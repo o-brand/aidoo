@@ -11,5 +11,8 @@
 - ML and AI for NLP. Language model to identify key words and creating synopses
 - NLP experts in dept. who can help
 ### student homepage (audience: students, schools & unis)
-### HR/Skill Gathering
+### hr/skill gathering
 - Matching best workers in an organization with tasks
+- Matching contractors with temporary jobs
+### smartcard manager
+- Developing a customizable platform for organizations to issue smartcards to access benefits, etc.
