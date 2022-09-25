@@ -16,3 +16,6 @@
 - Matching contractors with temporary jobs
 ### smartcard manager
 - Developing a customizable platform for organizations to issue smartcards to access benefits, etc.
+### Student helper (Android and iOS apps OR Responsive website)
+- The main purpose would be to access the timetable and show the rooms on maps. Detailed maps about each building to easily find rooms (and toilets).
+- We can include the student homepage idea as well.
