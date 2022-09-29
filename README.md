@@ -33,3 +33,4 @@
 - guides for student (where rooms are etc.)
 - digitize Id card
 ### hr website/scheduling
+### local event social network
