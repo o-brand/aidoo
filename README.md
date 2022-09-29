@@ -32,3 +32,4 @@
 - unify the different portals for uni (timetable, blackboard, course information, etc.)
 - guides for student (where rooms are etc.)
 - digitize Id card
+### hr website/scheduling
