@@ -20,5 +20,5 @@
 - The main purpose would be to access the timetable and show the rooms on maps. Detailed maps about each building to easily find rooms (and toilets).
 - We can include the student homepage idea as well.
 ### Workout creator
--Workout app that would build a workout plan for a person given their preferences
+- Workout app that would build a workout plan for a person given their preferences
 
