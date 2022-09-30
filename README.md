@@ -34,3 +34,27 @@
 - digitize Id card
 ### hr website/scheduling
 ### local event social network
+
+## new stuff
+
+### software/website that searches all patent db at once
+- prevents having to search all patent db indiviually
+- doesn't exist
+- good for research/students
+
+### a basic 2d game engine for platformers (e.g. celeste, mario bros)
+
+baseline:
+- physics engine with variable parameters like gravity, speed, etc
+- api style egine
+- no extra GUI or application
+
+extension:
+- could be extended for rogue likes (dead cells)
+- could be extended to 2.5d (moonlighter, stardew valley)
+- implement economy
+- GUI
+
+target audience
+- platformer devs, indie devs and the like
+
