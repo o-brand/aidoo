@@ -62,6 +62,6 @@ target audience
 - a customizable platform for financial education
 - gamified simulator (taxes, bills, savings, etc.)
 - help disseminate approved information by financial institutions and gov'ts
-- develop alongside gov'ts and sell to school district
+- develop alongside gov'ts and sell to school districts, etc.
 
 
