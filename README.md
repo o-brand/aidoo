@@ -70,3 +70,5 @@ target audience
 - Others can "apply" for a job and do them.
 - Get paid via the app. (We have some revenue as commission.)
 - Target audience: old people and grown-ups as "sellers" and students as "workers".
+
+### smart vending machines platform
