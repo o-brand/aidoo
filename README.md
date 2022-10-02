@@ -64,4 +64,9 @@ target audience
 - help disseminate approved information by financial institutions and gov'ts
 - develop alongside gov'ts and sell to school districts, etc.
 
+### "Small jobs" platform
 
+- Everybody with an account can post small jobs (cutting grass, shopping, walking dogs, etc.).
+- Others can "apply" for a job and do them.
+- Get paid via the app. (We have some revenue as commission.)
+- Target audience: old people and grown-ups as "sellers" and students as "workers".
