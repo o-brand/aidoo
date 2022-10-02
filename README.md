@@ -72,3 +72,10 @@ target audience
 - Target audience: old people and grown-ups as "sellers" and students as "workers".
 
 ### smart vending machines platform
+- Saving favorite orders (e.g. preferred coffee, products, and combinations)
+- Mobile and card payments
+- Order and collect orders
+- Dynamic pricing (combo deals)
+- Customer incentives to encourage sales and location loyalty
+- More precise business intelligence (e.g. which products sell more, at what frequency)
+- Stocking recommendations based on what customers get in other locations
