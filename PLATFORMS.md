@@ -6,3 +6,7 @@
 
 # Scheduling
 - https://lettucemeet.com/
+
+# Issue Tracking
+- Trello
+- Github Issues
