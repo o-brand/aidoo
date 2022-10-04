@@ -79,3 +79,10 @@ target audience
 - Customer incentives to encourage sales and location loyalty
 - More precise business intelligence (e.g. which products sell more, at what frequency)
 - Stocking recommendations based on what customers get in other locations
+
+### Maths exercises for small children
+- I have a nephew and I made a small website for him to create a "Maths maze". You have to find the way out by solving the additions and substractions. The path is the even results. You can reach it here: http://backup.nhely.hu/matyi/
+- So, my idea is something like that. We can make different small games as well. Include multiplication, long divisions.
+- Easy-to-use website to help parents print the exercises.
+- It is easy on the internet to find exercises but they are "fixed". So if your child solves them you have to find a new source. This way you can generate as many as you want.
+- Teachers can use it as well.
