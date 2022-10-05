@@ -86,3 +86,10 @@ target audience
 - Easy-to-use website to help parents print the exercises.
 - It is easy on the internet to find exercises but they are "fixed". So if your child solves them you have to find a new source. This way you can generate as many as you want.
 - Teachers can use it as well.
+
+
+### Desktop application that allows you to write Maths fluently
+- Perhaps a window that could be pulled up the the side of a word document which would allow the user to draw symbols and have them converted to a format that could work on word.
+- This would include a list of frequently used symbols that would copy to clipboard at a click.
+- The idea is that a student could effectively take notes digitally without a stylus, touch screen machine, or pen and paper.
+- Lecturers and teachers could purchase along side student and people working in the field.
