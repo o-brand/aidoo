@@ -1,5 +1,8 @@
 # golf
 ## new stuff
+Questions for Bruce:
+- Is the scope of the game engine suitable for this project, how much would we actually need to do to demonstrate?
+- What do we do when legal problems show up (e.g. in the small jobs app), how realistic do our ideas need to be?
 
 ### a basic 2d game engine for platformers (e.g. celeste, mario bros)
 5votes
