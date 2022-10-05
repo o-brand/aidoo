@@ -22,18 +22,6 @@ target audience
 - potentially huge scope
 - needs to be taylored for a subgenre of games (e.g. Platformers, dungeon crawler)
 
-### financial education guide
-3votes
-- a customizable platform for financial education
-- gamified simulator (taxes, bills, savings, etc.)
-- help disseminate approved information by financial institutions and gov'ts
-- develop alongside gov'ts and sell to school districts, etc.
-
-#### Concerns
-- a lot of knowledge of the problem domain needed
-- make a smaller prototype to demonstrate basic functionalities/ 2-3 layers of imformation
-- economy professors for input
-
 ### "Small jobs" platform
 4votes
 - Everybody with an account can post small jobs (cutting grass, shopping, walking dogs, etc.).
@@ -46,6 +34,18 @@ target audience
 - Freely choose jobs at first
 
 - Expand to give recommendations for matches
+
+### financial education guide
+3votes
+- a customizable platform for financial education
+- gamified simulator (taxes, bills, savings, etc.)
+- help disseminate approved information by financial institutions and gov'ts
+- develop alongside gov'ts and sell to school districts, etc.
+
+#### Concerns
+- a lot of knowledge of the problem domain needed
+- make a smaller prototype to demonstrate basic functionalities/ 2-3 layers of imformation
+- economy professors for input
 
 #### Basic prototype
 - create jobs
