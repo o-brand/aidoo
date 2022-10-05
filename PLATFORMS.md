@@ -10,3 +10,7 @@
 # Issue Tracking
 - Trello
 - Github Issues
+
+
+# Defining goals
+- SMART goals: https://corporatefinanceinstitute.com/resources/knowledge/other/smart-goal/
