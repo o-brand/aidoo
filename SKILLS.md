@@ -30,6 +30,17 @@
 - Databases: I was made to do a ton of database work at school, with access and excel. I believe we need a database for the project and I'm confident I could build a nice one.
 - Photoshop: I've used it a decent amount. I'm happy to attempt design challenges and the like.
 
+## Roman
 
+- I've never done anything webdev related
+
+- Embedded programming i.e. Arduino/PIC Microcontrollers
+- C/C++
+- Java (Maven)
+- Python
+- Assembler ARM
+- Git
+
+- I have worked in a team on a big project before, although that was a hardware project w/ waterfall management (1 year long)
 
 ## Add yourself here!
