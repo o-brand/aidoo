@@ -14,3 +14,4 @@
 
 # Defining goals
 - SMART goals: https://corporatefinanceinstitute.com/resources/knowledge/other/smart-goal/
+- should be able to write jumpking esque game in it? (rough guideline?)
