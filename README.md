@@ -21,6 +21,12 @@ extension:
 target audience
 - platformer devs, indie devs and the like
 
+#### Baseline Project - Phsysics Engine
+Focuses on:
+- Dynamics
+- Collisions
+- Collision Response
+
 #### Concerns
 - potentially huge scope
 - needs to be taylored for a subgenre of games (e.g. Platformers, dungeon crawler)
