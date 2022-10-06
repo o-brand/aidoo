@@ -1,33 +1,15 @@
 # golf
-## new stuff
-Questions for Bruce:
-- Is the scope of the game engine suitable for this project, how much would we actually need to do to demonstrate?
-- What do we do when legal problems show up (e.g. in the small jobs app), how realistic do our ideas need to be?
 
-### a basic 2d game engine for platformers (e.g. celeste, mario bros)
+## a 2d platformer
 5votes
 
-baseline:
-- physics engine with variable parameters like gravity, speed, etc
-- api style egine
-- no extra GUI or application
+### Idea
 
-extension:
-- could be extended for rogue likes (dead cells)
-- could be extended to 2.5d (moonlighter, stardew valley)
-- implement economy
-- GUI
+### Baseline Project
+- A demo of the game with 2-3 levels
 
-target audience
-- platformer devs, indie devs and the like
 
-#### Baseline Project - Phsysics Engine
-Focuses on:
-- Dynamics
-- Collisions
-- Collision Response
-
-#### Concerns
+### Concerns
 - potentially huge scope
 - needs to be taylored for a subgenre of games (e.g. Platformers, dungeon crawler)
 
