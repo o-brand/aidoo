@@ -4,6 +4,7 @@
 5votes
 
 ### Idea
+A 2d platformer. What kind of platformer is still pending.
 
 ### Baseline Project
 - A demo of the game with 2-3 levels
