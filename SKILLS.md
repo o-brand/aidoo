@@ -29,6 +29,7 @@
 - Java: as much as I needed to know for the previous courses. I like the language though and would happily work with it or similar (Kotlin as suggested)
 - Databases: I was made to do a ton of database work at school, with access and excel. I believe we need a database for the project and I'm confident I could build a nice one.
 - Photoshop: I've used it a decent amount. I'm happy to attempt design challenges and the like.
+- push
 
 ## Roman
 
