@@ -14,7 +14,7 @@ A 2d platformer. What kind of platformer is still pending.
 - potentially huge scope
 - needs to be taylored for a subgenre of games (e.g. Platformers, dungeon crawler)
 
-### "Small jobs" platform
+### "Small jobs" platform - TaskRabbit is almost the same
 4votes
 - Everybody with an account can post small jobs (cutting grass, shopping, walking dogs, etc.).
 - Others can "apply" for a job and do them.
