@@ -2,7 +2,7 @@
 
 ## Dragons & Knights platformer
 
-2d (castlevania) platformer where you are the dragon.
+2d (maybe metroidvania) platformer where you are the dragon.
 Could also be an RPG, but probably out of scope.
 
 You were caputred & emprisoned by a kingdom. 
