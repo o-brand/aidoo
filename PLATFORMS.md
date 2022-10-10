@@ -1,6 +1,8 @@
 # Platforms
 - Kotlin/Java (Android)
-- Web Dev (Javascript - Node.JS, React)
+- Web Dev
+   - Javascript - Node.JS, React
+   - Python - *Django*, Flask
 - Python
 - C/C++ (for desktop applications?)
 
