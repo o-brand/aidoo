@@ -1,5 +1,7 @@
 # Small Jobs App Ideas
 
+## Initial overview:
+
 ## Principal components:
 - Portal for task posters
 - Portal for bidders
