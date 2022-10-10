@@ -11,11 +11,15 @@
 - We can use [Firebase](https://firebase.google.com/) for user authentication, database (we can store data in JSON trees), and analytics. It can be easily integrated, I am using Firebase in my Android apps.
 - We should consider using [Bootstrap](https://getbootstrap.com/) for design purposes. This way we can create a responsive website much easier.
 - We can host our website in Firebase as well if we only use HTML, CSS, and Javascript. Other languages (Python, PHP) are not allowed. OR we must find a free website hoster.
+    - There might be a possibility that we can host the website using the uni's resources. We should ask Bruce or Brian about this.
+    - Being able to use a different framework (such as Django or Flask which use Python) could allow us to have an easier time than if we have to learn JavaScript
 
 ## Concerns
 
 - If we use an "in-app currency" or points, then we have to implement some mechanics to top up your balance to be able to post tasks for points.
   - What if we find a company that can sponsor the app while enabling spending points to buy their product?
+- I was thinking that only the task-doers would earn points which would have no other material value or use other than purchasing items at the "store" an organization makes for themselves (while for posting it can be unlimited or decided by a subscription tier fees payed to us).
+- I personally do love the company sponsorship idea (for discounts or freebies in the app), if it is feasible, because that really goes hand-in-hand with the goal of empowering local communities and businesses.
 
 
 ## Brief (working) overview:
@@ -36,7 +40,7 @@ A website/web app that gets people within an organization or community to perfor
    - \+
 - Ranking algorithms
    - Sorting
-      + Parameters: value, how long a task been posted, urgency, etc.
+      \+ Parameters: value, how long a task been posted, urgency, etc.
 
 ## Unanswered Questions
 - Should tasks have expirations?
