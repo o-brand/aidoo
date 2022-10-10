@@ -1,5 +1,23 @@
 # Small Jobs App Ideas
 
+## TODO list
+
+1. In my opinion, we must create "scenarios" and "use cases" for the website before starting coding.
+2. Then, we should create the requirements for the programming perspectives (and create the programming environment).
+3. After that we can come up with a design and start coding.
+
+## Ideas
+
+- We can use [Firebase](https://firebase.google.com/) for user authentication, database (we can store data in JSON trees), and analytics. It can be easily integrated, I am using Firebase in my Android apps.
+- We should consider using [Bootstrap](https://getbootstrap.com/) for design purposes. This way we can create a responsive website much easier.
+- We can host our website in Firebase as well if we only use HTML, CSS, and Javascript. Other languages (Python, PHP) are not allowed. OR we must find a free website hoster.
+
+## Concerns
+
+- If we use an "in-app currency" or points, then we have to implement some mechanics to top up your balance to be able to post tasks for points.
+  - What if we find a company that can sponsor the app while enabling spending points to buy their product?
+
+
 ## Brief (working) overview:
 A website/web app that gets people within an organization or community to perform tasks in exchange for points. These points behave like a digital currency in an "incentive shop" managed by the organizers.
 
