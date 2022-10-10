@@ -40,7 +40,7 @@ A website/web app that gets people within an organization or community to perfor
    - \+
 - Ranking algorithms
    - Sorting
-      - \+ Parameters: value, how long a task been posted, urgency, etc.
+      - Parameters: value, how long a task been posted, urgency, etc.
 
 ## Unanswered Questions
 - Should tasks have expirations?
