@@ -20,6 +20,15 @@
   - What if we find a company that can sponsor the app while enabling spending points to buy their product?
 - I was thinking that only the task-doers would earn points which would have no other material value or use other than purchasing items at the "store" an organization makes for themselves (while for posting it can be unlimited or decided by a subscription tier fees payed to us).
 - I personally do love the company sponsorship idea (for discounts or freebies in the app), if it is feasible, because that really goes hand-in-hand with the goal of empowering local communities and businesses.
+- Incentives need to be added in game theory, in a specific range, value of points needs to be calibrated so that people don't exploit it
+- SCRIP systems, fiat money, studies about collapse when people game the system
+- Should we manage rewards ourselves based on research and surveying within an organization/community about wants and needs?
+- Who can post jobs?
+- Security of data
+- Background checks
+- Risk that no one near would be interested in buying into the idea, is it that compelling then?
+- Liability of damage
+- Terms and Conditions
 
 
 ## Brief (working) overview:
@@ -41,9 +50,11 @@ A website/web app that gets people within an organization or community to perfor
 - Ranking algorithms
    - Sorting
       - Parameters: value, how long a task been posted, urgency, etc.
+- Rating of volunteers (behind the scenes)
 
 ## Unanswered Questions
 - Should tasks have expirations?
 - What mechanism is there to make sure tasks have been performed?
 
 ## Potential features
+- Certificates to accredit people for having done volunteering work
