@@ -1,6 +1,6 @@
 # Platforms
 - Web Dev
-   -  HTML, CSS
+   -  HTML, CSS, Bootstrap, (possibly Firebase)
    - Javascript - Node.JS, React
    - Python - *Django*, Flask
    - PHP, SQL
