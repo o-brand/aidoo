@@ -1,6 +1,6 @@
 # Platforms
 - Web Dev
-   -  HTML, CSS, Bootstrap, (possibly Firebase)
+   -  HTML, CSS, Bootstrap, (possibly [Firebase](https://github.com/firebase/firebaseui-web) )
    - Javascript - Node.JS, React
    - Python - *Django*, Flask
    - PHP, SQL
