@@ -1,4 +1,4 @@
-# Small Jobs App Ideas
+# Small Jobs App
 
 ## TODO list
 
