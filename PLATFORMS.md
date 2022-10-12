@@ -5,6 +5,8 @@
    - Python - *Django*, Flask
       - https://docs.djangoproject.com/en/4.1/intro/tutorial01/ 
    - PHP, SQL
+
+on practical 10/13: https://www.simplilearn.com/tutorials/php-tutorial/php-login-form#step_1_create_a_html_php_login_form
 - Python
 
 # Scheduling
