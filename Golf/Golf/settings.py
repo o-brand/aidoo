@@ -67,6 +67,10 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATE_DIRS = (
+    '/../templates/',
+)
+
 WSGI_APPLICATION = 'Golf.wsgi.application'
 
 
