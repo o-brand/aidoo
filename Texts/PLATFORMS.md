@@ -6,6 +6,7 @@
       - Versions: Django 4.1.2, 4.0 (in pythonanywhere), Python 3.10+
       - https://docs.djangoproject.com/en/4.1/intro/tutorial01/ 
    - PHP, SQL
+   - https://pythonguides.com/login-system-in-python-django/
 
 on practical 10/13: https://www.simplilearn.com/tutorials/php-tutorial/php-login-form#step_1_create_a_html_php_login_form
 - Python
