@@ -7,5 +7,5 @@ class LoginTestCase(TestCase):
 class DatabaseTestCase(TestCase):
     pass
 
-class WebsiteReachable(TestCase):
+class WebsiteReachableCase(TestCase):
     pass
