@@ -3,7 +3,7 @@
 	-  HTML, CSS, Bootstrap, (possibly [Firebase](https://github.com/firebase/firebaseui-web) )
 	- (Javascript - Node.JS, React) - learn in the meantime, even if we will not use it this semester
 	- Python - *Django*, Flask
-	- Versions: Django 4.1.2, 4.0 (in pythonanywhere), Python 3.10+
+		- Versions: Django 4.1.2, 4.0 (in pythonanywhere), Python 3.10+
 		- https://docs.djangoproject.com/en/4.1/intro/tutorial01/
 		- [Django for Beginners - Free 4 chapters](https://djangoforbeginners.com/introduction/)
 		- [Easy login tutorial](https://learndjango.com/tutorials/django-login-and-logout-tutorial)
