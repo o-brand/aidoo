@@ -16,3 +16,9 @@ class LoginTestCase(TestCase):
         response = self.client.post('/', self.credentials, follow=True)
         # should be logged in now
         self.assertTrue(response.context['user'].is_active)
+
+class DatabaseTestCase(TestCase):
+    pass
+
+class WebsiteReachableCase(TestCase):
+    pass
