@@ -1,7 +1,6 @@
 # Small Jobs App
 
 ## TODO list
-change the naem 'GolfFirstAPP'
 include tests for what we've written today
 
 1. In my opinion, we must create "scenarios" and "use cases" for the website before starting coding.
