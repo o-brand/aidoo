@@ -1,4 +1,4 @@
-from djang.test import TestCase
+from django.test import TestCase
 
 
 class LoginTestCase(TestCase):
