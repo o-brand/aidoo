@@ -1,7 +1,7 @@
 # Small Jobs App
 
 ## TODO list
-change the naem 'GoldFirstAPP'
+change the naem 'GolfFirstAPP'
 
 1. In my opinion, we must create "scenarios" and "use cases" for the website before starting coding.
 2. Then, we should create the requirements for the programming perspectives (and create the programming environment).
