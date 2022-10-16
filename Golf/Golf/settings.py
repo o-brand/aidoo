@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "login.apps.LoginConfig",
+    "jobs.apps.JobsConfig",
 ]
 
 MIDDLEWARE = [
@@ -47,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Golf.middlewares.LoginRequiredMiddleware', # Check if the user is authenticated.
 ]
 
 ROOT_URLCONF = 'Golf.urls'
@@ -54,7 +57,7 @@ ROOT_URLCONF = 'Golf.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [BASE_DIR / "templates"], # This way we can use our templates in EVERY app we add.
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,10 +69,6 @@ TEMPLATES = [
         },
     },
 ]
-
-TEMPLATE_DIRS = (
-    '/../templates/',
-)
 
 WSGI_APPLICATION = 'Golf.wsgi.application'
 
@@ -126,5 +125,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "home" # After login, the user is redirected to here instead of "accounts/profile"
+LOGOUT_REDIRECT_URL = "/" # After log out, the user is redirected to here instead of "logout"
