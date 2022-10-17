@@ -9,5 +9,7 @@
 - Easy login tutorial: https://learndjango.com/tutorials/django-login-and-logout-tutorial
 - Hard login tutorial: https://pythonguides.com/login-system-in-python-django/
 
+- fetching a job from the database and display: https://www.digitalocean.com/community/tutorials/how-to-create-views-for-django-web-development
+
 ## PHP
 - Login tutorial in PHP: https://www.simplilearn.com/tutorials/php-tutorial/php-login-form#step_1_create_a_html_php_login_form
