@@ -5,5 +5,6 @@
 {% block content %}
 <h1>Hi {{ user.username }}!</h1>
 <p>You can see the available jobs here.</p>
+<p><a href="{% url 'post' %}">Post a job</a></p>
 <p><a href="{% url 'logout' %}">Log Out</a></p>
 {% endblock %}

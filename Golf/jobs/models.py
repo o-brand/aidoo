@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
-# Create your models here.
 class JobPosting(models.Model):
     job_id = models.BigAutoField(primary_key=True)
     location = models.CharField(max_length=7)
