@@ -18,7 +18,7 @@
     {% for job in jobs %}
         <tr>
         <td>{{ job.posting_time }}</td>
-        <td>{{ job.job_title }}</td>
+        <td><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></td>
         <td>{{ job.job_short_description }}</td>
         <td>{{ job.location }}</td>
         <td>{{ job.points }}</td>
