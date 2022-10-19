@@ -6,9 +6,26 @@
 <h1>Hi {{ user.username }}!</h1>
 <p>You can see the available jobs here.</p>
 
-{% for job in jobs %}
-    <h3>{{ job.job_title }}</h3>
-{% endfor %}
+<table border="1">
+    <tr>
+    <th>Posting Time</th>
+    <th>Job Title</th>
+    <th>Job Short Description</th>
+    <th>Job Location</th>
+    <th>points</th>
+    </tr>
+    {% for job in jobs %}
+        <tr>
+        <td>{{ job.posting_time }}</td>
+        <td>{{ job.job_title }}</td>
+        <td>{{ job.job_short_description }}</td>
+        <td>{{ job.location }}</td>
+        <td>{{ job.points }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
 
 <p><a href="{% url 'post' %}">Post a job</a></p>
 <p><a href="{% url 'logout' %}">Log Out</a></p>
