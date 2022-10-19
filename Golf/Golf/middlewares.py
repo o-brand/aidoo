@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.utils.deprecation import MiddlewareMixin
 
-ENABLED_URLS = ("", "login/", "logout/")
+ENABLED_URLS = ("", "login/", "logout/", "update_server/")
 
 class LoginRequiredMiddleware(MiddlewareMixin):
 

@@ -6,6 +6,5 @@ from . import views
 urlpatterns = [
     path('', views.JobsView.as_view(), name='home'), # Basic home with the jobs list
     path('post/', TemplateView.as_view(template_name='postjob.html'), name='post'), # Posting a job
-    path("update_server/", views.update, name="update"),
     path('<int:job_id>/', views.detail, name='jobdetails'), # Details of a job
 ]
