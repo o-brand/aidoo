@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls), # Admin stuff
     path("", include("login.urls")), # Login..
     path("jobs/", include("jobs.urls")), # Jobs platform
+    path("update_server/", views.update, name="update"),
 ]
