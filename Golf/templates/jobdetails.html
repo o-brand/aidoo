@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Details of {{ job.job_title }}{% endblock %}
+
+{% block content %}
+<h1>{{ job.job_title }}</h1>
+<p>{{ job.job_description }}</p>
+<p>Location: {{ job.location }}</p>
+<p>Points: {{ job.points }}</p>
+<p>User: {{ job.poster_id.username }}</p>
+
+<p><a href="{% url 'home' %}">Go back</a></p>
+{% endblock %}
