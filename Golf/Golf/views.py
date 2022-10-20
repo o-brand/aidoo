@@ -1,7 +1,6 @@
 import git
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-
 @csrf_exempt
 def update(request):
     if request.method == "POST":
@@ -11,12 +10,9 @@ def update(request):
         Here the name of my directory is "test.pythonanywhere.com"
         '''
         repo = git.Repo("") 
-        #origin = repo.remotes.origin
-        repo.create_remote('origin', 'https://github.com/o-brand/golf.git')
-        
-        #origin.pull(main)
-        repo.remotes.origin.pull()
+        origin = repo.remotes.origin
 
+        origin.pull()
         return HttpResponse("Updated code on PythonAnywhere")
     else:
         return HttpResponse("Couldn't update the code on PythonAnywhere")
