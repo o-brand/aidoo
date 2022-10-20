@@ -12,8 +12,10 @@ def update(request):
         '''
         repo = git.Repo("") 
         #origin = repo.remotes.origin
+        repo.create_remote('origin', 'https://github.com/o-brand/golf.git')
         
-        repo.remotes.origin.pull(main)
+        #origin.pull(main)
+        repo.remotes.origin.pull()
 
         return HttpResponse("Updated code on PythonAnywhere")
     else:
