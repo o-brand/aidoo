@@ -1,15 +1,21 @@
 from django.http import HttpResponseRedirect
-from django.utils.deprecation import MiddlewareMixin
 
 ENABLED_URLS = ("", "login/", "logout/", "update_server/")
 
-class LoginRequiredMiddleware(MiddlewareMixin):
+class LoginRequiredMiddleware():
 
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+
         if not request.user.is_authenticated:
             path = request.path_info.lstrip('/')
 
             if path in ENABLED_URLS or path.startswith("admin"):
-                return self.get_response(request)
+                return response
 
             return HttpResponseRedirect("/login/?next=/" + path)
+
+        return response

@@ -29,9 +29,9 @@ class LoginTestCase(TestCase):
     def test_logout(self):
         response = self.client.get('/logout/')
         self.assertEqual(response.status_code, 302)
-        self.assertEqual("/", response.url)
+        self.assertEqual(response.url, "/")
 
     def test_logout_available_by_name(self):
         response = self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual("/", response.url)
+        self.assertEqual(response.url, "/")
