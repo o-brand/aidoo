@@ -13,7 +13,7 @@ def update(request):
         repo = git.Repo("") 
         origin = repo.remotes.origin
 
-        origin.pull()
+        origin.pull('origin','main')
 
         return HttpResponse("Updated code on PythonAnywhere")
     else:
