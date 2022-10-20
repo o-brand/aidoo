@@ -12,4 +12,4 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             if path in ENABLED_URLS or path.startswith("admin"):
                 return self.get_response(request)
 
-            return HttpResponseRedirect("/login/")
+            return HttpResponseRedirect("/login/?next=/" + path)
