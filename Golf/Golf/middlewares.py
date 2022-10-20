@@ -9,7 +9,7 @@ class LoginRequiredMiddleware(MiddlewareMixin):
         if not request.user.is_authenticated:
             path = request.path_info.lstrip('/')
 
-            if path in ENABLED_URLS or path.startswith("/admin"):
+            if path in ENABLED_URLS or path.startswith("admin"):
                 return self.get_response(request)
 
             return HttpResponseRedirect("/login/")
