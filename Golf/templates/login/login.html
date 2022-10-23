@@ -3,31 +3,33 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<h2>Log In</h2>
+<div class="center">
+    <h2>Login</h2>
 
-{% if next %}
-    <h4>Please login to see this page.</h4>
-{% endif %}
+    {% if next %}
+        <strong class="error">Please login to see this page.</strong>
+    {% endif %}
 
-{% if form.errors %}
-    <h4>Your username and password didn't match. Please try again.</h4>
-{% endif %}
+    {% if form.errors %}
+        <strong class="error">Your username and password didn't match. Please try again.</strong>
+    {% endif %}
 
-<form method="post" action="{% url 'login' %}">
-{% csrf_token %}
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
 
-<p>
-    {{ form.username.label_tag }}
-    {{ form.username }}
-</p>
-<p>
-    {{ form.password.label_tag }}
-    {{ form.password }}
-</p>
+        <p>
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </p>
+        <p>
+            {{ form.password.label_tag }}
+            {{ form.password }}
+        </p>
 
-<input type="submit" value="Login">
-<input type="hidden" name="next" value="{{ next }}">
-</form>
+        <input type="submit" value="Login">
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
 
-<p>No account? <a href="/signup">Create one now.</a></p>
+    <p>No account? <a href="{% url 'signup' %}">Create one now.</a></p>
+</div>
 {% endblock %}

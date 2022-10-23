@@ -14,8 +14,8 @@ class LoginTestCase(TestCase):
 
     def test_login(self):
         credentials = {
-            'username': 'golf',
-            'password': 'TeamGolf2022'
+            'username': 'asd',
+            'password': 'asd123'
         }
         User.objects.create_user(**credentials)
 

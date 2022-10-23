@@ -3,10 +3,45 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
+<div class="center">
   <h2>Sign up</h2>
-  <form method="post">
+
+  <p>Requirements:
+    <ul>
+      <li>The maximum length for the <b>username</b> is 150 characters.</li>
+      <li>The allowed characters are letters, digits and @.+-_ only.</li>
+      <li>Your <b>password</b> can't be too similar to your other personal information.</li>
+      <li>Your password must contain at least 8 characters.</li>
+      <li>Your password can't be a commonly used password.</li>
+      <li>Your password can't be entirely numeric.</li>
+    </ul>
+  </p>
+
+  {% if form.errors %}
+    <div>
+      {% for key, value in form.errors.items %}
+        <strong class="error">{{ value }}</strong>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
+    <p>
+      {{ form.username.label_tag }}
+      {{ form.username }}
+    </p>
+    <p>
+      {{ form.password1.label_tag }}
+      {{ form.password1 }}
+    </p>
+    <p>
+      {{ form.password2.label_tag }}
+      {{ form.password2 }}
+    </p>
+    <button type="submit">Sign up</button>
   </form>
+
+  <p>Already have an account? <a href="{% url 'login' %}">Login.</a></p>
+</div>
 {% endblock %}
