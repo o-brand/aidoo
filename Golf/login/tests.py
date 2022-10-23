@@ -36,4 +36,24 @@ class LoginTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/")
 
-# TODO - Signup tests!
+
+class SignupTestCase(TestCase):
+    
+    def test_signuppage(self):
+        response = self.client.get('/signup/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_signup_page_view_name(self):
+        response = self.client.get(reverse('signup'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='login/signup.html')
+
+    def test_signup(self):
+        response = self.client.post(reverse('signup'), data={
+            'username': 'madeupuser',
+            'password1': 'madeuppassword',
+            'password2': 'madeuppassword'
+        })
+
+        self.assertEqual(response.status_code, 302)
+
