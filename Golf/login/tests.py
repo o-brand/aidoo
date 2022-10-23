@@ -2,15 +2,19 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-class LoginTestCase(TestCase):
+class WelcomeTestCase(TestCase):
 
     def test_welcome(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='welcome.html')
 
     def test_welcome_available_by_name(self):
         response = self.client.get(reverse('welcome'))
         self.assertEqual(response.status_code, 200)
+
+
+class LoginTestCase(TestCase):
 
     def test_login(self):
         credentials = {
@@ -25,6 +29,7 @@ class LoginTestCase(TestCase):
     def test_login_available_by_name(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='login/login.html')
 
     def test_logout(self):
         response = self.client.get('/logout/')
@@ -49,11 +54,11 @@ class SignupTestCase(TestCase):
         self.assertTemplateUsed(response, template_name='login/signup.html')
 
     def test_signup(self):
-        response = self.client.post(reverse('signup'), data={
+        new_user = {
             'username': 'madeupuser',
             'password1': 'madeuppassword',
             'password2': 'madeuppassword'
-        })
+        }
+        response = self.client.post(reverse('signup'), data=new_user)
 
         self.assertEqual(response.status_code, 302)
-
