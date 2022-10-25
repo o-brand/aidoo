@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
+from .forms import RegisterForm
 
 class WelcomeTestCase(TestCase):
 
@@ -43,7 +44,7 @@ class LoginTestCase(TestCase):
 
 
 class SignupTestCase(TestCase):
-    
+
     def test_signuppage(self):
         response = self.client.get('/signup/')
         self.assertEqual(response.status_code, 200)
@@ -65,3 +66,133 @@ class SignupTestCase(TestCase):
         response = self.client.post(reverse('signup'), data=new_user)
 
         self.assertEqual(response.status_code, 302)
+
+
+class RegisterFormTestCase(TestCase):
+    # I think PasswordInput is already tested well, so I do not test it here.
+
+    def test_nothing_entered(self):
+        form = RegisterForm(data={})
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required.', form.errors[key][0])
+
+    def test_name_entered(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+        }
+        form = RegisterForm(data=new_user)
+
+        self.assertEqual(4, len(form.errors)) # Name must be ok
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required.', form.errors[key][0])
+
+    def test_name_username_entered_username_too_long(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'username': 'a' * 101,
+        }
+        form = RegisterForm(data=new_user)
+
+        self.assertEqual(4, len(form.errors)) # Name must be ok
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+
+            if key == 'username':
+                self.assertIn('Ensure this value has at most 100 characters (it has 101).', form.errors[key][0])
+            
+            else:
+                self.assertIn('This field is required.', form.errors[key][0])
+
+    def test_name_username_entered(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'username': 'madeupuser',
+        }
+        form = RegisterForm(data=new_user)
+
+        self.assertEqual(3, len(form.errors)) # Name, username must be ok
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required.', form.errors[key][0])
+
+    def test_name_username_email_entered_email_not_valid(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'email': "madeupusermadeupuser.com",
+            'username': 'madeupuser',
+        }
+        form = RegisterForm(data=new_user)
+
+        self.assertEqual(3, len(form.errors)) # Name, username must be ok
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+
+            if key == 'email':
+                self.assertIn('Enter a valid email address.', form.errors[key][0])
+            else:
+                self.assertIn('This field is required.', form.errors[key][0])
+
+    def test_name_username_email_entered(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'email': "madeupuser@madeupuser.com",
+            'username': 'madeupuser',
+        }
+        form = RegisterForm(data=new_user)
+
+        self.assertEqual(2, len(form.errors)) # Name, email, username must be ok
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required.', form.errors[key][0])
+
+    def test_name_username_email_passwords_entered_passwords_not_match(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'email': "madeupuser@madeupuser.com",
+            'username': 'madeupuser',
+            'password1': 'madeuppassword',
+            'password2': 'madeuppassword2'
+        }
+        form = RegisterForm(data=new_user)
+
+        self.assertEqual(1, len(form.errors)) # Name, email, username must be ok
+        self.assertIn('The two password fields didn’t match.', form.errors['password2'][0])
+
+    def test_name_username_email_passwords_entered_(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'email': "madeupuser@madeupuser.com",
+            'username': 'madeupuser',
+            'password1': 'madeuppassword',
+            'password2': 'madeuppassword'
+        }
+        form = RegisterForm(data=new_user)
+
+        self.assertEqual(0, len(form.errors))

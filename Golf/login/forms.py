@@ -2,8 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
-## TODO ~ Tests
 # This class extends the UserCreationForm to have extra fields.
+# We can customize the error messages later, if we want.
 class RegisterForm(UserCreationForm):
     first_name = forms.CharField(
         max_length=100,
