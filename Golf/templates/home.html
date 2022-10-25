@@ -3,21 +3,27 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Hi {{ user.username }}!</h1>
-<p>You can see the available jobs here.</p>
+<div class="container">
+    <h1>Hi {{ user.username }}!</h1>
+    <p>You can see the available jobs here.</p>
 
-<div class="jobs-scroll">
-    {% for job in jobs %}
-        <div class="job-card">
-            <h3><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h3>
-            <h4><a href="">{{ job.poster_id.username }}</a></h4>
-            <p>{{ job.points }} · {{ job.posting_time }} · {{ job.location }}</p>
-            <p>{{ job.job_short_description }}</p>
+    <div class="row">
+        <div class="col jobs-scroll">
+            {% for job in jobs %}
+                <div class="job-card" class="container">
+                    <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
+                    <h5><a href=""><img src="../static/assets/user.png"/>{{ job.poster_id.username }}</a></h5>
+                    <p>{{ job.points }} · {{ job.posting_time }} · {{ job.location }}</p>
+                    <p>{{ job.job_short_description }}</p>
+                    <button>Apply</button>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+        <div class="col">
+        </div>
+    </div>
+
+    <p><a href="{% url 'post' %}">Post a job</a></p>
+    <p><a href="{% url 'logout' %}">Log Out</a></p>
 </div>
-
-
-<p><a href="{% url 'post' %}">Post a job</a></p>
-<p><a href="{% url 'logout' %}">Log Out</a></p>
 {% endblock %}
