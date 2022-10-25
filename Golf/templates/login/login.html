@@ -26,8 +26,11 @@
             {{ form.password }}
         </p>
 
+        <p><a href="{% url 'password_reset_form' %}">Forgotten password?</a></p>
+
         <input type="submit" value="Login">
         <input type="hidden" name="next" value="{{ next }}">
+
     </form>
 
     <p>No account? <a href="{% url 'signup' %}">Create one now.</a></p>
