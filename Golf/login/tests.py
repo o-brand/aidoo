@@ -55,6 +55,9 @@ class SignupTestCase(TestCase):
 
     def test_signup(self):
         new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'email': "madeupuser@madeupuser.com",
             'username': 'madeupuser',
             'password1': 'madeuppassword',
             'password2': 'madeuppassword'

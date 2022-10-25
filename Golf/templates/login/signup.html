@@ -28,6 +28,18 @@
   <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     <p>
+      {{ form.first_name.label_tag }}
+      {{ form.first_name  }}
+    </p>
+    <p>
+      {{ form.last_name.label_tag }}
+      {{ form.last_name }}
+    </p>
+    <p>
+      {{ form.email.label_tag }}
+      {{ form.email }}
+    </p>
+    <p>
       {{ form.username.label_tag }}
       {{ form.username }}
     </p>
