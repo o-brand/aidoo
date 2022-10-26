@@ -11,11 +11,28 @@
         <div class="col jobs-scroll">
             {% for job in jobs %}
                 <div class="job-card" class="container">
-                    <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
-                    <h5><a href=""><img src="../static/assets/user.png"/>{{ job.poster_id.username }}</a></h5>
-                    <p>{{ job.points }} · {{ job.posting_time }} · {{ job.location }}</p>
+                    <div class="d-flex justify-content-between">
+                        <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Options
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#">Save for later</a>
+                              <a class="dropdown-item" href="#"></a>
+                              <a class="dropdown-item" href="#">Report</a>
+                            </div>
+                          </div>
+                    </div>
+                    <a href="">
+                        <div class="d-flex justify-content-start">
+                            <img src="../static/assets/user.png"/>
+                            <h5>{{ job.poster_id.username }}</h5>
+                        </div>
+                    </a>
+                    <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
-                    <button>Apply</button>
+                    <button class="btn btn-secondary">Apply</button>
                 </div>
             {% endfor %}
         </div>
