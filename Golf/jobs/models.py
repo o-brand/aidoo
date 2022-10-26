@@ -13,3 +13,4 @@ class JobPosting(models.Model):
     points = models.IntegerField(validators=[MinValueValidator(1)])
     assigned = models.BooleanField()
     completed = models.BooleanField()
+

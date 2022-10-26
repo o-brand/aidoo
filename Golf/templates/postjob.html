@@ -4,5 +4,17 @@
 
 {% block content %}
 <h1>Hi! You can post a new job here. Soon.</h1>
+
+<!-- add -->
+<form action = "" method = "post">
+    {% csrf_token %}
+    <table>
+        {{form.as_table}}
+    </table>
+    
+
+    <input type = "submit" value = "Submit" class = "btn btn-light">
+</form>
+
 <p><a href="{% url 'home' %}">Go back</a></p>
 {% endblock %}
