@@ -1,5 +1,5 @@
 body {
-    background-color: #80e27e;
+    background-color: #ffffff;
     color: #000;
 }
 
@@ -17,3 +17,22 @@ body {
         width: 100%;
     }
   }
+
+.jobs-scroll {
+    overflow: auto;
+}
+
+.job-card {
+    border: 2px solid #80e27e;
+    border-radius: 15px;
+    margin-left: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 3%;
+}
+
+.job-card img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}

@@ -3,32 +3,44 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Hi {{ user.username }}!</h1>
-<p>You can see the available jobs here.</p>
+<div class="container">
+    <h1>Hi {{ user.username }}!</h1>
+    <p>You can see the available jobs here.</p>
 
-<table border="1">
-    <tr>
-    <th>Posting Time</th>
-    <th>Job Title</th>
-    <th>Job Short Description</th>
-    <th>Job Location</th>
-    <th>points</th>
-    <th>Username</th>
-    </tr>
-    {% for job in jobs %}
-        <tr>
-        <td>{{ job.posting_time }}</td>
-        <td><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></td>
-        <td>{{ job.job_short_description }}</td>
-        <td>{{ job.location }}</td>
-        <td>{{ job.points }}</td>
-        <td>{{ job.poster_id.username }}</td>
-        </tr>
-    {% endfor %}
-</table>
+    <div class="row">
+        <div class="col jobs-scroll">
+            {% for job in jobs %}
+                <div class="job-card" class="container">
+                    <div class="d-flex justify-content-between">
+                        <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Options
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="#">Save for later</a>
+                              <a class="dropdown-item" href="#"></a>
+                              <a class="dropdown-item" href="#">Report</a>
+                            </div>
+                          </div>
+                    </div>
+                    <a href="">
+                        <div class="d-flex justify-content-start">
+                            <img src="../static/assets/user.png"/>
+                            <h5>{{ job.poster_id.username }}</h5>
+                        </div>
+                    </a>
+                    <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
+                    <p>{{ job.job_short_description }}</p>
+                    <button class="btn btn-primary">Apply</button>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col">
+        </div>
+    </div>
 
-
-
-<p><a href="{% url 'post' %}">Post a job</a></p>
-<p><a href="{% url 'logout' %}">Log Out</a></p>
+    <p><a href="{% url 'post' %}">Post a job</a></p>
+    <p><a href="{% url 'logout' %}">Log Out</a></p>
+</div>
 {% endblock %}
