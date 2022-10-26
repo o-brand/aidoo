@@ -13,7 +13,7 @@ class LoginRequiredMiddleware():
         if not request.user.is_authenticated:
             path = request.path_info.lstrip('/')
 
-            if path[-1] == '/':
+            if len(path) > 0 and path[-1] == '/':
                 path = path[0:-1]
 
             if path in ENABLED_URLS or path.startswith("admin") or path.startswith("password_reset"):
