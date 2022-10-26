@@ -27,27 +27,27 @@
   <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     <p>
-      {{ form.first_name.label_tag }}
+      {{ form.first_name.label_tag }}<br>
       {{ form.first_name  }}
     </p>
     <p>
-      {{ form.last_name.label_tag }}
+      {{ form.last_name.label_tag }}<br>
       {{ form.last_name }}
     </p>
     <p>
-      {{ form.email.label_tag }}
+      {{ form.email.label_tag }}<br>
       {{ form.email }}
     </p>
     <p>
-      {{ form.username.label_tag }}
+      {{ form.username.label_tag }}<br>
       {{ form.username }}
     </p>
     <p>
-      {{ form.password1.label_tag }}
+      <label for="html">Password: </label><br>
       {{ form.password1 }}
     </p>
     <p>
-      {{ form.password2.label_tag }}
+      {{ form.password2.label_tag }}<br>
       {{ form.password2 }}
     </p>
     <button type="submit">Sign up</button>
