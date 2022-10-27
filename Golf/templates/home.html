@@ -24,7 +24,7 @@
                             </div>
                           </div>
                     </div>
-                    <a href="">
+                    <a href="{% url 'userdetail' job.poster_id.id %}">
                         <div class="d-flex justify-content-start">
                             <img src="../static/assets/user.png"/>
                             <h5>{{ job.poster_id.username }}</h5>
