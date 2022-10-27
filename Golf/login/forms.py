@@ -50,6 +50,7 @@ class RegisterForm(UserCreationForm):
     password1 = forms.CharField(
         max_length=50,
         required=True,
+        label="Password",
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "Password",
