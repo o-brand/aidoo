@@ -9,3 +9,5 @@ These are the "rules" we should follow while developing our project. If you thin
 - If you are not sure what a function/file does, ask the last person who edited that file.
 
 - Before you commit, check if you made ACTUAL changes to the DB file. (It has a column for when the user last logged in, so the DB will have at least one difference, if you logged in.) If you didn't update the DB, then discard the changes before you commit. This way, it would be easier to merge branches later.
+
+- If you are writing a test for an url not in the login app, then use ```LoginRequiredTestCase``` instead of the default ```TestCase```. (You can import like this: ```from Golf.utils import LoginRequiredTestCase```.)

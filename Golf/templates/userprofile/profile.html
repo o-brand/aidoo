@@ -3,7 +3,13 @@
 {% block title %}Profile of {{ user.username }}{% endblock %}
 
 {% block content %}
-<h1>{{ user.first_name }} {{ user.last_name }}</h1>
+<h1>{{ user.username }}</h1>
+
+<p>Your real name: {{ user.first_name }} {{ user.last_name }}</p>
+<p>Your email address: {{ user.email }}</p>
+
+<p>You last logged in: {{ user.last_login }}</p>
+<p>You joined: {{ user.date_joined }}</p>
 
 <p><a href="{% url 'home' %}">Go back</a></p>
 {% endblock %}
