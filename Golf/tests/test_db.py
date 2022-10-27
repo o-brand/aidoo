@@ -2,19 +2,21 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from jobs.models import JobPosting
 from faker import Faker
+import random
 
 class UserTableTestCase(TestCase):
 
     def setUp(self):
         fake = Faker()
         # write 10 users into the table
-        for i in range(1):
+        for i in range(10):
             credentials = dict()
-            credentials['username'] = lambda: fake.unique.pronounceable_unique_id(length=30)
+            credentials['username'] = fake.unique.name()
             credentials['password'] = 'a'
             credentials['last_name'] = lambda: fake.last_name()
             credentials['first_name'] = lambda: fake.first_name()
             User.objects.create_user(**credentials)
+            credentials.clear()
 
     def test_retrieve_user(self):
 
@@ -26,7 +28,7 @@ class UserTableTestCase(TestCase):
         len1 = len(User.objects.all())
 
         credentials = dict()
-        credentials['username'] = lambda: fake.unique.pronounceable_unique_id(length=30)
+        credentials['username'] = '123'
         credentials['password'] = 'a'
         credentials['last_name'] = lambda: fake.last_name()
         credentials['first_name'] = lambda: fake.first_name()
@@ -50,21 +52,55 @@ class JobTableTestCase(TestCase):
 
     def setUp(self):
         fake = Faker()
-        #write 10 users into users table
+        # write 10 users into the table
         for i in range(10):
-            #User.objects.create_user()
-            pass
+            credentials = dict()
+            credentials['username'] = fake.unique.name()
+            credentials['password'] = 'a'
+            credentials['last_name'] = lambda: fake.last_name()
+            credentials['first_name'] = lambda: fake.first_name()
+            User.objects.create_user(**credentials)
+            credentials.clear()
         #write 10 jobs into the job_postings table
         for i in range(10):
             #JobPosting.objects.create_jobPosting()
-            pass
-        pass
+            jobs = dict()
+            jobs['posting_time'] = fake.date()
+            jobs['points'] = random.randint(0,100)
+            jobs['assigned'] = False
+            jobs['completed'] = False
+            jobs['poster_id_id'] = random.randint(1,10)
+            JobPosting.objects.create(**jobs)
 
     def test_retrieve_job(self):
-        pass
+        job = JobPosting.objects.get(pk=1)
+
+        self.assertEqual(job.job_id, 1)
 
     def test_create_job(self):
-        pass
+        fake = Faker()
+        len1 = len(JobPosting.objects.all())
 
-    def test_delete_jon(self):
-        pass
+        job = dict()
+
+        job['posting_time'] = fake.date()
+        job['points'] = random.randint(0,100)
+        job['assigned'] = False
+        job['completed'] = False
+        job['poster_id_id'] = random.randint(1,10)
+        JobPosting.objects.create(**job)
+
+        len2 = len(JobPosting.objects.all())
+        self.assertEqual(len1+1,len2)
+
+    def test_delete_job(self):
+        j = JobPosting.objects.get(pk=1)
+        len1 = len(JobPosting.objects.all())
+        j.delete()
+
+        len2 = len(JobPosting.objects.all())
+
+        self.assertEqual(len1-1,len2)
+
+
+
