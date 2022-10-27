@@ -36,3 +36,8 @@ body {
     height: 24px;
     margin-right: 8px;
 }
+
+.login-form {
+    margin-top: 2%;
+    margin-bottom: 4%;
+}

@@ -3,7 +3,7 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="center">
+<div class="container text-center">
   <h2>Login</h2>
 
   {% if next %}
@@ -14,24 +14,30 @@
     <strong class="error">Your username and password didn't match. Please try again.</strong>
   {% endif %}
 
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
+  <div class="row">
+    <div class="col d-flex justify-content-center">
+      <form method="post" action="{% url 'login' %}" class="login-form">
+        {% csrf_token %}
 
-    <p>
-        {{ form.username.label_tag }}
-        {{ form.username }}
-    </p>
-    <p>
-        {{ form.password.label_tag }}
-        {{ form.password }}
-    </p>
+        <p>
+            {{ form.username.label_tag }}
+            <br/>
+            {{ form.username }}
+        </p>
+        <p>
+            {{ form.password.label_tag }}
+            <br/>
+            {{ form.password }}
+        </p>
 
-    <p><a href="{% url 'password_reset_form' %}">Forgotten password?</a></p>
+        <input type="submit" value="Login" class="btn btn-dark">
+        <input type="hidden" name="next" value="{{ next }}">
 
-    <input type="submit" value="Login">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
-
+      </form>
+      
+    </div>
+  </div>
+  <p><a href="{% url 'password_reset_form' %}">Forgotten password?</a></p>
   <p>No account? <a href="{% url 'signup' %}">Create one now.</a></p>
 </div>
 {% endblock %}
