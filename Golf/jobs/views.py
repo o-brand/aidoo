@@ -4,6 +4,7 @@ from .models import JobPosting
 from django.views.generic import ListView
 from django.template import loader
 from .forms import JobForm
+import time
 
 def individualPost(request):
     recent_job = JobPosting.objects.get(pk=1)
@@ -33,3 +34,8 @@ class JobsView(ListView):
 
    def get_queryset(self):
         return JobPosting.objects.all()
+
+def testcall(request):
+    print("HI", request.POST['text'])
+    time.sleep(3) # Sleep...
+    return HttpResponse("ok")

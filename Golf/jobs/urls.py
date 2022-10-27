@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.JobsView.as_view(), name='home'), # Basic home with the jobs list
     path('post/', views.individualPost, name='post'), # Posting a job
     path('<int:job_id>/', views.detail, name='jobdetails'), # Details of a job
+    path('ajax/', views.testcall, name='ajax'), # Communication with Django via JavaScript
 ]
