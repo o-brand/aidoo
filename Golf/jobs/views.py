@@ -15,13 +15,9 @@ def individualPost(request):
 
 def detail(request, job_id):
     template = loader.get_template('jobdetails.html')
-
     context = {
         'job': JobPosting.objects.get(pk=job_id),
-        
     }
-    
-
     return HttpResponse(template.render(context, request))
 
 class JobsView(ListView):
