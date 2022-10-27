@@ -15,8 +15,14 @@ def individualPost(request):
 
 def detail(request, job_id):
     template = loader.get_template('jobdetails.html')
+
+    try:
+        job = JobPosting.objects.get(pk=job_id)
+    except JobPosting.DoesNotExist:
+        return HttpResponseNotFound()
+
     context = {
-        'job': JobPosting.objects.get(pk=job_id),
+        'job': job,
     }
     return HttpResponse(template.render(context, request))
 
