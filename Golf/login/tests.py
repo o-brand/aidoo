@@ -231,11 +231,3 @@ class PasswordResetTestCase(TestCase):
         response = self.client.get('/password_reset/<uidb64>/<token>')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/password_reset_confirm.html')
-
-
-
-
-
-
-
-
