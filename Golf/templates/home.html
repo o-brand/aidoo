@@ -18,7 +18,7 @@
                                 Options
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="#">Save for later</a>
+                              <a class="dropdown-item" href="javascript:testclick('{{ job.job_id }}')">Save for later</a>
                               <a class="dropdown-item" href="#"></a>
                               <a class="dropdown-item" href="#">Report</a>
                             </div>
@@ -62,5 +62,6 @@ function testclick(id) {
             }
     });
 }
+
 </script>
 {% endblock %}
