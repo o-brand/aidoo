@@ -25,6 +25,7 @@ class JobForm(ModelForm):
     date = forms.DateTimeField(widget = forms.TextInput(), required= False)
     duration = forms.DurationField(widget= forms.TextInput(), required= False)
 
+
     class Meta:  #don't know why, just include, it's a Django thing
         model = JobPosting
         fields = ['first_name',]

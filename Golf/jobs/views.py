@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from .models import JobPosting
 from django.views.generic import ListView
 from django.views import View
@@ -48,16 +48,17 @@ class FormView(View):
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
-    def return_submit(request):
-        form = JobForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
         if request.method == "POST":            
             print("here")
         
         #this if contained within the first if
             if form.is_valid():
-                form.save(commit=False)
+                form.save()
                 print("im here")
-                #return redirect("views: return_submit")
-        form = JobForm()
+                return HttpResponseRedirect("/jobs/")
+        #form = JobForm()
         return render(request, FormView.template_name, {'form': form})
         
