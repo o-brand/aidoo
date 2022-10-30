@@ -16,3 +16,6 @@
 
 # Defining goals
 - SMART goals: https://corporatefinanceinstitute.com/resources/knowledge/other/smart-goal/
+
+# Drawing Diagrams
+https://www.draw.io/index.html
