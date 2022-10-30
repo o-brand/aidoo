@@ -3,16 +3,69 @@
 {% block title %}Post a new job{% endblock %}
 
 {% block content %}
-<h1>Hi! You can post a new job here.</h1>
+<div>
+    <h1>Hi! You can post a new job here.</h1>
 
-<form action="" method="post">
-    {% csrf_token %}
-    <table>
-        {{form.as_table}}
-    </table>
-    
-    <input type="submit" value="Submit" class="btn btn-light"/>
-</form>
+    <form action="" method="post">
+        {% csrf_token %}
+  <!--This ..
 
-<p><a href="{% url 'home' %}">Go back</a></p>
+        <table>
+            {{form.as_table}}
+        </table>
+
+   ..worksm don't tamper. -->
+
+        <p>
+            {{ form.first_name.label_tag }}
+            <br/>
+            {{ form.first_name }}
+        </p>
+        <p>
+            {{ form.last_name.label_tag }}
+            <br/>
+            {{ form.last_name }}
+        </p> 
+        <p>
+            {{ form.job_title.label_tag }}
+            <br/>
+            {{ form.job_title }}
+        </p> 
+        <p>
+            {{ form.job_short_description.label_tag }}
+            <br/>
+            {{ form.job_short_description }}
+        </p> 
+        <p>
+            {{ form.job_long_description.label_tag }}
+            <br/>
+            {{ form.job_long_description }}
+        </p> 
+        <p>
+            {{ form.location.label_tag }}
+            <br/>
+            {{ form.location }}
+        </p> 
+        <p>
+            {{ form.posting_time.label_tag }}
+            <br/>
+            {{ form.posting_time }}
+        </p> 
+        <p>
+            {{ form.points.label_tag }}
+            <br/>
+            {{ form.points }}
+        </p> 
+        <p>
+            {{ form.duration.label_tag }}
+            <br/>
+            {{ form.duration }}
+        </p> 
+        
+        <input type="submit" value="Submit" class="btn btn-light"/>
+    </form>
+
+
+    <p><a href="{% url 'home' %}">Go back</a></p>
+</div>
 {% endblock %}
