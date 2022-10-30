@@ -36,13 +36,13 @@ class UserSaveForLater(models.Model):
                 fields=['user_id', 'job_id'], name='sfl_user_job_combo'
             )
         ]
-    
+
 class JobProcess(models.Model):
     class JobStatus(models.TextChoices):
         APPLIED = 'AP', ('Applied')
         REJECTED = 'RE', ('Rejected')
         ACCEPTED = 'AC', ('Accepted')
-        
+
     job_process_id = models.BigAutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete = models.CASCADE)
     job_id = models.ForeignKey(JobPosting, on_delete = models.CASCADE)
