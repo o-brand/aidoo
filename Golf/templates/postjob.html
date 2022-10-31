@@ -6,26 +6,17 @@
 <div>
     <h1>Hi! You can post a new job here.</h1>
 
-    <form action="" method="post">
+    {% if form.errors %}
+        <div>
+            {% for key, value in form.errors.items %}
+                <strong class="error">{{ value }}</strong>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form action="" method="post" id="form">
         {% csrf_token %}
-  <!--This ..
 
-        <table>
-            {{form.as_table}}
-        </table>
-
-   ..worksm don't tamper. -->
-
-        <p>
-            {{ form.first_name.label_tag }}
-            <br/>
-            {{ form.first_name }}
-        </p>
-        <p>
-            {{ form.last_name.label_tag }}
-            <br/>
-            {{ form.last_name }}
-        </p> 
         <p>
             {{ form.job_title.label_tag }}
             <br/>
@@ -37,35 +28,59 @@
             {{ form.job_short_description }}
         </p> 
         <p>
-            {{ form.job_long_description.label_tag }}
+            {{ form.job_description.label_tag }}
             <br/>
-            {{ form.job_long_description }}
+            {{ form.job_description }}
         </p> 
         <p>
             {{ form.location.label_tag }}
             <br/>
             {{ form.location }}
-        </p> 
+        </p>
         <p>
-            {{ form.posting_time.label_tag }}
+            The expected duration for the job. (It is used to calculate the rewards for the job.)
             <br/>
-            {{ form.posting_time }}
-        </p> 
-        <p>
-            {{ form.points.label_tag }}
-            <br/>
-            {{ form.points }}
-        </p> 
-        <p>
-            {{ form.duration.label_tag }}
-            <br/>
-            {{ form.duration }}
-        </p> 
-        
+            {{ form.duration_days }} days {{ form.duration_hours }} hours
+        </p>
+
+        <input type="hidden" name="poster_id" value="{{ poster_id }}" />
+
         <input type="submit" value="Submit" class="btn btn-light"/>
     </form>
 
-
     <p><a href="{% url 'home' %}">Go back</a></p>
 </div>
+
+<script>
+    //Points
+    var points = 5;
+    var days = 0;
+    var hours = 1;
+
+    // Recalculate points
+    $('select[name="duration_days"]').on('input', function (e) {
+        value = Number.parseFloat(e.target.value);
+        if(!Number.isNaN(value)) {
+            point += (value - days) * 24*5;
+            days = value;
+        }
+    });
+    $('select[name="duration_hours"]').on('input', function (e) {
+        value = Number.parseFloat(e.target.value);
+        if(!Number.isNaN(value)) {
+            point += (value - hours) * 5;
+            hours = value;
+        }
+    });
+
+    // Append calculated point.
+    $("#form").submit( function(eventObj) {
+        $("<input />").attr("type", "hidden")
+            .attr("name", "points")
+            .attr("value", points)
+            .appendTo("#form");
+
+        return true;
+    });
+</script>
 {% endblock %}

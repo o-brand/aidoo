@@ -39,7 +39,7 @@ class FormView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'poster_id': request.user.id})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -48,4 +48,4 @@ class FormView(View):
             form.save()
             return HttpResponseRedirect("/jobs/")
 
-        return render(request, FormView.template_name, {'form': form})
+        return render(request, FormView.template_name, {'form': form, 'poster_id': request.user.id})
