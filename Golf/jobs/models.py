@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from django.utils import timezone
 
 class JobPosting(models.Model):
     job_id = models.BigAutoField(primary_key=True)
@@ -9,10 +10,10 @@ class JobPosting(models.Model):
     job_title = models.CharField(max_length=50)
     job_short_description = models.CharField(max_length=50)
     job_description = models.CharField(max_length=1000)
-    posting_time = models.DateTimeField()
+    posting_time = models.DateTimeField(default=timezone.now)
     points = models.IntegerField(validators=[MinValueValidator(1)])
-    assigned = models.BooleanField()
-    completed = models.BooleanField()
+    assigned = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
 
 class UserExtended(models.Model):
     user_id = models.OneToOneField(
