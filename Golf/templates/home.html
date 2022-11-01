@@ -18,7 +18,7 @@
                                 Options
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="javascript:testclick('{{ job.job_id }}')">Save for later</a>
+                              <a class="dropdown-item" href="javascript:sendid('{{ user.id }}','{{ job.job_id }}')">Save for later</a>
                               <a class="dropdown-item" href="#"></a>
                               <a class="dropdown-item" href="#">Report</a>
                             </div>
@@ -59,7 +59,19 @@ function testclick(id) {
         data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text },
         success: function callback(response) {
             console.log(response);
-            }
+        }
+    });
+}
+
+function sendid(uid, jid) {
+    //Communicate with Python
+    $.ajax({
+        type: "POST",
+        url: "{% url 'ajax' %}",
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid},
+        success: function callback(response) {
+            console.log(response);
+        }
     });
 }
 
