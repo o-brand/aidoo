@@ -32,7 +32,7 @@
                     </a>
                     <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
-                    <button class="btn btn-primary" id="apply{{ job.job_id }}"onclick="testclick('{{ job.job_id }}')">Apply</button>
+                    <button class="btn btn-primary">Apply</button>
                 </div>
             {% endfor %}
         </div>
@@ -45,32 +45,17 @@
 </div>
 
 <script>
-//Test function
-function testclick(id) {
-    var text = "test";
-
-    //Disable button
-    $("#apply" + id).attr('disabled','disabled');
-
-    //Communicate with Python
-    $.ajax({
-        type: "POST",
-        url: "{% url 'ajax' %}",
-        data: { csrfmiddlewaretoken: '{{ csrf_token }}', text: text },
-        success: function callback(response) {
-            console.log(response);
-        }
-    });
-}
+//Disable button
+//$("#apply" + id).attr('disabled','disabled');
 
 function sendid(uid, jid) {
     //Communicate with Python
     $.ajax({
         type: "POST",
-        url: "{% url 'ajax' %}",
+        url: "{% url 'sfl' %}",
         data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid},
         success: function callback(response) {
-            console.log(response);
+            alert("You successfully saved the job. You can view it on your profile.")
         }
     });
 }

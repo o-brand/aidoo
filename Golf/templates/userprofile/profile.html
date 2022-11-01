@@ -11,5 +11,20 @@
 <p>You last logged in: {{ user.last_login }}</p>
 <p>You joined: {{ user.date_joined }}</p>
 
+<h2>Saved jobs</h2>
+{% if saved %}
+    <div>
+        {% for job, time in saved %}
+        <p>
+            <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+            <br>You saved at {{ time }}
+        </p>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>You don't have any saved jobs.</p>
+{% endif %}
+
+
 <p><a href="{% url 'home' %}">Go back</a></p>
 {% endblock %}

@@ -30,11 +30,6 @@ class JobsView(ListView):
    def get_queryset(self):
         return JobPosting.objects.all()
 
-def testcall(request):
-    print("HI", request.POST['text'])
-    time.sleep(3) # Sleep...
-    return HttpResponse("ok")
-
 def sflcall(request):
     tz = timezone.get_current_timezone()
     timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
@@ -43,7 +38,6 @@ def sflcall(request):
         job_id=JobPosting.objects.get(pk=int(request.POST['jid'])),
         saving_time=timzone_datetime)
     new_sfljob.save()
-    time.sleep(3) # Sleep...
     return HttpResponse("ok")
 
 class FormView(View):
