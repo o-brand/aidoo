@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}My profile{% endblock %}
+
+{% block content %}
+<h1>My username: {{ user.user_id.username }}</h1>
+
+<p>Real name: {{ user.user_id.first_name }} {{ user.user_id.last_name }}</p>
+<p>Email address: {{ user.user_id.email }}</p>
+<p>Date of birth: {{ user.date_of_birth }}</p>
+
+<p>Balance: {{ user.balance }} points</p>
+<p>Rating: {{ user.rating }}</p>
+
+<p>Last logged in: {{ user.user_id.last_login }}</p>
+<p>Joined: {{ user.user_id.date_joined }}</p>
+
+<h2>Saved jobs</h2>
+{% if saved %}
+    <div>
+        {% for job, time in saved %}
+        <p>
+            <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+            <br>Saved at {{ time }}
+        </p>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>I don't have any saved jobs.</p>
+{% endif %}
+
+<p><a href="{% url 'home' %}">Go back</a></p>
+{% endblock %}
