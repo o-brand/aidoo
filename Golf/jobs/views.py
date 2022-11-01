@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from .models import JobPosting
+from .models import User, JobPosting, UserSaveForLater
 from django.views.generic import ListView
 from django.views import View
 from django.template import loader
 from .forms import JobForm
+from django.utils import timezone
 import time
+import datetime
 
 def detail(request, job_id):
     template = loader.get_template('jobdetails.html')
@@ -30,6 +32,17 @@ class JobsView(ListView):
 
 def testcall(request):
     print("HI", request.POST['text'])
+    time.sleep(3) # Sleep...
+    return HttpResponse("ok")
+
+def sflcall(request):
+    tz = timezone.get_current_timezone()
+    timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
+    new_sfljob = UserSaveForLater(
+        user_id=User.objects.get(pk=int(request.POST['uid'])),
+        job_id=JobPosting.objects.get(pk=int(request.POST['jid'])),
+        saving_time=timzone_datetime)
+    new_sfljob.save()
     time.sleep(3) # Sleep...
     return HttpResponse("ok")
 
