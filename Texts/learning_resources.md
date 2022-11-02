@@ -1,5 +1,8 @@
 # Resources
 
+## Git Learning!
+- https://learngitbranching.js.org/
+
 ## SQLite viewer
 - https://inloop.github.io/sqlite-viewer/
 
