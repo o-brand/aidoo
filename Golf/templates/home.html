@@ -49,12 +49,12 @@
 //Disable button
 //$("#apply" + id).attr('disabled','disabled');
 
-function sendid(uid, jid) {
+function saveForLater(uid, jid) {
     //Communicate with Python
     $.ajax({
         type: "POST",
-        url: "{% url 'sfl' %}",
-        data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid},
+        url: "{% url 'generic' %}",
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "sfl", uid: uid, jid: jid},
         success: function callback(response) {
             alert("You successfully saved the job. You can view it on your profile.")
         }

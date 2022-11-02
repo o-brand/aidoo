@@ -30,19 +30,23 @@ class JobsView(ListView):
    def get_queryset(self):
         return JobPosting.objects.all()
 
+# Executed when saveForLater is run on the frontend (i.e. save for later button pressed)
 def sflcall(request):
     tz = timezone.get_current_timezone()
     timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
-    new_sfljob = UserSaveForLater(
+    new_sfljob = UserSaveForLater( # Make new UserSaveForLater record
         user_id=User.objects.get(pk=int(request.POST['uid'])),
         job_id=JobPosting.objects.get(pk=int(request.POST['jid'])),
         saving_time=timzone_datetime)
-    new_sfljob.save()
+    new_sfljob.save() # Save new UserSaveForLater record in database table
     return HttpResponse("ok")
 
+# A dictionary of functions we define to run through genericcall (so we can use only one url)
 function_dict = {'sfl' : sflcall,}
+
+# Runs a function in our dictionary, as specified by the frontend function calling it
 def genericcall(request):
-    function_dict[request.POST['func']](request) #how to pass keyword args?
+    function_dict[request.POST['func']](request)
     return HttpResponse("ok")
 
 
