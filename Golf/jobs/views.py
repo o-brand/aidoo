@@ -30,7 +30,7 @@ class JobsView(ListView):
    def get_queryset(self):
         return JobPosting.objects.all()
 
-def sflcall(request, **kwargs):
+def sflcall(request):
     tz = timezone.get_current_timezone()
     timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
     new_sfljob = UserSaveForLater(
@@ -42,7 +42,7 @@ def sflcall(request, **kwargs):
 
 function_dict = {'sfl' : sflcall,}
 def genericcall(request):
-    function_dict[request.POST['func']]() #how to pass keyword args?
+    function_dict[request.POST['func']](request) #how to pass keyword args?
     return HttpResponse("ok")
 
 
