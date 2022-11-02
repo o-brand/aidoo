@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 from .forms import RegisterForm
+import datetime
 
 class WelcomeTestCase(TestCase):
 
@@ -61,7 +62,8 @@ class SignupTestCase(TestCase):
             'email': "madeupuser@madeupuser.com",
             'username': 'madeupuser',
             'password1': 'madeuppassword',
-            'password2': 'madeuppassword'
+            'password2': 'madeuppassword',
+            'date_of_birth':datetime.date(2010,1,1)
         }
         response = self.client.post(reverse('signup'), data=new_user)
 
