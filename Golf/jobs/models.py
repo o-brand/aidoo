@@ -21,9 +21,9 @@ class UserExtended(models.Model):
         on_delete = models.CASCADE,
         primary_key = True
     )
-    balance = models.IntegerField()
+    balance = models.IntegerField(default=0)
     date_of_birth = models.DateField()
-    rating = models.FloatField()
+    rating = models.FloatField(default=0)
 
 class UserSaveForLater(models.Model):
     save_for_later_id = models.BigAutoField(primary_key=True)
