@@ -18,7 +18,7 @@
                                 Options
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="javascript:sendid('{{ user.id }}','{{ job.job_id }}')">Save for later</a>
+                              <a class="dropdown-item" href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">Save for later</a>
                               <a class="dropdown-item" href="#"></a>
                               <a class="dropdown-item" href="#">Report</a>
                             </div>
@@ -46,20 +46,20 @@
 </div>
 
 <script>
-//Disable button
-//$("#apply" + id).attr('disabled','disabled');
+    //Disable button
+    //$("#apply" + id).attr('disabled','disabled');
 
-function saveForLater(uid, jid) {
-    //Communicate with Python
-    $.ajax({
-        type: "POST",
-        url: "{% url 'generic' %}",
-        data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "sfl", uid: uid, jid: jid},
-        success: function callback(response) {
-            alert("You successfully saved the job. You can view it on your profile.")
-        }
-    });
-}
+    function saveForLater(uid, jid) {
+        //Communicate with Python
+        $.ajax({
+            type: "POST",
+            url: "{% url 'generic' %}",
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "sfl", uid: uid, jid: jid},
+            success: function callback(response) {
+                alert("You've successfully (un)saved the job. You can view the changes on your profile.")
+            }
+        });
+    }
 
 </script>
 {% endblock %}
