@@ -18,7 +18,14 @@
                                 Options
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" id="sfl{{ user.id }}-{{ job.job_id }}" href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">Save for later</a>
+                              <a class="dropdown-item" 
+                                id="sfl{{ user.id }}-{{ job.job_id }}" 
+                                href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">
+                                    {% if saved %}
+                                        Unsave
+                                    {% else %}
+                                        Save for later
+                              </a>
                               <a class="dropdown-item" href="#"></a>
                               <a class="dropdown-item" href="#">Report</a>
                             </div>

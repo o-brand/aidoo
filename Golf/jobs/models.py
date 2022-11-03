@@ -12,6 +12,8 @@ class JobPosting(models.Model):
     job_description = models.CharField(max_length=1000)
     posting_time = models.DateTimeField(default=timezone.now)
     points = models.IntegerField(validators=[MinValueValidator(1)])
+    deadline = models.DateTimeField()
+    hidden = models.BooleanField(default=False)
     assigned = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 

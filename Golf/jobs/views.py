@@ -28,7 +28,7 @@ class JobsView(ListView):
    context_object_name = 'jobs'
 
    def get_queryset(self):
-        return JobPosting.objects.all()
+        return JobPosting.objects.filter(hidden=False)
 
 # Executed when saveForLater is run on the frontend (i.e. save for later button pressed)
 def sfl_call(request):
