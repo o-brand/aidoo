@@ -6,14 +6,6 @@
 <div>
     <h1>Hi! You can post a new job here.</h1>
 
-    {% if form.errors %}
-        <div>
-            {% for key, value in form.errors.items %}
-                <strong class="error">{{ value }}</strong>
-            {% endfor %}
-        </div>
-    {% endif %}
-
     <form action="" method="post" id="form">
         {% csrf_token %}
 
@@ -21,21 +13,53 @@
             {{ form.job_title.label_tag }}
             <br/>
             {{ form.job_title }}
+            <br />
+            {% if form.errors %}
+                {% for key, value in form.errors.items %}
+                    {% if key == "job_title" %}
+                        <strong class="error">{{ value.as_text }}</strong>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </p> 
         <p>
             {{ form.job_short_description.label_tag }}
             <br/>
             {{ form.job_short_description }}
+            <br />
+            {% if form.errors %}
+                {% for key, value in form.errors.items %}
+                    {% if key == "job_short_description" %}
+                        <strong class="error">{{ value.as_text }}</strong>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </p> 
         <p>
             {{ form.job_description.label_tag }}
             <br/>
             {{ form.job_description }}
+            <br />
+            {% if form.errors %}
+                {% for key, value in form.errors.items %}
+                    {% if key == "job_description" %}
+                        <strong class="error">{{ value.as_text }}</strong>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </p> 
         <p>
             {{ form.location.label_tag }}
             <br/>
             {{ form.location }}
+            <br />
+            {% if form.errors %}
+                {% for key, value in form.errors.items %}
+                    {% if key == "location" %}
+                        <strong class="error">{{ value.as_text }}</strong>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </p>
         <p>
             The expected duration for the job. (It is used to calculate the rewards for the job.)
