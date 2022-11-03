@@ -8,5 +8,5 @@ urlpatterns = [
     path('', views.JobsView.as_view(), name='home'), # Basic home with the jobs list
     path('post/', views.FormView.as_view(), name='post'), # Posting a job
     path('<int:job_id>/', views.detail, name='jobdetails'), # Details of a job
-    path('generic', views.genericcall, name='generic'), # Generic function to communicate with Django via JavaScript
+    path('generic', views.generic_call, name='generic'), # Generic function to communicate with Django via JavaScript
 ]

@@ -31,7 +31,7 @@ class JobsView(ListView):
         return JobPosting.objects.all()
 
 # Executed when saveForLater is run on the frontend (i.e. save for later button pressed)
-def sflcall(request):
+def sfl_call(request):
     uid = int(request.POST['uid'])
     jid = int(request.POST['jid'])
     try:
@@ -51,11 +51,11 @@ def sflcall(request):
 
 
 # A dictionary of functions we define to run through genericcall (so we can use only one url)
-function_dict = {'sfl': sflcall, #save for later/unsave toggle function
+function_dict = {'sfl': sfl_call, #save for later/unsave toggle function
                 }
 
 # Runs a function in our dictionary, as specified by the frontend function calling it
-def genericcall(request):
+def generic_call(request):
     function_dict[request.POST['func']](request)
     return HttpResponse("ok")
 

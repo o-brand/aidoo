@@ -18,7 +18,7 @@
                                 Options
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">Save for later</a>
+                              <a class="dropdown-item" id="sfl{{ user.id }}-{{ job.job_id }}" href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">Save for later</a>
                               <a class="dropdown-item" href="#"></a>
                               <a class="dropdown-item" href="#">Report</a>
                             </div>
@@ -50,6 +50,12 @@
     //$("#apply" + id).attr('disabled','disabled');
 
     function saveForLater(uid, jid) {
+        if ($("#sfl" + uid + "-" + jid).text() == 'Save for later') {
+            $("#sfl" + uid + "-" + jid).text('Unsave')
+        }
+        else {
+            $("#sfl" + uid + "-" + jid).text('Save for later')
+        }
         //Communicate with Python
         $.ajax({
             type: "POST",
