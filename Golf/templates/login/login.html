@@ -10,7 +10,7 @@
     <strong class="error">Please login to see this page.</strong>
   {% endif %}
 
-  {% if form.errors %}
+  {% if form.errors %}{# Right now, we only have one kind of error, this is just a custom message for it. #}
     <strong class="error">Your username and password didn't match. Please try again.</strong>
   {% endif %}
 
@@ -20,21 +20,21 @@
         {% csrf_token %}
 
         <p>
-            {{ form.username.label_tag }}
-            <br/>
-            {{ form.username }}
+          {{ form.username.label_tag }}
+          <br/>
+          {{ form.username }}
         </p>
         <p>
-            {{ form.password.label_tag }}
-            <br/>
-            {{ form.password }}
+          {{ form.password.label_tag }}
+          <br/>
+          {{ form.password }}
         </p>
 
         <input type="submit" value="Login" class="btn btn-dark">
         <input type="hidden" name="next" value="{{ next }}">
 
       </form>
-      
+
     </div>
   </div>
   <p><a href="{% url 'password_reset_form' %}">Forgotten password?</a></p>
