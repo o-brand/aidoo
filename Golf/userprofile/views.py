@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from jobs.models import JobPosting, UserSaveForLater, UserExtended
+from jobs.models import JobPosting, UserSaveForLater, UserExtended, JobProcess
 from django.template import loader
 from django.http import HttpResponse, HttpResponseNotFound
 
@@ -35,8 +35,17 @@ def me(request):
     for job in saved:
         saved_jobs.append([job.job_id, job.saving_time])
 
+    # Posted jobs
+    posted_jobs = []
+    posted = JobPosting.objects.filter(poster_id=id)
+    for job in posted:
+         # Need to run the query, that is the reason for list.
+        applicants = list(JobProcess.objects.filter(job_id=job.job_id))
+        posted_jobs.append([job, applicants])
+
     context = {
         'user': user_extended,
         'saved': saved_jobs,
+        'posted': posted_jobs,
     }
     return HttpResponse(template.render(context, request))
