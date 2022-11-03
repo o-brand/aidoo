@@ -9,5 +9,5 @@
 <p>Points: {{ job.points }}</p>
 <p>User: {{ job.poster_id.username }}</p>
 
-<p><a href="{% url 'home' %}">Go back</a></p>
+<p><a href="{{ request.META.HTTP_REFERER }}">Go back</a></p>
 {% endblock %}
