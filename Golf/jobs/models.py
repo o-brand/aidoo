@@ -17,6 +17,12 @@ class JobPosting(models.Model):
     assigned = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
+    @staticmethod
+    def has_been_saved():
+        print([u.job_id for u in UserSaveForLater.objects.select_related('job_id')])
+        return UserSaveForLater.objects.select_related('job_id')
+    
+
 class UserExtended(models.Model):
     user_id = models.OneToOneField(
         User,
