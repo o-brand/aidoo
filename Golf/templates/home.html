@@ -33,6 +33,9 @@
                     <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
                     <button class="btn btn-primary">Apply</button>
+                    <!-- amend this one to disable the button after 1 click--> 
+                    <!-- check the file before Ori's commit, "Extended profile page +small changes commit" use the functionality of the button and the id-->
+                    <!-- use functions views.genericcal() to get message back from jscript, you ne-->
                 </div>
             {% endfor %}
         </div>
@@ -49,17 +52,30 @@
 //Disable button
 //$("#apply" + id).attr('disabled','disabled');
 
+
+// ANETA   WORK HERE!
+//similarly to this
+
+
+//write new funciton to send the message(what to do after clicking Apply) for the Django receive
+//by extending dict in the views.dict
+
 function sendid(uid, jid) {
     //Communicate with Python
     $.ajax({
         type: "POST",
-        url: "{% url 'sfl' %}",
-        data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid},
+        url: "{% url 'generic' %}",
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid, func : "sfl"},
         success: function callback(response) {
             alert("You successfully saved the job. You can view it on your profile.")
         }
+        //"ok" in HttpResponse triggers success and you just specify the message
     });
 }
+
+//data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid, HERE you add function to call to Django through dictionary},
+        //extend function_dict, with my function and implement it, the key is the same as the one sent with the javascript
+
 
 </script>
 {% endblock %}

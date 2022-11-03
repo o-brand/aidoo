@@ -30,6 +30,7 @@ class JobsView(ListView):
    def get_queryset(self):
         return JobPosting.objects.all()
 
+#write similar function to this, and then amend the dictionary 
 def sflcall(request, **kwargs):
     tz = timezone.get_current_timezone()
     timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
@@ -39,7 +40,10 @@ def sflcall(request, **kwargs):
         saving_time=timzone_datetime)
     new_sfljob.save()
     return HttpResponse("ok")
+    #this HttpResponse is connected to jscript sucess:
 
+
+#this is the ductionary, used in home.html: function sendid(uid...) .data {func: "sfl"}
 function_dict = {'sfl' : sflcall,}
 def genericcall(request):
     function_dict[request.POST['func']]() #how to pass keyword args?
