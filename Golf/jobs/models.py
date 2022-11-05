@@ -21,17 +21,6 @@ class JobPosting(models.Model):
     def has_been_saved():
         print([u.job_id for u in UserSaveForLater.objects.select_related('job_id')])
         return UserSaveForLater.objects.select_related('job_id')
-    
-
-class UserExtended(models.Model):
-    user_id = models.OneToOneField(
-        User,
-        on_delete = models.CASCADE,
-        primary_key = True
-    )
-    balance = models.IntegerField(default=0)
-    date_of_birth = models.DateField()
-    rating = models.FloatField(default=0)
 
 class UserSaveForLater(models.Model):
     save_for_later_id = models.BigAutoField(primary_key=True)
