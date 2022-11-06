@@ -134,9 +134,15 @@ LOGOUT_REDIRECT_URL = "/" # After log out, the user is redirected to here instea
 
 # Needed for the password reset
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
-EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
-EMAIL_USE_TLS = True
+#Console Printing Email Backend. Currently just using print instead
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#Disabled Until App is complete. We don't want to be sending real emails until the last step.
+
+#EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+#EMAIL_HOST = "smtp.gmail.com"
+#EMAIL_PORT = 587
+#EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
+#EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
+#EMAIL_USE_TLS = True

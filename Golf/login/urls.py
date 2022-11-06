@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
-from .views import SignUpView
+from .views import SignUpView, ActivateAccount
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='welcome.html'), name='welcome'), # Welcome page for the whole project
@@ -12,4 +12,6 @@ urlpatterns = [
     path('password_reset/done', auth_views.PasswordResetDoneView.as_view(template_name='login/password_reset_done.html'), name='password_reset_done'),
     path('password_reset/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='login/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password_reset/complete', auth_views.PasswordResetCompleteView.as_view(template_name='login/password_reset_complete.html'), name='password_reset_complete'),
+    path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
+
 ]
