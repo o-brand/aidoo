@@ -5,29 +5,96 @@
 {% block content %}
 <h1>My username: {{ user.user_id.username }}</h1>
 
-<p>Real name: {{ user.user_id.first_name }} {{ user.user_id.last_name }}</p>
-<p>Email address: {{ user.user_id.email }}</p>
-<p>Date of birth: {{ user.date_of_birth }}</p>
-
-<p>Balance: {{ user.balance }} points</p>
-<p>Rating: {{ user.rating }}</p>
-
-<p>Last logged in: {{ user.user_id.last_login }}</p>
-<p>Joined: {{ user.user_id.date_joined }}</p>
-
-<h2>Saved jobs</h2>
-{% if saved %}
-    <div>
-        {% for job, time in saved %}
-        <p>
-            <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
-            <br>Saved at {{ time }}
-        </p>
-        {% endfor %}
-    </div>
-{% else %}
-    <p>I don't have any saved jobs.</p>
-{% endif %}
-
 <p><a href="{% url 'home' %}">Go back</a></p>
+
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'details')" id="details_tab">Personal details</button>
+  <button class="tablinks" onclick="openTab(event, 'saved')" id="saved_tab">Saved jobs</button>
+  <button class="tablinks" onclick="openTab(event, 'posted')" id="posted_tab">Posted jobs</button>
+</div>
+
+<div id="details" class="tabcontent">
+  <h3>Personal details</h3>
+  <p>Real name: {{ user.user_id.first_name }} {{ user.user_id.last_name }}</p>
+  <p>Email address: {{ user.user_id.email }}</p>
+  <p>Date of birth: {{ user.date_of_birth }}</p>
+
+  <p>Balance: {{ user.balance }} points</p>
+  <p>Rating: {{ user.rating }}</p>
+
+  <p>Last logged in: {{ user.user_id.last_login }}</p>
+  <p>Joined: {{ user.user_id.date_joined }}</p>
+</div>
+
+<div id="saved" class="tabcontent">
+  <h3>Saved jobs</h3>
+  {% if saved %}
+      <div>
+          {% for job, time in saved %}
+          <p>
+              <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+              <br>Saved at {{ time }}
+          </p>
+          {% endfor %}
+      </div>
+  {% else %}
+      <p>I don't have any saved jobs.</p>
+  {% endif %}
+</div>
+  
+<div id="posted" class="tabcontent">
+  <h3>Posted jobs</h3>
+  {% if posted %}
+    {% for job, applicants in posted %}
+      <div>
+        <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+        <p>Posted on: {{ job.posting_time }}</p>
+        <h6>Applicants:</h6>
+        {% if applicants %}
+          <table>
+            {% for applicant in applicants %}
+              <tr>
+                <td>
+                  {{ applicant.user_id.username }} ({{ applicant.status }})
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        {% else %}
+        <p>No one has applied for this job.</p>
+        {% endif %}
+      </div>
+      <hr>
+    {% endfor %}
+  {% else %}
+      <p>I haven't posted any jobs.</p>
+  {% endif %}
+</div>
+
+<script>
+  // Open a tab
+  function openTab(evt, content) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(content).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  // Default tab
+  document.getElementById("details_tab").click();
+</script>
 {% endblock %}
