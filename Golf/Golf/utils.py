@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from jobs.models import UserExtended
+from userprofile.models import UserExtended
 import datetime
 
 class LoginRequiredTestCase(TestCase):
