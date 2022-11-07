@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from jobs.models import JobPosting, UserSaveForLater, UserExtended, JobProcess
+from jobs.models import JobPosting, UserSaveForLater, JobProcess
+from .models import UserExtended
 from django.template import loader
 from django.http import HttpResponse, HttpResponseNotFound
 
