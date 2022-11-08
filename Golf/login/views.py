@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from django.core.mail import send_mail
 
 class SignUpView(View):
     form_class1 = RegisterForm
@@ -33,6 +34,7 @@ class SignUpView(View):
             auth_user=form1.save(commit=False)
             auth_user.is_active=0
             user = auth_user.username
+            email = auth_user.email
             auth_user.save()
 
             tempid = form1.save()
@@ -56,12 +58,10 @@ class SignUpView(View):
             print(subject)
             print(message)
 
-            #User.email_user(subject, message)
-
-            #messages.success(request, ('Please Confirm your email to complete registration.'))
+            send_mail(subject,message,None,[email])
 
 
-            return redirect(reverse("login"))
+            return render(request, 'login/confirm_email.html', {'form1':form1})
 
         return render(request, self.template_name, {'form1': form1, 'form2': form2})
 
@@ -77,10 +77,6 @@ class ActivateAccount(View):
         if user is not None and account_activation_token.check_token(user, token):
             user.is_active = 1
             user.save()
-            #messages.success(request, ('Your account have been confirmed.'))
-            print("Victory")
-            return redirect('login')
+            return redirect('/confirm_email/success/')
         else:
-            #messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
-            print("Failure")
-            return redirect('login')
+            return redirect('/confirm_email/failure/')
