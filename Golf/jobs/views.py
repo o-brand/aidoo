@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from .models import User, JobPosting, UserSaveForLater
+from .models import User, JobPosting, UserSaveForLater, JobProcess
 from django.views.generic import ListView
 from django.views import View
 from django.template import loader
@@ -53,6 +53,20 @@ def sfl_call(request):
             job_id=JobPosting.objects.get(pk=int(request.POST['jid'])),
             saving_time=timzone_datetime)
         new_sfljob.save() # Save new UserSaveForLater record in database table
+
+def apply_call(request):
+    uid = int(request.POST['uid'])
+    jid = int(request.POST['jid'])
+    try: 
+        u = JobProcess.objects.get(user_id=uid, job_id=jid)
+    except JobProcess.DoesNotExist:
+        tz = timezone.get_current_timezone()
+        timezone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
+        new_apply = JobProcess(
+            user_id = User.objects.get(pk = int(request.POST['uid'])),
+            job_id = JobPosting.objects.get(pk=int(request.POST['jid'])),
+            saving_time = timezone_datetime)
+        new_apply.save()
     else:
         u.delete()
     finally:
@@ -60,8 +74,10 @@ def sfl_call(request):
 
 
 # A dictionary of functions we define to run through genericcall (so we can use only one url)
+
+#this is the dictionary, used in home.html: function sendid(uid...) .data {func: "sfl"}
 function_dict = {'sfl': sfl_call, #save for later/unsave toggle function
-                }
+                'app': apply_call}
 
 # Runs a function in our dictionary, as specified by the frontend function calling it
 def generic_call(request):
