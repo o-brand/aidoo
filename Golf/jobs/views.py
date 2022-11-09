@@ -28,8 +28,10 @@ class JobsView(ListView):
    context_object_name = 'jobs'
 
    def get_queryset(self):
-        return JobPosting.objects.filter(hidden=False)
-   
+        filter_val = self.request.GET.get('job_title__icontains', '')
+
+        return JobPosting.objects.filter(hidden=False,job_title__icontains=filter_val)
+    
    def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)

@@ -5,7 +5,13 @@
 {% block content %}
 <div class="container">
     <h1>Hi {{ user.username }}!</h1>
-    <p>You can see the available jobs here.</p>
+    <p>You can see the available jobs here. </p>
+
+
+    <form method ="get">
+        <input type="text" value='{{request.GET.job_title__icontains}}' name="job_title__icontains"/>
+    <button class="btn btn-primary" type="submit">Search</button>
+
 
     <div class="row">
         <div class="col jobs-scroll">
