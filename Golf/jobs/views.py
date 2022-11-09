@@ -75,12 +75,15 @@ def apply_call(request):
     finally:
         return HttpResponse("ok")
 
+def report_call(request):
+    return HttpResponse("ok")
 
 # A dictionary of functions we define to run through genericcall (so we can use only one url)
 
 #this is the dictionary, used in home.html: function sendid(uid...) .data {func: "sfl"}
 function_dict = {'sfl': sfl_call, #save for later/unsave toggle function
-                'app': apply_call}
+                'app': apply_call,
+                'report': report_call}
 
 # Runs a function in our dictionary, as specified by the frontend function calling it
 def generic_call(request):

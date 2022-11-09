@@ -26,12 +26,14 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                               <a class="dropdown-item" 
-                                id="sfl{{ user.id }}-{{ job.job_id }}" 
+                                id="sfl{{ job.job_id }}" 
                                 href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">
                                     Save for later
                               </a>
-                              <a class="dropdown-item" href="#"></a>
-                              <a class="dropdown-item" href="#">Report</a>
+                              <a class="dropdown-item" 
+                                href="javascript:report('{{ user.id }}','{{ job.job_id }}')">
+                                    Report
+                              </a>
                             </div>
                           </div>
                     </div>
@@ -61,12 +63,12 @@
     //$("#apply" + id).attr('disabled','disabled');
 
     
-function saveForLater(uid, jid) {
-        if ($("#sfl" + uid + "-" + jid).text() == 'Save for later') {
-            $("#sfl" + uid + "-" + jid).text('Unsave')
+    function saveForLater(uid, jid) {
+        if ($("#sfl"+jid).text() == 'Save for later') {
+            $("#sfl"+jid).text('Unsave')
         }
         else {
-            $("#sfl" + uid + "-" + jid).text('Save for later')
+            $("#sfl"+jid).text('Save for later')
         }
         //Communicate with Python
         $.ajax({
@@ -94,6 +96,17 @@ function saveForLater(uid, jid) {
             data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
             success: function callback(response) {
                 alert("You've applied for the job. There are no changes in your profile.")
+            }
+        });
+    }
+
+    function report(uid, jid) {
+        $.ajax({
+            type: "POST", 
+            url: "{% url 'generic' %}", 
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'report', uid: uid, jid: jid}, 
+            success: function callback(response) {
+                alert("Thank you for reporting the job. We will review your complaint shortly.")
             }
         });
     }
