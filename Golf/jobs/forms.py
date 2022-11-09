@@ -74,6 +74,14 @@ class JobForm(ModelForm):
         required=True,
     )
 
+    deadline = forms.DateField(
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'style': 'width: auto; display: initial;'},
+        ),
+        label="Deadline",
+        required=False
+    )
+
     class Meta:
         model = JobPosting
-        fields = ['job_title','job_short_description','job_description','location','points','poster_id']
+        fields = ['job_title','job_short_description','job_description','location','points','deadline','poster_id']
