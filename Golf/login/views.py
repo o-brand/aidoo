@@ -42,10 +42,6 @@ class SignUpView(View):
             userextended.user_id=tempid
             userextended.save()
 
-            print(user)
-            print(auth_user.pk)
-            print(auth_user)
-
             current_site = get_current_site(request)
             subject = 'Activate Your aidoo Account'
             message = render_to_string('login/account_activation_email.html', 
@@ -54,9 +50,6 @@ class SignUpView(View):
                 'uid': urlsafe_base64_encode(force_bytes(auth_user.pk)),
                 'token': account_activation_token.make_token(auth_user),}
                 )
-
-            print(subject)
-            print(message)
 
             send_mail(subject,message,None,[email])
 

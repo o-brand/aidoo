@@ -42,7 +42,7 @@
                     </a>
                     <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
-                    <button class="btn btn-primary">Apply</button>
+                    <button class="btn btn-primary", id = "btnApply">Apply</button>
                 </div>
             {% endfor %}
         </div>
@@ -59,7 +59,8 @@
     //Disable button
     //$("#apply" + id).attr('disabled','disabled');
 
-    function saveForLater(uid, jid) {
+    
+function saveForLater(uid, jid) {
         if ($("#sfl" + uid + "-" + jid).text() == 'Save for later') {
             $("#sfl" + uid + "-" + jid).text('Unsave')
         }
@@ -74,8 +75,31 @@
             success: function callback(response) {
                 alert("You've successfully (un)saved the job. You can view the changes on your profile.")
             }
+
+      
+
+            //"ok" in HttpResponse triggers success and you just specify the message
         });
     }
+        //write new funciton to send the message(what to do after clicking Apply) for the Django receive
+        //by extending dict in the views.dict
+    function apply(uid, jid) {
+        
+        $("#btnApply").attr("disabled", true);
+
+        $.ajax({
+            type: "POST", 
+            url: "{% url 'generic' %", 
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
+            success: function callback(response) {
+                alert("You've applied for the job. There are no changes in your profile.")
+            }
+        });
+    }
+
+//data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid, HERE you add function to call to Django through dictionary},
+        //extend function_dict, with my function and implement it, the key is the same as the one sent with the javascript
+
 
 </script>
 {% endblock %}
