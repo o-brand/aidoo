@@ -1,5 +1,8 @@
 from Golf.utils import LoginRequiredTestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 # Tests for the PUBLIC profile page.
 class PublicProfileTestCase(LoginRequiredTestCase):

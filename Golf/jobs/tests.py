@@ -1,12 +1,16 @@
 from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase
 from jobs.models import JobPosting
-from django.contrib.auth.models import User
+from userprofile.models import User
 from faker import Faker
 import random
 from django.utils import timezone
 from django.urls import reverse
 from .forms import JobForm
+import datetime
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 # TODO Other Tests...
 
@@ -21,6 +25,7 @@ class JobTableTestCase(TestCase):
             credentials['password'] = 'a'
             credentials['last_name'] = lambda: fake.last_name()
             credentials['first_name'] = lambda: fake.first_name()
+            credentials['date_of_birth'] = datetime.datetime.now()
             User.objects.create_user(**credentials)
             credentials.clear()
         #write 10 jobs into the job_postings table

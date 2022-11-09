@@ -1,8 +1,10 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
 from django.urls import reverse
 from .forms import RegisterForm
 import datetime
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 class WelcomeTestCase(TestCase):
 
@@ -21,7 +23,8 @@ class LoginTestCase(TestCase):
     def test_login(self):
         credentials = {
             'username': 'asd',
-            'password': 'asd123'
+            'password': 'asd123',
+            'date_of_birth':datetime.datetime.now(),
         }
         User.objects.create_user(**credentials)
 
@@ -91,7 +94,7 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(data=new_user)
 
-        self.assertEqual(4, len(form.errors)) # Name must be ok
+        self.assertEqual(5, len(form.errors)) # Name must be ok
 
         # Checks fields for errors
         for key in form.errors:
@@ -107,7 +110,7 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(data=new_user)
 
-        self.assertEqual(4, len(form.errors)) # Name must be ok
+        self.assertEqual(5, len(form.errors)) # Name must be ok
 
         # Checks fields for errors
         for key in form.errors:
@@ -128,7 +131,7 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(data=new_user)
 
-        self.assertEqual(3, len(form.errors)) # Name, username must be ok
+        self.assertEqual(4, len(form.errors)) # Name, username must be ok
 
         # Checks fields for errors
         for key in form.errors:
@@ -145,7 +148,7 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(data=new_user)
 
-        self.assertEqual(3, len(form.errors)) # Name, username must be ok
+        self.assertEqual(4, len(form.errors)) # Name, username must be ok
 
         # Checks fields for errors
         for key in form.errors:
@@ -166,7 +169,7 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(data=new_user)
 
-        self.assertEqual(2, len(form.errors)) # Name, email, username must be ok
+        self.assertEqual(3, len(form.errors)) # Name, email, username must be ok
 
         # Checks fields for errors
         for key in form.errors:
@@ -181,11 +184,11 @@ class RegisterFormTestCase(TestCase):
             'email': "madeupuser@madeupuser.com",
             'username': 'madeupuser',
             'password1': 'madeuppassword',
-            'password2': 'madeuppassword2'
+            'password2': 'madeuppassword2',
         }
         form = RegisterForm(data=new_user)
 
-        self.assertEqual(1, len(form.errors)) # Name, email, username must be ok
+        self.assertEqual(2, len(form.errors)) # Name, email, username must be ok
         self.assertIn('The two password fields didn’t match.', form.errors['password2'][0])
 
     def test_name_username_email_passwords_entered_(self):
@@ -195,7 +198,8 @@ class RegisterFormTestCase(TestCase):
             'email': "madeupuser@madeupuser.com",
             'username': 'madeupuser',
             'password1': 'madeuppassword',
-            'password2': 'madeuppassword'
+            'password2': 'madeuppassword',
+            'date_of_birth':datetime.date(2000,1,1),
         }
         form = RegisterForm(data=new_user)
 

@@ -1,12 +1,14 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 class JobPosting(models.Model):
     job_id = models.BigAutoField(primary_key=True)
     poster_id = models.ForeignKey(User, on_delete=models.CASCADE) # Should we use something else on delete?
-                                                #making the change general and it happens everywhere, if you delete user, everything about the user is deleted
+        #making the change general and it happens everywhere, if you delete user, everything about the user is deleted
     location = models.CharField(max_length=8)
     job_title = models.CharField(max_length=50)
     job_short_description = models.CharField(max_length=50)
@@ -25,8 +27,6 @@ class JobPosting(models.Model):
 
 class UserSaveForLater(models.Model):
     save_for_later_id = models.BigAutoField(primary_key=True)
-
-    #
     user_id = models.ForeignKey(User, on_delete = models.CASCADE)
     job_id = models.ForeignKey(JobPosting, on_delete = models.CASCADE)
     saving_time = models.DateTimeField()

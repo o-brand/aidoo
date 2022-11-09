@@ -1,12 +1,16 @@
 from tkinter import Widget
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from userprofile.models import UserExtended
 from datetime import datetime
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 # This class extends the UserCreationForm to have extra fields.
 # We can customize the error messages later, if we want.
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class RegisterForm(UserCreationForm):
     first_name = forms.CharField(
@@ -75,24 +79,19 @@ class RegisterForm(UserCreationForm):
         ),
     )
 
+    date_of_birth = forms.DateField(
+        required=True,
+        widget=forms.DateInput(
+            attrs={
+                "min":str(datetime.now().year - 100)+"-01-01",
+                "max":str(datetime.now().year - 13)+"-"+str("{:02d}".format(datetime.now().month))+"-"+str("{:02d}".format(datetime.now().day))
+            }
+        ),
+    )
+ 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'date_of_birth']
 
-class DateInput(forms.DateInput):
-    input_type = 'date'
+
     
-
-#Additional form required for the date of birth field. This form is an extension of the UserExtended model
-#from jobs.models
-class RegisterFormExtended(forms.ModelForm):
-
-    class Meta:
-    
-        model = UserExtended
-        fields = ['date_of_birth']
-        widgets={
-            'date_of_birth': DateInput(attrs={"min":str(datetime.now().year - 100)+"-01-01",
-                "max":str(datetime.now().year - 13)+"-"+str("{:02d}".format(datetime.now().month))+"-"+str("{:02d}".format(datetime.now().day))}
-                ),
-        }

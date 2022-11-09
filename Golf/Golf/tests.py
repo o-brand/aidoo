@@ -1,7 +1,10 @@
 from django.test import RequestFactory, TestCase
 from django.http import HttpResponse
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import AnonymousUser
 from .middlewares import LoginRequiredMiddleware, ENABLED_URLS
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 def dummy_middleware(request):
     response = HttpResponse()

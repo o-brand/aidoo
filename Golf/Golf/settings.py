@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['teamgolf.pythonanywhere.com','127.0.0.1'] # Because of pythonanywhere.com
 
+# OUR EXTENDED USER
+AUTH_USER_MODEL = 'userprofile.User'
 
 # Application definition
 

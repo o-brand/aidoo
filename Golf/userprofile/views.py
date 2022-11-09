@@ -1,17 +1,19 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from jobs.models import JobPosting, UserSaveForLater, JobProcess
-from .models import UserExtended
 from django.template import loader
 from django.http import HttpResponse, HttpResponseNotFound
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 # Public pofile page with just the basic information.
 def userdetail(request, user_id):
     template = loader.get_template('userprofile/public.html')
 
     try:
-        user_extended = UserExtended.objects.get(pk=user_id)
-    except UserExtended.DoesNotExist:
+        user_extended = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
         return HttpResponseNotFound()
 
     context = {
@@ -25,8 +27,8 @@ def me(request):
     id = request.user.id
 
     try:
-        user_extended = UserExtended.objects.get(pk=id)
-    except UserExtended.DoesNotExist:
+        user_extended = User.objects.get(pk=id)
+    except User.DoesNotExist:
         # This should not happen.
         return HttpResponseNotFound()
 

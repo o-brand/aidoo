@@ -1,9 +1,8 @@
 from django.urls import reverse
 from django.views import View
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, RegisterFormExtended
+from .forms import RegisterForm
 from datetime import datetime
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
@@ -13,34 +12,29 @@ from .tokens import account_activation_token
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 class SignUpView(View):
     form_class1 = RegisterForm
-    form_class2 = RegisterFormExtended
     template_name = "login/signup.html"
 
     # Renders the form at the first time
     def get(self, request, *args, **kwargs):
         form1 = self.form_class1()
-        form2 = self.form_class2()
-        return render(request, self.template_name, {'form1': form1, 'form2': form2})
+        return render(request, self.template_name, {'form1': form1})
 
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
         form1 = self.form_class1(request.POST)
-        form2 = self.form_class2(request.POST)
 
-        if form1.is_valid() and form2.is_valid():
+        if form1.is_valid():
             auth_user=form1.save(commit=False)
             auth_user.is_active=0
             user = auth_user.username
             email = auth_user.email
             auth_user.save()
-
-            tempid = form1.save()
-            userextended=form2.save(commit=False)
-            userextended.user_id=tempid
-            userextended.save()
 
             current_site = get_current_site(request)
             subject = 'Activate Your aidoo Account'
@@ -56,7 +50,7 @@ class SignUpView(View):
 
             return render(request, 'login/confirm_email.html', {'email':email})
 
-        return render(request, self.template_name, {'form1': form1, 'form2': form2})
+        return render(request, self.template_name, {'form1': form1})
 
 class ActivateAccount(View):
 

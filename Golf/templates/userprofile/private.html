@@ -3,7 +3,7 @@
 {% block title %}My profile{% endblock %}
 
 {% block content %}
-<h1>My username: {{ user.user_id.username }}</h1>
+<h1>My username: {{ user.username }}</h1>
 
 <p><a href="{% url 'home' %}">Go back</a></p>
 
@@ -15,15 +15,15 @@
 
 <div id="details" class="tabcontent">
   <h3>Personal details</h3>
-  <p>Real name: {{ user.user_id.first_name }} {{ user.user_id.last_name }}</p>
-  <p>Email address: {{ user.user_id.email }}</p>
+  <p>Real name: {{ user.first_name }} {{ user.last_name }}</p>
+  <p>Email address: {{ user.email }}</p>
   <p>Date of birth: {{ user.date_of_birth }}</p>
 
   <p>Balance: {{ user.balance }} points</p>
   <p>Rating: {{ user.rating }}</p>
 
-  <p>Last logged in: {{ user.user_id.last_login }}</p>
-  <p>Joined: {{ user.user_id.date_joined }}</p>
+  <p>Last logged in: {{ user.last_login }}</p>
+  <p>Joined: {{ user.date_joined }}</p>
 </div>
 
 <div id="saved" class="tabcontent">

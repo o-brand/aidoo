@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from jobs.models import JobPosting
 from faker import Faker
 import random
+import datetime
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 class UserTableTestCase(TestCase):
 
@@ -15,6 +19,7 @@ class UserTableTestCase(TestCase):
             credentials['password'] = 'a'
             credentials['last_name'] = lambda: fake.last_name()
             credentials['first_name'] = lambda: fake.first_name()
+            credentials['date_of_birth'] = datetime.datetime.now()
             User.objects.create_user(**credentials)
             credentials.clear()
 
@@ -32,6 +37,7 @@ class UserTableTestCase(TestCase):
         credentials['password'] = 'a'
         credentials['last_name'] = lambda: fake.last_name()
         credentials['first_name'] = lambda: fake.first_name()
+        credentials['date_of_birth'] = datetime.datetime.now()
         User.objects.create_user(**credentials)
 
         len2 = len(User.objects.all())

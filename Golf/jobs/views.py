@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from .models import User, JobPosting, UserSaveForLater, JobProcess
+from .models import JobPosting, UserSaveForLater, JobProcess
 from django.views.generic import ListView
 from django.views import View
 from django.template import loader
@@ -8,6 +8,9 @@ from .forms import JobForm
 from django.utils import timezone
 import time
 import datetime
+from django.contrib.auth import get_user_model
+
+User = get_user_model() # Get user model
 
 def detail(request, job_id):
     template = loader.get_template('jobdetails.html')
@@ -53,6 +56,10 @@ def sfl_call(request):
             job_id=JobPosting.objects.get(pk=int(request.POST['jid'])),
             saving_time=timzone_datetime)
         new_sfljob.save() # Save new UserSaveForLater record in database table
+    else:
+        u.delete()
+    finally:
+        return HttpResponse("ok")
 
 def apply_call(request):
     uid = int(request.POST['uid'])

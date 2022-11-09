@@ -24,14 +24,6 @@
     </div>
   {% endif %}
 
-  {% if form2.errors %}
-    <div>
-      {% for key, value in form2.errors.items %}
-        <strong class="error">{{ value }}</strong>
-      {% endfor %}
-    </div>
-  {% endif %}
-
   <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     <p>
@@ -58,12 +50,10 @@
       {{ form1.password2.label_tag }}<br>
       {{ form1.password2 }}
     </p>
-    {% if form2 %}
     <p>
-      {{ form2.date_of_birth.label_tag }}<br>
-      {{ form2.date_of_birth }}
+      {{ form1.date_of_birth.label_tag }}<br>
+      {{ form1.date_of_birth }}
     </p>
-    {% endif %}
     <button type="submit">Sign up</button>
   </form>
 
