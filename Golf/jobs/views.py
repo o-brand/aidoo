@@ -67,15 +67,11 @@ def apply_call(request):
     try: 
         u = JobProcess.objects.get(user_id=uid, job_id=jid)
     except JobProcess.DoesNotExist:
-        tz = timezone.get_current_timezone()
-        timezone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
         new_apply = JobProcess(
             user_id = User.objects.get(pk = int(request.POST['uid'])),
             job_id = JobPosting.objects.get(pk=int(request.POST['jid'])),
-            saving_time = timezone_datetime)
+        )
         new_apply.save()
-    else:
-        u.delete()
     finally:
         return HttpResponse("ok")
 

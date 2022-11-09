@@ -11,6 +11,7 @@
     <form method ="get">
         <input type="text" value='{{request.GET.job_title__icontains}}' name="job_title__icontains"/>
     <button class="btn btn-primary" type="submit">Search</button>
+    </form>
 
 
     <div class="row">
@@ -42,7 +43,7 @@
                     </a>
                     <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
-                    <button class="btn btn-primary", id = "btnApply">Apply</button>
+                    <button class="btn btn-primary", onclick="apply('{{user.id }}','{{ job.job_id }}')", id = "btnApply{{ job.job_id }}">Apply</button>
                 </div>
             {% endfor %}
         </div>
@@ -85,11 +86,11 @@ function saveForLater(uid, jid) {
         //by extending dict in the views.dict
     function apply(uid, jid) {
         
-        $("#btnApply").attr("disabled", true);
+        $("#btnApply"+jid).attr("disabled", true);
 
         $.ajax({
             type: "POST", 
-            url: "{% url 'generic' %", 
+            url: "{% url 'generic' %}", 
             data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
             success: function callback(response) {
                 alert("You've applied for the job. There are no changes in your profile.")
