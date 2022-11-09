@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 
-ENABLED_URLS = ("", "login", "signup", "logout", "update_server")
+ENABLED_URLS = ("", "login", "signup", "logout", "update_server","account_activation_email")
 
 class LoginRequiredMiddleware():
 
@@ -16,7 +16,7 @@ class LoginRequiredMiddleware():
             if len(path) > 0 and path[-1] == '/':
                 path = path[0:-1]
 
-            if path in ENABLED_URLS or path.startswith("admin") or path.startswith("password_reset"):
+            if path in ENABLED_URLS or path.startswith("admin") or path.startswith("password_reset") or path.startswith("activate") or path.startswith("confirm_email"):
                 return response
 
             return HttpResponseRedirect("/login/?next=/" + path)

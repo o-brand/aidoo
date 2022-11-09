@@ -63,7 +63,7 @@ class SignupTestCase(TestCase):
             'username': 'madeupuser',
             'password1': 'madeuppassword',
             'password2': 'madeuppassword',
-            'date_of_birth':datetime.date(2010,1,1)
+            'date_of_birth':datetime.date(2000,1,1)
         }
         response = self.client.post(reverse('signup'), data=new_user)
 

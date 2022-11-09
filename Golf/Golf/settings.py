@@ -134,6 +134,8 @@ LOGOUT_REDIRECT_URL = "/" # After log out, the user is redirected to here instea
 
 # Needed for the password reset
 
+#Console Printing Email Backend. Currently just using print instead
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
