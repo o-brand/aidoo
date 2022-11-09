@@ -61,7 +61,7 @@ class SignUpView(View):
             send_mail(subject,message,None,[email])
 
 
-            return render(request, 'login/confirm_email.html', {'form1':form1})
+            return render(request, 'login/confirm_email.html', {'email':email})
 
         return render(request, self.template_name, {'form1': form1, 'form2': form2})
 
