@@ -66,8 +66,10 @@ class SignupTestCase(TestCase):
             'date_of_birth':datetime.date(2000,1,1)
         }
         response = self.client.post(reverse('signup'), data=new_user)
+        self.assertTemplateUsed(response, template_name='login/confirm_email.html')
 
-        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(response.status_code, 200)
 
 
 class RegisterFormTestCase(TestCase):
