@@ -16,43 +16,84 @@
     </ul>
   </p>
 
-  {% if form1.errors %}
-    <div>
-      {% for key, value in form1.errors.items %}
-        <strong class="error">{{ value }}</strong>
-      {% endfor %}
-    </div>
-  {% endif %}
-
   <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     <p>
-      {{ form1.first_name.label_tag }}<br>
-      {{ form1.first_name  }}
+      {{ form.first_name.label_tag }}<br>
+      {{ form.first_name  }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "first_name" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </p>
     <p>
-      {{ form1.last_name.label_tag }}<br>
-      {{ form1.last_name }}
+      {{ form.last_name.label_tag }}<br>
+      {{ form.last_name }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "last_name" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </p>
     <p>
-      {{ form1.email.label_tag }}<br>
-      {{ form1.email }}
+      {{ form.email.label_tag }}<br>
+      {{ form.email }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "email" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </p>
     <p>
-      {{ form1.username.label_tag }}<br>
-      {{ form1.username }}
+      {{ form.username.label_tag }}<br>
+      {{ form.username }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "username" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </p>
     <p>
-      {{ form1.password1.label_tag }}<br>
-      {{ form1.password1 }}
+      {{ form.password1.label_tag }}<br>
+      {{ form.password1 }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "password1" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </p>
     <p>
-      {{ form1.password2.label_tag }}<br>
-      {{ form1.password2 }}
+      {{ form.password2.label_tag }}<br>
+      {{ form.password2 }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "password2" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </p>
     <p>
-      {{ form1.date_of_birth.label_tag }}<br>
-      {{ form1.date_of_birth }}
+      {{ form.date_of_birth.label_tag }}<br>
+      {{ form.date_of_birth }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "date_of_birth" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     </p>
     <button type="submit">Sign up</button>
   </form>

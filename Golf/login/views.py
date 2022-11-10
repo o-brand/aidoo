@@ -17,20 +17,20 @@ from django.contrib.auth import get_user_model
 User = get_user_model() # Get user model
 
 class SignUpView(View):
-    form_class1 = RegisterForm
+    form_class = RegisterForm
     template_name = "login/signup.html"
 
     # Renders the form at the first time
     def get(self, request, *args, **kwargs):
-        form1 = self.form_class1()
-        return render(request, self.template_name, {'form1': form1})
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
 
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
-        form1 = self.form_class1(request.POST)
+        form = self.form_class(request.POST)
 
-        if form1.is_valid():
-            auth_user=form1.save(commit=False)
+        if form.is_valid():
+            auth_user=form.save(commit=False)
             auth_user.is_active=0
             user = auth_user.username
             email = auth_user.email
@@ -50,7 +50,7 @@ class SignUpView(View):
 
             return render(request, 'login/confirm_email.html', {'email':email})
 
-        return render(request, self.template_name, {'form1': form1})
+        return render(request, self.template_name, {'form': form})
 
 class ActivateAccount(View):
 
