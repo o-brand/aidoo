@@ -38,6 +38,12 @@ def me(request):
     for job in saved:
         saved_jobs.append([job.job_id, job.saving_time])
 
+    # Applied jobs
+    applied_jobs = []
+    applied = JobProcess.objects.filter(user_id=id)
+    for job in applied:
+        applied_jobs.append([job.job_id, job.status])
+
     # Posted jobs
     posted_jobs = []
     posted = JobPosting.objects.filter(poster_id=id)
@@ -49,6 +55,7 @@ def me(request):
     context = {
         'user': user_extended,
         'saved': saved_jobs,
+        'applied': applied_jobs,
         'posted': posted_jobs,
     }
     return HttpResponse(template.render(context, request))

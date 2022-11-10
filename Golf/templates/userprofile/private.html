@@ -10,6 +10,7 @@
 <div class="tab">
   <button class="tablinks" onclick="openTab(event, 'details')" id="details_tab">Personal details</button>
   <button class="tablinks" onclick="openTab(event, 'saved')" id="saved_tab">Saved jobs</button>
+  <button class="tablinks" onclick="openTab(event, 'applied')" id="applied_tab">Applied jobs</button>
   <button class="tablinks" onclick="openTab(event, 'posted')" id="posted_tab">Posted jobs</button>
 </div>
 
@@ -41,7 +42,23 @@
       <p>I don't have any saved jobs.</p>
   {% endif %}
 </div>
-  
+
+<div id="applied" class="tabcontent">
+  <h3>Applied</h3>
+  {% if applied %}
+    {% for job, status in applied %}
+      <div>
+        <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+        <p>Posted on: {{ job.posting_time }}</p>
+        <p>Status: {{ status }}</p>
+      </div>
+      <hr>
+    {% endfor %}
+  {% else %}
+      <p>I haven't applied for any jobs.</p>
+  {% endif %}
+</div>
+
 <div id="posted" class="tabcontent">
   <h3>Posted jobs</h3>
   {% if posted %}
