@@ -78,20 +78,15 @@ class RegisterForm(UserCreationForm):
             }
         ),
     )
-
-    date_of_birth = forms.DateField(
-        required=True,
-        widget=forms.DateInput(
-            attrs={
-                "min":str(datetime.now().year - 100)+"-01-01",
-                "max":str(datetime.now().year - 13)+"-"+str("{:02d}".format(datetime.now().month))+"-"+str("{:02d}".format(datetime.now().day))
-            }
-        ),
-    )
  
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'date_of_birth']
+        widgets={
+            'date_of_birth': DateInput(attrs={"min":str(datetime.now().year - 100)+"-01-01",
+                "max":str(datetime.now().year - 13)+"-"+str("{:02d}".format(datetime.now().month))+"-"+str("{:02d}".format(datetime.now().day))}
+                ),
+        }
 
 
     
