@@ -3,18 +3,41 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand" href="{% url 'home' %}">aidoo</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'me' %}">My Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'post' %}">Post A Job</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
 <div class="container">
-    <h1>Hi {{ user.username }}!</h1>
-    <p>You can see the available jobs here. </p>
 
+    <div class="hello text-center">
+        <h1>Hi {{ user.username }}!</h1>
+        <p>You can see the {{jobs.job_count}} available jobs here. </p> <!--doesn't get count??-->
+    </div>
 
-    <form method ="get">
-        <input type="text" value='{{request.GET.job_title__icontains}}' name="job_title__icontains"/>
+    <form class="searchform d-flex justify-content-center" method ="get">
+        <input class="searchbar" type="text" value='{{request.GET.job_title__icontains}}' name="job_title__icontains"/>
     <button class="btn btn-primary" type="submit">Search</button>
     </form>
 
 
-    <div class="row">
+    <div class="row d-flex justify-content-center">
         <div class="col jobs-scroll">
             {% for job in jobs %}
                 <div class="job-card" class="container">
@@ -49,13 +72,9 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="col">
-        </div>
+        <!--<div class="col">
+        </div>-->
     </div>
-
-    <p><a href="{% url 'me' %}">My profile</a></p>
-    <p><a href="{% url 'post' %}">Post a job</a></p>
-    <p><a href="{% url 'logout' %}">Log Out</a></p>
 </div>
 
 <script>

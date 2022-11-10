@@ -76,7 +76,7 @@ class JobForm(ModelForm):
 
     deadline = forms.DateField(
         widget=forms.DateInput(
-            attrs={'class': 'form-control', 'style': 'width: auto; display: initial;'},
+            attrs={'class': 'form-control', 'placeholder': 'MM/DD/YYYY', 'style': 'width: auto; display: initial;'},
         ),
         label="Deadline",
         required=False

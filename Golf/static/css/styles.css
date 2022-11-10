@@ -18,12 +18,37 @@ body {
     }
   }
 
+.navbar {
+  padding-left: 1.5%;
+  padding-right: 1.5%;
+  margin-bottom: 1.5%;
+  border-bottom: 1px solid rgb(222, 222, 222);
+}
+
+.nav-link {
+  color: rgb(46, 45, 45);
+}
+
+.hello {
+  margin-bottom: 2.5%;
+}
+
+.searchform {
+  margin-bottom: 1.5%;
+}
+.searchbar {
+  width: 40%;
+  margin-right: 0.5%;
+}
+
 .jobs-scroll {
     overflow: auto;
+    margin-left: 14%;
+    margin-right: 14%;
 }
 
 .job-card {
-    border: 2px solid #80e27e;
+    border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
     border-radius: 15px;
     margin-left: 0px;
     margin-top: 10px;

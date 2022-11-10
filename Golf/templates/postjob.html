@@ -3,7 +3,7 @@
 {% block title %}Post a new job{% endblock %}
 
 {% block content %}
-<div>
+<div class="container">
     <h1>Hi! You can post a new job here.</h1>
 
     <form action="" method="post" id="form">
@@ -11,9 +11,7 @@
 
         <p>
             {{ form.job_title.label_tag }}
-            <br/>
             {{ form.job_title }}
-            <br />
             {% if form.errors %}
                 {% for key, value in form.errors.items %}
                     {% if key == "job_title" %}
@@ -24,9 +22,7 @@
         </p> 
         <p>
             {{ form.job_short_description.label_tag }}
-            <br/>
             {{ form.job_short_description }}
-            <br />
             {% if form.errors %}
                 {% for key, value in form.errors.items %}
                     {% if key == "job_short_description" %}
@@ -37,9 +33,7 @@
         </p> 
         <p>
             {{ form.job_description.label_tag }}
-            <br/>
             {{ form.job_description }}
-            <br />
             {% if form.errors %}
                 {% for key, value in form.errors.items %}
                     {% if key == "job_description" %}
@@ -50,9 +44,7 @@
         </p> 
         <p>
             {{ form.location.label_tag }}
-            <br/>
             {{ form.location }}
-            <br />
             {% if form.errors %}
                 {% for key, value in form.errors.items %}
                     {% if key == "location" %}
@@ -62,21 +54,19 @@
             {% endif %}
         </p>
         <p>
-            The expected duration for the job. (It is used to calculate the rewards for the job.)
-            <br/>
+            The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
             {{ form.duration_days }} days {{ form.duration_hours }} hours
         </p>
         <p>
-            The deadline to complete the job (optional)
-            <br/>
+            The deadline to complete the job (optional)<br/>
             {{ form.deadline }}
         </p>
 
         <input type="hidden" name="poster_id" value="{{ poster_id }}" />
 
-        <input type="submit" value="Submit" class="btn btn-light"/>
+        <input type="submit" value="Submit" class="btn btn-primary"/>
     </form>
-
+    <br/>
     <p><a href="{{ request.META.HTTP_REFERER }}">Go back</a></p>
 </div>
 
