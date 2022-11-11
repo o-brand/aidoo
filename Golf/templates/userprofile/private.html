@@ -68,18 +68,16 @@
         <p>Posted on: {{ job.posting_time }}</p>
         <h6>Applicants:</h6>
         {% if applicants %}
-          <table>
+        <select>
             {% for applicant in applicants %}
-              <tr>
-                <td>
-                  {{ applicant.user_id.username }} ({{ applicant.status }})
-                </td>
-              </tr>
+                <option value = "{{ applicant.user_id.username }}">{{ applicant.user_id.username }}</option> 
             {% endfor %}
-          </table>
+          </select>
+          <button>Accept</button>
         {% else %}
         <p>No one has applied for this job.</p>
         {% endif %}
+        
       </div>
       <hr>
     {% endfor %}
