@@ -75,7 +75,9 @@
               <select name="accept" id="option-{{job.job_id}}"class="select">
                 <option disabled selected value="-1">Select somebody</option>
                 {% for applicant in applicants %}
-                    <option value="{{ applicant.user_id.id }}">{{ applicant.user_id.username }}</option> 
+                  {% if applicant.status == "AP" %}
+                    <option value="{{ applicant.user_id.id }}">{{ applicant.user_id.username }}</option>
+                  {% endif %}
                 {% endfor %}
               </select>
               <input type="hidden" value='{{job.job_id}}' name="accepted" >
