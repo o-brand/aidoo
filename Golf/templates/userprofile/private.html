@@ -68,12 +68,24 @@
         <p>Posted on: {{ job.posting_time }}</p>
         <h6>Applicants:</h6>
         {% if applicants %}
-        <select>
+        {% if not job.assigned %}
+          
+
+        <form method = "post" action="{% url 'me' %}", id = "applicant {{job.job_id}}">
+          {% csrf_token %}
+
+          <select name ="accept" form = "applicant {{job.job_id}}">
             {% for applicant in applicants %}
-                <option value = "{{ applicant.user_id.username }}">{{ applicant.user_id.username }}</option> 
+                <option value = "{{ applicant.user_id.id }}">{{ applicant.user_id.username }}</option> 
             {% endfor %}
           </select>
-          <button>Accept</button>
+          <input type="hidden" value='{{job.job_id}}' name="accepted" >
+          <button type = "submit">Accept</button>
+        </form>
+
+        {% else %}
+        <!--email-->
+        {% endif %}
         {% else %}
         <p>No one has applied for this job.</p>
         {% endif %}

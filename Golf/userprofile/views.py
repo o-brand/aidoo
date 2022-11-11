@@ -25,6 +25,24 @@ def userdetail(request, user_id):
 def me(request):
     template = loader.get_template('userprofile/private.html')
     id = request.user.id
+    if request.POST:
+        user_id = request.POST["accept"][0]
+        job_id = request.POST["accepted"]
+        #we get row from the table with the job id
+        job = JobPosting.objects.get(pk = job_id)
+        job.assigned = True
+        job.save()
+
+        #change status of applicants
+        set_rejected = JobProcess.objects.filter(job_id = job_id)
+        for user in set_rejected:
+            if str(user.user_id.id) != user_id:
+                user.status = "RE"
+                user.save()
+
+            else:
+                user.status = "AC"
+                user.save()
 
     try:
         user_extended = User.objects.get(pk=id)
