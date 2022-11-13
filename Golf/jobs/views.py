@@ -48,7 +48,11 @@ class JobsView(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the saved for later jobs
-        context['saveforlater'] = UserSaveForLater.objects.filter(user_id=self.request.user.id)
+        context['save_for_later'] = [i.job_id.job_id for i in UserSaveForLater.objects.filter(user_id=self.request.user.id)]
+        context['jobs_applied'] = [i.job_id.job_id for i in JobProcess.objects.filter(user_id=self.request.user.id)]
+        context['saved'] = "Unsave"
+        context['not_saved'] = "Save for later"
+        context['count'] = self.job_count()
         return context
 
 # Executed when saveForLater is run on the frontend (i.e. save for later button pressed)
