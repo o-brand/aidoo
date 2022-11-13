@@ -66,7 +66,7 @@
                             <h5>{{ job.poster_id.username }}</h5>
                         </div>
                     </a>
-                    <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
+                    <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
                     <button class="btn btn-primary", onclick="apply('{{user.id }}','{{ job.job_id }}')", id = "btnApply{{ job.job_id }}">Apply</button>
                 </div>
@@ -80,14 +80,47 @@
 <script>
     //Disable button
     //$("#apply" + id).attr('disabled','disabled');
+    const sfl = [];
 
+    function execOnIdArray(arr, func) {
+        console.log(arr);
+        arr.forEach(func); //Apply some function to an array of element IDs
+    }
+
+    function sflOnLoad(uid) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'generic' %}",
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "indb_sfl", uid: uid},
+            success: function callback(response) {
+                JSON.parse(response).forEach((value) => {
+                    $("#sfl"+value).text('Unsave');
+                });
+            }
+        });
+    }
+
+    function applyOnLoad(uid) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'generic' %}",
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "indb_app", uid: uid},
+            success: function callback(response) {
+                JSON.parse(response).forEach((value) => {
+                    $("#btnApply"+value).attr("disabled", true);
+                });
+            }
+        });
+    }
     
     function saveForLater(uid, jid) {
-        if ($("#sfl"+jid).text() == 'Save for later') {
-            $("#sfl"+jid).text('Unsave')
+        if ($("#sfl"+jid).text() === 'Save for later') {
+            $("#sfl"+jid).text('Unsave');
+            msg = "saved";
         }
         else {
-            $("#sfl"+jid).text('Save for later')
+            $("#sfl"+jid).text('Save for later');
+            msg = "unmarked";
         }
         //Communicate with Python
         $.ajax({
@@ -95,7 +128,7 @@
             url: "{% url 'generic' %}",
             data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "sfl", uid: uid, jid: jid},
             success: function callback(response) {
-                alert("You've successfully (un)saved the job. You can view the changes on your profile.")
+                alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
             }
 
       
@@ -114,7 +147,7 @@
             url: "{% url 'generic' %}", 
             data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
             success: function callback(response) {
-                alert("You've applied for the job. There are no changes in your profile.")
+                alert("You've applied for the job. You can now view the changes in your profile.")
             }
         });
     }
@@ -129,6 +162,11 @@
             }
         });
     }
+
+    sflOnLoad("{{user.id}}"); //Vulnerable to injection attacks?
+    applyOnLoad("{{user.id}}");
+
+
 
 //data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid, HERE you add function to call to Django through dictionary},
         //extend function_dict, with my function and implement it, the key is the same as the one sent with the javascript

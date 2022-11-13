@@ -8,6 +8,7 @@ from .forms import JobForm
 from django.utils import timezone
 import time
 import datetime
+import json
 from django.contrib.auth import get_user_model
 
 User = get_user_model() # Get user model
@@ -86,18 +87,38 @@ def apply_call(request):
 def report_call(request):
     return HttpResponse("ok")
 
+def indb_sfl_call(request):
+    uid = int(request.POST['uid'])
+    sfls = UserSaveForLater.objects.filter(user_id=uid)
+    result = []
+    for i in sfls:
+        result.append(f"{i.job_id.job_id}")
+    result_json = json.dumps(result)
+    return HttpResponse(result_json)
+
+def indb_app_call(request):
+    uid = int(request.POST['uid'])
+    jps = JobProcess.objects.filter(user_id=uid)
+    result = []
+    for i in jps:
+        result.append(f"{i.job_id.job_id}")
+    result_json = json.dumps(result)
+    return HttpResponse(result_json)
+
+
 # A dictionary of functions we define to run through genericcall (so we can use only one url)
 
 #this is the dictionary, used in home.html: function sendid(uid...) .data {func: "sfl"}
 function_dict = {'sfl': sfl_call, #save for later/unsave toggle function
                 'app': apply_call,
-                'report': report_call}
+                'report': report_call, 
+                'indb_sfl': indb_sfl_call,
+                'indb_app' : indb_app_call}
 
 # Runs a function in our dictionary, as specified by the frontend function calling it
 def generic_call(request):
-    function_dict[request.POST['func']](request)
-    return HttpResponse("ok")
-
+    return function_dict[request.POST['func']](request)
+    # Make sure that your functions return HttpResponse object or similar
 
 class FormView(View):
     form_class = JobForm
