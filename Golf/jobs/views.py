@@ -37,7 +37,7 @@ class JobsView(ListView):
         return JobPosting.objects.filter(hidden=False,job_title__icontains=filter_val)
 
    def job_count(self): 
-        return self.get_queryset().count
+        return self.get_queryset().count()
 
    def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
