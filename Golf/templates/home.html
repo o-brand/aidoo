@@ -80,10 +80,8 @@
 <script>
     //Disable button
     //$("#apply" + id).attr('disabled','disabled');
-    const sfl = [];
 
     function execOnIdArray(arr, func) {
-        console.log(arr);
         arr.forEach(func); //Apply some function to an array of element IDs
     }
 
@@ -114,7 +112,7 @@
     }
     
     function saveForLater(uid, jid) {
-        if ($("#sfl"+jid).text() === 'Save for later') {
+        if ($("#sfl"+jid).text().trim() == 'Save for later') {
             $("#sfl"+jid).text('Unsave');
             msg = "saved";
         }
