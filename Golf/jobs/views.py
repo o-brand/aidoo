@@ -39,10 +39,7 @@ class JobsView(ListView):
    def job_count(self): 
         filter_val = self.request.GET.get('job_title__icontains', '')
         available = JobPosting.objects.filter(hidden=False,job_title__icontains=filter_val)
-        i = 0
-        for _ in available:
-            i += 1
-        return i
+        return len(available)
 
    def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context

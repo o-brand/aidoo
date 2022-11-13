@@ -28,7 +28,7 @@
 
     <div class="hello text-center">
         <h1>Hi {{ user.username }}!</h1>
-        <p>You can see the {{count}} available jobs here. </p> <!--doesn't get count??-->
+        <p>You can see the {{jobs_count}} available jobs here. </p> <!--doesn't get count??-->
     </div>
 
     <form class="searchform d-flex justify-content-center" method ="get">
@@ -119,17 +119,17 @@
         //write new function to send the message(what to do after clicking Apply) for the Django receive
         //by extending dict in the views.dict
     
-        function apply(uid, jid) {
-            $.ajax({
-                type: "POST", 
-                url: "{% url 'generic' %}", 
-                data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
-                success: function callback(response) {
-                    $("#btnApply"+jid).attr("disabled", true);
-                    $("#btnApply"+jid).text("Applied ✓");
-                    alert("You've applied for the job. You can now view the changes in your profile.")
-                }
-            });
+    function apply(uid, jid) {
+        $.ajax({
+            type: "POST", 
+            url: "{% url 'generic' %}", 
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
+            success: function callback(response) {
+                $("#btnApply"+jid).attr("disabled", true);
+                $("#btnApply"+jid).text("Applied ✓");
+                alert("You've applied for the job. You can now view the changes in your profile.")
+            }
+        });
     }
 
     function report(uid, jid) {
