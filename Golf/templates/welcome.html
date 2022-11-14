@@ -3,6 +3,19 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-<h1>Welcome to our website! You must log in to use it.</h1>
-<a href="{% url 'login' %}">Log In</a>
+<div class="container">
+    <div class="row" style="margin:3%">
+        <div class="col text-center">
+            <h1>Welcome to aidoo</h1>
+        </div>
+    </div>
+    <div class="row" style="margin:3%">
+        <div class="col text-center">
+            <h3>Join us today</h3>
+            <a class="btn btn-outline-success" href="{% url 'login' %}">Log In</a>
+            <a class="btn btn-outline-dark" href="{% url 'signup'%}">Sign Up</a>
+        </div>
+    </div>
+    
+</div>
 {% endblock %}

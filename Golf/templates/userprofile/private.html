@@ -51,6 +51,7 @@
         <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
         <p>Posted on: {{ job.posting_time }}</p>
         <p>Status: {{ status }}</p>
+        <!-- Print email here email - find it with the help of "status" model -->
       </div>
       <hr>
     {% endfor %}
@@ -68,17 +69,25 @@
         <p>Posted on: {{ job.posting_time }}</p>
         <h6>Applicants:</h6>
         {% if applicants %}
-          <table>
-            {% for applicant in applicants %}
-              <tr>
-                <td>
-                  {{ applicant.user_id.username }} ({{ applicant.status }})
-                </td>
-              </tr>
-            {% endfor %}
-          </table>
+          {% if not job.assigned %}
+            <form method="post" action="{% url 'me' %}" id="applicant-{{job.job_id}}">
+              {% csrf_token %}
+              <select name="accept" id="option-{{job.job_id}}"class="select">
+                <option disabled selected value="-1">Select somebody</option>
+                {% for applicant in applicants %}
+                  {% if applicant.status == "AP" %}
+                    <option value="{{ applicant.user_id.id }}">{{ applicant.user_id.username }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+              <input type="hidden" value='{{job.job_id}}' name="accepted" >
+              <button type="submit" disabled id="accept-{{job.job_id}}">Accept</button>
+            </form>
+          {% else %}
+            <!-- Print email here email - find the accepted one between "applicants". -->
+          {% endif %}
         {% else %}
-        <p>No one has applied for this job.</p>
+          <p>No one has applied for this job.</p>
         {% endif %}
       </div>
       <hr>
@@ -113,5 +122,22 @@
 
   // Default tab
   document.getElementById("details_tab").click();
+
+  // Get all the selects from the page
+  let selects = document.getElementsByClassName("select");
+
+  //Add the listener to every select.
+  Array.prototype.forEach.call(selects, function(select) {
+    // When user clicked on select element.
+    select.addEventListener("click", () => {
+      // If default value is changed.
+      select.addEventListener("change", () => {
+        // Get the button id
+        var button_id = "accept-" + select.id.split("-")[1]
+        // and enable it.
+        document.getElementById(button_id).disabled = false;
+      });
+    });
+  });
 </script>
 {% endblock %}

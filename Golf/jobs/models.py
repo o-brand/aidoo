@@ -20,11 +20,6 @@ class JobPosting(models.Model):
     assigned = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
-    @staticmethod
-    def has_been_saved():
-        print([u.job_id for u in UserSaveForLater.objects.select_related('job_id')])
-        return UserSaveForLater.objects.select_related('job_id')
-
 class UserSaveForLater(models.Model):
     save_for_later_id = models.BigAutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete = models.CASCADE)
@@ -45,6 +40,9 @@ class JobProcess(models.Model):
         APPLIED = 'AP', ('Applied')
         REJECTED = 'RE', ('Rejected')
         ACCEPTED = 'AC', ('Accepted')
+        WITHDRAWN = 'WD', ('Withdrawn') # Applicant withdrew from job
+        DONE = 'DN', ('Done') # Job has been finished
+        CONFLICT = 'CO', ('Conflict') # Conflict in releasing points
 
     #primary key
     job_process_id = models.BigAutoField(primary_key=True)
@@ -57,6 +55,8 @@ class JobProcess(models.Model):
         choices=JobStatus.choices,
         default=JobStatus.APPLIED,
     )
+    time_of_application = models.DateTimeField(default=timezone.now)
+    time_of_final_status = models.DateTimeField(default=None, blank=True, null=True)
 
     #this helps Django and constraints that ids are unique
     class Meta:

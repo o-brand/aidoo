@@ -10,8 +10,8 @@
     <strong class="error">Please login to see this page.</strong>
   {% endif %}
 
-  {% if form.errors %}{# Right now, we only have one kind of error, this is just a custom message for it. #}
-    <strong class="error">Your username and password didn't match. Please try again.</strong>
+  {% if form.errors %}
+    <strong class="error">Your username and password didn't match. Please try again.<br />Or check your inbox if you haven't activited your account (you have 3 days to do it after registration).</strong>
   {% endif %}
 
   <div class="row">

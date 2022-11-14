@@ -6,7 +6,6 @@ from django.views import View
 from django.template import loader
 from .forms import JobForm
 from django.utils import timezone
-import time
 import datetime
 from django.contrib.auth import get_user_model
 
@@ -32,22 +31,18 @@ class JobsView(ListView):
 
    def get_queryset(self):
         filter_val = self.request.GET.get('job_title__icontains', '')
-
         return JobPosting.objects.filter(hidden=False,job_title__icontains=filter_val)
 
    def job_count(self): 
-        filter_val = self.request.GET.get('job_title__icontains', '')
-        available = JobPosting.objects.filter(hidden=False,job_title__icontains=filter_val)
-        i = 0
-        for _ in available:
-            i += 1
-        return i
+        return self.get_queryset().count()
 
    def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the saved for later jobs
-        context['saveforlater'] = UserSaveForLater.objects.filter(user_id=self.request.user.id)
+        context['save_for_later'] = [i.job_id.job_id for i in UserSaveForLater.objects.filter(user_id=self.request.user.id)]
+        context['jobs_applied'] = [i.job_id.job_id for i in JobProcess.objects.filter(user_id=self.request.user.id)]
+        context['jobs_count'] = self.job_count()
         return context
 
 # Executed when saveForLater is run on the frontend (i.e. save for later button pressed)
@@ -60,8 +55,8 @@ def sfl_call(request):
         tz = timezone.get_current_timezone()
         timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
         new_sfljob = UserSaveForLater( # Make new UserSaveForLater record
-            user_id=User.objects.get(pk=int(request.POST['uid'])),
-            job_id=JobPosting.objects.get(pk=int(request.POST['jid'])),
+            user_id=User.objects.get(pk=uid),
+            job_id=JobPosting.objects.get(pk=jid),
             saving_time=timzone_datetime)
         new_sfljob.save() # Save new UserSaveForLater record in database table
     else:
@@ -72,12 +67,12 @@ def sfl_call(request):
 def apply_call(request):
     uid = int(request.POST['uid'])
     jid = int(request.POST['jid'])
-    try: 
+    try:
         u = JobProcess.objects.get(user_id=uid, job_id=jid)
     except JobProcess.DoesNotExist:
         new_apply = JobProcess(
-            user_id = User.objects.get(pk = int(request.POST['uid'])),
-            job_id = JobPosting.objects.get(pk=int(request.POST['jid'])),
+            user_id = User.objects.get(pk=uid),
+            job_id = JobPosting.objects.get(pk=jid),
         )
         new_apply.save()
     finally:
@@ -95,9 +90,8 @@ function_dict = {'sfl': sfl_call, #save for later/unsave toggle function
 
 # Runs a function in our dictionary, as specified by the frontend function calling it
 def generic_call(request):
-    function_dict[request.POST['func']](request)
-    return HttpResponse("ok")
-
+    return function_dict[request.POST['func']](request)
+    # Make sure that your functions return HttpResponse object or similar
 
 class FormView(View):
     form_class = JobForm

@@ -28,7 +28,7 @@
 
     <div class="hello text-center">
         <h1>Hi {{ user.username }}!</h1>
-        <p>You can see the {{jobs.job_count}} available jobs here. </p> <!--doesn't get count??-->
+        <p>You can see the {{jobs_count}} available jobs here. </p> <!--doesn't get count??-->
     </div>
 
     <form class="searchform d-flex justify-content-center" method ="get">
@@ -51,7 +51,11 @@
                               <a class="dropdown-item" 
                                 id="sfl{{ job.job_id }}" 
                                 href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">
-                                    Save for later
+                                    {% if job.job_id in save_for_later %}
+                                        Unsave
+                                    {% else %}
+                                        Save for later
+                                    {% endif %}
                               </a>
                               <a class="dropdown-item" 
                                 href="javascript:report('{{ user.id }}','{{ job.job_id }}')">
@@ -66,9 +70,20 @@
                             <h5>{{ job.poster_id.username }}</h5>
                         </div>
                     </a>
-                    <p>{{ job.points }} Points · {{ job.posting_time }} Ago · {{ job.location }}</p>
+                    <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
-                    <button class="btn btn-primary", onclick="apply('{{user.id }}','{{ job.job_id }}')", id = "btnApply{{ job.job_id }}">Apply</button>
+                    <button
+                        {% if job.job_id in jobs_applied %} disabled {% endif %}
+                        class="btn btn-primary", 
+                        onclick="apply('{{user.id }}','{{ job.job_id }}')"
+                        id = "btnApply{{ job.job_id }}"
+                    >
+                        {% if job.job_id in jobs_applied %} 
+                            Applied ✓
+                        {% else %}
+                            Apply
+                        {% endif %}
+                    </button>
                 </div>
             {% endfor %}
         </div>
@@ -80,41 +95,39 @@
 <script>
     //Disable button
     //$("#apply" + id).attr('disabled','disabled');
-
     
     function saveForLater(uid, jid) {
-        if ($("#sfl"+jid).text() == 'Save for later') {
-            $("#sfl"+jid).text('Unsave')
-        }
-        else {
-            $("#sfl"+jid).text('Save for later')
-        }
         //Communicate with Python
         $.ajax({
             type: "POST",
             url: "{% url 'generic' %}",
             data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "sfl", uid: uid, jid: jid},
             success: function callback(response) {
-                alert("You've successfully (un)saved the job. You can view the changes on your profile.")
+                if ($("#sfl"+jid).text().trim() == 'Save for later') {
+                $("#sfl"+jid).text('Unsave');
+                msg = "saved";
+                }
+                else {
+                    $("#sfl"+jid).text('Save for later');
+                    msg = "unmarked";
+                }
+                alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
             }
-
-      
-
             //"ok" in HttpResponse triggers success and you just specify the message
         });
     }
-        //write new funciton to send the message(what to do after clicking Apply) for the Django receive
+        //write new function to send the message(what to do after clicking Apply) for the Django receive
         //by extending dict in the views.dict
+    
     function apply(uid, jid) {
-        
         $("#btnApply"+jid).attr("disabled", true);
-
         $.ajax({
             type: "POST", 
             url: "{% url 'generic' %}", 
             data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
             success: function callback(response) {
-                alert("You've applied for the job. There are no changes in your profile.")
+                $("#btnApply"+jid).text("Applied ✓");
+                alert("You've applied for the job. You can now view the changes in your profile.")
             }
         });
     }

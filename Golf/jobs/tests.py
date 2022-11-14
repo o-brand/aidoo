@@ -12,8 +12,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model() # Get user model
 
-# TODO Other Tests...
-
+# Testing the JobPosting Model
 class JobTableTestCase(TestCase):
 
     def setUp(self):
@@ -77,7 +76,39 @@ class JobTableTestCase(TestCase):
 
         self.assertEqual(len1-1,len2)
 
-class FormTestCase():
+
+# Testing the details page.
+class DetailsTestCase(LoginRequiredTestCase):
+
+    # Creating a job before every test. (The database is deleted after the test finishes.)
+    def setUp(self):
+        super().setUp()
+        job = {
+            'poster_id': self.user,
+            'location': 'AB21 3EW',
+            'job_title': 'Walking a dog',
+            'job_short_description': 'Please walk my dog',
+            'job_description': 'Nothing',
+            'points': 10,
+        }
+        JobPosting.objects.create(**job)
+
+    def test_details(self):
+        response = self.client.get('/jobs/1/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='jobdetails.html')
+
+    def test_details_available_by_name(self):
+        response = self.client.get(reverse('jobdetails', kwargs={'job_id':1}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_details_404(self):
+        response = self.client.get('/jobs/0/') # The id starts with 1, so no job is there with this id.
+        self.assertEqual(response.status_code, 404)
+
+
+# Testing the posting form.
+class FormTestCase(TestCase):
     #website tests
 
     class PostPageCase(LoginRequiredTestCase):
@@ -281,4 +312,3 @@ class FormTestCase():
 
             form = JobForm(data=new_application)
             self.assertEqual(0, len(form.errors))
-
