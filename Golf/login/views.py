@@ -30,16 +30,6 @@ class SignUpView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
-        #dob_string = form['date_of_birth'].value()
-
-        #dob = datetime.strptime(dob_string, '%Y-%m-%d').date()
-        
-        #years = date.today().year
-
-        #dobmin = date.today().replace(year=years-100)
-        #dobmax = date.today().replace(year=years-13)
-
-
         if form.is_valid():
             auth_user=form.save(commit=False)
             auth_user.is_active=0
@@ -56,7 +46,7 @@ class SignUpView(View):
                 'token': account_activation_token.make_token(auth_user),}
                 )
 
-            #send_mail(subject,message,None,[email])
+            send_mail(subject,message,None,[email])
 
 
             return render(request, 'login/confirm_email.html', {'email':email})
