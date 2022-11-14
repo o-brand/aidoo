@@ -205,6 +205,22 @@ class RegisterFormTestCase(TestCase):
 
         self.assertEqual(0, len(form.errors))
 
+    def test_DoB_out_of_range(self):
+        new_user = {
+            'first_name': 'User',
+            'last_name': 'MadeUp',
+            'email': "madeupuser@madeupuser.com",
+            'username': 'madeupuser',
+            'password1': 'madeuppassword',
+            'password2': 'madeuppassword',
+            'date_of_birth':datetime.date.today()
+        }
+
+        form = RegisterForm(data=new_user)
+        
+        self.assertEqual(1, len(form.errors))
+
+
 
 class PasswordResetTestCase(TestCase):
 
@@ -239,3 +255,35 @@ class PasswordResetTestCase(TestCase):
         response = self.client.get('/password_reset/<uidb64>/<token>')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/password_reset_confirm.html')
+
+class EmailConfirmationTestCase(TestCase):
+    
+    def test_email_confirmation_page(self):
+        response = self.client.get('/confirm_email/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_email_confirmation_page_view_name(self):
+        response = self.client.get(reverse('confirm_email'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='login/confirm_email.html')
+
+    def test_email_confirmation_success_page(self):
+        response = self.client.get('/confirm_email/success/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_email_confirmation_success_page_view_name(self):
+        response = self.client.get(reverse('confirm_email_success'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='login/confirm_email_success.html')
+
+    def test_email_confirmation_failure_page(self):
+        response = self.client.get('/confirm_email/failure/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_email_confirmation_failure_page_view_name(self):
+        response = self.client.get(reverse('confirm_email_failure'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='login/confirm_email_failure.html')
+
+    
+

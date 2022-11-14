@@ -2,19 +2,20 @@ from django.urls import reverse
 from django.views import View
 from django.shortcuts import render, redirect
 from .forms import RegisterForm
-from datetime import datetime
+from datetime import datetime, date
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
-from .tokens import account_activation_token
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 
 User = get_user_model() # Get user model
+account_activation_token = PasswordResetTokenGenerator()
 
 class SignUpView(View):
     form_class = RegisterForm
@@ -28,6 +29,16 @@ class SignUpView(View):
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+
+        #dob_string = form['date_of_birth'].value()
+
+        #dob = datetime.strptime(dob_string, '%Y-%m-%d').date()
+        
+        #years = date.today().year
+
+        #dobmin = date.today().replace(year=years-100)
+        #dobmax = date.today().replace(year=years-13)
+
 
         if form.is_valid():
             auth_user=form.save(commit=False)
@@ -45,7 +56,7 @@ class SignUpView(View):
                 'token': account_activation_token.make_token(auth_user),}
                 )
 
-            send_mail(subject,message,None,[email])
+            #send_mail(subject,message,None,[email])
 
 
             return render(request, 'login/confirm_email.html', {'email':email})

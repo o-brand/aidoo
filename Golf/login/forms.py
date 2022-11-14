@@ -3,6 +3,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from datetime import datetime
 from django.contrib.auth import get_user_model
+from .validator import validate_dob
+from Golf.utils import create_date_string
 
 User = get_user_model() # Get user model
 
@@ -78,15 +80,22 @@ class RegisterForm(UserCreationForm):
             }
         ),
     )
+
+    date_of_birth = forms.DateField(
+        required=True,
+        label="Date of Birth",
+        widget=DateInput(
+            attrs={
+                "min":create_date_string(100),
+                "max":create_date_string(13)
+            }
+        ),
+        validators=[validate_dob],
+    )
  
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'date_of_birth']
-        widgets={
-            'date_of_birth': DateInput(attrs={"min":str(datetime.now().year - 100)+"-01-01",
-                "max":str(datetime.now().year - 13)+"-"+str("{:02d}".format(datetime.now().month))+"-"+str("{:02d}".format(datetime.now().day))}
-                ),
-        }
 
 
     
