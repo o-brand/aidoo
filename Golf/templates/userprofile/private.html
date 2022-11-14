@@ -52,6 +52,9 @@
         <p>Posted on: {{ job.posting_time }}</p>
         <p>Status: {{ status }}</p>
         <!-- Print email here email - find it with the help of "status" model -->
+         {% if status == "AC" %}
+              <p>Poster: {{ job.poster_id.username }} <a href="">{{ job.poster_id.email }}</a></p>
+          {% endif %}
       </div>
       <hr>
     {% endfor %}
@@ -85,6 +88,11 @@
             </form>
           {% else %}
             <!-- Print email here email - find the accepted one between "applicants". -->
+              {% for applicant in applicants %}
+                {% if applicant.status == "AC" %}
+                    <p>{{ applicant.user_id.username }}: <a href="">{{ applicant.user_id.email }}</a></p>
+                {% endif %}
+              {% endfor %}
           {% endif %}
         {% else %}
           <p>No one has applied for this job.</p>
