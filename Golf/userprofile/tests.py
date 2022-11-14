@@ -7,6 +7,10 @@ import datetime
 
 User = get_user_model() # Get user model
 
+# Write tests for user_extended (was combined with user)
+# Test for max/min lengths in fields
+# Test for constraints
+#
 # Testing the User Model
 class UserTableTestCase(TestCase):
 
@@ -54,6 +58,21 @@ class UserTableTestCase(TestCase):
 
         self.assertEqual(len1-1, len2)
 
+    def test_balance(self):
+        # checks if the balance is greater or equal to 0
+        # assumes that there are no negative values allowed
+        u = User.objects.get(pk=1)
+        self.assertGreaterEqual(u.balance, 0)
+
+    def test_DoB(self):
+        # tests if there are 3 items separated by "-"
+        u = User.objects.get(pk=1)
+        self.assertEqual(len(str(u.date_of_birth).split("-")), 3)
+
+    def test_rating(self):
+        # checks if the rating is greater or equal than 0
+        u = User.objects.get(pk=1)
+        self.assertGreaterEqual(u.rating, 0)
 
 # Tests for the PUBLIC profile page.
 class PublicProfileTestCase(LoginRequiredTestCase):
@@ -83,3 +102,4 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
     def test_profile_available_by_name(self):
         response = self.client.get(reverse('me'))
         self.assertEqual(response.status_code, 200)
+
