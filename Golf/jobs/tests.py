@@ -312,3 +312,4 @@ class FormTestCase(TestCase):
 
             form = JobForm(data=new_application)
             self.assertEqual(0, len(form.errors))
+
