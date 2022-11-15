@@ -107,209 +107,221 @@ class DetailsTestCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 404)
 
 
+# Testing the posting page.
+class PostPageCase(LoginRequiredTestCase):
+
+    def test_postPage(self):
+        response = self.client.get('/jobs/post/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='postjob.html')
+
+    def test_postPage_available_by_name(self):
+        response = self.client.get(reverse('post'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_redirect_since_everything_is_correct(self):
+        new_form = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'write the tests for me',
+            'job_description' : 'This is a cry for help, I actually have no skills of writing tests, but wanted to do it on my own cause i wanna learn.',
+            'location' : 'AB25 1GN',
+            'duration_days' : '0',
+            'duration_hours': '1',
+            'deadline': datetime.date.today(),
+        }
+        response = self.client.post(reverse('post'), data = new_form)
+        self.assertEqual(response.status_code, 302)
+
+
 # Testing the posting form.
-class FormTestCase(TestCase):
-    #website tests
+class PostJobCase(TestCase):
+    # poster_id is already there, so we do not test that part!
 
-    class PostPageCase(LoginRequiredTestCase):
-
-        def test_postPage(self):
-            response = self.client.get('jobs/post/')
-            #test if the website is there, when it should
-            self.assertEqual(response.status_code, 200)
-            self.assertTemplateUsed(response, template_name='postjob.html')
-
-        #check whether the html_code_name fits the url
-        def test_welcome_available_by_name(self):
-            response = self.client.get(reverse('post'))
-            self.assertEqual(response.status_code, 200)
+    
+    # Creating a user before every test. (The database is deleted after the test finishes.)
+    def setUp(self):
+        credentials = {
+            'username': 'asd',
+            'password': 'asd123',
+            'date_of_birth':datetime.datetime.now(),
+        }
+        User.objects.create_user(**credentials)
 
 
-    #form tests
-    class PostJobCase(TestCase):
-        def test_post(self):
-            new_form = {
-                'job_title' : 'Job',
-                'job_short_description' : 'write the tests for me',
-                'job_long_description' : 'This is a cry for help, I actually have no skills of writing tests, but wanted to do it on my own cause i wanna learn.',
-                'location' : 'AB25 1GN',
-                'duration_days' : '0',
-                'duration_hours': '1',
+    def test_empty_form(self):
+        form = JobForm(data={'poster_id': '1'})
 
-            }
-            response = self.client.post(reverse('postjob'), data = new_form)
+        self.assertEqual(6, len(form.errors))
 
-            #302 is redirect - test whether redirection works
-            self.assertEqual(response.status_code, 302)
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required', form.errors[key][0])
 
-    class RegisterFormTestCase(TestCase):
-        #for testing error messages
+    #adding only first fields (job_title)
+    #as job_title and short description are formatted in the same, im testing them together
+    def test_added_job_title_short_description(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short'
+        }
+        form = JobForm(data = new_application)
 
-        #runserver -> input wrong data -> write test for the error that comes up
+        #check how many errors
+        self.assertEqual(4, len(form.errors))
 
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required.', form.errors[key][0])
 
-        #nothing has been input -> so you need to give error that the field is required
-        def test_empty_form(self):
-            form = JobForm(data={})
+    def test_long_desc_too_long(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : '!'*1001,
+        }
+        form = JobForm(data = new_application)
+        self.assertEqual(4, len(form.errors)) #2 fields should work, 4 still in error
 
-            for key in form.errors:
-                error_now = form.errors[key]
-                self.assertEqual(1, len(error_now))
-                self.assertIn('This field is required', form.errors[key][0])
+        #check which field an error
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
 
-        #adding only first fields (job_title)
-        #as job_title and short description are formatted in the same, im testing them together
-        def test_added_job_title(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short'
-            }
-            form = JobForm(data = new_application)
-
-            self.assertAlmostEqual(4, len(form.errors))
-            #there are only 4 remaining error fields, as 2 should be input
-            #you should have 2 less error message
-
-            #check how many errors
-            for key in form.errors:
-                error_now = form.errors[key]
-                self.assertEqual(1, len(error_now))
+            if key == 'job_description':
+                self.assertIn('Ensure this value has at most 1000 characters', form.errors[key][0])
+            else:
                 self.assertIn('This field is required.', form.errors[key][0])
 
-        def test_long_desc_too_long(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : '!'*1001,
-            }
-            form = JobForm(data = new_application)
-            self.assertEqual(4, len(form.errors)) #2 fields should work, 4 still in error
+    def test_long_desc_too_short(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : '!',
+        }
+        form = JobForm(data = new_application)
+        self.assertEqual(4, len(form.errors))
 
-            #check which field an error
-            for key in form.errors:
-                error_now = form.erros[key]
-                self.assertEqual(1, len(error_now))
+        #check which field an error
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
 
-                if key == 'job_long_description':
-                    self.assertIn('Ensure this value has at most 1000 characters.', form.errors[key][0])
-                else:
-                    self.assertIn('This field is required.', form.errors[key][0])
-
-        def test_long_desc_too_short(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : '!',
-            }
-            form = JobForm(data = new_application)
-            self.assertEqual(4, len(form.errors))
-
-            #check which field an error
-            for key in form.errors:
-                error_now = form.erros[key]
-                self.assertEqual(1, len(error_now))
-
-                if key == 'job_long_description':
-                    self.assertIn('Ensure this value has at least 50 characters.', form.errors[key][0])
-                else:
-                    self.assertIn('This field is required.', form.errors[key][0])
-
-        def test_added_long_desc(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : 'l'*50,
-            }
-            form = JobForm(data=new_application)
-            self.assertEqual(3, len(form.errors)) #3 fields should be input ok
-
-            for key in form.errors:
-                error_now = form.errors[key]
-                self.assertEqual(1, len(error_now))
+            if key == 'job_description':
+                self.assertIn('Ensure this value has at least 50 characters', form.errors[key][0])
+            else:
                 self.assertIn('This field is required.', form.errors[key][0])
 
-        def test_ZIP_code_valid(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : 'l'*50,
-                'location' : '00000000',
-            }
-            form = JobForm(data = new_application)
-            self.assertEqual(3, len(form.errors))
+    def test_added_long_desc(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+        }
+        form = JobForm(data=new_application)
+        self.assertEqual(3, len(form.errors)) #3 fields should be input ok
 
-            for key in form.errors:
-                error_now = form.errors[key]
-                self.assertEqual(1, len(error_now))
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required.', form.errors[key][0])
 
-                if key == 'location':
-                    self.assertIn('Enter a valid ZIP code', form.erros[key][0])
+    def test_ZIP_code_not_valid(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : '00000000',
+        }
+        form = JobForm(data = new_application)
+        self.assertEqual(3, len(form.errors))
 
-                else:
-                    self.assertIn('This field is required.', form.errors[key][0])
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
 
-        def test_added_ZIP(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : 'l'*50,
-                'location' : 'AB25 3SR',
-            }
-            form = JobForm(data = new_application)
-            self.assertEqual(2, len(form.errors))
+            if key == 'location':
+                self.assertIn('The postcode format is not valid. You must use capital letters.', form.errors[key][0])
+            else:
+                self.assertIn('This field is required.', form.errors[key][0])
 
-        def test_duration_days_valid(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : 'l'*50,
-                'location' : 'AB25 3SR',
-                'duration_days' : '20',
-            }
+    def test_added_ZIP(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : 'AB25 3SR',
+        }
+        form = JobForm(data = new_application)
+        self.assertEqual(2, len(form.errors))
 
-            form = JobForm(data = new_application)
-            self.assertEqual(2, len(form.add_errors))
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('This field is required.', form.errors[key][0])
 
-            for key in form.errors:
-                error_now = form.errors[key]
-                self.assertEqual(1, len(error_now))
+    def test_duration_days_valid(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : 'AB25 3SR',
+            'duration_days' : '20',
+        }
 
-                if key == 'duration_days':
-                    self.assertIn('Days out of bounds, enter value betwen 0-15.', form.erros[key][0])
-                else:
-                    self.assertIn('This field is required.', form.errors[key][0])
+        form = JobForm(data = new_application)
+        self.assertEqual(1, len(form.errors))
 
-        def test_duration_hours_valid(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : 'l'*50,
-                'location' : 'AB25 3SR',
-                'duration_hours' : '30',
-            }
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
 
-            form = JobForm(data = new_application)
-            self.assertEqual(2, len(form.add_errors))
+            if key == 'duration_days':
+                self.assertIn('Select a valid choice. That choice is not one of the available choices.', form.erros[key][0])
+            else:
+                self.assertIn('This field is required.', form.errors[key][0])
 
-            for key in form.errors:
-                error_now = form.errors[key]
-                self.assertEqual(1, len(error_now))
+    def test_duration_hours_valid(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : 'AB25 3SR',
+            'duration_hours' : '30',
+        }
 
-                if key == 'duration_hours':
-                    self.assertIn('Hours out of bounds, enter value betwen 0-25.', form.erros[key][0])
-                else:
-                    self.assertIn('This field is required.', form.errors[key][0])
+        form = JobForm(data = new_application)
+        self.assertEqual(1, len(form.errors))
 
-        def test_added_days_hours(self):
-            new_application = {
-                'job_title' : 'Job',
-                'job_short_description' : 'short',
-                'job_long_description' : 'l'*50,
-                'location' : 'AB25 3SR',
-                'duration_days' : '0',
-                'duration_hours' : '1',
-            }
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
 
-            form = JobForm(data=new_application)
-            self.assertEqual(0, len(form.errors))
+            if key == 'duration_hours':
+                self.assertIn('Select a valid choice. That choice is not one of the available choices.', form.erros[key][0])
+            else:
+                self.assertIn('This field is required.', form.errors[key][0])
 
+    def test_fine(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : 'AB25 3SR',
+            'duration_days' : '0',
+            'duration_hours' : '1',
+        }
+
+        form = JobForm(data=new_application)
+        self.assertEqual(0, len(form.errors))

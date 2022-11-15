@@ -93,6 +93,8 @@ class RegisterFormTestCase(TestCase):
     def test_nothing_entered(self):
         form = RegisterForm(data={})
 
+        self.assertEqual(7, len(form.errors))
+
         # Checks fields for errors
         for key in form.errors:
             error_now = form.errors[key]
