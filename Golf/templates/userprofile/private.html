@@ -70,7 +70,11 @@
       <div>
         <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
         <p>Posted on: {{ job.posting_time }}</p>
+        {% if not job.completed %}
         <h6>Applicants:</h6>
+        {% else %}
+        <p>This job is complete.</p>
+        {% endif %}
         {% if applicants %}
           {% if not job.assigned %}
             <form method="post" action="{% url 'me' %}" id="applicant-{{job.job_id}}">
@@ -91,11 +95,16 @@
               {% for applicant in applicants %}
                 {% if applicant.status == "AC" %}
                     <p>{{ applicant.user_id.username }}: <a href="">{{ applicant.user_id.email }}</a></p>
+                    <button 
+                    class="btn btn-primary" id="close{{job.job_id}}"
+                    onclick="releasePoints('{{job.job_id}}', '{{applicant.user_id.id}}')">
+                        Job done
+                    </button>
                 {% endif %}
               {% endfor %}
           {% endif %}
         {% else %}
-          <p>No one has applied for this job.</p>
+          <p>No one has applied for this job yet.</p>
         {% endif %}
       </div>
       <hr>
@@ -147,5 +156,19 @@
       });
     });
   });
+
+  function releasePoints(jid, appid) {
+    // For now I've not worried about persistance since this button should not show after this function
+    $("#close"+jid).attr("disabled", true);
+    $.ajax({
+        type: "POST", 
+        url: "{% url 'generic' %}", 
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'rel', jid: jid, appid: appid}, 
+        success: function callback(response) {
+            alert("Job is now finished. The points will now be transfered to the volunteer.");
+            location.reload(); // Changes don't show until page reloads. How can we make this better?
+        }
+    });
+  }
 </script>
 {% endblock %}

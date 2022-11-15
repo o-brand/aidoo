@@ -64,12 +64,10 @@
                             </div>
                           </div>
                     </div>
-                    <a href="{% url 'userdetail' job.poster_id.id %}">
-                        <div class="d-flex justify-content-start">
-                            <img src="../static/assets/user.png"/>
-                            <h5>{{ job.poster_id.username }}</h5>
-                        </div>
-                    </a>
+                    <div class="d-flex justify-content-start">
+                        <a href="{% url 'userdetail' job.poster_id.id %}"><img src="../static/assets/user.png"></a>                        
+                        <h5><a href="{% url 'userdetail' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
+                    </div>
                     <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
                     <p>{{ job.job_short_description }}</p>
                     <button

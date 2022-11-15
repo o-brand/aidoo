@@ -79,3 +79,32 @@ def me(request):
         'posted': posted_jobs,
     }
     return HttpResponse(template.render(context, request))
+
+def release_points(request):
+    jid = int(request.POST['jid']) # Job in question
+    appid = int(request.POST['appid']) # ID of applicant
+
+    post = JobPosting.objects.get(job_id=jid) # Job post
+    volunteer = User.objects.get(id=appid) # Applicant
+    poster = User.objects.get(id=post.poster_id.id) # Job poster
+    job_process = JobProcess.objects.get(job_id=jid, user_id=appid) # Job process (?)
+    
+    poster.balance = poster.balance - post.points # Deduct points from job poster
+    volunteer.balance = volunteer.balance + post.points # Pay points to volunteer
+    post.completed = True # Set the post to completed
+    job_process.status = "DN" # Set the job process to done
+
+    poster.save()
+    volunteer.save()
+    post.save()
+    job_process.save()
+
+    return HttpResponse("ok")
+
+#this is the dictionary, used in private.html: function sendid(uid...) .data {func: "sfl"}
+function_dict = {'rel': release_points}
+
+# Runs a function in our dictionary, as specified by the frontend function calling it
+def generic_call(request):
+    return function_dict[request.POST['func']](request)
+    # Make sure that your functions return HttpResponse object or similar
