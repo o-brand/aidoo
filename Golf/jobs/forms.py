@@ -4,7 +4,7 @@ from django import forms
 from django.forms import ModelForm
 from .models import JobPosting
 from django.forms.widgets import NumberInput
-import datetime
+from _datetime import datetime
 from django.core.validators import RegexValidator
 
 # Form for posting a Job
@@ -75,8 +75,10 @@ class JobForm(ModelForm):
     )
 
     deadline = forms.DateField(
+        initial=datetime.now().strftime("%Y-%m-%d"),
         widget=forms.DateInput(
-            attrs={'class': 'form-control', 'placeholder': 'MM/DD/YYYY', 'style': 'width: auto; display: initial;'},
+            attrs={'type': 'date', 'class': 'form-control', 'placeholder': 'Initial date...',
+                   'style': 'width: auto; display: initial;'},
         ),
         label="Deadline",
         required=False
@@ -84,4 +86,4 @@ class JobForm(ModelForm):
 
     class Meta:
         model = JobPosting
-        fields = ['job_title','job_short_description','job_description','location','duration_days', 'duration_hours','deadline','poster_id']
+        fields = ['job_title', 'job_short_description', 'job_description', 'location', 'duration_days', 'duration_hours','deadline','poster_id']
