@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 
-ENABLED_URLS = ("", "login", "signup", "logout", "update_server","account_activation_email")
+ENABLED_URLS = ("", "login", "signup", "logout", "privacy", "update_server","account_activation_email")
 
 class LoginRequiredMiddleware():
 

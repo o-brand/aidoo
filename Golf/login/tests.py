@@ -18,6 +18,18 @@ class WelcomeTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class PrivacyTestCase(TestCase):
+
+    def test_privacy(self):
+        response = self.client.get('/privacy/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name='login/privacy.html')
+
+    def test_privacy_available_by_name(self):
+        response = self.client.get(reverse('privacy'))
+        self.assertEqual(response.status_code, 200)
+
+
 class LoginTestCase(TestCase):
 
     def test_login(self):
@@ -221,7 +233,6 @@ class RegisterFormTestCase(TestCase):
         self.assertEqual(1, len(form.errors))
 
 
-
 class PasswordResetTestCase(TestCase):
 
     def test_password_reset_page(self):
@@ -256,6 +267,7 @@ class PasswordResetTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/password_reset_confirm.html')
 
+
 class EmailConfirmationTestCase(TestCase):
     
     def test_email_confirmation_page(self):
@@ -284,6 +296,3 @@ class EmailConfirmationTestCase(TestCase):
         response = self.client.get(reverse('confirm_email_failure'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/confirm_email_failure.html')
-
-    
-
