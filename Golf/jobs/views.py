@@ -31,7 +31,7 @@ class JobsView(ListView):
 
    def get_queryset(self):
         filter_val = self.request.GET.get('job_title__icontains', '')
-        return JobPosting.objects.filter(hidden=False,job_title__icontains=filter_val)
+        return JobPosting.objects.filter(hidden=False,job_title__icontains=filter_val).exclude(poster_id_id=self.request.user.id)
 
    def job_count(self): 
         return self.get_queryset().count()
