@@ -105,7 +105,13 @@ class FormView(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            form.save()
+            # Recalculate points (because of security - the user could change the calculated value)
+            duration_days = form.cleaned_data["duration_days"]
+            duration_hours = form.cleaned_data["duration_hours"]
+            post = form.save(commit=False)
+            post.points = (duration_days * 24 + duration_hours) * 5
+            post.save()
+
             return HttpResponseRedirect("/jobs/")
 
         return render(request, FormView.template_name, {'form': form, 'poster_id': request.user.id})

@@ -55,11 +55,18 @@
         </p>
         <p>
             The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
-            {{ form.duration_days }} days {{ form.duration_hours }} hours
+            {{ form.duration_days }} days {{ form.duration_hours }} hours. This means <span id="points">5</span> points.
         </p>
         <p>
             The deadline to complete the job (optional)<br/>
-            {{ form.deadline }}
+            {{ form.deadline }}<br/>
+            {% if form.errors %}
+                {% for key, value in form.errors.items %}
+                    {% if key == "deadline" %}
+                        <strong class="error">{{ value.as_text }}</strong>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </p>
 
         <input type="hidden" name="poster_id" value="{{ poster_id }}" />
@@ -80,26 +87,18 @@
     $('select[name="duration_days"]').on('input', function (e) {
         value = Number.parseFloat(e.target.value);
         if(!Number.isNaN(value)) {
-            point += (value - days) * 24*5;
+            points += (value - days) * 24*5;
             days = value;
+            $('#points').html(points);
         }
     });
     $('select[name="duration_hours"]').on('input', function (e) {
         value = Number.parseFloat(e.target.value);
         if(!Number.isNaN(value)) {
-            point += (value - hours) * 5;
+            points += (value - hours) * 5;
             hours = value;
+            $('#points').html(points);
         }
-    });
-
-    // Append calculated point.
-    $("#form").submit( function(eventObj) {
-        $("<input />").attr("type", "hidden")
-            .attr("name", "points")
-            .attr("value", points)
-            .appendTo("#form");
-
-        return true;
     });
 </script>
 {% endblock %}
