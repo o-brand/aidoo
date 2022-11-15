@@ -3,17 +3,13 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from datetime import datetime
 from django.contrib.auth import get_user_model
-from .validator import validate_dob
+from .validators import validate_dob
 from Golf.utils import create_date_string
 
 User = get_user_model() # Get user model
 
 # This class extends the UserCreationForm to have extra fields.
 # We can customize the error messages later, if we want.
-
-class DateInput(forms.DateInput):
-    input_type = 'date'
-
 class RegisterForm(UserCreationForm):
     first_name = forms.CharField(
         max_length=100,
@@ -84,8 +80,9 @@ class RegisterForm(UserCreationForm):
     date_of_birth = forms.DateField(
         required=True,
         label="Date of Birth",
-        widget=DateInput(
+        widget=forms.DateInput(
             attrs={
+                'type': 'date',
                 "min":create_date_string(100),
                 "max":create_date_string(13)
             }

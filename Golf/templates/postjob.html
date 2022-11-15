@@ -58,7 +58,7 @@
             {{ form.duration_days }} days {{ form.duration_hours }} hours. This means <span id="points">5</span> points.
         </p>
         <p>
-            The deadline to complete the job (optional)<br/>
+            {{ form.deadline.label_tag }}<br/>
             {{ form.deadline }}<br/>
             {% if form.errors %}
                 {% for key, value in form.errors.items %}

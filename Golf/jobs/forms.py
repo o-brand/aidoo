@@ -6,6 +6,8 @@ from .models import JobPosting
 from django.forms.widgets import NumberInput
 from _datetime import datetime
 from django.core.validators import RegexValidator
+from .validators import validate_deadline
+from Golf.utils import create_date_string
 
 # Form for posting a Job
 class JobForm(ModelForm):
@@ -75,13 +77,16 @@ class JobForm(ModelForm):
     )
 
     deadline = forms.DateField(
-        initial=datetime.now().strftime("%Y-%m-%d"),
         widget=forms.DateInput(
-            attrs={'type': 'date', 'class': 'form-control', 'placeholder': 'Initial date...',
-                   'style': 'width: auto; display: initial;'},
+            attrs={'type': 'date',
+                'class': 'form-control',
+                "min":create_date_string(0),
+                "max":create_date_string(-1), # 1 year in the future
+                'style': 'width: auto; display: initial;'},
         ),
-        label="Deadline",
-        required=False
+        label="The deadline to complete the job (optional)",
+        required=False,
+        validators=[validate_deadline],
     )
 
     class Meta:
