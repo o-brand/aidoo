@@ -28,23 +28,28 @@ def me(request):
 
     # If the user accepted somebody
     if request.POST:
-        user_id = request.POST["accept"][0]
-        job_id = request.POST["accepted"]
+        if request.POST['kind'] == 'exchange':
+            jid = int(request.POST['jid']) # Job in question
+            appid = int(request.POST['appid']) # ID of applicant
+            release_points(id, jid, appid)
+        else:
+            user_id = request.POST["accept"][0]
+            job_id = request.POST["accepted"]
 
-        # we get row from the table with the job id
-        job = JobPosting.objects.get(pk=job_id)
-        job.assigned = True
-        job.save()
+            # we get row from the table with the job id
+            job = JobPosting.objects.get(pk=job_id)
+            job.assigned = True
+            job.save()
 
-        # change status of applicants - only those status where "AP"
-        set_rejected = JobProcess.objects.filter(job_id=job_id, status="AP")
-        for user in set_rejected:
-            if str(user.user_id.id) != user_id:
-                user.status = "RE"
-                user.save()
-            else:
-                user.status = "AC"
-                user.save()
+            # change status of applicants - only those status where "AP"
+            set_rejected = JobProcess.objects.filter(job_id=job_id, status="AP")
+            for user in set_rejected:
+                if str(user.user_id.id) != user_id:
+                    user.status = "RE"
+                    user.save()
+                else:
+                    user.status = "AC"
+                    user.save()
 
     try:
         user_extended = User.objects.get(pk=id)
@@ -80,12 +85,11 @@ def me(request):
     }
     return HttpResponse(template.render(context, request))
 
-def release_points(request):
-    jid = int(request.POST['jid']) # Job in question
-    appid = int(request.POST['appid']) # ID of applicant
-
+def release_points(rid, jid, appid): #rid = id of requester
     try:
         post = JobPosting.objects.get(job_id=jid) # Job post
+        if id != post.poster_id.id:
+            return HttpResponseNotFound()
         volunteer = User.objects.get(id=appid) # Applicant
         poster = User.objects.get(id=post.poster_id.id) # Job poster
         job_process = JobProcess.objects.get(job_id=jid, user_id=appid) # Job process (?)
