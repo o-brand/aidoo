@@ -67,7 +67,11 @@ class UserTableTestCase(TestCase):
     def test_DoB(self):
         # tests if there are 3 items separated by "-"
         u = User.objects.get(pk=1)
-        self.assertEqual(len(str(u.date_of_birth).split("-")), 3)
+        l = str(u.date_of_birth).split("-")
+        Y = int(l[0])
+        M = int(l[1])
+        D = int(l[2])
+        self.assertEqual(type(datetime.date(Y,M,D)), datetime.date)
 
     def test_rating(self):
         # checks if the rating is greater or equal than 0
