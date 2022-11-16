@@ -338,7 +338,7 @@ class PostJobCase(TestCase):
             'location' : 'AB25 3SR',
             'duration_days' : '0',
             'duration_hours' : '1',
-            'deadline': datetime.date(2022,11,16)
+            'deadline': datetime.date(2022,11,16)#
 
         }
 
