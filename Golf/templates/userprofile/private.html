@@ -73,7 +73,7 @@
           <h6>Applicants:</h6>
           {% if applicants %}
             {% if not job.assigned %}
-              <form method="post" action="{% url 'me' %}" id="applicant-{{job.job_id}}">
+              <form method="post" action="{% url 'me' %}#posted" id="applicant-{{job.job_id}}">
                 {% csrf_token %}
                 <select name="accept" id="option-{{job.job_id}}"class="select">
                   <option disabled selected value="-1">Select somebody</option>
@@ -135,8 +135,17 @@
     evt.currentTarget.className += " active";
   }
 
-  // Default tab
-  document.getElementById("details_tab").click();
+  // Get the active tab from URL and open it (if there is anything)
+  var anchorHash = location.href;
+  if(anchorHash.lastIndexOf('#') != -1) {
+    // Get the id from the end of the URL
+    anchorHash = anchorHash.substr(anchorHash.lastIndexOf('#')+1);
+    document.getElementById(anchorHash + "_tab").click();
+  }
+  else {
+    // Default tab
+    document.getElementById("details_tab").click();
+  }
 
   // Get all the selects from the page
   let selects = document.getElementsByClassName("select");
