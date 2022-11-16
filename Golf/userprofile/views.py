@@ -88,7 +88,7 @@ def me(request):
 def release_points(rid, jid, appid): #rid = id of requester
     try:
         post = JobPosting.objects.get(job_id=jid) # Job post
-        if id != post.poster_id.id:
+        if rid != post.poster_id.id:
             return HttpResponseNotFound()
         volunteer = User.objects.get(id=appid) # Applicant
         poster = User.objects.get(id=post.poster_id.id) # Job poster
