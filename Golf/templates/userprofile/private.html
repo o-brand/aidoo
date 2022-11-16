@@ -162,7 +162,7 @@
     $("#close"+jid).attr("disabled", true);
     $.ajax({
         type: "POST", 
-        url: "{% url 'generic' %}", 
+        url: "{% url 'genericprofile' %}", 
         data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'rel', jid: jid, appid: appid}, 
         success: function callback(response) {
             alert("Job is now finished. The points will now be transfered to the volunteer.");

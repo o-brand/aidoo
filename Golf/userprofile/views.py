@@ -108,6 +108,6 @@ def release_points(request):
 function_dict = {'rel': release_points}
 
 # Runs a function in our dictionary, as specified by the frontend function calling it
-def generic_call(request):
+def generic_profile_call(request):
     return function_dict[request.POST['func']](request)
     # Make sure that your functions return HttpResponse object or similar
