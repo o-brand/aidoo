@@ -321,6 +321,57 @@ class PostJobCase(TestCase):
             'location' : 'AB25 3SR',
             'duration_days' : '0',
             'duration_hours' : '1',
+            'deadline': datetime.date.today()
+
+        }
+
+        form = JobForm(data=new_application)
+        self.assertEqual(0, len(form.errors))
+
+
+    def test_fine1(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : 'AB25 3SR',
+            'duration_days' : '0',
+            'duration_hours' : '1',
+            'deadline': datetime.date(2022,11,16)##
+
+        }
+
+        form = JobForm(data=new_application)
+        self.assertEqual(0, len(form.errors))
+
+    def test_fine2(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : 'AB25 3SR',
+            'duration_days' : '0',
+            'duration_hours' : '1',
+            'deadline': datetime.date(2022,10,31)
+
+        }
+
+        form = JobForm(data=new_application)
+        self.assertEqual(1, len(form.errors))
+
+    def test_fine3(self):
+        new_application = {
+            'poster_id': '1',
+            'job_title' : 'Job',
+            'job_short_description' : 'short',
+            'job_description' : 'l'*50,
+            'location' : 'AB25 3SR',
+            'duration_days' : '0',
+            'duration_hours' : '1',
+            'deadline': datetime.date(2023,7,31)
+
         }
 
         form = JobForm(data=new_application)
