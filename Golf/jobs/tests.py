@@ -9,6 +9,7 @@ from django.urls import reverse
 from .forms import JobForm
 import datetime
 from django.contrib.auth import get_user_model
+from Golf.utils import create_date_string
 
 User = get_user_model() # Get user model
 
@@ -268,7 +269,7 @@ class PostJobCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn('This field is required.', form.errors[key][0])
 
-    def test_duration_days_valid(self):
+    def test_duration_days_not_valid(self):
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -290,7 +291,7 @@ class PostJobCase(TestCase):
             else:
                 self.assertIn('This field is required.', form.errors[key][0])
 
-    def test_duration_hours_valid(self):
+    def test_duration_hours_not_valid(self):
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -321,15 +322,11 @@ class PostJobCase(TestCase):
             'location' : 'AB25 3SR',
             'duration_days' : '0',
             'duration_hours' : '1',
-            'deadline': datetime.date.today()
-
         }
-
         form = JobForm(data=new_application)
         self.assertEqual(0, len(form.errors))
-
-
-    def test_fine1(self):
+ 
+    def test_deadline_fine(self):
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -338,14 +335,14 @@ class PostJobCase(TestCase):
             'location' : 'AB25 3SR',
             'duration_days' : '0',
             'duration_hours' : '1',
-            'deadline': datetime.date(2022,11,16)##
-
+            'deadline': create_date_string(0),
         }
-
         form = JobForm(data=new_application)
+
+        # No errors.
         self.assertEqual(0, len(form.errors))
 
-    def test_fine2(self):
+    def test_deadline_in_past_others_are_fine(self):
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -354,14 +351,17 @@ class PostJobCase(TestCase):
             'location' : 'AB25 3SR',
             'duration_days' : '0',
             'duration_hours' : '1',
-            'deadline': datetime.date(2022,10,31)
-
+            'deadline': create_date_string(5),
         }
-
         form = JobForm(data=new_application)
         self.assertEqual(1, len(form.errors))
 
-    def test_fine3(self):
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('is not a valid date. The minimum deadline is today.', form.errors[key][0])
+
+    def test_deadline_too_far_others_are_fine(self):
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -370,9 +370,12 @@ class PostJobCase(TestCase):
             'location' : 'AB25 3SR',
             'duration_days' : '0',
             'duration_hours' : '1',
-            'deadline': datetime.date(2023,7,31)
-
+            'deadline': create_date_string(-100),
         }
-
         form = JobForm(data=new_application)
-        self.assertEqual(0, len(form.errors))
+        self.assertEqual(1, len(form.errors))
+
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn('is not a valid date. The deadline cannot be more than 1 year from now.', form.errors[key][0])
