@@ -105,13 +105,3 @@ def release_points(rid, jid, appid): #rid = id of requester
         volunteer.save()
         post.save()
         job_process.save()
-
-        return HttpResponse("ok")
-
-#this is the dictionary, used in private.html: function sendid(uid...) .data {func: "sfl"}
-function_dict = {'rel': release_points}
-
-# Runs a function in our dictionary, as specified by the frontend function calling it
-def generic_profile_call(request):
-    return function_dict[request.POST['func']](request)
-    # Make sure that your functions return HttpResponse object or similar
