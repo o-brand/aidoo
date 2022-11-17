@@ -65,7 +65,7 @@ def me(request):
 
     # Applied jobs
     applied_jobs = []
-    applied = Application.objects.filter(user_id=id)
+    applied = Application.objects.filter(applicant_id=id)
     for job in applied:
         applied_jobs.append([job.job_id, job.status])
 
