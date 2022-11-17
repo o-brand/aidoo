@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from .models import JobPosting, UserSaveForLater, JobProcess
+from .models import Job, Bookmark, Application
 from django.views.generic import ListView
 from django.views import View
 from django.template import loader
@@ -15,8 +15,8 @@ def detail(request, job_id):
     template = loader.get_template('jobdetails.html')
 
     try:
-        job = JobPosting.objects.get(pk=job_id)
-    except JobPosting.DoesNotExist:
+        job = Job.objects.get(pk=job_id)
+    except Job.DoesNotExist:
         return HttpResponseNotFound()
 
     context = {
@@ -25,13 +25,13 @@ def detail(request, job_id):
     return HttpResponse(template.render(context, request))
 
 class JobsView(ListView):
-   model               = JobPosting
+   model               = Job
    template_name       = 'home.html'
    context_object_name = 'jobs'
 
    def get_queryset(self):
         filter_val = self.request.GET.get('job_title__icontains', '')
-        return JobPosting.objects.filter(hidden=False,assigned=False,job_title__icontains=filter_val).exclude(poster_id_id=self.request.user.id)
+        return Job.objects.filter(hidden=False,assigned=False,job_title__icontains=filter_val).exclude(poster_id_id=self.request.user.id)
 
    def job_count(self): 
         return self.get_queryset().count()
@@ -40,8 +40,8 @@ class JobsView(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the saved for later jobs
-        context['save_for_later'] = [i.job_id.job_id for i in UserSaveForLater.objects.filter(user_id=self.request.user.id)]
-        context['jobs_applied'] = [i.job_id.job_id for i in JobProcess.objects.filter(user_id=self.request.user.id)]
+        context['save_for_later'] = [i.job_id.job_id for i in Bookmark.objects.filter(user_id=self.request.user.id)]
+        context['jobs_applied'] = [i.job_id.job_id for i in Application.objects.filter(user_id=self.request.user.id)]
         context['jobs_count'] = self.job_count()
         return context
 
@@ -50,15 +50,15 @@ def sfl_call(request):
     uid = int(request.POST['uid'])
     jid = int(request.POST['jid'])
     try:
-        u = UserSaveForLater.objects.get(user_id=uid, job_id=jid)
-    except UserSaveForLater.DoesNotExist:
+        u = Bookmark.objects.get(user_id=uid, job_id=jid)
+    except Bookmark.DoesNotExist:
         tz = timezone.get_current_timezone()
         timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
-        new_sfljob = UserSaveForLater( # Make new UserSaveForLater record
+        new_sfljob = Bookmark( # Make new Bookmark record
             user_id=User.objects.get(pk=uid),
-            job_id=JobPosting.objects.get(pk=jid),
+            job_id=Job.objects.get(pk=jid),
             saving_time=timzone_datetime)
-        new_sfljob.save() # Save new UserSaveForLater record in database table
+        new_sfljob.save() # Save new Bookmark record in database table
     else:
         u.delete()
     finally:
@@ -68,11 +68,11 @@ def apply_call(request):
     uid = int(request.POST['uid'])
     jid = int(request.POST['jid'])
     try:
-        u = JobProcess.objects.get(user_id=uid, job_id=jid)
-    except JobProcess.DoesNotExist:
-        new_apply = JobProcess(
+        u = Application.objects.get(user_id=uid, job_id=jid)
+    except Application.DoesNotExist:
+        new_apply = Application(
             user_id = User.objects.get(pk=uid),
-            job_id = JobPosting.objects.get(pk=jid),
+            job_id = Job.objects.get(pk=jid),
         )
         new_apply.save()
     finally:

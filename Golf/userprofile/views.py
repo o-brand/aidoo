@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from jobs.models import JobPosting, UserSaveForLater, JobProcess
+from jobs.models import Job, Bookmark, Application
 from django.template import loader
 from django.http import HttpResponse, HttpResponseNotFound
 from django.contrib.auth import get_user_model
@@ -37,12 +37,12 @@ def me(request):
             job_id = request.POST["accepted"]
 
             # we get row from the table with the job id
-            job = JobPosting.objects.get(pk=job_id)
+            job = Job.objects.get(pk=job_id)
             job.assigned = True
             job.save()
 
             # change status of applicants - only those status where "AP"
-            set_rejected = JobProcess.objects.filter(job_id=job_id, status="AP")
+            set_rejected = Application.objects.filter(job_id=job_id, status="AP")
             for user in set_rejected:
                 if str(user.user_id.id) != user_id:
                     user.status = "RE"
@@ -59,22 +59,22 @@ def me(request):
 
     # Saved jobs
     saved_jobs = []
-    saved = UserSaveForLater.objects.filter(user_id=id)
+    saved = Bookmark.objects.filter(user_id=id)
     for job in saved:
         saved_jobs.append([job.job_id, job.saving_time])
 
     # Applied jobs
     applied_jobs = []
-    applied = JobProcess.objects.filter(user_id=id)
+    applied = Application.objects.filter(user_id=id)
     for job in applied:
         applied_jobs.append([job.job_id, job.status])
 
     # Posted jobs
     posted_jobs = []
-    posted = JobPosting.objects.filter(poster_id=id)
+    posted = Job.objects.filter(poster_id=id)
     for job in posted:
          # Need to run the query, that is the reason for list.
-        applicants = list(JobProcess.objects.filter(job_id=job.job_id))
+        applicants = list(Application.objects.filter(job_id=job.job_id))
         posted_jobs.append([job, applicants])
 
     context = {
@@ -87,21 +87,21 @@ def me(request):
 
 def release_points(rid, jid, appid): #rid = id of requester
     try:
-        post = JobPosting.objects.get(job_id=jid) # Job post
+        post = Job.objects.get(job_id=jid) # Job post
         if rid != post.poster_id.id:
             return HttpResponseNotFound()
         volunteer = User.objects.get(id=appid) # Applicant
         poster = User.objects.get(id=post.poster_id.id) # Job poster
-        job_process = JobProcess.objects.get(job_id=jid, user_id=appid) # Job process (?)
-    except (User.DoesNotExist, JobPosting.DoesNotExist, JobProcess.DoesNotExist):
+        application = Application.objects.get(job_id=jid, user_id=appid) # Job process (?)
+    except (User.DoesNotExist, Job.DoesNotExist, Application.DoesNotExist):
         return HttpResponseNotFound()
     else:
         poster.balance = poster.balance - post.points # Deduct points from job poster
         volunteer.balance = volunteer.balance + post.points # Pay points to volunteer
         post.completed = True # Set the post to completed
-        job_process.status = "DN" # Set the job process to done
+        application.status = "DN" # Set the job process to done
 
         poster.save()
         volunteer.save()
         post.save()
-        job_process.save()
+        application.save()

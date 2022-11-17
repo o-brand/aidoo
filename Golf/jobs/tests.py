@@ -1,6 +1,6 @@
 from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase
-from jobs.models import JobPosting
+from jobs.models import Job
 from userprofile.models import User
 from faker import Faker
 import random
@@ -13,7 +13,7 @@ from Golf.utils import create_date_string
 
 User = get_user_model() # Get user model
 
-# Testing the JobPosting Model
+# Testing the Job Model
 class JobTableTestCase(TestCase):
 
     def setUp(self):
@@ -34,23 +34,23 @@ class JobTableTestCase(TestCase):
             tz = timezone.get_current_timezone()
             timzone_datetime = timezone.make_aware(fake.date_time(), tz, True)
 
-            #JobPosting.objects.create_jobPosting()
+            #Job.objects.create_Job()
             jobs = dict()
             jobs['posting_time'] = timzone_datetime
             jobs['points'] = random.randint(0,100)
             jobs['assigned'] = False
             jobs['completed'] = False
             jobs['poster_id_id'] = random.randint(1,10)
-            JobPosting.objects.create(**jobs)
+            Job.objects.create(**jobs)
 
     def test_retrieve_job(self):
-        job = JobPosting.objects.get(pk=1)
+        job = Job.objects.get(pk=1)
 
         self.assertEqual(job.job_id, 1)
 
     def test_create_job(self):
         fake = Faker()
-        len1 = len(JobPosting.objects.all())
+        len1 = len(Job.objects.all())
 
         job = dict()
 
@@ -63,17 +63,17 @@ class JobTableTestCase(TestCase):
         job['assigned'] = False
         job['completed'] = False
         job['poster_id_id'] = random.randint(1,10)
-        JobPosting.objects.create(**job)
+        Job.objects.create(**job)
 
-        len2 = len(JobPosting.objects.all())
+        len2 = len(Job.objects.all())
         self.assertEqual(len1+1,len2)
 
     def test_delete_job(self):
-        j = JobPosting.objects.get(pk=1)
-        len1 = len(JobPosting.objects.all())
+        j = Job.objects.get(pk=1)
+        len1 = len(Job.objects.all())
         j.delete()
 
-        len2 = len(JobPosting.objects.all())
+        len2 = len(Job.objects.all())
 
         self.assertEqual(len1-1,len2)
 
@@ -92,7 +92,7 @@ class DetailsTestCase(LoginRequiredTestCase):
             'job_description': 'Nothing',
             'points': 10,
         }
-        JobPosting.objects.create(**job)
+        Job.objects.create(**job)
 
     def test_details(self):
         response = self.client.get('/jobs/1/')

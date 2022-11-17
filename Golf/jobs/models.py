@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model() # Get user model
 
-class JobPosting(models.Model):
+class Job(models.Model):
     job_id = models.BigAutoField(primary_key=True)
     poster_id = models.ForeignKey(User, on_delete=models.CASCADE) # Should we use something else on delete?
         #making the change general and it happens everywhere, if you delete user, everything about the user is deleted
@@ -20,10 +20,10 @@ class JobPosting(models.Model):
     assigned = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
-class UserSaveForLater(models.Model):
+class Bookmark(models.Model):
     bookmark_id = models.BigAutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete = models.CASCADE)
-    job_id = models.ForeignKey(JobPosting, on_delete = models.CASCADE)
+    job_id = models.ForeignKey(Job, on_delete = models.CASCADE)
     saving_time = models.DateTimeField()
 
     class Meta:
@@ -34,7 +34,7 @@ class UserSaveForLater(models.Model):
         ]
 
 #a table
-class JobProcess(models.Model):
+class Application(models.Model):
     class JobStatus(models.TextChoices):
         #attributes for the status of the of the button
         APPLIED = 'AP', ('Applied')
@@ -48,7 +48,7 @@ class JobProcess(models.Model):
     application_id = models.BigAutoField(primary_key=True)
     #foreign key - back to the User table, user_id of the applicant
     applicant_id = models.ForeignKey(User, on_delete = models.CASCADE)
-    job_id = models.ForeignKey(JobPosting, on_delete = models.CASCADE)
+    job_id = models.ForeignKey(Job, on_delete = models.CASCADE)
     #describes progess of the Apply process
     status = models.CharField(
         max_length=2,

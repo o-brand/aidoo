@@ -2,7 +2,7 @@ from dataclasses import Field
 from time import time
 from django import forms
 from django.forms import ModelForm
-from .models import JobPosting
+from .models import Job
 from django.forms.widgets import NumberInput
 from _datetime import datetime
 from django.core.validators import RegexValidator
@@ -90,5 +90,5 @@ class JobForm(ModelForm):
     )
 
     class Meta:
-        model = JobPosting
+        model = Job
         fields = ['job_title', 'job_short_description', 'job_description', 'location', 'duration_days', 'duration_hours','deadline','poster_id']

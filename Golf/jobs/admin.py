@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import JobPosting, UserSaveForLater, JobProcess
+from .models import Job, Bookmark, Application
 
 # Register your models here. - This ways we can edit the models via /admin/
-admin.site.register(JobPosting)
-admin.site.register(UserSaveForLater)
-admin.site.register(JobProcess)
+admin.site.register(Job)
+admin.site.register(Bookmark)
+admin.site.register(Application)
