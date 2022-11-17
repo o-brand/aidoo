@@ -20,9 +20,10 @@ class Job(models.Model):
     assigned = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
+
 class Bookmark(models.Model):
     bookmark_id = models.BigAutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete = models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete = models.CASCADE) # User who bookmarked job
     job_id = models.ForeignKey(Job, on_delete = models.CASCADE)
     saving_time = models.DateTimeField()
 
@@ -32,6 +33,7 @@ class Bookmark(models.Model):
                 fields=['user_id', 'job_id'], name='bookmark_user_job_combo'
             )
         ]
+
 
 #a table
 class Application(models.Model):
@@ -57,6 +59,7 @@ class Application(models.Model):
     )
     time_of_application = models.DateTimeField(default=timezone.now)
     time_of_final_status = models.DateTimeField(default=None, blank=True, null=True)
+
 
     #this helps Django and constraints that ids are unique
     class Meta:
