@@ -21,7 +21,7 @@ class JobPosting(models.Model):
     completed = models.BooleanField(default=False)
 
 class UserSaveForLater(models.Model):
-    save_for_later_id = models.BigAutoField(primary_key=True)
+    bookmark_id = models.BigAutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete = models.CASCADE)
     job_id = models.ForeignKey(JobPosting, on_delete = models.CASCADE)
     saving_time = models.DateTimeField()
@@ -29,7 +29,7 @@ class UserSaveForLater(models.Model):
     class Meta:
          constraints = [
             models.UniqueConstraint(
-                fields=['user_id', 'job_id'], name='sfl_user_job_combo'
+                fields=['user_id', 'job_id'], name='bookmark_user_job_combo'
             )
         ]
 
@@ -45,9 +45,9 @@ class JobProcess(models.Model):
         CONFLICT = 'CO', ('Conflict') # Conflict in releasing points
 
     #primary key
-    job_process_id = models.BigAutoField(primary_key=True)
+    application_id = models.BigAutoField(primary_key=True)
     #foreign key - back to the User table, user_id of the applicant
-    user_id = models.ForeignKey(User, on_delete = models.CASCADE)
+    applicant_id = models.ForeignKey(User, on_delete = models.CASCADE)
     job_id = models.ForeignKey(JobPosting, on_delete = models.CASCADE)
     #describes progess of the Apply process
     status = models.CharField(
@@ -62,7 +62,7 @@ class JobProcess(models.Model):
     class Meta:
          constraints = [
             models.UniqueConstraint(
-                fields=['user_id', 'job_id'], name='process_user_job_combo'
+                fields=['applicant_id', 'job_id'], name='application_user_job_combo'
             )
         ]
 #kay, i need this explained
