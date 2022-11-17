@@ -16,6 +16,11 @@ If you think we should add anything else, or change something, feel free to do i
 
 - You should delete unused code and imports.
 
+- The order of the imports should follow this list:
+  + Basic Python libraries
+  + Django libraries
+  + Our project
+
 - Every file should end with an empty line.
 
 ### Comments
@@ -41,3 +46,5 @@ If you think we should add anything else, or change something, feel free to do i
 - If you are writing a test for an url not in the login app, then use ```LoginRequiredTestCase``` instead of the default ```TestCase```. (You can import like this: ```from Golf.utils import LoginRequiredTestCase```.)
 
 - JS is just used to communicate with Django. So no sensitive information should be communicated via the JS functions and you should check the values on the backend.
+
+- Use ```f-strings``` for string formatting. [Examples](https://zetcode.com/python/fstring/)
