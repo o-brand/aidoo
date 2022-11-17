@@ -47,15 +47,20 @@
   <h3>Applied</h3>
   {% if applied %}
     {% for job, status in applied %}
-      <div>
+    <ul>
+      <div class = "close">
+        <span style = "cursor: pointer; font-size: 25px;font-weight: 600;">&times;</span>
         <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
         <p>Posted on: {{ job.posting_time }}</p>
         <p>Status: {{ status }}</p>
         {% if status == "AC" %}
           <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
         {% endif %}
+        <!--the cross cn also go in here, in case css does not work out-->
       </div>
+    
       <hr>
+    </ul>
     {% endfor %}
   {% else %}
       <p>I haven't applied for any jobs.</p>
@@ -165,6 +170,16 @@
       });
     });
   });
+
+  //unapply
+  var closebtns = document.getElementsByClassName("close");
+  var i;
+
+  for (i = 0; i < closebtns.length; i++) {
+    closebtns[i].addEventListener("click", function() {
+      this.parentElement.style.display = 'none';
+    });
+  }
 
 </script>
 {% endblock %}
