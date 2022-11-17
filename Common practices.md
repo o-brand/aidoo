@@ -16,6 +16,8 @@ If you think we should add anything else, or change something, feel free to do i
 
 - You should delete unused code and imports.
 
+- Every file should end with an empty line.
+
 ### Comments
 
 - Every class, function should have a meaningful comment what is it for - Use [docstrings](https://peps.python.org/pep-0008/#documentation-strings) in Python and ```/** This is a description of the foo function. */``` in JS.
