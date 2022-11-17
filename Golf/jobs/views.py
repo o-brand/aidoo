@@ -41,7 +41,7 @@ class JobsView(ListView):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the saved for later jobs
         context['save_for_later'] = [i.job_id.job_id for i in Bookmark.objects.filter(user_id=self.request.user.id)]
-        context['jobs_applied'] = [i.job_id.job_id for i in Application.objects.filter(user_id=self.request.user.id)]
+        context['jobs_applied'] = [i.job_id.job_id for i in Application.objects.filter(applicant_id=self.request.user.id)]
         context['jobs_count'] = self.job_count()
         return context
 
@@ -68,10 +68,10 @@ def apply_call(request):
     uid = int(request.POST['uid'])
     jid = int(request.POST['jid'])
     try:
-        u = Application.objects.get(user_id=uid, job_id=jid)
+        u = Application.objects.get(applicant_id=uid, job_id=jid)
     except Application.DoesNotExist:
         new_apply = Application(
-            user_id = User.objects.get(pk=uid),
+            applicant_id = User.objects.get(pk=uid),
             job_id = Job.objects.get(pk=jid),
         )
         new_apply.save()

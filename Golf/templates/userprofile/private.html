@@ -79,7 +79,7 @@
                   <option disabled selected value="-1">Select somebody</option>
                   {% for applicant in applicants %}
                     {% if applicant.status == "AP" %}
-                      <option value="{{ applicant.user_id.id }}">{{ applicant.user_id.username }}</option>
+                      <option value="{{ applicant.applicant_id.id }}">{{ applicant.applicant_id.username }}</option>
                     {% endif %}
                   {% endfor %}
                 </select>
@@ -89,11 +89,11 @@
             {% else %}
               {% for applicant in applicants %}
                 {% if applicant.status == "AC" %}
-                  <p>{{ applicant.user_id.username }}: <a href="mailto:{{ applicant.user_id.email }}">{{ applicant.user_id.email }}</a></p>
+                  <p>{{ applicant.applicant_id.username }}: <a href="mailto:{{ applicant.applicant_id.email }}">{{ applicant.applicant_id.email }}</a></p>
                   <form method="post" action="{% url 'me' %}#posted">
                     {% csrf_token %}
                     <input type="hidden" value='{{job.job_id}}' name="jid">
-                    <input type="hidden" value='{{applicant.user_id.id}}' name="appid">
+                    <input type="hidden" value='{{applicant.applicant_id.id}}' name="appid">
                     <input type="hidden" value='exchange' name="kind">
                     <button type="submit" class="btn btn-primary" id="close{{job.job_id}}">Job Done</button>
                   </form>
