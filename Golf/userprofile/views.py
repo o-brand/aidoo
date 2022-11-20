@@ -41,8 +41,8 @@ def me(request):
             applicant.status = "WD"
             applicant.save()
 
-            jid = request.POST['job_id'] #possibly redundant
-            job = JobPosting.objects.get(pk=jid) #too
+            jid = request.POST['job_id']
+            job = JobPosting.objects.get(pk=jid)
             job.assigned = False
             job.save()
 
