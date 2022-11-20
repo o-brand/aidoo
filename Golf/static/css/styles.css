@@ -5,6 +5,7 @@ body {
 
 .error {
     color: red;
+    font-weight: bold;
 }
 
 .center {
