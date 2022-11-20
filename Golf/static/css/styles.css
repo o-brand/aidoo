@@ -34,6 +34,15 @@ body {
   color: rgb(46, 45, 45);
 }
 
+.navbar-brand {
+  margin-left: 0.5%;
+}
+.navbar-brand img { 
+  width: 60px;
+  height: 20px;
+  vertical-align: text-top;
+}
+
 .hello {
   margin-bottom: 2.5%;
 }
