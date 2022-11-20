@@ -57,7 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "Golf.middlewares.LoginRequiredMiddleware",  # Check if the user is authenticated.
+    "Golf.middlewares.LoginRequiredMiddleware",
 ]
 
 ROOT_URLCONF = "Golf.urls"
