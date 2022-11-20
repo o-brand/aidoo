@@ -36,12 +36,13 @@ def me(request):
             # TODO - You have "job_id"
 
             #anet starts
+            jid = request.POST['job_id']
 
-            applicant = JobProcess.objects.get(pk=actual_user_id)
+            applicant = JobProcess.objects.get(job_id=jid, user_id=actual_user_id)
             applicant.status = "WD"
             applicant.save()
 
-            jid = request.POST['job_id']
+            # I think this is not necessary, since you cannot withdraw NOW if the poster has already accepted you.
             job = JobPosting.objects.get(pk=jid)
             job.assigned = False
             job.save()
