@@ -47,7 +47,7 @@
   <h3>Applied</h3>
   {% if applied %}
     {% for job, status in applied %}
-    <form method="post" action="{% url 'me' %}#posted" id ="unapply-{{job.job_id}}" name = "unapply" >
+    <form method="post" action="{% url 'me' %}#posted" id ="unapply" name = "unapply" >
     <ul>
       <div>
         <li>
@@ -180,16 +180,26 @@
 
   //unapply
 
-  var closebtns = document.getElementsByClassName("close");
+  var close_elements = document.getElementsByClassName("close");
   var i;
 
-  for (i = 0; i < closebtns.length; i++) {
-    closebtns[i].addEventListener("click", function() {
+  for (i = 0; i < close_elements.length; i++) {
+    close_elements[i].addEventListener("click", function() {
       //get user_id, change status to withdrawn -> deletes
-      document.getElementById().state = "WD"
+      //document.getElementById().state = "WD"
       //job_assign False
       //cal POST again
+      
       //this.parentElement.style.display = 'none';
+      document.querySelector("#submit").onclick = function() {
+       // alert(close_elements.value = "WD")
+        $.ajax({
+          type: "POST",
+          url: "{% url 'home' %}",
+          data: {status: "WD", job_assign : "False"}
+        })
+      }
+
 
     });
   }
