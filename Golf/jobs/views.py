@@ -1,13 +1,14 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from .models import Job, Bookmark, Application
 from django.views.generic import ListView
 from django.views import View
 from django.template import loader
-from .forms import JobForm
 from django.utils import timezone
-import datetime
 from django.contrib.auth import get_user_model
+from .models import Job, Bookmark, Application
+from .forms import JobForm
+
 
 User = get_user_model() # Get user model
 

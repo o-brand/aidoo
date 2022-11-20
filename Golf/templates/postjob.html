@@ -4,101 +4,98 @@
 
 {% block content %}
 <div class="container">
-    <h1>Hi! You can post a new job here.</h1>
+  <h1>Hi! You can post a new job here.</h1>
 
-    <form action="" method="post" id="form">
-        {% csrf_token %}
-
-        <p>
-            {{ form.job_title.label_tag }}
-            {{ form.job_title }}
-            {% if form.errors %}
-                {% for key, value in form.errors.items %}
-                    {% if key == "job_title" %}
-                        <strong class="error">{{ value.as_text }}</strong>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </p> 
-        <p>
-            {{ form.job_short_description.label_tag }}
-            {{ form.job_short_description }}
-            {% if form.errors %}
-                {% for key, value in form.errors.items %}
-                    {% if key == "job_short_description" %}
-                        <strong class="error">{{ value.as_text }}</strong>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </p> 
-        <p>
-            {{ form.job_description.label_tag }}
-            {{ form.job_description }}
-            {% if form.errors %}
-                {% for key, value in form.errors.items %}
-                    {% if key == "job_description" %}
-                        <strong class="error">{{ value.as_text }}</strong>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </p> 
-        <p>
-            {{ form.location.label_tag }}
-            {{ form.location }}
-            {% if form.errors %}
-                {% for key, value in form.errors.items %}
-                    {% if key == "location" %}
-                        <strong class="error">{{ value.as_text }}</strong>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </p>
-        <p>
-            The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
-            {{ form.duration_days }} days {{ form.duration_hours }} hours. This means <span id="points">5</span> points.
-        </p>
-        <p>
-            {{ form.deadline.label_tag }}<br/>
-            {{ form.deadline }}<br/>
-            {% if form.errors %}
-                {% for key, value in form.errors.items %}
-                    {% if key == "deadline" %}
-                        <strong class="error">{{ value.as_text }}</strong>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </p>
-
-        <input type="hidden" name="poster_id" value="{{ poster_id }}" />
-
-        <input type="submit" value="Submit" class="btn btn-primary"/>
-    </form>
-    <br/>
-    <p><a href="{{ request.META.HTTP_REFERER }}">Go back</a></p>
+  <form action="" method="post" id="form">
+		{% csrf_token %}
+		<p>
+				{{ form.job_title.label_tag }}
+				{{ form.job_title }}
+				{% if form.errors %}
+						{% for key, value in form.errors.items %}
+								{% if key == "job_title" %}
+										<strong class="error">{{ value.as_text }}</strong>
+								{% endif %}
+						{% endfor %}
+				{% endif %}
+		</p> 
+		<p>
+		{{ form.job_short_description.label_tag }}
+		{{ form.job_short_description }}
+		{% if form.errors %}
+			{% for key, value in form.errors.items %}
+				{% if key == "job_short_description" %}
+					<strong class="error">{{ value.as_text }}</strong>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		</p> 
+		<p>
+			{{ form.job_description.label_tag }}
+			{{ form.job_description }}
+			{% if form.errors %}
+				{% for key, value in form.errors.items %}
+					{% if key == "job_description" %}
+						<strong class="error">{{ value.as_text }}</strong>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</p>
+		<p>
+			{{ form.location.label_tag }}
+			{{ form.location }}
+			{% if form.errors %}
+				{% for key, value in form.errors.items %}
+					{% if key == "location" %}
+						<strong class="error">{{ value.as_text }}</strong>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</p>
+		<p>
+				The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
+				{{ form.duration_days }} days {{ form.duration_hours }} hours. This means <span id="points">5</span> points.
+		</p>
+		<p>
+			{{ form.deadline.label_tag }}<br/>
+			{{ form.deadline }}<br/>
+			{% if form.errors %}
+				{% for key, value in form.errors.items %}
+					{% if key == "deadline" %}
+							<strong class="error">{{ value.as_text }}</strong>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</p>
+			<input type="hidden" name="poster_id" value="{{ poster_id }}" />
+			<input type="submit" value="Submit" class="btn btn-primary"/>
+  </form>
+  <br/>
+  <p><a href="{{ request.META.HTTP_REFERER }}">Go back</a></p>
 </div>
 
 <script>
-    //Points
-    var points = 5;
-    var days = 0;
-    var hours = 1;
+	//Points
+	var points = 5;
+	var days = 0;
+	var hours = 1;
 
-    // Recalculate points
-    $('select[name="duration_days"]').on('input', function (e) {
-        value = Number.parseFloat(e.target.value);
-        if(!Number.isNaN(value)) {
-            points += (value - days) * 24*5;
-            days = value;
-            $('#points').html(points);
-        }
-    });
-    $('select[name="duration_hours"]').on('input', function (e) {
-        value = Number.parseFloat(e.target.value);
-        if(!Number.isNaN(value)) {
-            points += (value - hours) * 5;
-            hours = value;
-            $('#points').html(points);
-        }
-    });
+	// Recalculate points
+	$('select[name="duration_days"]').on('input', function (e) {
+		value = Number.parseFloat(e.target.value);
+		if(!Number.isNaN(value)) {
+			points += (value - days) * 24*5;
+			days = value;
+			$('#points').html(points);
+		}
+	});
+	$('select[name="duration_hours"]').on('input', function (e) {
+		value = Number.parseFloat(e.target.value);
+		if(!Number.isNaN(value)) {
+			points += (value - hours) * 5;
+			hours = value;
+			$('#points').html(points);
+		}
+	});
 </script>
 {% endblock %}

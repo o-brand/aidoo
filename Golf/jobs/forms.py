@@ -1,13 +1,14 @@
 from dataclasses import Field
 from time import time
+from _datetime import datetime
 from django import forms
 from django.forms import ModelForm
-from .models import Job
 from django.forms.widgets import NumberInput
-from _datetime import datetime
 from django.core.validators import RegexValidator
 from .validators import validate_deadline
 from Golf.utils import create_date_string
+from .models import Job
+
 
 # Form for posting a Job
 class JobForm(ModelForm):
