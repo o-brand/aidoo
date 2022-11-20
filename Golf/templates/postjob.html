@@ -9,15 +9,15 @@
   <form action="" method="post" id="form">
 		{% csrf_token %}
 		<p>
-				{{ form.job_title.label_tag }}
-				{{ form.job_title }}
-				{% if form.errors %}
-					{% for key, value in form.errors.items %}
-						{% if key == "job_title" %}
-							<p class="error">{{ value.as_text }}</p>
-						{% endif %}
-					{% endfor %}
-				{% endif %}
+			{{ form.job_title.label_tag }}
+			{{ form.job_title }}
+			{% if form.errors %}
+				{% for key, value in form.errors.items %}
+					{% if key == "job_title" %}
+						<p class="error">{{ value.as_text }}</p>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
 		</p> 
 		<p>
 		{{ form.job_short_description.label_tag }}
@@ -62,7 +62,7 @@
 			{% if form.errors %}
 				{% for key, value in form.errors.items %}
 					{% if key == "deadline" %}
-							<p class="error">{{ value.as_text }}</p>
+						<p class="error">{{ value.as_text }}</p>
 					{% endif %}
 				{% endfor %}
 			{% endif %}
