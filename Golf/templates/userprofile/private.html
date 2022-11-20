@@ -47,28 +47,32 @@
   <h3>Applied</h3>
   {% if applied %}
     {% for job, status in applied %}
-    <form method="post" action="{% url 'me' %}#posted" id ="unapply" name = "unapply" >
-    <ul>
       <div>
-        <li>
         <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
-        
         <p>Posted on: {{ job.posting_time }}</p>
         <p>Status: {{ status }}</p>
         {% if status == "AC" %}
           <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
+        {% elif status == "AP" %}
+          <form method="post" action="{% url 'me' %}#applied">
+            {% csrf_token %}
+            <input type="hidden" value='{{job.job_id}}' name="job_id">
+            <input type="hidden" value='unapply' name="kind">
+            <button type="submit" class="close" style="font-size: 25px;font-weight: 600;">&times;</button>
+            <p>If you withdraw, you cannot apply again.</p>
+          </form>
+        {% elif status == "WD" %}
+          <p>If you withdrew from this job.</p>
+        {% elif status == "RE" %}
+          <p>The poster rejected your application. Sorry.</p>
+        {% elif status == "DN" %}
+          <p>You finished this job.</p>
+        {% elif status == "C" %}
+          <p>There is a conflict between you and the poster. We are working on it.</p>
         {% endif %}
-        <span class = "close" style = "cursor: pointer; font-size: 25px;font-weight: 600;">&times;</span>        
-      <input type="hidden" value='{user_id.id}}' name = "user_id_WD">
-      </li>
+        <hr>
       </div>
-    
-      <hr>
-    </form>
-    </ul>
-    
     {% endfor %}
-  
   {% else %}
       <p>I haven't applied for any jobs.</p>
   {% endif %}
@@ -95,6 +99,7 @@
                     {% endif %}
                   {% endfor %}
                 </select>
+                <input type="hidden" value='accept' name="kind">
                 <input type="hidden" value='{{job.job_id}}' name="accepted" >
                 <button type="submit" disabled id="accept-{{job.job_id}}">Accept</button>
               </form>
@@ -177,32 +182,6 @@
       });
     });
   });
-
-  //unapply
-
-  var close_elements = document.getElementsByClassName("close");
-  var i;
-
-  for (i = 0; i < close_elements.length; i++) {
-    close_elements[i].addEventListener("click", function() {
-      //get user_id, change status to withdrawn -> deletes
-      //document.getElementById().state = "WD"
-      //job_assign False
-      //cal POST again
-      
-      //this.parentElement.style.display = 'none';
-      document.querySelector("#submit").onclick = function() {
-       // alert(close_elements.value = "WD")
-        $.ajax({
-          type: "POST",
-          url: "{% url 'home' %}",
-          data: {status: "WD", job_assign : "False"}
-        })
-      }
-
-
-    });
-  }
 
 </script>
 {% endblock %}
