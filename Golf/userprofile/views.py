@@ -34,7 +34,20 @@ def me(request):
             release_points(actual_user_id, jid, appid)
         elif request.POST['kind'] == 'unapply':
             # TODO - You have "job_id"
-            print(request.POST)
+
+            #anet starts
+
+            applicant = JobProcess.objects.get(pk=actual_user_id)
+            applicant.status = "WD"
+            applicant.save()
+
+            jid = request.POST['job_id'] #possibly redundant
+            job = JobPosting.objects.get(pk=jid) #too
+            job.assigned = False
+            job.save()
+
+            #anet ends
+            print(request.POST, applicant.status)
         elif request.POST['kind'] == 'accept':
             user_id = request.POST["accept"][0]
             job_id = request.POST["accepted"]
