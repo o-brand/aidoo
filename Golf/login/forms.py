@@ -14,7 +14,6 @@ class RegisterForm(UserCreationForm):
 
     first_name = forms.CharField(
         max_length=100,
-        required=True,
         widget=forms.TextInput(
             attrs={
                 "placeholder": "First Name",
@@ -24,7 +23,6 @@ class RegisterForm(UserCreationForm):
     )
     last_name = forms.CharField(
         max_length=100,
-        required=True,
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Last Name",
@@ -35,7 +33,6 @@ class RegisterForm(UserCreationForm):
 
     username = forms.CharField(
         max_length=100,
-        required=True,
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Username",
@@ -45,7 +42,6 @@ class RegisterForm(UserCreationForm):
     )
 
     email = forms.EmailField(
-        required=True,
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Email",
@@ -56,7 +52,6 @@ class RegisterForm(UserCreationForm):
 
     password1 = forms.CharField(
         max_length=50,
-        required=True,
         label="Password",
         widget=forms.PasswordInput(
             attrs={
@@ -68,7 +63,6 @@ class RegisterForm(UserCreationForm):
 
     password2 = forms.CharField(
         max_length=50,
-        required=True,
         label="Confirm Password",
         widget=forms.PasswordInput(
             attrs={
@@ -79,7 +73,6 @@ class RegisterForm(UserCreationForm):
     )
 
     date_of_birth = forms.DateField(
-        required=True,
         label="Date of Birth",
         widget=forms.DateInput(
             attrs={

@@ -54,7 +54,7 @@ class SignUpView(View):
             current_site = get_current_site(request)
             subject = "Activate Your aidoo Account"
             message = render_to_string(
-                "login/account_activation_email.html",
+                "emails/account_activation_email.html",
                 {
                     "user": username,
                     "domain": current_site.domain,
@@ -69,7 +69,7 @@ class SignUpView(View):
             # Render the confirmation page
             return render(
                 request,
-                "login/confirm_email.html",
+                "login/activation_link_sent.html",
                 {"email": email}
             )
 

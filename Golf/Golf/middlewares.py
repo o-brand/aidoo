@@ -31,13 +31,13 @@ class LoginRequiredMiddleware:
                 or path.startswith("admin")
                 or path.startswith("password_reset")
                 or path.startswith("activate")
-                or path.startswith("confirm_email")
+                or path.startswith("activation")
             ):
                 return response
 
             # Redirect to the login page (but after login the user is
             # redirected to the requested page)
-            return HttpResponseRedirect("/login/?next=/" + path)
+            return HttpResponseRedirect("/login?next=/" + path)
 
         # The user can see this page
         return response

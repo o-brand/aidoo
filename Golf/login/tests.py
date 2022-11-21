@@ -4,7 +4,10 @@ from .forms import RegisterForm
 import datetime
 from django.contrib.auth import get_user_model
 
-User = get_user_model() # Get user model
+
+# Get actual user model.
+User = get_user_model()
+
 
 class WelcomeTestCase(TestCase):
 
@@ -21,7 +24,7 @@ class WelcomeTestCase(TestCase):
 class PrivacyTestCase(TestCase):
 
     def test_privacy(self):
-        response = self.client.get('/privacy/')
+        response = self.client.get('/privacy')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/privacy.html')
 
@@ -40,7 +43,7 @@ class LoginTestCase(TestCase):
         }
         User.objects.create_user(**credentials)
 
-        response = self.client.post('/login/', credentials, follow=True)
+        response = self.client.post('/login', credentials, follow=True)
         self.assertTrue(response.context['user'].is_active)
 
     def test_login_available_by_name(self):
@@ -49,7 +52,7 @@ class LoginTestCase(TestCase):
         self.assertTemplateUsed(response, template_name='login/login.html')
 
     def test_logout(self):
-        response = self.client.get('/logout/')
+        response = self.client.get('/logout')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/")
 
@@ -62,7 +65,7 @@ class LoginTestCase(TestCase):
 class SignupTestCase(TestCase):
 
     def test_signuppage(self):
-        response = self.client.get('/signup/')
+        response = self.client.get('/signup')
         self.assertEqual(response.status_code, 200)
 
     def test_signup_page_view_name(self):
@@ -81,7 +84,7 @@ class SignupTestCase(TestCase):
             'date_of_birth':datetime.date(2000,1,1)
         }
         response = self.client.post(reverse('signup'), data=new_user)
-        self.assertTemplateUsed(response, template_name='login/confirm_email.html')
+        self.assertTemplateUsed(response, template_name='login/activation_link_sent.html')
 
 
         self.assertEqual(response.status_code, 200)
@@ -238,7 +241,7 @@ class RegisterFormTestCase(TestCase):
 class PasswordResetTestCase(TestCase):
 
     def test_password_reset_page(self):
-        response = self.client.get('/password_reset/')
+        response = self.client.get('/password_reset')
         self.assertEqual(response.status_code, 200)
 
     def test_password_reset_page_view_name(self):
@@ -247,13 +250,13 @@ class PasswordResetTestCase(TestCase):
         self.assertTemplateUsed(response, template_name='login/password_reset_form.html')
 
     def test_password_reset_done_page(self):
-        response = self.client.get('/password_reset/done')
+        response = self.client.get('/password_reset/sent')
         self.assertEqual(response.status_code, 200)
 
     def test_password_reset_done_page_view_name(self):
-        response = self.client.get(reverse('password_reset_done'))
+        response = self.client.get(reverse('password_reset_sent'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='login/password_reset_done.html')
+        self.assertTemplateUsed(response, template_name='login/password_reset_sent.html')
 
     def test_password_reset_complete_page(self):
         response = self.client.get('/password_reset/complete')
@@ -271,30 +274,21 @@ class PasswordResetTestCase(TestCase):
 
 
 class EmailConfirmationTestCase(TestCase):
-    
-    def test_email_confirmation_page(self):
-        response = self.client.get('/confirm_email/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_email_confirmation_page_view_name(self):
-        response = self.client.get(reverse('confirm_email'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='login/confirm_email.html')
 
     def test_email_confirmation_success_page(self):
-        response = self.client.get('/confirm_email/success/')
+        response = self.client.get('/activation/success')
         self.assertEqual(response.status_code, 200)
 
     def test_email_confirmation_success_page_view_name(self):
-        response = self.client.get(reverse('confirm_email_success'))
+        response = self.client.get(reverse('activation_success'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='login/confirm_email_success.html')
+        self.assertTemplateUsed(response, template_name='login/activation_success.html')
 
     def test_email_confirmation_failure_page(self):
-        response = self.client.get('/confirm_email/failure/')
+        response = self.client.get('/activation/failure')
         self.assertEqual(response.status_code, 200)
 
     def test_email_confirmation_failure_page_view_name(self):
-        response = self.client.get(reverse('confirm_email_failure'))
+        response = self.client.get(reverse('activation_failure'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='login/confirm_email_failure.html')
+        self.assertTemplateUsed(response, template_name='login/activation_failure.html')

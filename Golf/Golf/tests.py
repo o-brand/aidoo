@@ -34,7 +34,7 @@ class LoginRequiredMiddlewareTestCase(TestCase):
 
         # Assert the redirection
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/login/?next=/jobs/post")
+        self.assertEqual(response.url, "/login?next=/jobs/post")
 
     def test_user_logged_id(self):
         """Tests what happens if the user is authenticated."""

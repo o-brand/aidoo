@@ -19,7 +19,7 @@ class LoginRequiredTestCase(TestCase):
             "date_of_birth": datetime.now(),
         }
         self.user = User.objects.create_user(**credentials)
-        self.client.post("/login/", credentials, follow=True)
+        self.client.post("/login", credentials, follow=True)
 
 
 def create_date_string(difference):
