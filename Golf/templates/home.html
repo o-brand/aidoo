@@ -30,13 +30,10 @@
     <h1>Hi {{ user.username }}!</h1>
     <p>You can see the {{jobs_count}} available jobs here. </p> <!--doesn't get count??-->
   </div>
-
   <form class="searchform d-flex justify-content-center" method ="get">
     <input class="searchbar" type="text" value='{{request.GET.job_title__icontains}}' name="job_title__icontains"/>
     <button class="btn btn-primary" type="submit">Search</button>
   </form>
-
-
   <div class="row d-flex justify-content-center">
     <div class="col jobs-scroll">
       {% for job in jobs %}
@@ -50,7 +47,7 @@
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" id="sfl{{ job.job_id }}" 
-                  href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">
+                  href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
                     {% if job.job_id in save_for_later %}
                       Unsave
                     {% else %}
@@ -86,12 +83,12 @@
 </div>
 
 <script>    
-  function saveForLater(uid, jid) {
+  function bookmark(uid, jid) {
       //Communicate with Python
     $.ajax({
       type: "POST",
       url: "{% url 'generic' %}",
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "sfl", uid: uid, jid: jid},
+      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "bookmark", uid: uid, jid: jid},
       success: function callback(response) {
         if ($("#sfl"+jid).text().trim() == 'Save for later') {
           $("#sfl"+jid).text('Unsave');

@@ -47,25 +47,27 @@ class JobsView(ListView):
         return context
 
 # Executed when saveForLater is run on the frontend (i.e. save for later button pressed)
-def sfl_call(request):
-    uid = int(request.POST['uid'])
-    jid = int(request.POST['jid'])
+def bookmark_call(request):
+    """Create a new bookmark record in database"""
+    user_id = int(request.POST['uid'])
+    job_id = int(request.POST['jid'])
     try:
-        u = Bookmark.objects.get(user_id=uid, job_id=jid)
+        u = Bookmark.objects.get(user_id=user_id, job_id=job_id)
     except Bookmark.DoesNotExist:
         tz = timezone.get_current_timezone()
         timzone_datetime = timezone.make_aware(datetime.datetime.now(tz=None), tz, True)
-        new_sfljob = Bookmark( # Make new Bookmark record
-            user_id=User.objects.get(pk=uid),
-            job_id=Job.objects.get(pk=jid),
+        new_bookmark = Bookmark( # Make new Bookmark record
+            user_id=User.objects.get(pk=user_id),
+            job_id=Job.objects.get(pk=job_id),
             saving_time=timzone_datetime)
-        new_sfljob.save() # Save new Bookmark record in database table
+        new_bookmark.save() # Save new Bookmark record in database table
     else:
         u.delete()
     finally:
         return HttpResponse("ok")
 
 def apply_call(request):
+    """Create a new application record in database"""
     uid = int(request.POST['uid'])
     jid = int(request.POST['jid'])
     try:
@@ -80,21 +82,24 @@ def apply_call(request):
         return HttpResponse("ok")
 
 def report_call(request):
+    """Do something related to reporting a job post TBD"""
     return HttpResponse("ok")
 
 # A dictionary of functions we define to run through genericcall (so we can use only one url)
 
 #this is the dictionary, used in home.html: function sendid(uid...) .data {func: "sfl"}
-function_dict = {'sfl': sfl_call, #save for later/unsave toggle function
+function_dict = {'bookmark': bookmark_call, #save for later/unsave toggle function
                 'app': apply_call,
                 'report': report_call}
 
 # Runs a function in our dictionary, as specified by the frontend function calling it
 def generic_call(request):
+    """Run a function from dict as specified by the request on the front end"""
     return function_dict[request.POST['func']](request)
     # Make sure that your functions return HttpResponse object or similar
 
 class FormView(View):
+    """Django form of the job posting form"""
     form_class = JobForm
     template_name = "postjob.html"
 

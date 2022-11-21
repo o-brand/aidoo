@@ -92,7 +92,7 @@ def release_points(rid, jid, appid): #rid = id of requester
             return HttpResponseNotFound()
         volunteer = User.objects.get(id=appid) # Applicant
         poster = User.objects.get(id=post.poster_id.id) # Job poster
-        application = Application.objects.get(job_id=jid, user_id=appid) # Job process (?)
+        application = Application.objects.get(job_id=jid, applicant_id=appid) # Job process (?)
     except (User.DoesNotExist, Job.DoesNotExist, Application.DoesNotExist):
         return HttpResponseNotFound()
     else:
