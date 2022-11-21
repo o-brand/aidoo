@@ -19,7 +19,6 @@ def dummy_middleware(_):
 class LoginRequiredMiddlewareTestCase(TestCase):
     """Tests for LoginRequiredMiddleware."""
 
-
     def setUp(self):
         """Saves the Middleware before every tests."""
         self.middleware = LoginRequiredMiddleware(dummy_middleware)
