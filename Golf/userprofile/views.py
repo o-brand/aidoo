@@ -24,15 +24,32 @@ def userdetail(request, user_id):
 # Private pofile page with more data.
 def me(request):
     template = loader.get_template('userprofile/private.html')
-    id = request.user.id
+    actual_user_id = request.user.id
 
     # If the user accepted somebody
     if request.POST:
         if request.POST['kind'] == 'exchange':
             jid = int(request.POST['jid']) # Job in question
             appid = int(request.POST['appid']) # ID of applicant
-            release_points(id, jid, appid)
-        else:
+            release_points(actual_user_id, jid, appid)
+        elif request.POST['kind'] == 'unapply':
+            # TODO - You have "job_id"
+
+            #anet starts
+            jid = request.POST['job_id']
+
+            applicant = JobProcess.objects.get(job_id=jid, user_id=actual_user_id)
+            applicant.status = "WD"
+            applicant.save()
+
+            # I think this is not necessary, since you cannot withdraw NOW if the poster has already accepted you.
+            job = JobPosting.objects.get(pk=jid)
+            job.assigned = False
+            job.save()
+
+            #anet ends
+            print(request.POST, applicant.status)
+        elif request.POST['kind'] == 'accept':
             user_id = request.POST["accept"][0]
             job_id = request.POST["accepted"]
 
@@ -52,26 +69,32 @@ def me(request):
                     user.save()
 
     try:
-        user_extended = User.objects.get(pk=id)
+        user_extended = User.objects.get(pk=actual_user_id)
     except User.DoesNotExist:
         # This should not happen.
         return HttpResponseNotFound()
 
     # Saved jobs
     saved_jobs = []
-    saved = Bookmark.objects.filter(user_id=id)
+
+    saved = Bookmark.objects.filter(user_id=actual_user_id)
+
     for job in saved:
         saved_jobs.append([job.job_id, job.saving_time])
 
     # Applied jobs
     applied_jobs = []
-    applied = Application.objects.filter(applicant_id=id)
+
+    applied = Application.objects.filter(applicant_id=actual_user_id)
+
     for job in applied:
         applied_jobs.append([job.job_id, job.status])
 
     # Posted jobs
     posted_jobs = []
-    posted = Job.objects.filter(poster_id=id)
+
+    posted = Job.objects.filter(poster_id=actual_user_id)
+
     for job in posted:
          # Need to run the query, that is the reason for list.
         applicants = list(Application.objects.filter(job_id=job.job_id))
