@@ -1,17 +1,19 @@
-from django.test import TestCase
-from Golf.utils import LoginRequiredTestCase
-from jobs.models import Job
-from userprofile.models import User
-from faker import Faker
+import datetime
 import random
+from faker import Faker
+from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from .forms import JobForm
-import datetime
 from django.contrib.auth import get_user_model
 from Golf.utils import create_date_string
+from Golf.utils import LoginRequiredTestCase
+from jobs.models import Job
+from .forms import JobForm
 
-User = get_user_model() # Get user model
+
+# Get actual user model.
+User = get_user_model()
+
 
 # Testing the Job Model
 class JobTableTestCase(TestCase):
@@ -95,7 +97,7 @@ class DetailsTestCase(LoginRequiredTestCase):
         Job.objects.create(**job)
 
     def test_details(self):
-        response = self.client.get('/jobs/1/')
+        response = self.client.get('/jobs/1')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='jobdetails.html')
 
@@ -112,7 +114,7 @@ class DetailsTestCase(LoginRequiredTestCase):
 class PostPageCase(LoginRequiredTestCase):
 
     def test_postPage(self):
-        response = self.client.get('/jobs/post/')
+        response = self.client.get('/jobs/post')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='postjob.html')
 
