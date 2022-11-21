@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+
 urlpatterns = [
     path("admin/", admin.site.urls),  # Admin pages (Django handles them)
     path("", include("login.urls")),  # Login pages + Welcome page

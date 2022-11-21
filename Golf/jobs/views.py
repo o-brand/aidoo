@@ -12,6 +12,7 @@ from .forms import JobForm
 
 User = get_user_model() # Get user model
 
+
 def detail(request, job_id):
     template = loader.get_template('jobdetails.html')
 
