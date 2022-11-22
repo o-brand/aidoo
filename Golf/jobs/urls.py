@@ -11,7 +11,7 @@ urlpatterns = [
     # Posting a job
     path("post", views.FormView.as_view(), name="post"),
     # Details of a job
-    path("<int:job_id>", views.detail, name="jobdetails"),
+    path("<int:job_id>", views.details, name="jobdetails"),
      # Generic function to communicate with Django via JavaScript
     path("generic", views.generic_call, name="generic"),
 ]

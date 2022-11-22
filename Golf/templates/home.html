@@ -30,7 +30,7 @@
     <p>You can see the {{jobs_count}} available jobs here. </p> <!--doesn't get count??-->
   </div>
   <form class="searchform d-flex justify-content-center" method ="get">
-    <input class="searchbar" type="text" value='{{request.GET.job_title__icontains}}' name="job_title__icontains"/>
+    <input class="searchbar" type="text" value='{{request.GET.search_title}}' name="search_title"/>
     <button class="btn btn-primary" type="submit">Search</button>
   </form>
   <div class="row d-flex justify-content-center">
@@ -81,9 +81,9 @@
   </div>
 </div>
 
-<script>  
+<script>
+  // Bookmark a job.
   function bookmark(uid, jid) {
-      //Communicate with Python
     $.ajax({
       type: "POST",
       url: "{% url 'generic' %}",
@@ -102,6 +102,7 @@
     });
   }
 
+  //Apply for a job.
   function apply(uid, jid) {
     $("#btnApply"+jid).attr("disabled", true);
     $.ajax({
@@ -115,6 +116,7 @@
     });
   }
 
+  //Report a job.
   function report(uid, jid) {
     $.ajax({
       type: "POST", 
