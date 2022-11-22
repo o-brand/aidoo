@@ -58,7 +58,7 @@
             {% csrf_token %}
             <input type="hidden" value='{{job.job_id}}' name="job_id">
             <input type="hidden" value='unapply' name="kind">
-            <button type="submit" class="close" style="font-size: 25px;font-weight: 600;">&times;</button>
+            <button type="submit" class="btn btn-outline-danger">Unapply</button>
             <p>If you withdraw, you cannot apply again.</p>
           </form>
         {% elif status == "WD" %}
@@ -101,7 +101,7 @@
                 </select>
                 <input type="hidden" value='accept' name="kind">
                 <input type="hidden" value='{{job.job_id}}' name="accepted" >
-                <button type="submit" disabled id="accept-{{job.job_id}}">Accept</button>
+                <button type="submit" class = "btn btn-primary" disabled id="accept-{{job.job_id}}">Accept</button>
               </form>
             {% else %}
               {% for applicant in applicants %}
