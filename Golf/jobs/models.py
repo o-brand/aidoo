@@ -60,8 +60,8 @@ class Bookmark(models.Model):
     # Foreign key to the Job model (the job which is bookmarked now)
     job_id = models.ForeignKey(Job, on_delete=models.CASCADE)
 
-    # The time of bookmarking
-    saving_time = models.DateTimeField()
+    # The time of bookmarking (it has default value)
+    saving_time = models.DateTimeField(default=timezone.now)
 
     class Meta:
         """This class creates a contraint for the model."""
