@@ -39,8 +39,6 @@ def me(request):
             applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
             applicant.status = "WD"
             applicant.save()
-
-            print(request.POST, applicant.status)
         elif request.POST['kind'] == 'accept':
             user_id = request.POST["accept"][0]
             job_id = request.POST["accepted"]
@@ -53,7 +51,7 @@ def me(request):
             # change status of applicants - only those status where "AP"
             set_rejected = Application.objects.filter(job_id=job_id, status="AP")
             for user in set_rejected:
-                if str(user.user_id.id) != user_id:
+                if str(user.applicant_id.id) != user_id:
                     user.status = "RE"
                     user.save()
                 else:
