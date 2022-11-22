@@ -33,21 +33,13 @@ def me(request):
             appid = int(request.POST['appid']) # ID of applicant
             release_points(actual_user_id, jid, appid)
         elif request.POST['kind'] == 'unapply':
-            # TODO - You have "job_id"
 
-            #anet starts
             jid = request.POST['job_id']
 
             applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
             applicant.status = "WD"
             applicant.save()
 
-            # I think this is not necessary, since you cannot withdraw NOW if the poster has already accepted you.
-            job = Job.objects.get(pk=jid)
-            job.assigned = False
-            job.save()
-
-            #anet ends
             print(request.POST, applicant.status)
         elif request.POST['kind'] == 'accept':
             user_id = request.POST["accept"][0]
