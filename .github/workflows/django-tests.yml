@@ -2,7 +2,7 @@ name: Django Tests
 
 on:
   push:
-    branches: [ "main", "cleaning" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
