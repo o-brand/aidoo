@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model() # Get user model
 
 class WelcomeTestCase(TestCase):
+    # test if the welcome page can be reached and uses the right template
 
     def test_welcome(self):
         response = self.client.get('/')
@@ -31,6 +32,9 @@ class PrivacyTestCase(TestCase):
 
 
 class LoginTestCase(TestCase):
+    # test for loging in and logging out
+    # can the login page be reached
+    # is the user redirected after logging in
 
     def test_login(self):
         credentials = {
@@ -61,6 +65,7 @@ class LoginTestCase(TestCase):
 
 class SignupTestCase(TestCase):
 
+    # test if the signup page is reachable and uses the right template
     def test_signuppage(self):
         response = self.client.get('/signup/')
         self.assertEqual(response.status_code, 200)
@@ -70,6 +75,7 @@ class SignupTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/signup.html')
 
+    # test if signing up works if correct data given and user is redirected after
     def test_signup(self):
         new_user = {
             'first_name': 'User',
@@ -91,6 +97,7 @@ class RegisterFormTestCase(TestCase):
     # I think PasswordInput is already tested well, so I do not test it here.
 
     def test_nothing_entered(self):
+        # behaviour if form is empty
         form = RegisterForm(data={})
 
         self.assertEqual(7, len(form.errors))
@@ -102,6 +109,8 @@ class RegisterFormTestCase(TestCase):
             self.assertIn('This field is required.', form.errors[key][0])
 
     def test_name_entered(self):
+        # behaviour if full name is entered and valid
+        # there should be less errors thrown
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -117,6 +126,7 @@ class RegisterFormTestCase(TestCase):
             self.assertIn('This field is required.', form.errors[key][0])
 
     def test_name_username_entered_username_too_long(self):
+        # behaviour if the username entered is too long and name is correct
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -138,6 +148,8 @@ class RegisterFormTestCase(TestCase):
                 self.assertIn('This field is required.', form.errors[key][0])
 
     def test_name_username_entered(self):
+        # behaviour if username and name are valid, rest invalid
+        # num of errors must match the num of required fields not filled
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -154,6 +166,9 @@ class RegisterFormTestCase(TestCase):
             self.assertIn('This field is required.', form.errors[key][0])
 
     def test_name_username_email_entered_email_not_valid(self):
+        # behaviour if entered email is not valid
+        # other entered fields are valid
+        # the expected error message should be the response
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -175,6 +190,8 @@ class RegisterFormTestCase(TestCase):
                 self.assertIn('This field is required.', form.errors[key][0])
 
     def test_name_username_email_entered(self):
+        # behaviour if the email is valid
+        # the number of errors should be the number of empty required fields
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -192,6 +209,8 @@ class RegisterFormTestCase(TestCase):
             self.assertIn('This field is required.', form.errors[key][0])
 
     def test_name_username_email_passwords_entered_passwords_not_match(self):
+        # behaviour repeated passphrase does not match original one
+        # should give the expected error message
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -206,6 +225,7 @@ class RegisterFormTestCase(TestCase):
         self.assertIn('The two password fields didn’t match.', form.errors['password2'][0])
 
     def test_name_username_email_passwords_entered_(self):
+        #test if all fields are entered and valid
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -220,6 +240,7 @@ class RegisterFormTestCase(TestCase):
         self.assertEqual(0, len(form.errors))
 
     def test_DoB_out_of_range(self):
+        #behaviour if user is too young
         new_user = {
             'first_name': 'User',
             'last_name': 'MadeUp',
@@ -231,7 +252,7 @@ class RegisterFormTestCase(TestCase):
         }
 
         form = RegisterForm(data=new_user)
-        
+
         self.assertEqual(1, len(form.errors))
 
 
@@ -271,7 +292,8 @@ class PasswordResetTestCase(TestCase):
 
 
 class EmailConfirmationTestCase(TestCase):
-    
+
+    # test reachability of page
     def test_email_confirmation_page(self):
         response = self.client.get('/confirm_email/')
         self.assertEqual(response.status_code, 200)
@@ -281,6 +303,8 @@ class EmailConfirmationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/confirm_email.html')
 
+    # test if the confirmation through email is registered by the system
+    # and page is displayed for success
     def test_email_confirmation_success_page(self):
         response = self.client.get('/confirm_email/success/')
         self.assertEqual(response.status_code, 200)
@@ -290,6 +314,8 @@ class EmailConfirmationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/confirm_email_success.html')
 
+    # test display right page when authentication fails
+    # test if page reachable
     def test_email_confirmation_failure_page(self):
         response = self.client.get('/confirm_email/failure/')
         self.assertEqual(response.status_code, 200)
