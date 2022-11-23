@@ -38,7 +38,11 @@ class PrivacyTestCase(TestCase):
 
 
 class LoginTestCase(TestCase):
+
     """Tests for the login and the logout page"""
+    # can the login page be reached
+    # is the user redirected after logging in
+
 
     def test_login(self):
         credentials = {
@@ -70,6 +74,7 @@ class LoginTestCase(TestCase):
 class SignupTestCase(TestCase):
     """Tests for the signup page."""
 
+    # test if the signup page is reachable and uses the right template
     def test_signup(self):
         response = self.client.get("/signup")
         self.assertEqual(response.status_code, 200)
@@ -79,6 +84,7 @@ class SignupTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="login/signup.html")
 
+    # test if signing up works if correct data given and user is redirected after
     def test_signup_flow(self):
         new_user = {
             "first_name": "User",
@@ -175,6 +181,7 @@ class RegisterFormTestCase(TestCase):
     # PasswordInput is already tested well, so we do not test it here.
 
     def test_nothing_entered(self):
+        # behaviour if form is empty
         form = RegisterForm(data={})
 
         self.assertEqual(7, len(form.errors))
@@ -186,6 +193,8 @@ class RegisterFormTestCase(TestCase):
             self.assertIn("This field is required.", form.errors[key][0])
 
     def test_name_entered(self):
+        # behaviour if full name is entered and valid
+        # there should be less errors thrown
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -202,6 +211,7 @@ class RegisterFormTestCase(TestCase):
             self.assertIn("This field is required.", form.errors[key][0])
 
     def test_name_username_entered_username_too_long(self):
+        # behaviour if the username entered is too long and name is correct
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -226,6 +236,8 @@ class RegisterFormTestCase(TestCase):
                 self.assertIn("This field is required.", form.errors[key][0])
 
     def test_name_username_entered(self):
+        # behaviour if username and name are valid, rest invalid
+        # num of errors must match the num of required fields not filled
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -243,6 +255,9 @@ class RegisterFormTestCase(TestCase):
             self.assertIn("This field is required.", form.errors[key][0])
 
     def test_name_username_email_entered_email_not_valid(self):
+        # behaviour if entered email is not valid
+        # other entered fields are valid
+        # the expected error message should be the response
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -268,6 +283,8 @@ class RegisterFormTestCase(TestCase):
                 self.assertIn("This field is required.", form.errors[key][0])
 
     def test_name_username_email_entered(self):
+        # behaviour if the email is valid
+        # the number of errors should be the number of empty required fields
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -286,6 +303,8 @@ class RegisterFormTestCase(TestCase):
             self.assertIn("This field is required.", form.errors[key][0])
 
     def test_name_username_email_passwords_entered_passwords_not_match(self):
+        # behaviour repeated passphrase does not match original one
+        # should give the expected error message
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -305,6 +324,7 @@ class RegisterFormTestCase(TestCase):
         )
 
     def test_name_username_email_passwords_entered_(self):
+        #test if all fields are entered and valid
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -318,6 +338,8 @@ class RegisterFormTestCase(TestCase):
 
         self.assertEqual(0, len(form.errors))
 
+
+    #behaviour if user is too young
     def test_DoB_out_of_range_too_young(self):
         new_user = {
             "first_name": "User",
@@ -329,7 +351,6 @@ class RegisterFormTestCase(TestCase):
             "date_of_birth": create_date_string(0),
         }
         form = RegisterForm(data=new_user)
-
         self.assertEqual(1, len(form.errors))
 
     def test_DoB_out_of_range_too_old(self):
@@ -343,5 +364,6 @@ class RegisterFormTestCase(TestCase):
             "date_of_birth": create_date_string(123),
         }
         form = RegisterForm(data=new_user)
+
 
         self.assertEqual(1, len(form.errors))
