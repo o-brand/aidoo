@@ -17,7 +17,7 @@ class JobTableTestCase(TestCase):
 
     def setUp(self):
         fake = Faker()
-        # write 10 users into the table
+        # create 10 users in the database
         for i in range(10):
             credentials = dict()
             credentials['username'] = fake.unique.name()
@@ -43,11 +43,13 @@ class JobTableTestCase(TestCase):
             JobPosting.objects.create(**jobs)
 
     def test_retrieve_job(self):
+        # test jobs can be retrieved from the database
         job = JobPosting.objects.get(pk=1)
 
         self.assertEqual(job.job_id, 1)
 
     def test_create_job(self):
+        # test jobs can be added to the database
         fake = Faker()
         len1 = len(JobPosting.objects.all())
 
@@ -68,6 +70,7 @@ class JobTableTestCase(TestCase):
         self.assertEqual(len1+1,len2)
 
     def test_delete_job(self):
+        # test jobs can be removed from database
         j = JobPosting.objects.get(pk=1)
         len1 = len(JobPosting.objects.all())
         j.delete()
@@ -94,15 +97,18 @@ class DetailsTestCase(LoginRequiredTestCase):
         JobPosting.objects.create(**job)
 
     def test_details(self):
+        # job page is reachable via URL
         response = self.client.get('/jobs/1/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='jobdetails.html')
 
     def test_details_available_by_name(self):
+        # job page is reachable via the name and number of the job
         response = self.client.get(reverse('jobdetails', kwargs={'job_id':1}))
         self.assertEqual(response.status_code, 200)
 
     def test_details_404(self):
+        # behaviour if page does not exist
         response = self.client.get('/jobs/0/') # The id starts with 1, so no job is there with this id.
         self.assertEqual(response.status_code, 404)
 
@@ -111,15 +117,18 @@ class DetailsTestCase(LoginRequiredTestCase):
 class PostPageCase(LoginRequiredTestCase):
 
     def test_postPage(self):
+        # test availability via URL
         response = self.client.get('/jobs/post/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='postjob.html')
 
     def test_postPage_available_by_name(self):
+        # test availability via name of page
         response = self.client.get(reverse('post'))
         self.assertEqual(response.status_code, 200)
 
     def test_redirect_since_everything_is_correct(self):
+        # test if the user is redirected if the fields are filled in with valid data
         new_form = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -138,7 +147,7 @@ class PostPageCase(LoginRequiredTestCase):
 class PostJobCase(TestCase):
     # poster_id is already there, so we do not test that part!
 
-    
+
     # Creating a user before every test. (The database is deleted after the test finishes.)
     def setUp(self):
         credentials = {
@@ -150,6 +159,7 @@ class PostJobCase(TestCase):
 
 
     def test_empty_form(self):
+        # behviour if empty form is submitted
         form = JobForm(data={'poster_id': '1'})
 
         self.assertEqual(6, len(form.errors))
@@ -178,6 +188,7 @@ class PostJobCase(TestCase):
             self.assertIn('This field is required.', form.errors[key][0])
 
     def test_long_desc_too_long(self):
+        # behaviour if long desc too long
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -198,6 +209,7 @@ class PostJobCase(TestCase):
                 self.assertIn('This field is required.', form.errors[key][0])
 
     def test_long_desc_too_short(self):
+        # behaviour if long description too short
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -218,6 +230,7 @@ class PostJobCase(TestCase):
                 self.assertIn('This field is required.', form.errors[key][0])
 
     def test_added_long_desc(self):
+        # behaviour if long description is correct length
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -233,6 +246,7 @@ class PostJobCase(TestCase):
             self.assertIn('This field is required.', form.errors[key][0])
 
     def test_ZIP_code_not_valid(self):
+        # behavior if the ZIP code is not valid
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -253,6 +267,7 @@ class PostJobCase(TestCase):
                 self.assertIn('This field is required.', form.errors[key][0])
 
     def test_added_ZIP(self):
+        # behaviour ZIP code is valid
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -269,6 +284,7 @@ class PostJobCase(TestCase):
             self.assertIn('This field is required.', form.errors[key][0])
 
     def test_duration_days_valid(self):
+        # behaviour if the duration is too long
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
@@ -291,6 +307,7 @@ class PostJobCase(TestCase):
                 self.assertIn('This field is required.', form.errors[key][0])
 
     def test_duration_hours_valid(self):
+        # behaviour if the duration is too long
         new_application = {
             'poster_id': '1',
             'job_title' : 'Job',
