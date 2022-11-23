@@ -3,18 +3,36 @@
 {% block title %}Welcome to aidoo{% endblock %}
 
 {% block content %}
-<div class="container">
-  <div class="row" style="margin:3%">
-    <div class="col text-center">
-      <h1>Welcome to aidoo</h1>
-    </div>
-  </div>
-  <div class="row" style="margin:3%">
-    <div class="col text-center">
-      <h3>Join us today</h3>
+<nav class="navbar navbar-expand-lg navbar-light" style="margin-bottom: 0px;">
+  <a class="navbar-brand" href="{% url 'welcome' %}"><img class="img-fluid" width="60" height="70" src="../static/assets/logo_full.png"/></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
         <a class="btn btn-outline-success" href="{% url 'login' %}">Log In</a>
+      </li>
+      <li class="nav-item">
         <a class="btn btn-outline-dark" href="{% url 'signup'%}">Sign Up</a>
-      </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div>
+  <div class="text-center">
+    <p style="margin: 0px; background-image: url('../static/assets/bg.jpg'); background-size: contain; background-size: 100%; height:fit-content; background-attachment: local; background-repeat: no-repeat; padding-bottom: 2%; padding-top: 2%;">
+      <img src="../static/assets/crop.png" class=".img-fluid" style="max-width: 50%; height: auto; padding: 10%"/>
+    </p>
+  </div>
+  <div style="padding: 5%; background-color: rgb(41, 43, 41); color: white; font-family: 'Lato', sans-serif;">
+    <h3>Join the revolution</h3>
+    <p>
+      Welcome to the revolution of volunteering, coming to life right in Aberdeen. 
+      Aidoo is the 
+
+    </p>
   </div>
 </div>
 {% endblock %}
