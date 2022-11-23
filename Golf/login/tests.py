@@ -258,6 +258,7 @@ class RegisterFormTestCase(TestCase):
 
 class PasswordResetTestCase(TestCase):
 
+    # page is loadable and uses the right template
     def test_password_reset_page(self):
         response = self.client.get('/password_reset/')
         self.assertEqual(response.status_code, 200)
@@ -267,15 +268,18 @@ class PasswordResetTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/password_reset_form.html')
 
+    # check if the user is redirected after the password was reset
     def test_password_reset_done_page(self):
         response = self.client.get('/password_reset/done')
         self.assertEqual(response.status_code, 200)
 
+    # check if the right template is used
     def test_password_reset_done_page_view_name(self):
         response = self.client.get(reverse('password_reset_done'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/password_reset_done.html')
 
+    # check if the right template is used when the user is informed that the reset is complete
     def test_password_reset_complete_page(self):
         response = self.client.get('/password_reset/complete')
         self.assertEqual(response.status_code, 200)
@@ -285,6 +289,7 @@ class PasswordResetTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='login/password_reset_complete.html')
 
+    # check if the right template is used for the confirmation
     def test_password_reset_confirm_page(self):
         response = self.client.get('/password_reset/<uidb64>/<token>')
         self.assertEqual(response.status_code, 200)
