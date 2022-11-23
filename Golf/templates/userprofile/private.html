@@ -53,9 +53,25 @@
         <p>Status: {{ status }}</p>
         {% if status == "AC" %}
           <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
+        {% elif status == "AP" %}
+          <form method="post" action="{% url 'me' %}#applied">
+            {% csrf_token %}
+            <input type="hidden" value='{{job.job_id}}' name="job_id">
+            <input type="hidden" value='unapply' name="kind">
+            <button type="submit" class="btn btn-outline-danger">Unapply</button>
+            <p>If you withdraw, you cannot apply again.</p>
+          </form>
+        {% elif status == "WD" %}
+          <p>You withdrew from this job.</p>
+        {% elif status == "RE" %}
+          <p>The poster rejected your application. Sorry.</p>
+        {% elif status == "DN" %}
+          <p>You finished this job.</p>
+        {% elif status == "C" %}
+          <p>There is a conflict between you and the poster. We are working on it.</p>
         {% endif %}
+        <hr>
       </div>
-      <hr>
     {% endfor %}
   {% else %}
       <p>I haven't applied for any jobs.</p>
@@ -79,22 +95,25 @@
                   <option disabled selected value="-1">Select somebody</option>
                   {% for applicant in applicants %}
                     {% if applicant.status == "AP" %}
-                      <option value="{{ applicant.user_id.id }}">{{ applicant.user_id.username }}</option>
+                      <option value="{{ applicant.applicant_id.id }}">{{ applicant.applicant_id.username }}</option>
                     {% endif %}
                   {% endfor %}
                 </select>
+                <input type="hidden" value='accept' name="kind">
                 <input type="hidden" value='{{job.job_id}}' name="accepted" >
-                <button type="submit" disabled id="accept-{{job.job_id}}">Accept</button>
+                <button type="submit" class = "btn btn-primary" disabled id="accept-{{job.job_id}}">Accept</button>
               </form>
             {% else %}
               {% for applicant in applicants %}
                 {% if applicant.status == "AC" %}
-                  <p>{{ applicant.user_id.username }}: <a href="mailto:{{ applicant.user_id.email }}">{{ applicant.user_id.email }}</a></p>
-                  <button
-                  class="btn btn-primary" id="close{{job.job_id}}"
-                  onclick="releasePoints('{{job.job_id}}', '{{applicant.user_id.id}}')">
-                    Job done
-                  </button>
+                  <p>{{ applicant.applicant_id.username }}: <a href="mailto:{{ applicant.applicant_id.email }}">{{ applicant.applicant_id.email }}</a></p>
+                  <form method="post" action="{% url 'me' %}#posted">
+                    {% csrf_token %}
+                    <input type="hidden" value='{{job.job_id}}' name="jid">
+                    <input type="hidden" value='{{applicant.applicant_id.id}}' name="appid">
+                    <input type="hidden" value='exchange' name="kind">
+                    <button type="submit" class="btn btn-primary" id="close{{job.job_id}}">Job Done</button>
+                  </form>
                 {% endif %}
               {% endfor %}
             {% endif %}
@@ -164,18 +183,5 @@
     });
   });
 
-  function releasePoints(jid, appid) {
-    // For now I've not worried about persistance since this button should not show after this function
-    $("#close"+jid).attr("disabled", true);
-    $.ajax({
-        type: "POST", 
-        url: "{% url 'genericprofile' %}", 
-        data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'rel', jid: jid, appid: appid}, 
-        success: function callback(response) {
-            alert("Job is now finished. The points will now be transfered to the volunteer.");
-            location.reload(); // Changes don't show until page reloads. How can we make this better?
-        }
-    });
-  }
 </script>
 {% endblock %}

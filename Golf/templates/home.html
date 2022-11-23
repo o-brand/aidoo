@@ -3,147 +3,129 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-
 <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="{% url 'home' %}">aidoo</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'me' %}">My Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'post' %}">Post A Job</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <a class="navbar-brand" href="{% url 'home' %}"><img class="img-fluid" width="60" height="70" src="../static/assets/logo_full.png"/></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'me' %}">My Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'post' %}">Post a Job</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
 <div class="container">
 
-    <div class="hello text-center">
-        <h1>Hi {{ user.username }}!</h1>
-        <p>You can see the {{jobs_count}} available jobs here. </p> <!--doesn't get count??-->
-    </div>
-
-    <form class="searchform d-flex justify-content-center" method ="get">
-        <input class="searchbar" type="text" value='{{request.GET.job_title__icontains}}' name="job_title__icontains"/>
+  <div class="hello text-center">
+    <h1>Hi {{ user.username }}!</h1>
+    <p>You can see the {{jobs_count}} available jobs here. </p> <!--doesn't get count??-->
+  </div>
+  <form class="searchform d-flex justify-content-center" method ="get">
+    <input class="searchbar" type="text" value='{{request.GET.search_title}}' name="search_title"/>
     <button class="btn btn-primary" type="submit">Search</button>
-    </form>
-
-
-    <div class="row d-flex justify-content-center">
-        <div class="col jobs-scroll">
-            {% for job in jobs %}
-                <div class="job-card" class="container">
-                    <div class="d-flex justify-content-between">
-                        <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Options
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" 
-                                id="sfl{{ job.job_id }}" 
-                                href="javascript:saveForLater('{{ user.id }}','{{ job.job_id }}')">
-                                    {% if job.job_id in save_for_later %}
-                                        Unsave
-                                    {% else %}
-                                        Save for later
-                                    {% endif %}
-                              </a>
-                              <a class="dropdown-item" 
-                                href="javascript:report('{{ user.id }}','{{ job.job_id }}')">
-                                    Report
-                              </a>
-                            </div>
-                          </div>
-                    </div>
-                    <div class="d-flex justify-content-start">
-                        <a href="{% url 'userdetail' job.poster_id.id %}"><img src="../static/assets/user.png"></a>                        
-                        <h5><a href="{% url 'userdetail' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
-                    </div>
-                    <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
-                    <p>{{ job.job_short_description }}</p>
-                    <button
-                        {% if job.job_id in jobs_applied %} disabled {% endif %}
-                        class="btn btn-primary", 
-                        onclick="apply('{{user.id }}','{{ job.job_id }}')"
-                        id = "btnApply{{ job.job_id }}"
-                    >
-                        {% if job.job_id in jobs_applied %} 
-                            Applied ✓
-                        {% else %}
-                            Apply
-                        {% endif %}
-                    </button>
-                </div>
-            {% endfor %}
+  </form>
+  <div class="row d-flex justify-content-center">
+    <div class="col jobs-scroll mb-5">
+      {% for job in jobs %}
+        <div class="job-card" class="container">
+          <div class="d-flex justify-content-between">
+            <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" 
+                type="button" id="dropdownMenuButton" data-toggle="dropdown" 
+                aria-haspopup="true" aria-expanded="false">Options
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" id="sfl{{ job.job_id }}" 
+                  href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
+                    {% if job.job_id in save_for_later %}
+                      Unsave
+                    {% else %}
+                      Save for later
+                    {% endif %}
+                </a>
+                <a class="dropdown-item" 
+                  href="javascript:report('{{ user.id }}','{{ job.job_id }}')">Report</a>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-start">
+            <a href="{% url 'userdetail' job.poster_id.id %}"><img src="../static/assets/user.png"></a>                        
+            <h5><a href="{% url 'userdetail' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
+          </div>
+          <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
+          <p>{{ job.job_short_description }}</p>
+          <button
+            {% if job.job_id in jobs_applied %} disabled {% endif %}
+            class="btn btn-primary" 
+            onclick="apply('{{user.id }}','{{ job.job_id }}')"
+            id = "btnApply{{ job.job_id }}">
+            {% if job.job_id in jobs_applied %} 
+              Applied ✓
+            {% else %}
+              Apply
+            {% endif %}
+          </button>
         </div>
-        <!--<div class="col">
-        </div>-->
+      {% endfor %}
     </div>
+  </div>
 </div>
 
 <script>
-    //Disable button
-    //$("#apply" + id).attr('disabled','disabled');
-    
-    function saveForLater(uid, jid) {
-        //Communicate with Python
-        $.ajax({
-            type: "POST",
-            url: "{% url 'generic' %}",
-            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "sfl", uid: uid, jid: jid},
-            success: function callback(response) {
-                if ($("#sfl"+jid).text().trim() == 'Save for later') {
-                $("#sfl"+jid).text('Unsave');
-                msg = "saved";
-                }
-                else {
-                    $("#sfl"+jid).text('Save for later');
-                    msg = "unmarked";
-                }
-                alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
-            }
-            //"ok" in HttpResponse triggers success and you just specify the message
-        });
-    }
-        //write new function to send the message(what to do after clicking Apply) for the Django receive
-        //by extending dict in the views.dict
-    
-    function apply(uid, jid) {
-        $("#btnApply"+jid).attr("disabled", true);
-        $.ajax({
-            type: "POST", 
-            url: "{% url 'generic' %}", 
-            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
-            success: function callback(response) {
-                $("#btnApply"+jid).text("Applied ✓");
-                alert("You've applied for the job. You can now view the changes in your profile.")
-            }
-        });
-    }
+  // Bookmark a job.
+  function bookmark(uid, jid) {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'generic' %}",
+      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "bookmark", uid: uid, jid: jid},
+      success: function callback(response) {
+        if ($("#sfl"+jid).text().trim() == 'Save for later') {
+          $("#sfl"+jid).text('Unsave');
+          msg = "saved";
+        }
+        else {
+          $("#sfl"+jid).text('Save for later');
+          msg = "unmarked";
+        }
+        alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
+      }
+    });
+  }
 
-    function report(uid, jid) {
-        $.ajax({
-            type: "POST", 
-            url: "{% url 'generic' %}", 
-            data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'report', uid: uid, jid: jid}, 
-            success: function callback(response) {
-                alert("Thank you for reporting the job. We will review your complaint shortly.")
-            }
-        });
-    }
+  //Apply for a job.
+  function apply(uid, jid) {
+    $("#btnApply"+jid).attr("disabled", true);
+    $.ajax({
+      type: "POST", 
+      url: "{% url 'generic' %}", 
+      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
+      success: function callback(response) {
+        $("#btnApply"+jid).text("Applied ✓");
+        alert("You've applied for the job. You can now view the changes in your profile.")
+      }
+    });
+  }
 
-//data: { csrfmiddlewaretoken: '{{ csrf_token }}', uid: uid, jid: jid, HERE you add function to call to Django through dictionary},
-        //extend function_dict, with my function and implement it, the key is the same as the one sent with the javascript
-
-
+  //Report a job.
+  function report(uid, jid) {
+    $.ajax({
+      type: "POST", 
+      url: "{% url 'generic' %}", 
+      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'report', uid: uid, jid: jid}, 
+      success: function callback(response) {
+        alert("Thank you for reporting the job. We will review your complaint shortly.")
+      }
+    });
+  }
 </script>
 {% endblock %}
