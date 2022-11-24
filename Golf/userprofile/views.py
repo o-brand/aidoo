@@ -1,68 +1,80 @@
+import logging
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from jobs.models import Job, Bookmark, Application
 from django.template import loader
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.contrib.auth import get_user_model
 
-User = get_user_model() # Get user model
 
-# Public pofile page with just the basic information.
-def userdetail(request, user_id):
-    template = loader.get_template('userprofile/public.html')
+# Get actual user model.
+User = get_user_model()
+
+
+def userdetails(request, user_id):
+    """Public pofile page with just the basic information."""
 
     try:
         user_extended = User.objects.get(pk=user_id)
     except User.DoesNotExist:
-        return HttpResponseNotFound()
+        raise Http404("User does not exist.")
 
     context = {
         'user': user_extended,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'userprofile/public.html', context)
 
-# Private pofile page with more data.
+
 def me(request):
+    """Private pofile page with more data."""
+
     template = loader.get_template('userprofile/private.html')
     actual_user_id = request.user.id
 
     # If the user accepted somebody
     if request.POST:
-        if request.POST['kind'] == 'exchange':
-            jid = int(request.POST['jid']) # Job in question
-            appid = int(request.POST['appid']) # ID of applicant
-            release_points(actual_user_id, jid, appid)
-        elif request.POST['kind'] == 'unapply':
+        try:
+            if request.POST['kind'] == 'exchange':
 
-            jid = request.POST['job_id']
+                jid = int(request.POST['jid']) # Job in question
+                appid = int(request.POST['appid']) # ID of applicant
+                release_points(actual_user_id, jid, appid)
 
-            applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
-            applicant.status = "WD"
-            applicant.save()
-        elif request.POST['kind'] == 'accept':
-            user_id = request.POST["accept"][0]
-            job_id = request.POST["accepted"]
+            #If the user decides to 'Unapply' 
+            elif request.POST['kind'] == 'unapply':
+                jid = request.POST['job_id']
+                applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
+                applicant.status = "WD"
+                applicant.save()
 
-            # we get row from the table with the job id
-            job = Job.objects.get(pk=job_id)
-            job.assigned = True
-            job.save()
+            #If the user accepts applicant for a job
+            elif request.POST['kind'] == 'accept':
+                user_id = request.POST["accept"][0]
+                job_id = request.POST["accepted"]
 
-            # change status of applicants - only those status where "AP"
-            set_rejected = Application.objects.filter(job_id=job_id, status="AP")
-            for user in set_rejected:
-                if str(user.applicant_id.id) != user_id:
-                    user.status = "RE"
-                    user.save()
-                else:
-                    user.status = "AC"
-                    user.save()
+                # we get row from the table with the job id
+                job = Job.objects.get(pk=job_id)
+                job.assigned = True
+                job.save()
+
+                # change status of applicants - only those status where "AP"
+                set_rejected = Application.objects.filter(job_id=job_id, status="AP")
+                for user in set_rejected:
+                    if str(user.applicant_id.id) != user_id:
+                        user.status = "RE"
+                        user.save()
+                    else:
+                        user.status = "AC"
+                        user.save()
+
+        except logging.exception("Unknown error requesting POST."):
+            return None
 
     try:
         user_extended = User.objects.get(pk=actual_user_id)
     except User.DoesNotExist:
         # This should not happen.
-        return HttpResponseNotFound()
+        raise Http404("User does not exist.")
 
     # Saved jobs
     saved_jobs = []
@@ -102,12 +114,13 @@ def release_points(rid, jid, appid): #rid = id of requester
     try:
         post = Job.objects.get(job_id=jid) # Job post
         if rid != post.poster_id.id:
-            return HttpResponseNotFound()
+            return None
         volunteer = User.objects.get(id=appid) # Applicant
         poster = User.objects.get(id=post.poster_id.id) # Job poster
         application = Application.objects.get(job_id=jid, applicant_id=appid) # Job process (?)
     except (User.DoesNotExist, Job.DoesNotExist, Application.DoesNotExist):
-        return HttpResponseNotFound()
+        return None
+    
     else:
         poster.balance = poster.balance - post.points # Deduct points from job poster
         volunteer.balance = volunteer.balance + post.points # Pay points to volunteer

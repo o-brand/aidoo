@@ -65,7 +65,6 @@ class JobModelTestCase(TestCase):
         fake = Faker()
 
         # create 10 users in the database
-
         for i in range(10):
             credentials = dict()
             credentials["username"] = fake.unique.name()
@@ -87,7 +86,6 @@ class JobModelTestCase(TestCase):
             Job.objects.create(**job)
 
     def test_retrieve_job(self):
-
         # test jobs can be retrieved from the database
         job = Job.objects.get(pk=1)
 
@@ -110,14 +108,11 @@ class JobModelTestCase(TestCase):
         self.assertEqual(len1 + 1, len2)
 
     def test_delete_job(self):
-
         j = Job.objects.get(pk=1)
         len1 = len(Job.objects.all())
 
-
         # Delete the job
         j.delete()
-
 
         len2 = len(Job.objects.all())
         self.assertEqual(len1 - 1, len2)
@@ -188,20 +183,17 @@ class JobModelTestCase(TestCase):
             created_job.full_clean()
 
 
-
 class PostPageCase(LoginRequiredTestCase):
     """Tests for Post page."""
 
-
-     # test availability via URL
     def test_post_page(self):
+        # test availability via URL
         response = self.client.get("/jobs/post")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="postjob.html")
 
-
-    # test availability via name of page
     def test_post_page_available_by_name(self):
+        # test availability via name of page
         response = self.client.get(reverse("post"))
         self.assertEqual(response.status_code, 200)
 
@@ -223,10 +215,7 @@ class PostPageCase(LoginRequiredTestCase):
 
 class PostJobCase(TestCase):
     """Tests for posting a job form."""
-
     # poster_id is already there, so we do not test that part!
-
-    # Creating a user before every test. (The database is deleted after the test finishes.)
 
     def setUp(self):
         """Creats a user before every test."""
@@ -236,9 +225,9 @@ class PostJobCase(TestCase):
             "date_of_birth": datetime.datetime.now(),
         }
         User.objects.create_user(**credentials)
-        
-    # behviour if empty form is submitted
+
     def test_empty_form(self):
+        # behviour if empty form is submitted
         form = JobForm(data={"poster_id": "1"})
 
         self.assertEqual(6, len(form.errors))
@@ -371,9 +360,8 @@ class PostJobCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required.", form.errors[key][0])
 
-
-    # behaviour if the duration is too long
     def test_duration_days_not_valid(self):
+        # behaviour if the duration is too long
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
@@ -398,9 +386,8 @@ class PostJobCase(TestCase):
             else:
                 self.assertIn("This field is required.", form.errors[key][0])
 
-
-    # behaviour if the duration is too long
     def test_duration_hours_not_valid(self):
+        # behaviour if the duration is too long
         new_application = {
             "poster_id": "1",
             "job_title": "Job",

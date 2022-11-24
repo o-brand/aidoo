@@ -38,7 +38,6 @@ class PrivacyTestCase(TestCase):
 
 
 class LoginTestCase(TestCase):
-
     """Tests for the login and the logout page"""
     # can the login page be reached
     # is the user redirected after logging in
@@ -177,7 +176,6 @@ class ActivationTestCase(TestCase):
 
 class RegisterFormTestCase(TestCase):
     """Tests for RegisterForm."""
-
     # PasswordInput is already tested well, so we do not test it here.
 
     def test_nothing_entered(self):
@@ -335,12 +333,10 @@ class RegisterFormTestCase(TestCase):
             "date_of_birth": datetime.date(2000, 1, 1),
         }
         form = RegisterForm(data=new_user)
-
         self.assertEqual(0, len(form.errors))
 
-
-    #behaviour if user is too young
     def test_DoB_out_of_range_too_young(self):
+        #behaviour if user is too young
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -364,6 +360,4 @@ class RegisterFormTestCase(TestCase):
             "date_of_birth": create_date_string(123),
         }
         form = RegisterForm(data=new_user)
-
-
         self.assertEqual(1, len(form.errors))
