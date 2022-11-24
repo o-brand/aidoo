@@ -80,16 +80,16 @@ class PublicProfileTestCase(LoginRequiredTestCase):
     """Tests for the PUBLIC profile page."""
 
     def test_profile(self):
-        response = self.client.get('/profile/' + str(self.user.id) + '/')
+        response = self.client.get('/profile/' + str(self.user.id))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='userprofile/public.html')
 
     def test_profile_available_by_name(self):
-        response = self.client.get(reverse('userdetail', kwargs={'user_id':self.user.id}))
+        response = self.client.get(reverse('userdetails', kwargs={'user_id':self.user.id}))
         self.assertEqual(response.status_code, 200)
 
     def test_profile_404(self):
-        response = self.client.get('/profile/0/')
+        response = self.client.get('/profile/0')
         self.assertEqual(response.status_code, 404)
 
 
@@ -97,7 +97,7 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
     """Tests for the PRIVATE profile page."""
 
     def test_profile(self):
-        response = self.client.get('/profile/me/')
+        response = self.client.get('/profile/me')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name='userprofile/private.html')
 
