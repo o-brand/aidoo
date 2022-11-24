@@ -1,18 +1,15 @@
-from Golf.utils import LoginRequiredTestCase
+from faker import Faker
+import datetime
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from faker import Faker
-import datetime
+from Golf.utils import LoginRequiredTestCase
+
 
 User = get_user_model() # Get user model
 
-# Write tests for user_extended (was combined with user)
-# Test for max/min lengths in fields
-# Test for constraints
-#
-# Testing the User Model
 class UserTableTestCase(TestCase):
+    """ Testing the User Model"""
 
     def setUp(self):
         fake = Faker()
@@ -78,8 +75,9 @@ class UserTableTestCase(TestCase):
         u = User.objects.get(pk=1)
         self.assertGreaterEqual(u.rating, 0)
 
-# Tests for the PUBLIC profile page.
+
 class PublicProfileTestCase(LoginRequiredTestCase):
+    """Tests for the PUBLIC profile page."""
 
     def test_profile(self):
         response = self.client.get('/profile/' + str(self.user.id) + '/')
@@ -95,8 +93,8 @@ class PublicProfileTestCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-# Tests for the PRIVATE profile page.
 class PrivateProfileTestCase(LoginRequiredTestCase):
+    """Tests for the PRIVATE profile page."""
 
     def test_profile(self):
         response = self.client.get('/profile/me/')

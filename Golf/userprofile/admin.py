@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
+from .models import User
 
-# Extended Admin, just for us.
+
 class UserAdmin(BaseUserAdmin):
+    """Extended Admin, just for developers. To create a view of data in the https://teamgolf.pythonanywhere.com/admin/ page."""
 
     # The fields to be used in displaying the User model.
     fieldsets = (
