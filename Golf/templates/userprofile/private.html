@@ -3,132 +3,157 @@
 {% block title %}My profile{% endblock %}
 
 {% block content %}
-<h1>My username: {{ user.username }}</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <a class="navbar-brand" href="{% url 'home' %}"><img class="img-fluid" width="60" height="70" src="../../static/assets/logo_full.png"/></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'me' %}">My Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'post' %}">Post a Job</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a class="btn btn-outline-dark" href="{% url 'logout' %}">Log Out</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+  
+<div class="container my-4">
+  
+  <h1>My username: {{ user.username }}</h1>
 
-<p><a href="{% url 'home' %}">Go back</a></p>
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'details')" id="details_tab">Personal details</button>
+    <button class="tablinks" onclick="openTab(event, 'saved')" id="saved_tab">Bookmarked jobs</button>
+    <button class="tablinks" onclick="openTab(event, 'applied')" id="applied_tab">Applied jobs</button>
+    <button class="tablinks" onclick="openTab(event, 'posted')" id="posted_tab">Posted jobs</button>
+  </div>
 
-<div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'details')" id="details_tab">Personal details</button>
-  <button class="tablinks" onclick="openTab(event, 'saved')" id="saved_tab">Saved jobs</button>
-  <button class="tablinks" onclick="openTab(event, 'applied')" id="applied_tab">Applied jobs</button>
-  <button class="tablinks" onclick="openTab(event, 'posted')" id="posted_tab">Posted jobs</button>
-</div>
+  <div id="details" class="tabcontent">
+    <h3>Personal details</h3>
+    <p>Real name: {{ user.first_name }} {{ user.last_name }}</p>
+    <p>Email address: {{ user.email }}</p>
+    <p>Date of birth: {{ user.date_of_birth }}</p>
 
-<div id="details" class="tabcontent">
-  <h3>Personal details</h3>
-  <p>Real name: {{ user.first_name }} {{ user.last_name }}</p>
-  <p>Email address: {{ user.email }}</p>
-  <p>Date of birth: {{ user.date_of_birth }}</p>
+    <p>Balance: {{ user.balance }} points</p>
+    <p>Rating: {{ user.rating }}</p>
 
-  <p>Balance: {{ user.balance }} points</p>
-  <p>Rating: {{ user.rating }}</p>
+    <p>Last logged in: {{ user.last_login }}</p>
+    <p>Joined: {{ user.date_joined }}</p>
+  </div>
 
-  <p>Last logged in: {{ user.last_login }}</p>
-  <p>Joined: {{ user.date_joined }}</p>
-</div>
+  <div id="saved" class="tabcontent">
+    <h3>Bookmarked jobs</h3>
+    {% if saved %}
+        <div>
+            {% for job, time in saved %}
+            <p>
+                <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+                <br>Saved at {{ time }}
+            </p>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>I don't have any saved jobs.</p>
+    {% endif %}
+  </div>
 
-<div id="saved" class="tabcontent">
-  <h3>Saved jobs</h3>
-  {% if saved %}
-      <div>
-          {% for job, time in saved %}
-          <p>
-              <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
-              <br>Saved at {{ time }}
-          </p>
-          {% endfor %}
-      </div>
-  {% else %}
-      <p>I don't have any saved jobs.</p>
-  {% endif %}
-</div>
+  <div id="applied" class="tabcontent">
+    <h3>Applied jobs</h3>
+    {% if applied %}
+      {% for job, status in applied %}
+        <div>
+          <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+          <p>Posted on: {{ job.posting_time }}</p>
+          <p>Status: {{ status }}</p>
+          {% if status == "AC" %}
+            <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
+          {% elif status == "AP" %}
+            <form method="post" action="{% url 'me' %}#applied">
+              {% csrf_token %}
+              <input type="hidden" value='{{job.job_id}}' name="job_id">
+              <input type="hidden" value='unapply' name="kind">
+              <button type="submit" class="btn btn-outline-danger">Withdraw</button>
+              <p>If you withdraw, you cannot apply again.</p>
+            </form>
+          {% elif status == "WD" %}
+            <p>You withdrew from this job.</p>
+          {% elif status == "RE" %}
+            <p>The poster rejected your application. Sorry.</p>
+          {% elif status == "DN" %}
+            <p>You finished this job.</p>
+          {% elif status == "C" %}
+            <p>There is a conflict between you and the poster. We are working on it.</p>
+          {% endif %}
+          <hr>
+        </div>
+      {% endfor %}
+    {% else %}
+        <p>I haven't applied for any jobs.</p>
+    {% endif %}
+  </div>
 
-<div id="applied" class="tabcontent">
-  <h3>Applied</h3>
-  {% if applied %}
-    {% for job, status in applied %}
-      <div>
-        <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
-        <p>Posted on: {{ job.posting_time }}</p>
-        <p>Status: {{ status }}</p>
-        {% if status == "AC" %}
-          <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
-        {% elif status == "AP" %}
-          <form method="post" action="{% url 'me' %}#applied">
-            {% csrf_token %}
-            <input type="hidden" value='{{job.job_id}}' name="job_id">
-            <input type="hidden" value='unapply' name="kind">
-            <button type="submit" class="btn btn-outline-danger">Unapply</button>
-            <p>If you withdraw, you cannot apply again.</p>
-          </form>
-        {% elif status == "WD" %}
-          <p>You withdrew from this job.</p>
-        {% elif status == "RE" %}
-          <p>The poster rejected your application. Sorry.</p>
-        {% elif status == "DN" %}
-          <p>You finished this job.</p>
-        {% elif status == "C" %}
-          <p>There is a conflict between you and the poster. We are working on it.</p>
-        {% endif %}
-        <hr>
-      </div>
-    {% endfor %}
-  {% else %}
-      <p>I haven't applied for any jobs.</p>
-  {% endif %}
-</div>
-
-<div id="posted" class="tabcontent">
-  <h3>Posted jobs</h3>
-  {% if posted %}
-    {% for job, applicants in posted %}
-      <div>
-        <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
-        <p>Posted on: {{ job.posting_time }}</p>
-        {% if not job.completed %}
-          <h6>Applicants:</h6>
-          {% if applicants %}
-            {% if not job.assigned %}
-              <form method="post" action="{% url 'me' %}#posted" id="applicant-{{job.job_id}}">
-                {% csrf_token %}
-                <select name="accept" id="option-{{job.job_id}}"class="select">
-                  <option disabled selected value="-1">Select somebody</option>
-                  {% for applicant in applicants %}
-                    {% if applicant.status == "AP" %}
-                      <option value="{{ applicant.applicant_id.id }}">{{ applicant.applicant_id.username }}</option>
-                    {% endif %}
-                  {% endfor %}
-                </select>
-                <input type="hidden" value='accept' name="kind">
-                <input type="hidden" value='{{job.job_id}}' name="accepted" >
-                <button type="submit" class = "btn btn-primary" disabled id="accept-{{job.job_id}}">Accept</button>
-              </form>
+  <div id="posted" class="tabcontent">
+    <h3>Posted jobs</h3>
+    {% if posted %}
+      {% for job, applicants in posted %}
+        <div>
+          <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+          <p>Posted on: {{ job.posting_time }}</p>
+          {% if not job.completed %}
+            <h6>Applicants:</h6>
+            {% if applicants %}
+              {% if not job.assigned %}
+                <form method="post" action="{% url 'me' %}#posted" id="applicant-{{job.job_id}}">
+                  {% csrf_token %}
+                  <select name="accept" id="option-{{job.job_id}}"class="select">
+                    <option disabled selected value="-1">Select somebody</option>
+                    {% for applicant in applicants %}
+                      {% if applicant.status == "AP" %}
+                        <option value="{{ applicant.applicant_id.id }}">{{ applicant.applicant_id.username }}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                  <input type="hidden" value='accept' name="kind">
+                  <input type="hidden" value='{{job.job_id}}' name="accepted" >
+                  <button type="submit" class = "btn btn-primary" disabled id="accept-{{job.job_id}}">Accept</button>
+                </form>
+              {% else %}
+                {% for applicant in applicants %}
+                  {% if applicant.status == "AC" %}
+                    <p>{{ applicant.applicant_id.username }}: <a href="mailto:{{ applicant.applicant_id.email }}">{{ applicant.applicant_id.email }}</a></p>
+                    <form method="post" action="{% url 'me' %}#posted">
+                      {% csrf_token %}
+                      <input type="hidden" value='{{job.job_id}}' name="jid">
+                      <input type="hidden" value='{{applicant.applicant_id.id}}' name="appid">
+                      <input type="hidden" value='exchange' name="kind">
+                      <button type="submit" class="btn btn-primary" id="close{{job.job_id}}">Job Done</button>
+                    </form>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
             {% else %}
-              {% for applicant in applicants %}
-                {% if applicant.status == "AC" %}
-                  <p>{{ applicant.applicant_id.username }}: <a href="mailto:{{ applicant.applicant_id.email }}">{{ applicant.applicant_id.email }}</a></p>
-                  <form method="post" action="{% url 'me' %}#posted">
-                    {% csrf_token %}
-                    <input type="hidden" value='{{job.job_id}}' name="jid">
-                    <input type="hidden" value='{{applicant.applicant_id.id}}' name="appid">
-                    <input type="hidden" value='exchange' name="kind">
-                    <button type="submit" class="btn btn-primary" id="close{{job.job_id}}">Job Done</button>
-                  </form>
-                {% endif %}
-              {% endfor %}
+              <p>No one has applied for this job yet.</p>
             {% endif %}
           {% else %}
-            <p>No one has applied for this job yet.</p>
+            <p>This job is complete.</p>
           {% endif %}
-        {% else %}
-          <p>This job is complete.</p>
-        {% endif %}
-      </div>
-      <hr>
-    {% endfor %}
-  {% else %}
-      <p>I haven't posted any jobs.</p>
-  {% endif %}
+        </div>
+        <hr>
+      {% endfor %}
+    {% else %}
+        <p>I haven't posted any jobs.</p>
+    {% endif %}
+  </div>
+  <br/>
+  <p><a href="{% url 'home' %}">Go back</a></p>
 </div>
 
 <script>

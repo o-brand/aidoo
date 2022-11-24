@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
   <a class="navbar-brand" href="{% url 'home' %}"><img class="img-fluid" width="60" height="70" src="../static/assets/logo_full.png"/></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -16,8 +16,10 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'post' %}">Post a Job</a>
       </li>
+    </ul>
+    <ul class="navbar-nav ms-auto">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        <a class="btn btn-outline-dark" href="{% url 'logout' %}">Log Out</a>
       </li>
     </ul>
   </div>
@@ -48,9 +50,9 @@
                 <a class="dropdown-item" id="sfl{{ job.job_id }}" 
                   href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
                     {% if job.job_id in save_for_later %}
-                      Unsave
+                      Unmark
                     {% else %}
-                      Save for later
+                      Bookmark
                     {% endif %}
                 </a>
                 <a class="dropdown-item" 
@@ -59,7 +61,8 @@
             </div>
           </div>
           <div class="d-flex justify-content-start">
-            <a href="{% url 'userdetail' job.poster_id.id %}"><img src="../static/assets/user.png"></a>                        
+            <a href="{% url 'userdetail' job.poster_id.id %}"><img src="../static/assets/pfp/{{job.poster_id.id}}.jpeg"></a>                        
+            
             <h5><a href="{% url 'userdetail' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
           </div>
           <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
@@ -89,12 +92,12 @@
       url: "{% url 'generic' %}",
       data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "bookmark", uid: uid, jid: jid},
       success: function callback(response) {
-        if ($("#sfl"+jid).text().trim() == 'Save for later') {
-          $("#sfl"+jid).text('Unsave');
-          msg = "saved";
+        if ($("#sfl"+jid).text().trim() == 'Bookmark') {
+          $("#sfl"+jid).text('Unmark');
+          msg = "bookmarked";
         }
         else {
-          $("#sfl"+jid).text('Save for later');
+          $("#sfl"+jid).text('Bookmark');
           msg = "unmarked";
         }
         alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
