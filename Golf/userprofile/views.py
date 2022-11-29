@@ -1,10 +1,8 @@
 import logging
 from django.shortcuts import render
-from django.contrib.auth.models import User
-from jobs.models import Job, Bookmark, Application
-from django.template import loader
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.http import Http404
 from django.contrib.auth import get_user_model
+from jobs.models import Job, Bookmark, Application
 
 
 # Get actual user model.
@@ -20,35 +18,33 @@ def userdetails(request, user_id):
         raise Http404("User does not exist.")
 
     context = {
-        'user': user_extended,
+        "user": user_extended,
     }
-    return render(request, 'userprofile/public.html', context)
+    return render(request, "userprofile/public.html", context)
 
 
 def me(request):
     """Private pofile page with more data."""
 
-    template = loader.get_template('userprofile/private.html')
     actual_user_id = request.user.id
 
     # If the user accepted somebody
     if request.POST:
         try:
-            if request.POST['kind'] == 'exchange':
-
-                jid = int(request.POST['jid']) # Job in question
-                appid = int(request.POST['appid']) # ID of applicant
+            if request.POST["kind"] == "exchange":
+                jid = int(request.POST["jid"]) # Job in question
+                appid = int(request.POST["appid"]) # ID of applicant
                 release_points(actual_user_id, jid, appid)
 
-            #If the user decides to 'Unapply' 
-            elif request.POST['kind'] == 'unapply':
-                jid = request.POST['job_id']
+            #If the user decides to "Unapply" 
+            elif request.POST["kind"] == "unapply":
+                jid = request.POST["job_id"]
                 applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
                 applicant.status = "WD"
                 applicant.save()
 
             #If the user accepts applicant for a job
-            elif request.POST['kind'] == 'accept':
+            elif request.POST["kind"] == "accept":
                 user_id = request.POST["accept"][0]
                 job_id = request.POST["accepted"]
 
@@ -103,12 +99,12 @@ def me(request):
         posted_jobs.append([job, applicants])
 
     context = {
-        'user': user_extended,
-        'saved': saved_jobs,
-        'applied': applied_jobs,
-        'posted': posted_jobs,
+        "user": user_extended,
+        "saved": saved_jobs,
+        "applied": applied_jobs,
+        "posted": posted_jobs,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, "userprofile/private.html",context)
 
 def release_points(rid, jid, appid): #rid = id of requester
     try:

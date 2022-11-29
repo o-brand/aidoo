@@ -6,7 +6,9 @@ from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase
 
 
-User = get_user_model() # Get user model
+# Get actual user model.
+User = get_user_model()
+
 
 class UserTableTestCase(TestCase):
     """ Testing the User Model"""
@@ -16,11 +18,11 @@ class UserTableTestCase(TestCase):
         # write 10 users into the table
         for i in range(10):
             credentials = dict()
-            credentials['username'] = fake.unique.name()
-            credentials['password'] = 'a'
-            credentials['last_name'] = lambda: fake.last_name()
-            credentials['first_name'] = lambda: fake.first_name()
-            credentials['date_of_birth'] = datetime.datetime.now()
+            credentials["username"] = fake.unique.name()
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
             User.objects.create_user(**credentials)
             credentials.clear()
 
@@ -31,14 +33,15 @@ class UserTableTestCase(TestCase):
         self.assertEqual(u.id, 1)
 
     def test_create_user(self):
+        fake = Faker()
         len1 = len(User.objects.all())
 
         credentials = dict()
-        credentials['username'] = '123'
-        credentials['password'] = 'a'
-        credentials['last_name'] = lambda: fake.last_name()
-        credentials['first_name'] = lambda: fake.first_name()
-        credentials['date_of_birth'] = datetime.datetime.now()
+        credentials["username"] = "123"
+        credentials["password"] = "a"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = datetime.datetime.now()
         User.objects.create_user(**credentials)
 
         len2 = len(User.objects.all())
@@ -80,16 +83,16 @@ class PublicProfileTestCase(LoginRequiredTestCase):
     """Tests for the PUBLIC profile page."""
 
     def test_profile(self):
-        response = self.client.get('/profile/' + str(self.user.id))
+        response = self.client.get("/profile/" + str(self.user.id))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='userprofile/public.html')
+        self.assertTemplateUsed(response, template_name="userprofile/public.html")
 
     def test_profile_available_by_name(self):
-        response = self.client.get(reverse('userdetails', kwargs={'user_id':self.user.id}))
+        response = self.client.get(reverse("userdetails", kwargs={"user_id":self.user.id}))
         self.assertEqual(response.status_code, 200)
 
     def test_profile_404(self):
-        response = self.client.get('/profile/0')
+        response = self.client.get("/profile/0")
         self.assertEqual(response.status_code, 404)
 
 
@@ -97,11 +100,11 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
     """Tests for the PRIVATE profile page."""
 
     def test_profile(self):
-        response = self.client.get('/profile/me')
+        response = self.client.get("/profile/me")
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name='userprofile/private.html')
+        self.assertTemplateUsed(response, template_name="userprofile/private.html")
 
     def test_profile_available_by_name(self):
-        response = self.client.get(reverse('me'))
+        response = self.client.get(reverse("me"))
         self.assertEqual(response.status_code, 200)
 

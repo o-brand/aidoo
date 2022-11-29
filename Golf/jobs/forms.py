@@ -1,6 +1,5 @@
 from django import forms
 from django.forms import ModelForm
-from django.forms.widgets import NumberInput
 from django.core.validators import RegexValidator
 from Golf.utils import create_date_string
 from .validators import validate_deadline

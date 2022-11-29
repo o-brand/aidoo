@@ -1,10 +1,7 @@
-import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.views import View
-from django.template import loader
-from django.utils import timezone
 from django.contrib.auth import get_user_model
 from .models import Job, Bookmark, Application
 from .forms import JobForm
