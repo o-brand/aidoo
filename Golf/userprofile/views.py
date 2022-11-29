@@ -1,5 +1,6 @@
 import logging
-from django.shortcuts import render
+from django.urls import reverse
+from django.shortcuts import render, redirect
 from django.http import Http404
 from django.contrib.auth import get_user_model
 from jobs.models import Job, Bookmark, Application
@@ -28,13 +29,17 @@ def me(request):
 
     actual_user_id = request.user.id
 
-    # If the user accepted somebody
-    if request.POST:
+    # If there is a form
+    if request.method == "POST":
         try:
+            # If the user marks a job as "done"
             if request.POST["kind"] == "exchange":
                 jid = int(request.POST["jid"]) # Job in question
                 appid = int(request.POST["appid"]) # ID of applicant
                 release_points(actual_user_id, jid, appid)
+
+                # Redirect to clear POST
+                return redirect(reverse("me") + "#posted")
 
             #If the user decides to "Unapply" 
             elif request.POST["kind"] == "unapply":
@@ -42,6 +47,9 @@ def me(request):
                 applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
                 applicant.status = "WD"
                 applicant.save()
+
+                # Redirect to clear POST
+                return redirect(reverse("me") + "#applied")
 
             #If the user accepts applicant for a job
             elif request.POST["kind"] == "accept":
@@ -62,6 +70,9 @@ def me(request):
                     else:
                         user.status = "AC"
                         user.save()
+
+                # Redirect to clear POST
+                return redirect(reverse("me") + "#posted")
 
         except logging.exception("Unknown error requesting POST."):
             return None
