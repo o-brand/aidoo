@@ -76,7 +76,7 @@
           {% if status == "AC" %}
             <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
           {% elif status == "AP" %}
-            <form method="post" action="{% url 'me' %}#applied">
+            <form method="post" action="{% url 'me' %}">
               {% csrf_token %}
               <input type="hidden" value='{{job.job_id}}' name="job_id">
               <input type="hidden" value='unapply' name="kind">
@@ -111,7 +111,7 @@
             <h6>Applicants:</h6>
             {% if applicants %}
               {% if not job.assigned %}
-                <form method="post" action="{% url 'me' %}#posted" id="applicant-{{job.job_id}}">
+                <form method="post" action="{% url 'me' %}" id="applicant-{{job.job_id}}">
                   {% csrf_token %}
                   <select name="accept" id="option-{{job.job_id}}"class="select">
                     <option disabled selected value="-1">Select somebody</option>
@@ -129,7 +129,7 @@
                 {% for applicant in applicants %}
                   {% if applicant.status == "AC" %}
                     <p>{{ applicant.applicant_id.username }}: <a href="mailto:{{ applicant.applicant_id.email }}">{{ applicant.applicant_id.email }}</a></p>
-                    <form method="post" action="{% url 'me' %}#posted">
+                    <form method="post" action="{% url 'me' %}">
                       {% csrf_token %}
                       <input type="hidden" value='{{job.job_id}}' name="jid">
                       <input type="hidden" value='{{applicant.applicant_id.id}}' name="appid">

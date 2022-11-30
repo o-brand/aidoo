@@ -4,6 +4,6 @@ from . import views
 
 # Be aware that the url already includes "profile/"
 urlpatterns = [
-    path('<int:user_id>', views.userdetails, name='userdetails'), # Details of a user
-    path('me', views.me, name='me') # My profile
+    path("<int:user_id>", views.userdetails, name="userdetails"), # Details of a user
+    path("me", views.me, name="me") # My profile
 ]
