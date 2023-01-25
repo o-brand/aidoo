@@ -1,5 +1,8 @@
 # Small Jobs App
 
+## Development Themes
+Scrip, UI, user interactions, code (frontend to backend communication), human aspect
+
 ## TODO list
 include tests for what we've written today
 
