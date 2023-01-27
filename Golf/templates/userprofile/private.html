@@ -37,7 +37,10 @@
   </div>
 
   <div id="details" class="tabcontent">
-    <h3>Personal details</h3>
+    <div class="d-flex justify-content-between">
+      <h3>Personal details</h3>
+      <button class="btn btn-secondary">Edit</button> <!--Not connected to anything yet-->
+    </div>
     <p>Real name: {{ user.first_name }} {{ user.last_name }}</p>
     <p>Email address: {{ user.email }}</p>
     <p>Date of birth: {{ user.date_of_birth }}</p>

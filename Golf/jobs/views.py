@@ -3,6 +3,7 @@ from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from .models import Job, Bookmark, Application
 from .forms import JobForm
 
@@ -70,7 +71,12 @@ class JobsView(ListView):
         """Reads jobs from the database."""
         filter_val = self.request.GET.get("search_title", "")
         return Job.objects.filter(
-            hidden=False, assigned=False, job_title__icontains=filter_val
+            Q(job_title__icontains=filter_val) |
+            Q(job_description__icontains=filter_val) |
+            Q(job_short_description__icontains=filter_val) |
+            Q(location__icontains=filter_val),
+            hidden=False, 
+            assigned=False
         ).exclude(poster_id_id=self.request.user.id)
 
     def job_count(self):
