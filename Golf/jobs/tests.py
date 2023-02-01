@@ -182,6 +182,47 @@ class JobModelTestCase(TestCase):
         with self.assertRaises(ValidationError):
             created_job.full_clean()
 
+class BookmarkModelTestCase(TestCase):
+    """Tests for Bookmark model."""
+
+    def fake_time(self):
+        """Returns a timezone aware time to prevent warnings."""
+        fake = Faker()
+        tz = timezone.get_current_timezone()
+        return timezone.make_aware(fake.date_time(), tz, True)
+
+    def setUp(self):
+        fake = Faker()
+
+        # create 1 user in the database
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "a"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = datetime.datetime.now()
+        User.objects.create_user(**credentials)
+        credentials.clear()
+
+        # Write 1 job into the job model
+        job = dict()
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = random.randint(1, 10)
+        Job.objects.create(**job)
+        
+    def test_unique_constraint(self):
+        """Test if a non-unique user_id and job_id pair raises an error"""
+        bookmark = dict()
+        bookmark["user_id"] = User(pk=1)
+        bookmark["job_id"] = Job(pk=1)
+        bookmark["saving_time"] = self.fake_time()
+        Bookmark.objects.create(**bookmark)
+        with self.assertRaises(IntegrityError):
+            Bookmark.objects.create(**bookmark)
+
 
 class PostPageCase(LoginRequiredTestCase):
     """Tests for Post page."""
