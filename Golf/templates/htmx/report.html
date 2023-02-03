@@ -1,0 +1,6 @@
+<a
+  class="dropdown-item"
+  hx-put="{% url 'report' job.job_id %}"
+  hx-swap="outerHTML"
+  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+  {% block extra %}{% endblock %}>Report</a>

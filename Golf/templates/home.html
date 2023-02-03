@@ -40,8 +40,7 @@
                       Bookmark
                     {% endif %}
                 </a>
-                <a class="dropdown-item" 
-                  href="javascript:report('{{ user.id }}','{{ job.job_id }}')">Report</a>
+                {% include 'htmx/report.html'%}
               </div>
             </div>
           </div>
@@ -88,18 +87,6 @@
           msg = "unmarked";
         }
         alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
-      }
-    });
-  }
-
-  //Report a job.
-  function report(uid, jid) {
-    $.ajax({
-      type: "POST", 
-      url: "{% url 'generic' %}", 
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'report', uid: uid, jid: jid}, 
-      success: function callback(response) {
-        alert("Thank you for reporting the job. We will review your complaint shortly.")
       }
     });
   }

@@ -140,13 +140,23 @@ def apply_call(request, job_id):
     )
 
 
-def report_call(request):
+def report_call(request, job_id):
     """Do something related to reporting a job post TBD."""
-    return HttpResponse("ok")
+
+    jobs = Job.objects.filter(pk=job_id)
+    job_id_exists = len(jobs) == 1
+    if not job_id_exists:
+        return HttpResponse("")
+
+    # Since this functionality is not yet implemented, we have to send back
+    # the job to be able to click again, as it was possible with JS.
+    return render(
+        request, "htmx/report-alert.html", {"job": jobs[0]}
+    )
 
 
 # This is used in generic_call to map a string to a function.
-function_dict = {"bookmark": bookmark_call, "report": report_call}
+function_dict = {"bookmark": bookmark_call}
 
 
 def generic_call(request):

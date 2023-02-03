@@ -14,4 +14,6 @@ urlpatterns = [
     path("generic", views.generic_call, name="generic"),
     # Applying for a job, used by HTMX
     path("apply/<int:job_id>", views.apply_call, name="apply"),
+    # Reporting a job, used by HTMX
+    path("report/<int:job_id>", views.report_call, name="report"),
 ]
