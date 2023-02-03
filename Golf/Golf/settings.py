@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import django_heroku
 import dj_database_url
+import sys
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -94,11 +95,20 @@ WSGI_APPLICATION = "Golf.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "d5igcq490qf7bb",
+        "USER": "vmckibhwnrgrcy",
+        "PASSWORD": "226fad9766738bf6206a43c57c34f7257215b4b382afc9538f07ee48e1071cb4",
+        "HOST": "ec2-63-32-248-14.eu-west-1.compute.amazonaws.com",
+        "PORT": "5432",
     }
 }
 
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
