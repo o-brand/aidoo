@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-import django_heroku
 import dj_database_url
 import sys
 
@@ -164,4 +163,7 @@ EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
 EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
 EMAIL_USE_TLS = True
 
-django_heroku.settings(locals())
+# HEROKU
+if '/app' in os.environ['HOME']:
+    import django_heroku
+    django_heroku.settings(locals())
