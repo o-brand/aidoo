@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
 import sys
 
 
@@ -28,6 +27,11 @@ SECRET_KEY = "django-insecure-ygkairtzpyop9eyg6n&1xd6@i*2mn1jfuq&b(jy!4*g9q6sa=f
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+
+# For security (run python manage.py check --deploy to check the problems)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 ALLOWED_HOSTS = [
     "teamgolf.pythonanywhere.com",
