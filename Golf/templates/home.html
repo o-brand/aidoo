@@ -23,7 +23,7 @@
   <div class="row d-flex justify-content-center">
     <div class="col jobs-scroll mb-5">
       {% for job in jobs %}
-        <div class="job-card" class="container">
+        <div class="job-card container">
           <div class="d-flex justify-content-between">
             <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
             <div class="dropdown">
@@ -50,7 +50,7 @@
             </a>
             <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
           </div>
-          <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
+          <p>{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
           <p>{{ job.job_short_description }}</p>
 
           {% if job.job_id in jobs_applied %} 
