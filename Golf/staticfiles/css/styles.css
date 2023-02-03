@@ -1,0 +1,150 @@
+body {
+    background-color: #ffffff;
+    color: #000;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+    .center {
+        width: 100%;
+    }
+  }
+
+/* NAVIGATION TEMPLATE */
+.navbar {
+  padding-left: 1.5%;
+  padding-right: 1.5%;
+  margin-bottom: 1.5%;
+  border-bottom: 1px solid rgb(222, 222, 222);
+}
+
+.navbar-nav > li{
+  padding-left:7px;
+  padding-right:7px;
+}
+
+.nav-link {
+  color: rgb(46, 45, 45);
+}
+
+.navbar-brand {
+  margin-left: 0.5%;
+}
+.navbar-brand img { 
+  width: 60px;
+  height: 20px;
+  vertical-align: text-top;
+}
+
+
+.hello {
+  margin-bottom: 2.5%;
+}
+
+.searchform {
+  margin-bottom: 1.5%;
+}
+.searchbar {
+  width: 40%;
+  margin-right: 0.5%;
+}
+
+.jobs-scroll {
+    overflow: auto;
+    margin-left: 14%;
+    margin-right: 14%;
+}
+
+.job-card {
+    border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
+    border-radius: 15px;
+    margin-left: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 3%;
+}
+
+.job-card img {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    border-radius: 30px;
+}
+
+.login-form {
+    margin-top: 2%;
+    margin-bottom: 4%;
+}
+
+/* PROFILE PAGES */
+.profile-pic {
+  height: auto;
+  max-width: 60%;
+  border-radius: 100%;
+  border: 2px solid lightgray;
+}
+
+.user-sidebar h5 {
+  color: rgb(115, 115, 115);
+}
+
+.user-sidebar h4 {
+  margin-bottom: 0px;
+}
+
+.user-jobs td, th {
+  text-align: center;
+}
+
+/* PRIVATE PROFILE PAGE */
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
