@@ -12,4 +12,6 @@ urlpatterns = [
     path("<int:job_id>", views.details, name="jobdetails"),
      # Generic function to communicate with Django via JavaScript
     path("generic", views.generic_call, name="generic"),
+    # Applying for a job, used by HTMX
+    path("apply/<int:job_id>", views.apply_call, name="apply"),
 ]

@@ -118,21 +118,26 @@ def bookmark_call(request):
         return HttpResponse("ok")
 
 
-def apply_call(request):
+def apply_call(request, job_id):
     """Create a new application record in database."""
-    uid = int(request.POST["uid"])
-    jid = int(request.POST["jid"])
+    user = request.user
 
-    try:
-        u = Application.objects.get(applicant_id=uid, job_id=jid)
-    except Application.DoesNotExist:
-        new_apply = Application(
-            applicant_id=User.objects.get(pk=uid),
-            job_id=Job.objects.get(pk=jid),
-        )
-        new_apply.save()
-    finally:
-        return HttpResponse("ok")
+    jobs = Job.objects.filter(pk=job_id)
+    job_id_exists = len(jobs) == 1
+    if not job_id_exists:
+        return HttpResponse("")
+
+    applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
+    application_exists = len(applications) == 0
+    if not application_exists:
+        return HttpResponse("")
+
+    new_apply = Application(applicant_id=user, job_id=jobs[0])
+    new_apply.save()
+
+    return render(
+        request, "htmx/applied-alert.html", {"job_id": job_id}
+    )
 
 
 def report_call(request):
@@ -141,7 +146,7 @@ def report_call(request):
 
 
 # This is used in generic_call to map a string to a function.
-function_dict = {"bookmark": bookmark_call, "app": apply_call, "report": report_call}
+function_dict = {"bookmark": bookmark_call, "report": report_call}
 
 
 def generic_call(request):

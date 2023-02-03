@@ -2,6 +2,11 @@
 
 {% block title %}Home{% endblock %}
 
+{% block head_extra %}
+<script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
+{% endblock %}
+
 {% block content %}
 {% include 'navigation.html' %}
 
@@ -48,17 +53,18 @@
           </div>
           <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
           <p>{{ job.job_short_description }}</p>
-          <button
-            {% if job.job_id in jobs_applied %} disabled {% endif %}
-            class="btn btn-primary" 
-            onclick="apply('{{user.id }}','{{ job.job_id }}')"
-            id = "btnApply{{ job.job_id }}">
-            {% if job.job_id in jobs_applied %} 
-              Applied ✓
-            {% else %}
-              Apply
-            {% endif %}
-          </button>
+
+          {% if job.job_id in jobs_applied %} 
+            {% include 'htmx/applied.html' %}
+          {% else %}
+            <button class="btn btn-primary"
+              id="btnApply{{ job.job_id }}"
+              _="on click add @disabled to me"
+              hx-put="{% url 'apply' job.job_id %}"
+              hx-swap="outerHTML"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
+          {% endif %}
+
         </div>
       {% endfor %}
     </div>
@@ -82,20 +88,6 @@
           msg = "unmarked";
         }
         alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
-      }
-    });
-  }
-
-  //Apply for a job.
-  function apply(uid, jid) {
-    $("#btnApply"+jid).attr("disabled", true);
-    $.ajax({
-      type: "POST", 
-      url: "{% url 'generic' %}", 
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
-      success: function callback(response) {
-        $("#btnApply"+jid).text("Applied ✓");
-        alert("You've applied for the job. You can now view the changes in your profile.")
       }
     });
   }
