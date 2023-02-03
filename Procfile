@@ -1,0 +1,1 @@
+web: python Golf/manage.py runserver
