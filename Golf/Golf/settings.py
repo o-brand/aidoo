@@ -30,14 +30,11 @@ SECRET_KEY = "django-insecure-ygkairtzpyop9eyg6n&1xd6@i*2mn1jfuq&b(jy!4*g9q6sa=f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = [
-#     "teamgolf.pythonanywhere.com",
-#     "127.0.0.1",
-#     "aidoo.herokuapp.com",
-# ]
-
-ALLOWED_HOSTS = ["*"] #Change this later!! (not safe)
-
+ALLOWED_HOSTS = [
+    "teamgolf.pythonanywhere.com",
+    "127.0.0.1",
+    "aidoo.herokuapp.com",
+]
 
 # OUR EXTENDED USER
 AUTH_USER_MODEL = "userprofile.User"
