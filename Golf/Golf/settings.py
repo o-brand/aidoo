@@ -164,6 +164,6 @@ EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
 EMAIL_USE_TLS = True
 
 # HEROKU
-if '/app' in os.environ['HOME']:
+if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
     import django_heroku
     django_heroku.settings(locals())
