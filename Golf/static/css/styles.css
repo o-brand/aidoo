@@ -19,6 +19,7 @@ body {
     }
   }
 
+/* NAVIGATION TEMPLATE */
 .navbar {
   padding-left: 1.5%;
   padding-right: 1.5%;
@@ -43,6 +44,7 @@ body {
   height: 20px;
   vertical-align: text-top;
 }
+
 
 .hello {
   margin-bottom: 2.5%;
@@ -81,6 +83,26 @@ body {
 .login-form {
     margin-top: 2%;
     margin-bottom: 4%;
+}
+
+/* PROFILE PAGES */
+.profile-pic {
+  height: auto;
+  max-width: 60%;
+  border-radius: 100%;
+  border: 2px solid lightgray;
+}
+
+.user-sidebar h5 {
+  color: rgb(115, 115, 115);
+}
+
+.user-sidebar h4 {
+  margin-bottom: 0px;
+}
+
+.user-jobs td, th {
+  text-align: center;
 }
 
 /* PRIVATE PROFILE PAGE */

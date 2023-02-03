@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.http import Http404
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from jobs.models import Job, Bookmark, Application
 
 
@@ -18,8 +19,12 @@ def userdetails(request, user_id):
     except User.DoesNotExist:
         raise Http404("User does not exist.")
 
+    posted_active = Job.objects.filter(poster_id=user_id, completed=False)
+    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user_id)
     context = {
         "user": user_extended,
+        "posted_active": posted_active,
+        "posted_inactive": posted_inactive
     }
     return render(request, "userprofile/public.html", context)
 

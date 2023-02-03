@@ -21,6 +21,7 @@
       <h3>Personal details</h3>
       <button class="btn btn-secondary">Edit</button> <!--Not connected to anything yet-->
     </div>
+    <p><img src="../static/assets/pfp/{{user.id}}.jpeg" class="profile-pic img-fluid"/></p>
     <p>Real name: {{ user.first_name }} {{ user.last_name }}</p>
     <p>Email address: {{ user.email }}</p>
     <p>Date of birth: {{ user.date_of_birth }}</p>
@@ -37,10 +38,12 @@
     {% if saved %}
         <div>
             {% for job, time in saved %}
-            <p>
-                <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
-                <br>Saved at {{ time }}
-            </p>
+              {% if not job.hidden %}
+                <p>
+                    <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
+                    <br>Saved at {{ time }}
+                </p>
+              {% endif %}
             {% endfor %}
         </div>
     {% else %}
