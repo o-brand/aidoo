@@ -12,8 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-#import django_heroku
-#import dj_database_url
+import django_heroku
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,11 +29,13 @@ SECRET_KEY = "django-insecure-ygkairtzpyop9eyg6n&1xd6@i*2mn1jfuq&b(jy!4*g9q6sa=f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "teamgolf.pythonanywhere.com",
-    "127.0.0.1",
-    "aidoo.herokuapp.com",
-]
+# ALLOWED_HOSTS = [
+#     "teamgolf.pythonanywhere.com",
+#     "127.0.0.1",
+#     "aidoo.herokuapp.com",
+# ]
+
+ALLOWED_HOSTS = ["*"] #Change this later!! (not safe)
 
 
 # OUR EXTENDED USER
@@ -132,11 +134,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = "static/"
-STATICFILES_DIRS = (
-    BASE_DIR / "static/",
-)
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 
 # Default primary key field type
@@ -157,4 +157,4 @@ EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
 EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
 EMAIL_USE_TLS = True
 
-#django_heroku.settings(locals)
+django_heroku.settings(locals())
