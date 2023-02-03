@@ -1,1 +1,1 @@
-web: python Golf/manage.py runserver
+web: gunicorn Golf.wsgi –log-file -
