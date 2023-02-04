@@ -15,6 +15,9 @@
   <div class="hello text-center">
     <h1>Hi {{ user.username }}!</h1>
     <p>You can see the {{jobs_count}} available jobs here. </p>
+    <button class="btn btn-secondary" hx-get="{% url 'post' %}" hx-target="#dialog">
+      Quick Post
+    </button>
   </div>
   <form class="searchform d-flex justify-content-center" method ="get">
     <input class="searchbar" type="text" value='{{request.GET.search_title}}' name="search_title"/>

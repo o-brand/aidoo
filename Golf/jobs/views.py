@@ -11,6 +11,12 @@ from .forms import JobForm
 # Get actual user model.
 User = get_user_model()
 
+# Modal test
+def add_movie(request):
+    form = JobForm()
+    return render(request, 'htmx/jobpost-modal.html', {
+        'form': form,
+    })
 
 def details(request, job_id):
     """Shows the details of a job. It is a static page."""
@@ -34,7 +40,7 @@ class FormView(View):
     """Displays a form for posting a job."""
 
     form_class = JobForm
-    template_name = "postjob.html"
+    template_name = "htmx/jobpost-modal.html"
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -53,7 +59,7 @@ class FormView(View):
             post.points = (duration_days * 24 + duration_hours) * 5
             post.save()
 
-            return redirect("/jobs/")
+            return HttpResponse(status=204) # No content
 
         return render(
             request, self.template_name, {"form": form, "poster_id": request.user.id}

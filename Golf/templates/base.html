@@ -37,6 +37,11 @@
 <body>
   {% block content %}
   {% endblock %}
+  <div id="modal" class="modal fade">
+    <div id="dialog" class="modal-dialog" hx-target="this"></div>
+  </div>
+
+  <script src="{% static 'js/dialog.js' %}"></script>
 </body>
 
 </html>
