@@ -44,7 +44,8 @@ body {
   vertical-align: text-top;
 }
 
-.hello {
+/*  styles the "Hi <usr>" message in .../jobs/ */
+.greeting-user {
   margin-bottom: 2.5%;
 }
 
@@ -125,4 +126,16 @@ body {
 @keyframes fadeEffect {
   from {opacity: 0;}
   to {opacity: 1;}
+}
+
+.bottom {
+  margin-bottom: 0px;
+  border-bottom: none;
+}
+
+/* styles the logo in the nav bar */
+.img-banner{
+  max-width: 50%;
+  height: auto;
+  padding: 10%;
 }
