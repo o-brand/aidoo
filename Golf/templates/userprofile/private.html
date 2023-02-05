@@ -3,6 +3,11 @@
 
 {% block title %}My profile{% endblock %}
 
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}" defer></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}" defer></script>
+{% endblock %}
+
 {% block content %}
 {% include 'navigation.html' %}
   
@@ -11,10 +16,10 @@
   <h1>My username: {{ user.username }}</h1>
 
   <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'details')" id="details_tab">Personal details</button>
-    <button class="tablinks" onclick="openTab(event, 'saved')" id="saved_tab">Bookmarked jobs</button>
-    <button class="tablinks" onclick="openTab(event, 'applied')" id="applied_tab">Applied jobs</button>
-    <button class="tablinks" onclick="openTab(event, 'posted')" id="posted_tab">Posted jobs</button>
+    <button class="tablinks" id="details_tab">Personal details</button>
+    <button class="tablinks" id="saved_tab">Bookmarked jobs</button>
+    <button class="tablinks" id="applied_tab">Applied jobs</button>
+    <button class="tablinks" id="posted_tab">Posted jobs</button>
   </div>
 
   <div id="details" class="tabcontent">
@@ -59,26 +64,9 @@
         <div>
           <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
           <p>Posted on: {{ job.posting_time }}</p>
-          <p>Status: {{ status }}</p>
-          {% if status == "AC" %}
-            <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
-          {% elif status == "AP" %}
-            <form method="post" action="{% url 'me' %}">
-              {% csrf_token %}
-              <input type="hidden" value='{{job.job_id}}' name="job_id">
-              <input type="hidden" value='unapply' name="kind">
-              <button type="submit" class="btn btn-outline-danger">Withdraw</button>
-              <p>If you withdraw, you cannot apply again.</p>
-            </form>
-          {% elif status == "WD" %}
-            <p>You withdrew from this job.</p>
-          {% elif status == "RE" %}
-            <p>The poster rejected your application. Sorry.</p>
-          {% elif status == "DN" %}
-            <p>You finished this job.</p>
-          {% elif status == "C" %}
-            <p>There is a conflict between you and the poster. We are working on it.</p>
-          {% endif %}
+          <span>
+            {% include 'htmx/job-applied.html' %}
+          </span>
           <hr>
         </div>
       {% endfor %}

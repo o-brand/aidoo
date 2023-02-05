@@ -1,9 +1,10 @@
 import logging
 from django.urls import reverse
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import HttpResponse, Http404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
 
 
@@ -45,16 +46,6 @@ def me(request):
 
                 # Redirect to clear POST
                 return redirect(reverse("me") + "#posted")
-
-            #If the user decides to "Unapply" 
-            elif request.POST["kind"] == "unapply":
-                jid = request.POST["job_id"]
-                applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
-                applicant.status = "WD"
-                applicant.save()
-
-                # Redirect to clear POST
-                return redirect(reverse("me") + "#applied")
 
             #If the user accepts applicant for a job
             elif request.POST["kind"] == "accept":
@@ -122,6 +113,39 @@ def me(request):
     }
     return render(request, "userprofile/private.html",context)
 
+
+def withdraw_call(request):
+    """Withdraw from a job."""
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
+
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            return HttpResponse(status=204)
+
+        # Check if there is an application
+        applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
+        application_exists = len(applications) == 1
+        if not application_exists:
+            return HttpResponse(status=204)
+
+        # Withdraw
+        application = applications[0]
+        application.status = "WD"
+        application.save()
+
+        return render(
+            request, "htmx/job-applied.html", {"job": jobs[0], "status": application.status}
+        )
+
+    # If it is not POST
+    return HttpResponse(status=204)
+
+
 def release_points(rid, jid, appid): #rid = id of requester
     try:
         post = Job.objects.get(job_id=jid) # Job post
@@ -138,6 +162,7 @@ def release_points(rid, jid, appid): #rid = id of requester
         volunteer.balance = volunteer.balance + post.points # Pay points to volunteer
         post.completed = True # Set the post to completed
         application.status = "DN" # Set the job process to done
+        application.time_of_final_status = timezone.now # Set the time of the final status
 
         poster.save()
         volunteer.save()

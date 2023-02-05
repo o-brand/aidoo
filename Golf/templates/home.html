@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
 {% block head_extra %}
-<script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
+<script src="{% static 'js/htmx-1.8.5.min.js' %}" defer></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -62,7 +63,8 @@
             <button class="btn btn-primary"
               id="btnApply{{ job.job_id }}"
               _="on click add @disabled to me"
-              hx-put="{% url 'apply' job.job_id %}"
+              hx-post="{% url 'apply' %}"
+              hx-vals='{"job_id": {{ job.job_id }} }'
               hx-swap="outerHTML"
               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
           {% endif %}
