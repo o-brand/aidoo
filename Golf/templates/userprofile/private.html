@@ -82,44 +82,9 @@
         <div>
           <a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a> ({{job.points}} points)
           <p>Posted on: {{ job.posting_time }}</p>
-          {% if not job.completed %}
-            <h6>Applicants:</h6>
-            {% if applicants %}
-              {% if not job.assigned %}
-                <form method="post" action="{% url 'me' %}" id="applicant-{{job.job_id}}">
-                  {% csrf_token %}
-                  <select name="accept" id="option-{{job.job_id}}"class="select">
-                    <option disabled selected value="-1">Select somebody</option>
-                    {% for applicant in applicants %}
-                      {% if applicant.status == "AP" %}
-                        <option value="{{ applicant.applicant_id.id }}">{{ applicant.applicant_id.username }}</option>
-                      {% endif %}
-                    {% endfor %}
-                  </select>
-                  <input type="hidden" value='accept' name="kind">
-                  <input type="hidden" value='{{job.job_id}}' name="accepted" >
-                  <button type="submit" class = "btn btn-primary" disabled id="accept-{{job.job_id}}">Accept</button>
-                </form>
-              {% else %}
-                {% for applicant in applicants %}
-                  {% if applicant.status == "AC" %}
-                    <p>{{ applicant.applicant_id.username }}: <a href="mailto:{{ applicant.applicant_id.email }}">{{ applicant.applicant_id.email }}</a></p>
-                    <form method="post" action="{% url 'me' %}">
-                      {% csrf_token %}
-                      <input type="hidden" value='{{job.job_id}}' name="jid">
-                      <input type="hidden" value='{{applicant.applicant_id.id}}' name="appid">
-                      <input type="hidden" value='exchange' name="kind">
-                      <button type="submit" class="btn btn-primary" id="close{{job.job_id}}">Job Done</button>
-                    </form>
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% else %}
-              <p>No one has applied for this job yet.</p>
-            {% endif %}
-          {% else %}
-            <p>This job is complete.</p>
-          {% endif %}
+            <span>
+              {% include 'htmx/job-applicants.html' %}
+            </span>
         </div>
         <hr>
       {% endfor %}

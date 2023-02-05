@@ -38,17 +38,8 @@ def me(request):
     # If there is a form
     if request.method == "POST":
         try:
-            # If the user marks a job as "done"
-            if request.POST["kind"] == "exchange":
-                jid = int(request.POST["jid"]) # Job in question
-                appid = int(request.POST["appid"]) # ID of applicant
-                release_points(actual_user_id, jid, appid)
-
-                # Redirect to clear POST
-                return redirect(reverse("me") + "#posted")
-
             #If the user accepts applicant for a job
-            elif request.POST["kind"] == "accept":
+            if request.POST["kind"] == "accept":
                 user_id = request.POST["accept"][0]
                 job_id = request.POST["accepted"]
 
@@ -145,26 +136,48 @@ def withdraw_call(request):
     # If it is not POST
     return HttpResponse(status=204)
 
+def jobdone_call(request):
+    """Finish a job."""
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
 
-def release_points(rid, jid, appid): #rid = id of requester
-    try:
-        post = Job.objects.get(job_id=jid) # Job post
-        if rid != post.poster_id.id:
-            return None
-        volunteer = User.objects.get(id=appid) # Applicant
-        poster = User.objects.get(id=post.poster_id.id) # Job poster
-        application = Application.objects.get(job_id=jid, applicant_id=appid) # Job process (?)
-    except (User.DoesNotExist, Job.DoesNotExist, Application.DoesNotExist):
-        return None
-    
-    else:
-        poster.balance = poster.balance - post.points # Deduct points from job poster
-        volunteer.balance = volunteer.balance + post.points # Pay points to volunteer
-        post.completed = True # Set the post to completed
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            return HttpResponse(status=204)
+        job = jobs[0]
+
+        # Check if there is an application
+        applications = Application.objects.filter(job_id=job_id)
+        application_exists = len(applications) == 1
+        if not application_exists:
+            return HttpResponse(status=204)
+        application = applications[0]
+        
+        # Get volunteer, poster
+        volunteer = User.objects.get(pk=application.applicant_id.id)
+        poster = User.objects.get(id=user.id) # Job poster
+
+        # Work...
+        poster.balance = poster.balance - job.points # Deduct points from job poster
+        volunteer.balance = volunteer.balance + job.points # Pay points to volunteer
+        job.completed = True # Set the post to completed
         application.status = "DN" # Set the job process to done
-        application.time_of_final_status = timezone.now # Set the time of the final status
+        application.time_of_final_status = timezone.now() # Set the time of the final status
 
         poster.save()
         volunteer.save()
-        post.save()
+        job.save()
         application.save()
+
+        applicants = list(Application.objects.filter(job_id=job.job_id))
+
+        return render(
+            request, "htmx/job-applicants.html", {"job": job, "applicants": applicants}
+        )
+
+    # If it is not POST
+    return HttpResponse(status=204)

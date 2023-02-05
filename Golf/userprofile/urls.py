@@ -10,4 +10,6 @@ urlpatterns = [
     path("me", views.me, name="me"),
     # Withdrawing from a job, used by HTMX
     path("withdraw", views.withdraw_call, name="withdraw"),
+    # Finishing a job, used by HTMX
+    path("jobdone", views.jobdone_call, name="jobdone"),
 ]
