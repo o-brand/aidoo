@@ -118,41 +118,55 @@ def bookmark_call(request):
         return HttpResponse("ok")
 
 
-def apply_call(request, job_id):
+def apply_call(request):
     """Create a new application record in database."""
-    user = request.user
+    if request.method == "POST":
+        job_id = request.POST["job_id"]
+        user = request.user
 
-    jobs = Job.objects.filter(pk=job_id)
-    job_id_exists = len(jobs) == 1
-    if not job_id_exists:
-        return HttpResponse("")
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            return HttpResponse("")
 
-    applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
-    application_exists = len(applications) == 0
-    if not application_exists:
-        return HttpResponse("")
+        # Check if there is an application already
+        applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
+        application_exists = len(applications) == 0
+        if not application_exists:
+            return HttpResponse("")
 
-    new_apply = Application(applicant_id=user, job_id=jobs[0])
-    new_apply.save()
+        # Create the application
+        new_apply = Application(applicant_id=user, job_id=jobs[0])
+        new_apply.save()
 
-    return render(
-        request, "htmx/applied-alert.html", {"job_id": job_id}
-    )
+        return render(
+            request, "htmx/applied-alert.html", {"job_id": job_id}
+        )
+
+    # If it is not POST
+    return HttpResponse("")
 
 
-def report_call(request, job_id):
+def report_call(request):
     """Do something related to reporting a job post TBD."""
+    if request.method == "POST":
+        job_id = request.POST["job_id"]
 
-    jobs = Job.objects.filter(pk=job_id)
-    job_id_exists = len(jobs) == 1
-    if not job_id_exists:
-        return HttpResponse("")
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            return HttpResponse("")
 
-    # Since this functionality is not yet implemented, we have to send back
-    # the job to be able to click again, as it was possible with JS.
-    return render(
-        request, "htmx/report-alert.html", {"job": jobs[0]}
-    )
+        # Since this functionality is not yet implemented, we have to send back
+        # the job to be able to click again, as it was possible with JS.
+        return render(
+            request, "htmx/report-alert.html", {"job": jobs[0]}
+        )
+
+    # If it is not POST
+    return HttpResponse("")
 
 
 # This is used in generic_call to map a string to a function.

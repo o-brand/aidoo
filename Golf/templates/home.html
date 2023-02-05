@@ -60,7 +60,8 @@
             <button class="btn btn-primary"
               id="btnApply{{ job.job_id }}"
               _="on click add @disabled to me"
-              hx-put="{% url 'apply' job.job_id %}"
+              hx-post="{% url 'apply' %}"
+              hx-vals='{"job_id": {{ job.job_id }} }'
               hx-swap="outerHTML"
               hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
           {% endif %}
