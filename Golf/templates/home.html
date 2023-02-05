@@ -15,7 +15,14 @@
 
   <div class="hello text-center">
     <h1>Hi {{ user.username }}!</h1>
-    <p>You can see the {{jobs_count}} available jobs here. </p>
+    {% if jobs_count == 0 %}
+      <p>There are no available jobs with this search term.</p>
+    {% elif jobs_count == 1 %}
+      <p>You can see the available job here. </p>
+    {% else %}
+      <p>You can see the {{jobs_count}} available jobs here. </p>
+    {% endif %}
+    
   </div>
   <form class="searchform d-flex justify-content-center" method ="get">
     <input class="searchbar" type="text" value='{{request.GET.search_title}}' name="search_title"/>
@@ -33,14 +40,11 @@
                 aria-haspopup="true" aria-expanded="false">Options
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" id="sfl{{ job.job_id }}" 
-                  href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
-                    {% if job.job_id in save_for_later %}
-                      Unmark
-                    {% else %}
-                      Bookmark
-                    {% endif %}
-                </a>
+                {% if job.job_id in save_for_later %}
+                  {% include 'htmx/bookmark-unmark.html' %}
+                {% else %}
+                  {% include 'htmx/bookmark.html' %}
+                {% endif %}
                 {% include 'htmx/report.html'%}
               </div>
             </div>
@@ -72,25 +76,5 @@
   </div>
 </div>
 
-<script>
-  // Bookmark a job.
-  function bookmark(uid, jid) {
-    $.ajax({
-      type: "POST",
-      url: "{% url 'generic' %}",
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "bookmark", uid: uid, jid: jid},
-      success: function callback(response) {
-        if ($("#sfl"+jid).text().trim() == 'Bookmark') {
-          $("#sfl"+jid).text('Unmark');
-          msg = "bookmarked";
-        }
-        else {
-          $("#sfl"+jid).text('Bookmark');
-          msg = "unmarked";
-        }
-        alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
-      }
-    });
-  }
-</script>
+
 {% endblock %}
