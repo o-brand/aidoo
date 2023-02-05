@@ -1,12 +1,12 @@
 ;(function(){
-  const modal = new bootstrap.Modal(document.getElementById("modal"))
+  const modal = new bootstrap.Modal(document.getElementById("modal"));
 
   htmx.on("htmx:afterSwap", (e) => {
     // Response targeting #dialog => show the modal
     if (e.detail.target.id == "dialog") {
         modal.show();
     }
-  })
+  });
 
   htmx.on("htmx:beforeSwap", (e) => {
       // Hides dialog after form is submitted
@@ -14,17 +14,10 @@
         modal.hide();
         e.detail.shouldSwap = false;
       }
-    })
+    });
 
-    htmx.on("hidden.bs.modal", (e) => {
-      // Clear form after modal is hidden
-      document.getElementById("dialog").innerHTML = "";
-      $('body').removeClass('modal-open');
-      $('.modal-backdrop').remove();
-    })
-
-    modal.on('hide.bs.modal', function (e) {
-      $(document.body).removeClass('modal-open');
-      $('.modal-backdrop').remove();
+  htmx.on("hidden.bs.modal", (e) => {
+    // Clear form after modal is hidden
+    document.getElementById("dialog").innerHTML = "";
   });
 })()
