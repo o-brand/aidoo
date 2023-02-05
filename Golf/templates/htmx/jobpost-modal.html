@@ -4,7 +4,7 @@
   {% csrf_token %}
   <div class="modal-header">
     <h5 class="modal-title">New Job Post</h5>
-    <button class="btn-close" data-bs-dismiss="modal" onClick="javascript:del_overlay()"></button>
+    <button class="btn-close" data-bs-dismiss="modal"></button>
   </div>
   <div class="modal-body">
     <p>
@@ -69,7 +69,7 @@
   </div>
   <div class="modal-footer">
     <input type="hidden" name="poster_id" value="{{ poster_id }}" />
-    <button class="btn btn-secondary" data-bs-dismiss="modal" onClick="javascript:del_overlay()">Cancel</button>
+    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
     <input type="submit" value="Post" class="btn btn-primary"/>
   </div>
 </form>
