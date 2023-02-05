@@ -46,8 +46,8 @@ body {
 }
 
 .navbar-nav img {
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border-radius: 100%;
   border: 1.5px rgb(183, 183, 183) solid;
   transition: border 0.1s;
@@ -56,12 +56,6 @@ body {
 .navbar-nav img:hover {
   border: 1.5px rgb(153, 153, 153) solid
 }
-
-.dropdown-menu li a {
-  line-height: 20px;
-  padding-top: 0;
-}
-
 
 /* Home Page */
 .hello {
@@ -126,6 +120,12 @@ body {
   border-color: #a9332f;
 }
 
+.post-button:active:focus {
+  background-color: #bf3e3a;
+  border-color: #a12e2a;
+}
+
+
 .chat-button {
   background-color: #5bc0de;
   border-color: #5bc0de;
@@ -135,6 +135,11 @@ body {
 .chat-button:hover {
   background-color: #48abc9;
   border-color: #3b93ae;
+}
+
+.chat-button:active:focus {
+  background-color: rgb(60, 152, 181);
+  border-color: rgb(48, 131, 157);
 }
 
 .shop-button {
@@ -148,13 +153,28 @@ body {
   border-color: #388538;
 }
 
+.shop-button:active:focus {
+  background-color: rgb(59, 140, 59);
+  border-color: #368436;
+}
+
 
 /* PROFILE PAGES */
-.profile-pic {
+.user-sidebar .profile-pic {
   height: auto;
   max-width: 60%;
   border-radius: 100%;
   border: 2px solid lightgray;
+}
+
+.profile-pic {
+  max-width: 125px;
+  height: 125px;
+  border-radius: 100%;
+}
+
+.user-sidebar .bar {
+  height: max(100%, 300px);
 }
 
 .user-sidebar h5 {

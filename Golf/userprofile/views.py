@@ -14,6 +14,7 @@ User = get_user_model()
 
 def userdetails(request, user_id):
     """Public pofile page with just the basic information."""
+    requester = request.user #The user who is currently signed in
 
     try:
         user_extended = User.objects.get(pk=user_id)
@@ -23,9 +24,10 @@ def userdetails(request, user_id):
     posted_active = Job.objects.filter(poster_id=user_id, completed=False)
     posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user_id)
     context = {
-        "user": user_extended,
+        "user": requester,
+        "viewed_user": user_extended,
         "posted_active": posted_active,
-        "posted_inactive": posted_inactive
+        "posted_inactive": posted_inactive,
     }
     return render(request, "userprofile/public.html", context)
 

@@ -7,12 +7,17 @@
 
 <div class="container my-4">
   <div class="row">
-    <div class="user-sidebar col-4">
-      <img src="../static/assets/pfp/{{user.id}}.jpeg" class="profile-pic img-fluid mb-4"/>
-      <h4>{{ user.first_name }} {{ user.last_name }}</h4>
-      <h5>{{ user.username }}</h4>
-      <p>Joined: {{ user.date_joined | date:'d M Y'}}</p>
-      <p>Rating: {{ user.rating }}</p>
+    <div class="user-sidebar col-3 hstack">
+      <div>
+        <img src="../static/assets/pfp/{{viewed_user.id}}.jpeg" class="profile-pic img-fluid mb-4"/>
+        <h4>{{ viewed_user.first_name }} {{ viewed_user.last_name }}</h4>
+        <h5>{{ viewed_user.username }}</h4>
+        <p>Joined: {{ viewed_user.date_joined | date:'d M Y'}}</p>
+        <p>Rating: {{ viewed_user.rating }}</p>
+      </div>
+      <div class="d-flex bar">
+        <div class="vr"></div>
+      </div>
     </div>
     <div class="user-jobs col">
       <div class="mb-5">
@@ -44,7 +49,7 @@
             </div>
           {% endfor %}
         {% else %}
-        <p>{{user.first_name}} doesn't have any active jobs.</p>
+        <p>{{viewed_user.first_name}} doesn't have any active jobs.</p>
         {% endif %}
       </div>
 
@@ -76,7 +81,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <p>{{user.first_name}} doesn't have any archived jobs.</p>
+        <p>{{viewed_user.first_name}} doesn't have any archived jobs.</p>
       {% endif %}
     </div>
   </div>
