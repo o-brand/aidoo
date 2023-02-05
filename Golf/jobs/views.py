@@ -117,14 +117,17 @@ def bookmark_call(request):
         bookmark_exists = len(bookmarks) == 0
         if not bookmark_exists:
             bookmarks.delete()
-            return HttpResponse("")
+
+            return render(
+                request, "htmx/bookmark-alert.html", {"job": jobs[0]}
+            )
         
         # Creates the bookmark
         new_bookmark = Bookmark(user_id=user, job_id=jobs[0])
         new_bookmark.save()
 
         return render(
-            request, "htmx/bookmark-alert.html", {"job_id": job_id}
+            request, "htmx/bookmark-unmark-alert.html", {"job": jobs[0]}
         )
 
     # If it is not POST
