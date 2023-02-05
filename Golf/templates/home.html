@@ -16,7 +16,7 @@
     <h1>Hi {{ user.username }}!</h1>
     <p>You can see the {{jobs_count}} available jobs here. </p>
     <button class="btn btn-secondary" hx-get="{% url 'post' %}" hx-target="#dialog">
-      Quick Post
+      <i class="bi bi-pencil-square"></i>
     </button>
   </div>
   <form class="searchform d-flex justify-content-center" method ="get">

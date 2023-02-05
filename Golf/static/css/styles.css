@@ -85,6 +85,10 @@ body {
     margin-bottom: 4%;
 }
 
+i {
+  font-size: 28px;
+}
+
 /* PROFILE PAGES */
 .profile-pic {
   height: auto;
