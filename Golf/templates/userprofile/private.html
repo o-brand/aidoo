@@ -10,11 +10,11 @@
   
   <h1>My username: {{ user.username }}</h1>
 
-  <div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'details')" id="details_tab">Personal details</button>
-    <button class="tablinks" onclick="openTab(event, 'saved')" id="saved_tab">Bookmarked jobs</button>
-    <button class="tablinks" onclick="openTab(event, 'applied')" id="applied_tab">Applied jobs</button>
-    <button class="tablinks" onclick="openTab(event, 'posted')" id="posted_tab">Posted jobs</button>
+  <div id="tab" class="tab">
+    <button class="tablinks" id="details_tab">Personal details</button>
+    <button class="tablinks" id="saved_tab">Bookmarked jobs</button>
+    <button class="tablinks" id="applied_tab">Applied jobs</button>
+    <button class="tablinks" id="posted_tab">Posted jobs</button>
   </div>
 
   <div id="details" class="tabcontent">
