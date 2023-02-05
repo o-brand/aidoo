@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from Golf.utils import create_date_string
 from Golf.utils import LoginRequiredTestCase
-from jobs.models import Job, Bookmark
+from jobs.models import Job, Bookmark, Application
 from .forms import JobForm
 
 
@@ -210,7 +210,7 @@ class BookmarkModelTestCase(TestCase):
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
-        job["poster_id_id"] = random.randint(1, 10)
+        job["poster_id_id"] = 1
         Job.objects.create(**job)
         
     def test_unique_constraint(self):
@@ -525,3 +525,111 @@ class PostJobCase(TestCase):
                 "is not a valid date. The deadline cannot be more than 1 year from now.",
                 form.errors[key][0],
             )
+
+
+class ApplyButtonCase(LoginRequiredTestCase):
+    """Tests for apply button."""
+
+    def fake_time(self):
+        """Returns a timezone aware time to prevent warnings."""
+        fake = Faker()
+        tz = timezone.get_current_timezone()
+        return timezone.make_aware(fake.date_time(), tz, True)
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # Write 1 job into the job model
+        job = dict()
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = 1
+        Job.objects.create(**job)
+
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/jobs/apply")
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("apply"))
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_post_no_job(self):
+        # test without sending a job id
+        response = self.client.post("/jobs/apply")
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_post_job_not_valid(self):
+        # test with a wrong job id
+        response = self.client.post("/jobs/apply", {"job_id": 5})
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_post_job_application_exists(self):
+        # test with an application which exists
+        application = dict()
+        application["applicant_id"] = User(pk=1)
+        application["job_id"] = Job(pk=1)
+        application["status"] = "AP"
+        Application.objects.create(**application)
+
+        response = self.client.post("/jobs/apply", {"job_id": 1})
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_post_job(self):
+        # test works
+        response = self.client.post("/jobs/apply", {"job_id": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="htmx/applied-alert.html")
+        self.assertEqual(len(Application.objects.all()), 1)
+
+class ReportButtonCase(LoginRequiredTestCase):
+    """Tests for report button."""
+    # We need to write more tests when the function is fully implemented.
+
+    def fake_time(self):
+        """Returns a timezone aware time to prevent warnings."""
+        fake = Faker()
+        tz = timezone.get_current_timezone()
+        return timezone.make_aware(fake.date_time(), tz, True)
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # Write 1 job into the job model
+        job = dict()
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = 1
+        Job.objects.create(**job)
+
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/jobs/report")
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("report"))
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_post_no_job(self):
+        # test without sending a job id
+        response = self.client.post("/jobs/report")
+        self.assertEqual(response.status_code, 204)
+
+    def test_page_post_job_not_valid(self):
+        # test with a wrong job id
+        response = self.client.post("/jobs/report", {"job_id": 5})
+        self.assertEqual(response.status_code, 204)

@@ -1,7 +1,6 @@
 // Add click listeners
 $(".tablinks").each(function() {
   $(this).on("click", function (event) {
-    console.log("aaa");
     openTab(event.currentTarget.id.slice(0,-4));
   });
 });

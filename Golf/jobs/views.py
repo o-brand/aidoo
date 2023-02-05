@@ -121,20 +121,21 @@ def bookmark_call(request):
 def apply_call(request):
     """Create a new application record in database."""
     if request.method == "POST":
-        job_id = request.POST["job_id"]
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
         user = request.user
 
         # Check if the job ID is valid
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse("")
+            return HttpResponse(status=204)
 
         # Check if there is an application already
         applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
         application_exists = len(applications) == 0
         if not application_exists:
-            return HttpResponse("")
+            return HttpResponse(status=204)
 
         # Create the application
         new_apply = Application(applicant_id=user, job_id=jobs[0])
@@ -145,19 +146,20 @@ def apply_call(request):
         )
 
     # If it is not POST
-    return HttpResponse("")
+    return HttpResponse(status=204)
 
 
 def report_call(request):
     """Do something related to reporting a job post TBD."""
     if request.method == "POST":
-        job_id = request.POST["job_id"]
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
 
         # Check if the job ID is valid
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse("")
+            return HttpResponse(status=204)
 
         # Since this functionality is not yet implemented, we have to send back
         # the job to be able to click again, as it was possible with JS.
@@ -166,7 +168,7 @@ def report_call(request):
         )
 
     # If it is not POST
-    return HttpResponse("")
+    return HttpResponse(status=204)
 
 
 # This is used in generic_call to map a string to a function.
