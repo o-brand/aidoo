@@ -45,7 +45,25 @@ body {
   vertical-align: text-top;
 }
 
+.navbar-nav img {
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  border: 1.5px rgb(183, 183, 183) solid;
+  transition: border 0.1s;
+}
 
+.navbar-nav img:hover {
+  border: 1.5px rgb(153, 153, 153) solid
+}
+
+.dropdown-menu li a {
+  line-height: 20px;
+  padding-top: 0;
+}
+
+
+/* Home Page */
 .hello {
   margin-bottom: 2.5%;
 }
@@ -85,9 +103,51 @@ body {
     margin-bottom: 4%;
 }
 
-i {
+.hello i {
   font-size: 28px;
 }
+
+.hello button {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+}
+
+.post-button {
+  background-color: #d9534f;
+  border-color: #d9534f;
+  transition: 0.1s;
+}
+
+.post-button:hover {
+  background-color: #c5433f;
+  border-color: #a9332f;
+}
+
+.chat-button {
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+  transition: 0.1s;
+}
+
+.chat-button:hover {
+  background-color: #48abc9;
+  border-color: #3b93ae;
+}
+
+.shop-button {
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+  transition: 0.1s;
+}
+
+.shop-button:hover {
+  background-color: #49a149;
+  border-color: #388538;
+}
+
 
 /* PROFILE PAGES */
 .profile-pic {

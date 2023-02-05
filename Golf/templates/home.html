@@ -13,11 +13,17 @@
 
 <div class="container">
 
-  <div class="hello text-center">
+  <div class="hello text-center justify-content-center">
     <h1>Hi {{ user.username }}!</h1>
     <p>You can see the {{jobs_count}} available jobs here. </p>
-    <button class="btn btn-secondary" hx-get="{% url 'post' %}" hx-target="#dialog">
+    <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-pencil-square"></i>
+    </button>
+    <button class="btn btn-secondary chat-button">
+      <i class="bi bi-chat-left"></i>
+    </button>
+    <button class="btn btn-secondary shop-button">
+      <i class="bi bi-bag"></i>
     </button>
   </div>
   <form class="searchform d-flex justify-content-center" method ="get">
