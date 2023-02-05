@@ -32,37 +32,7 @@ def userdetails(request, user_id):
 
 def me(request):
     """Private pofile page with more data."""
-
     actual_user_id = request.user.id
-
-    # If there is a form
-    if request.method == "POST":
-        try:
-            #If the user accepts applicant for a job
-            if request.POST["kind"] == "accept":
-                user_id = request.POST["accept"][0]
-                job_id = request.POST["accepted"]
-
-                # we get row from the table with the job id
-                job = Job.objects.get(pk=job_id)
-                job.assigned = True
-                job.save()
-
-                # change status of applicants - only those status where "AP"
-                set_rejected = Application.objects.filter(job_id=job_id, status="AP")
-                for user in set_rejected:
-                    if str(user.applicant_id.id) != user_id:
-                        user.status = "RE"
-                        user.save()
-                    else:
-                        user.status = "AC"
-                        user.save()
-
-                # Redirect to clear POST
-                return redirect(reverse("me") + "#posted")
-
-        except logging.exception("Unknown error requesting POST."):
-            return None
 
     try:
         user_extended = User.objects.get(pk=actual_user_id)
@@ -136,6 +106,46 @@ def withdraw_call(request):
     # If it is not POST
     return HttpResponse(status=204)
 
+def selectapplicant_call(request):
+    """Select an applicant for a job."""
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        applicant_id = request.POST.get("accept", [-1])
+
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            return HttpResponse(status=204)
+        job = jobs[0]
+
+        # Check if there is at least one application
+        applications = Application.objects.filter(job_id=job_id, status="AP")
+        no_application = len(applications) == 0
+        if no_application:
+            return HttpResponse(status=204)
+
+        # Assign the job
+        job.assigned = True
+        job.save()
+
+        # change status of applicants - only those status where "AP"
+        for user in applications:
+            if str(user.applicant_id.id) != applicant_id:
+                user.status = "RE"
+                user.save()
+            else:
+                user.status = "AC"
+                user.save()
+
+        return render(
+            request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
+        )
+
+    # If it is not POST
+    return HttpResponse(status=204)
+
 def jobdone_call(request):
     """Finish a job."""
     if request.method == "POST":
@@ -151,7 +161,7 @@ def jobdone_call(request):
         job = jobs[0]
 
         # Check if there is an application
-        applications = Application.objects.filter(job_id=job_id)
+        applications = Application.objects.filter(job_id=job_id, status="AC")
         application_exists = len(applications) == 1
         if not application_exists:
             return HttpResponse(status=204)

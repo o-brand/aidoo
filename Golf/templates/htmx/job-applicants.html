@@ -2,19 +2,24 @@
   <h6>Applicants:</h6>
   {% if applicants %}
     {% if not job.assigned %}
-      <form method="post" action="{% url 'me' %}" id="applicant-{{job.job_id}}">
-        {% csrf_token %}
-        <select name="accept" id="option-{{job.job_id}}"class="select">
-          <option disabled selected value="-1">Select somebody</option>
-          {% for applicant in applicants %}
-            {% if applicant.status == "AP" %}
-              <option value="{{ applicant.applicant_id.id }}">{{ applicant.applicant_id.username }}</option>
-            {% endif %}
-          {% endfor %}
-        </select>
-        <input type="hidden" value='accept' name="kind">
-        <input type="hidden" value='{{job.job_id}}' name="accepted" >
-        <button type="submit" class="btn btn-primary" disabled id="accept-{{job.job_id}}">Accept</button>
+      <form
+        hx-post="{% url 'selectapplicant' %}"
+        hx-target="closest span"
+        hx-swap="innerHTML"
+        hx-vals='{"job_id": {{ job.job_id }} }'
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+          <select name="accept" id="option-{{job.job_id}}"class="select">
+            <option disabled selected value="-1">Select somebody</option>
+            {% for applicant in applicants %}
+              {% if applicant.status == "AP" %}
+                <option value="{{ applicant.applicant_id.id }}">{{ applicant.applicant_id.username }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <button class="btn btn-primary"
+            disabled
+            id="accept-{{job.job_id}}"
+            type="submit">Accept</button>
       </form>
     {% else %}
       {% for applicant in applicants %}
