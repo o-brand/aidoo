@@ -11,13 +11,6 @@ from .forms import JobForm
 # Get actual user model.
 User = get_user_model()
 
-# Modal test
-def add_movie(request):
-    form = JobForm()
-    return render(request, 'htmx/jobpost-modal.html', {
-        'form': form,
-    })
-
 def details(request, job_id):
     """Shows the details of a job. It is a static page."""
 
