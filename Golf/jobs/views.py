@@ -20,9 +20,16 @@ def details(request, job_id):
     except Job.DoesNotExist:
         raise Http404("This job does not exist.")
 
+    # Temporary measure until I figure out how to connect the jobs view to the jobsdetail
+    jobs_applied = [ 
+        i.job_id.job_id
+        for i in Application.objects.filter(applicant_id=request.user.id)
+    ]
+
     # Give the found job to the template
     context = {
         "job": job,
+        "jobs_applied": jobs_applied
     }
 
     # Render the page
