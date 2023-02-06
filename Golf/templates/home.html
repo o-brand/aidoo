@@ -19,9 +19,9 @@
     <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-pencil-square"></i>
     </button>
-    <button class="btn btn-secondary chat-button">
+    <a href="{% url 'chat' %}" class="btn btn-secondary chat-button">
       <i class="bi bi-chat-left"></i>
-    </button>
+    </a>
     <button class="btn btn-secondary shop-button">
       <i class="bi bi-bag"></i>
     </button>
