@@ -12,7 +12,6 @@
 {% include 'navigation.html' %}
 
 <div class="container">
-
   <div class="hello text-center justify-content-center">
     <h1>Hi {{ user.username }}!</h1>
     <p>You can see the {{jobs_count}} available jobs here. </p>
@@ -33,52 +32,61 @@
   <div class="row d-flex justify-content-center">
     <div class="col jobs-scroll mb-5">
       {% for job in jobs %}
-        <div class="job-card container">
-          <div class="d-flex justify-content-between">
-            <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" 
-                type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" 
-                aria-haspopup="true" aria-expanded="false">Options
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" id="sfl{{ job.job_id }}" 
-                  href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
-                    {% if job.job_id in save_for_later %}
-                      Unmark
-                    {% else %}
-                      Bookmark
-                    {% endif %}
-                </a>
-                {% include 'htmx/report.html'%}
+        <div class="card job-card mb-2">
+          <div class="card-body">
+            <div class="card-title d-flex justify-content-between mb-0">
+              <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
+              <div class="dropdown">
+                <button class="btn" 
+                  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" 
+                  aria-haspopup="true" aria-expanded="false">
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" id="sfl{{ job.job_id }}" 
+                    href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
+                      {% if job.job_id in save_for_later %}
+                        Unmark
+                      {% else %}
+                        Bookmark
+                      {% endif %}
+                  </a>
+                  {% include 'htmx/report.html'%}
+                </div>
               </div>
             </div>
-          </div>
-          <div class="d-flex justify-content-start">
-            <a href="{% url 'userdetails' job.poster_id.id %}">
-              <img src="../static/assets/pfp/{{job.poster_id.id}}.jpeg">
-            </a>
-            <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
-          </div>
-          <p>{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
-          <p>{{ job.job_short_description }}</p>
-
-          {% if job.job_id in jobs_applied %} 
-            {% include 'htmx/applied.html' %}
-          {% else %}
-            <button class="btn btn-primary"
-              id="btnApply{{ job.job_id }}"
-              _="on click add @disabled to me"
-              hx-post="{% url 'apply' %}"
-              hx-vals='{"job_id": {{ job.job_id }} }'
-              hx-swap="outerHTML"
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
-          {% endif %}
-
+            <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
+              <a href="{% url 'userdetails' job.poster_id.id %}">
+                <img src="../static/assets/pfp/{{job.poster_id.id}}.jpeg">
+              </a>
+              <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
+            </div>
+            <p class="">{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
+            <p class="">{{ job.job_short_description }}</p>
+            {% if job.job_id in jobs_applied %} 
+              {% include 'htmx/applied.html' %}
+            {% else %}
+              <button class="btn btn-primary"
+                id="btnApply{{ job.job_id }}"
+                _="on click add @disabled to me"
+                hx-post="{% url 'apply' %}"
+                hx-vals='{"job_id": {{ job.job_id }} }'
+                hx-swap="outerHTML"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
+            {% endif %}
         </div>
+      </div>
       {% endfor %}
     </div>
   </div>
+
+  <button
+      type="button"
+      class="btn btn-danger btn-floating btn-lg"
+      id="btn-back-to-top"
+      >
+      <i class="bi bi-arrow-up"></i>
+  </button>
 </div>
 
 <script>
@@ -102,4 +110,6 @@
     });
   }
 </script>
+
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

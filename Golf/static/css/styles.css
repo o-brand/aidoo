@@ -79,17 +79,13 @@ body {
 .job-card {
     border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
     border-radius: 15px;
-    margin-left: 0px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 3%;
 }
 
 .job-card img {
     width: 32px;
     height: 32px;
     margin-right: 8px;
-    border-radius: 30px;
+    border-radius: 100%;
 }
 
 .login-form {
@@ -156,6 +152,21 @@ body {
 .shop-button:active:focus {
   background-color: rgb(59, 140, 59);
   border-color: #368436;
+}
+
+#btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+}
+
+.options:active {
+  border: none;
+}
+
+.options:active:focus {
+  border: none;
 }
 
 
