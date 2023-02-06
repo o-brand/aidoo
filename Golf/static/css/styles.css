@@ -81,7 +81,7 @@ body {
     border-radius: 15px;
 }
 
-.job-card img {
+.job-card img, .details-card img {
     width: 32px;
     height: 32px;
     margin-right: 8px;
@@ -124,7 +124,6 @@ body {
   background-color: #bf3e3a;
   border-color: #a12e2a;
 }
-
 
 .chat-button {
   background-color: #5bc0de;
