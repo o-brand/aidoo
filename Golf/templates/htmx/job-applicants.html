@@ -3,6 +3,7 @@
   {% if applicants %}
     {% if not job.assigned %}
       <form
+        _="on htmx:beforeSend add @disabled to <button/> in me"
         hx-post="{% url 'selectapplicant' %}"
         hx-target="closest span"
         hx-swap="innerHTML"

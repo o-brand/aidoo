@@ -1,5 +1,3 @@
-import logging
-
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.shortcuts import render, redirect
@@ -8,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
+from django.template.loader import render_to_string
 
 
 # Get actual user model.
@@ -116,7 +115,6 @@ def selectapplicant_call(request):
         # Get the job ID or -1 if it is not found
         job_id = request.POST.get("job_id", -1)
         applicant_id = request.POST.get("accept", [-1])
-        to_email = request.POST.get("applicant", -1)
 
 
         # Check if the job ID is valid
@@ -139,15 +137,42 @@ def selectapplicant_call(request):
         # change status of applicants - only those status where "AP"
         for user in applications:
             if str(user.applicant_id.id) != applicant_id:
-                user.status = "RE"
                 # send an email to the rejected applicant
-                send_mail('Sorry！', 'Your application has been rejected.', 'smtpmailer.send@gmail.com',
-                          [user.applicant_id.email], fail_silently=False,)
+                message = render_to_string(
+                    "emails/application_rejection.html",
+                    {
+                        "user": user.applicant_id.username,
+                        "job_title": job.job_title,
+                        "poster": job.poster_id.username,
+                    },
+                )
+                send_mail(
+                    'Sorry!',
+                    message,
+                    None,
+                    [user.applicant_id.email],
+                )
+
+                user.status = "RE"
                 user.save()
             else:
+                # send an email to the accepted applicant
+                message = render_to_string(
+                    "emails/application_acceptance.html",
+                    {
+                        "user": user.applicant_id.username,
+                        "job_title": job.job_title,
+                        "poster": job.poster_id.username,
+                    },
+                )
+                send_mail(
+                    'Congratulations!',
+                    message,
+                    None,
+                    [user.applicant_id.email],
+                )
+
                 user.status = "AC"
-                send_mail('Congratulations！', 'Your application has been accepted.', 'smtpmailer.send@gmail.com',
-                          [user.applicant_id.email], fail_silently=False,)
                 user.save()
         return render(
             request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
