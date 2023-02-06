@@ -212,7 +212,7 @@ class BookmarkModelTestCase(TestCase):
         job["completed"] = False
         job["poster_id_id"] = 1
         Job.objects.create(**job)
-        
+
     def test_unique_constraint(self):
         """Test if a non-unique user_id and job_id pair raises an error"""
         bookmark = dict()

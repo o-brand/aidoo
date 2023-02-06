@@ -81,7 +81,7 @@ class JobsView(ListView):
             Q(job_description__icontains=filter_val) |
             Q(job_short_description__icontains=filter_val) |
             Q(location__icontains=filter_val),
-            hidden=False, 
+            hidden=False,
             assigned=False
         ).exclude(poster_id_id=self.request.user.id)
 
