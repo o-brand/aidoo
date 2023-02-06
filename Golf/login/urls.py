@@ -7,7 +7,7 @@ from .views import SignUpView, activateAccount
 urlpatterns = [
     # Welcome page for the whole project
     path(
-        route="", 
+        route="",
         view=TemplateView.as_view(template_name="welcome.html"),
         name="welcome"
     ),
