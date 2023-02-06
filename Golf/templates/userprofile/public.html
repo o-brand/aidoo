@@ -23,7 +23,7 @@
         <h5>Current jobs</h5>
         {% if posted_active %}
           {% for job in posted_active %}
-            <div class="card mb-1 mini-job-card">
+            <div class="card mb-1 job-card">
               <div class="card-body">
                 <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
                 <h6 class="card-subtitle mb-2 text-muted">
@@ -47,7 +47,7 @@
       <h5>Past jobs</h5>
       {% if posted_inactive %}
         {% for job in posted_inactive %}
-          <div class="card mb-1 mini-job-card-archived">
+          <div class="card mb-1 job-card-archived">
             <div class="card-body">
               <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
               <h6 class="card-subtitle mb-2 text-muted">

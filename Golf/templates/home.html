@@ -35,12 +35,12 @@
         <div class="card job-card mb-2">
           <div class="card-body">
             <div class="card-title d-flex justify-content-between mb-0">
-              <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
+              <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>   
               <div class="dropdown">
-                <button class="btn" 
+                <button class="btn btn-secondary" 
                   type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" 
                   aria-haspopup="true" aria-expanded="false">
-                  <i class="bi bi-three-dots-vertical"></i>
+                  <i class="bi bi-list"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a class="dropdown-item" id="sfl{{ job.job_id }}" 
