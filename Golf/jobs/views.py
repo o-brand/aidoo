@@ -33,7 +33,7 @@ class FormView(View):
     """Displays a form for posting a job."""
 
     form_class = JobForm
-    template_name = "htmx/jobpost-modal.html"
+    template_name = "postjob.html"
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()

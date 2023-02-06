@@ -251,7 +251,7 @@ class PostPageCase(LoginRequiredTestCase):
             "deadline": datetime.date.today(),
         }
         response = self.client.post(reverse("post"), data=new_form)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 204)
 
 
 class PostJobCase(TestCase):
