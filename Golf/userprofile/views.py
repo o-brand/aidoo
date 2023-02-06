@@ -176,7 +176,7 @@ def jobdone_call(request):
         if not application_exists:
             return HttpResponse(status=204)
         application = applications[0]
-        
+
         # Get volunteer, poster
         volunteer = User.objects.get(pk=application.applicant_id.id)
         poster = User.objects.get(id=user.id) # Job poster
