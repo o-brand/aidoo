@@ -1,4 +1,6 @@
 import logging
+
+from django.core.mail import send_mail
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
@@ -72,7 +74,7 @@ def me(request):
         "applied": applied_jobs,
         "posted": posted_jobs,
     }
-    return render(request, "userprofile/private.html",context)
+    return render(request, "userprofile/private.html", context)
 
 
 def withdraw_call(request):
@@ -89,7 +91,7 @@ def withdraw_call(request):
             return HttpResponse(status=204)
 
         # Check if there is an application
-        applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
+        applications = Application.objects.filter(applicant_id=user.id, job_id=job_id)
         application_exists = len(applications) == 1
         if not application_exists:
             return HttpResponse(status=204)
@@ -112,6 +114,8 @@ def selectapplicant_call(request):
         # Get the job ID or -1 if it is not found
         job_id = request.POST.get("job_id", -1)
         applicant_id = request.POST.get("accept", [-1])
+        to_email = request.POST.get("applicant", -1)
+
 
         # Check if the job ID is valid
         jobs = Job.objects.filter(pk=job_id)
@@ -134,11 +138,15 @@ def selectapplicant_call(request):
         for user in applications:
             if str(user.applicant_id.id) != applicant_id:
                 user.status = "RE"
+                # send an email to the rejected applicant
+                send_mail('Sorry！', 'Your application has been rejected.', 'smtpmailer.send@gmail.com',
+                          [user.applicant_id.email], fail_silently=False,)
                 user.save()
             else:
                 user.status = "AC"
+                send_mail('Congratulations！', 'Your application has been accepted.', 'smtpmailer.send@gmail.com',
+                          [user.applicant_id.email], fail_silently=False,)
                 user.save()
-
         return render(
             request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
         )

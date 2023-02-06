@@ -108,6 +108,7 @@ class Application(models.Model):
     # The time of final status (WITHDRAWN, DONE)
     time_of_final_status = models.DateTimeField(default=None, blank=True, null=True)
 
+
     class Meta:
         """This class creates a contraint for the model."""
 
