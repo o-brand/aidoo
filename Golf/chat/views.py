@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
+
 
 def home(request):
-    return HttpResponse("")
+    # Render the page
+    return render(request, "chat/index.html")

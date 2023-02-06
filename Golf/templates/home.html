@@ -18,9 +18,9 @@
     <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-pencil-square"></i>
     </button>
-    <button class="btn btn-secondary chat-button">
+    <a href="{% url 'chat' %}" class="btn btn-secondary chat-button">
       <i class="bi bi-chat-left"></i>
-    </button>
+    </a>
     <button class="btn btn-secondary shop-button">
       <i class="bi bi-bag"></i>
     </button>
@@ -88,6 +88,15 @@
       <i class="bi bi-arrow-up"></i>
   </button>
 </div>
+
+<!-- Right now this is the only page where we use the modal, so moved from base.html -->
+<!--Reusable modal-->
+<div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div id="dialog" class="modal-dialog" hx-target="this"></div>
+</div>
+
+<!--Modal behavior (JS)-->
+<script src="{% static 'js/dialog.js' %}"></script>
 
 <script>
   // Bookmark a job.
