@@ -160,37 +160,19 @@ body {
 
 
 /* PROFILE PAGES */
-.user-sidebar .profile-pic {
-  height: auto;
-  max-width: 60%;
-  border-radius: 100%;
-  border: 2px solid lightgray;
-}
-
 .profile-pic {
   max-width: 125px;
   height: 125px;
   border-radius: 100%;
 }
 
-.user-sidebar .bar {
-  height: max(100%, 300px);
-}
-
-.user-sidebar h5 {
-  color: rgb(115, 115, 115);
-}
-
-.user-sidebar h4 {
-  margin-bottom: 0px;
-}
-
-.user-jobs td, th {
-  text-align: center;
-}
-
 .mini-job-card {
   border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
+  border-radius: 15px;
+}
+
+.mini-job-card-archived {
+  border: 2px solid rgb(149, 173, 147); /*originally: #80e27e;*/
   border-radius: 15px;
 }
 
