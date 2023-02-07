@@ -102,27 +102,5 @@
 <!--Modal behavior (JS)-->
 <script src="{% static 'js/dialog.js' %}"></script>
 
-<script>
-  // Bookmark a job.
-  function bookmark(uid, jid) {
-    $.ajax({
-      type: "POST",
-      url: "{% url 'generic' %}",
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "bookmark", uid: uid, jid: jid},
-      success: function callback(response) {
-        if ($("#sfl"+jid).text().trim() == 'Bookmark') {
-          $("#sfl"+jid).text('Unmark');
-          msg = "bookmarked";
-        }
-        else {
-          $("#sfl"+jid).text('Bookmark');
-          msg = "unmarked";
-        }
-        alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
-      }
-    });
-  }
-</script>
-
 <script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

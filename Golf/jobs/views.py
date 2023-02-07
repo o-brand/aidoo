@@ -192,13 +192,3 @@ def report_call(request):
 
     # If it is not POST
     return HttpResponse(status=204)
-
-
-# This is used in generic_call to map a string to a function.
-function_dict = {"bookmark": bookmark_call}
-
-
-def generic_call(request):
-    """Run a function from dict as specified by the request on the front end."""
-    return function_dict[request.POST["func"]](request)
-    # Make sure that your functions return HttpResponse object or similar
