@@ -108,21 +108,38 @@ class JobsView(ListView):
 
 def bookmark_call(request):
     """Create a new bookmark record in database."""
-    user_id = int(request.POST["uid"])
-    job_id = int(request.POST["jid"])
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
 
-    try:
-        u = Bookmark.objects.get(user_id=user_id, job_id=job_id)
-    except Bookmark.DoesNotExist:
-        new_bookmark = Bookmark(  # Make new Bookmark record
-            user_id=User.objects.get(pk=user_id), job_id=Job.objects.get(pk=job_id)
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            return HttpResponse(status=204)
+
+        # Check if there is a bookmark already
+        bookmarks = Bookmark.objects.filter(user_id=user.id,job_id=job_id)
+        bookmark_exists = len(bookmarks) == 0
+        
+        if not bookmark_exists:
+            bookmarks.delete()
+
+            return render(
+                request, "htmx/bookmark-unmark-alert.html", {"job": jobs[0]}
+            )
+        
+        # Creates the bookmark
+        new_bookmark = Bookmark(user_id=user, job_id=jobs[0])
+        new_bookmark.save()
+
+        return render(
+            request, "htmx/bookmark-alert.html", {"job": jobs[0]}
         )
-        new_bookmark.save()  # Save new Bookmark record in database table
-    else:
-        u.delete()
-    finally:
-        return HttpResponse("ok")
 
+    # If it is not POST
+    return HttpResponse(status=204)
 
 def apply_call(request):
     """Create a new application record in database."""

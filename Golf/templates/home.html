@@ -14,7 +14,13 @@
 <div class="container">
   <div class="hello text-center justify-content-center">
     <h1>Hi {{ user.username }}!</h1>
-    <p>You can see the {{jobs_count}} available jobs here. </p>
+    {% if jobs_count == 0 %}
+      <p>There are no available jobs for this search term.</p>
+    {% elif jobs_count == 1 %}
+      <p>You can see the available job here. </p>
+    {% else %}
+      <p>You can see the {{jobs_count}} available jobs here. </p>
+    {% endif %}
     <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-pencil-square"></i>
     </button>
@@ -43,14 +49,12 @@
                   <i class="bi bi-list"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" id="sfl{{ job.job_id }}"
-                    href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
-                      {% if job.job_id in save_for_later %}
-                        Unmark
-                      {% else %}
-                        Bookmark
-                      {% endif %}
-                  </a>
+                  {% if job.job_id in save_for_later %}
+                    {% include 'htmx/bookmark-unmark.html' %}
+                  {% else %}
+                    {% include 'htmx/bookmark.html' %}
+                  {% endif %}
+                  
                   {% include 'htmx/report.html'%}
                 </div>
               </div>
