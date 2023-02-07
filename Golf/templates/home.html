@@ -1,35 +1,29 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Home{% endblock %}
 
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
+{% endblock %}
+
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <a class="navbar-brand" href="{% url 'home' %}"><img class="img-fluid" width="60" height="70" src="../static/assets/logo_full.png"/></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'me' %}">My Profile</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'post' %}">Post a Job</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav ms-auto">
-      <li class="nav-item">
-        <a class="btn btn-outline-dark" href="{% url 'logout' %}">Log Out</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+{% include 'navigation.html' %}
 
 <div class="container">
-
-  <div class="greeting-user text-center">
+  <div class="hello text-center justify-content-center">
     <h1>Hi {{ user.username }}!</h1>
     <p>You can see the {{jobs_count}} available jobs here. </p>
+    <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
+      <i class="bi bi-pencil-square"></i>
+    </button>
+    <a href="{% url 'chat' %}" class="btn btn-secondary chat-button">
+      <i class="bi bi-chat-left"></i>
+    </a>
+    <button class="btn btn-secondary shop-button">
+      <i class="bi bi-bag"></i>
+    </button>
   </div>
   <form class="searchform d-flex justify-content-center" method ="get">
     <input class="searchbar" type="text" value='{{request.GET.search_title}}' name="search_title"/>
@@ -38,52 +32,117 @@
   <div class="row d-flex justify-content-center">
     <div class="col jobs-scroll mb-5">
       {% for job in jobs %}
-        <div class="job-card" class="container">
-          <div class="d-flex justify-content-between">
-            <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" 
-                type="button" id="dropdownMenuButton" data-toggle="dropdown" 
-                aria-haspopup="true" aria-expanded="false">Options
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" id="sfl{{ job.job_id }}" 
-                  href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
-                    {% if job.job_id in save_for_later %}
-                      Unmark
-                    {% else %}
-                      Bookmark
-                    {% endif %}
-                </a>
-                <a class="dropdown-item" 
-                  href="javascript:report('{{ user.id }}','{{ job.job_id }}')">Report</a>
+        <div class="card job-card mb-2">
+          <div class="card-body">
+            <div class="card-title d-flex justify-content-between mb-0">
+              <h4><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h4>
+              <div class="dropdown">
+                <button class="btn btn-secondary"
+                  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <i class="bi bi-list"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" id="sfl{{ job.job_id }}"
+                    href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
+                      {% if job.job_id in save_for_later %}
+                        Unmark
+                      {% else %}
+                        Bookmark
+                      {% endif %}
+                  </a>
+                  {% include 'htmx/report.html'%}
+                </div>
               </div>
             </div>
+            <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
+              <a href="{% url 'userdetails' job.poster_id.id %}">
+                <img src="../static/assets/pfp/{{job.poster_id.id}}.jpeg">
+              </a>
+              <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
+            </div>
+            <p class="">{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
+            <p class="">{{ job.job_short_description }}</p>
+            <div class="main">
+              <div class="contain" id="textcontain{{ job.job_id }}"> 
+                  <p>{{ job.job_description }}</p>
+                  <div class="open-btn" id="btncontain{{ job.job_id }}">
+                      <a onclick="showMore('{{ job.job_id }}')">read more</ a>
+                  </div>
+              </div>
           </div>
-          <div class="d-flex justify-content-start">
-            <a href="{% url 'userdetails' job.poster_id.id %}">
-              <img src="../static/assets/pfp/{{job.poster_id.id}}.jpeg">
-            </a>
-            <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
-          </div>
-          <p>{{ job.points }} Points · {{ job.posting_time }} · {{ job.location }}</p>
-          <p>{{ job.job_short_description }}</p>
-          <button
-            {% if job.job_id in jobs_applied %} disabled {% endif %}
-            class="btn btn-primary" 
-            onclick="apply('{{user.id }}','{{ job.job_id }}')"
-            id = "btnApply{{ job.job_id }}">
-            {% if job.job_id in jobs_applied %} 
-              Applied ✓
+          <script>
+              // When you click on the read more button
+              function showMore(id) {
+                console.log(id);
+                  $("#textcontain"+id).height("auto");//Removing the height limit on text containers
+                  $("#btncontain"+id).hide();//Hide the button read more
+              }
+          </script>
+          <style>
+              .main{
+                  width: 100%;
+              }
+              .contain{
+                  width: 100%;
+                  position: relative;
+                  margin: 0 auto;
+                  height: 100px;
+                  overflow: hidden;/*Set the height of the text container, any excess will be hidden*/
+                  text-align: center;
+              }
+              .open-btn{
+                  position: absolute;
+                  width: 100%;
+                  bottom: 0;
+                  height: 80px;
+                  background: linear-gradient(180deg,rgba(255,255,255,0),#fff);/*Implementing gradient effects, 
+                  masking effects*/
+              }
+              .open-btn a{
+                  text-decoration: none;
+                  color: chocolate;
+                  display: inline-block;
+                  margin-top: 60px;
+              }
+          </style>
+          <br/>
+          <br/>
+
+            {% if job.job_id in jobs_applied %}
+              {% include 'htmx/applied.html' %}
             {% else %}
-              Apply
+              <button class="btn btn-primary"
+                id="btnApply{{ job.job_id }}"
+                _="on click add @disabled to me"
+                hx-post="{% url 'apply' %}"
+                hx-vals='{"job_id": {{ job.job_id }} }'
+                hx-swap="outerHTML"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
             {% endif %}
-          </button>
         </div>
+      </div>
       {% endfor %}
     </div>
   </div>
+
+  <button
+      type="button"
+      class="btn btn-danger btn-floating btn-lg"
+      id="btn-back-to-top"
+      >
+      <i class="bi bi-arrow-up"></i>
+  </button>
 </div>
+
+<!-- Right now this is the only page where we use the modal, so moved from base.html -->
+<!--Reusable modal-->
+<div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div id="dialog" class="modal-dialog" hx-target="this"></div>
+</div>
+
+<!--Modal behavior (JS)-->
+<script src="{% static 'js/dialog.js' %}"></script>
 
 <script>
   // Bookmark a job.
@@ -105,31 +164,7 @@
       }
     });
   }
-
-  //Apply for a job.
-  function apply(uid, jid) {
-    $("#btnApply"+jid).attr("disabled", true);
-    $.ajax({
-      type: "POST", 
-      url: "{% url 'generic' %}", 
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'app', uid: uid, jid: jid}, 
-      success: function callback(response) {
-        $("#btnApply"+jid).text("Applied ✓");
-        alert("You've applied for the job. You can now view the changes in your profile.")
-      }
-    });
-  }
-
-  //Report a job.
-  function report(uid, jid) {
-    $.ajax({
-      type: "POST", 
-      url: "{% url 'generic' %}", 
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: 'report', uid: uid, jid: jid}, 
-      success: function callback(response) {
-        alert("Thank you for reporting the job. We will review your complaint shortly.")
-      }
-    });
-  }
 </script>
+
+<script src="{% static 'js/home.js' %}"></script>
 {% endblock %}

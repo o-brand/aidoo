@@ -4,7 +4,12 @@
 
 {% block content %}
 <div class="container text-center mt-5 mb-5">
+    {% load static %}
+  <p> 
+    <img src="{% static '../static/assets/logo_full.png' %}" alt="logo" width="150 ">
+  </p>
   <h2>Login</h2>
+   <h5 style="color:blue;">to explore your job in aidoo</h5>
 
   {% if next %}
     <strong class="error">Please login to see this page.</strong>
