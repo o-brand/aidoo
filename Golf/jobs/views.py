@@ -21,7 +21,7 @@ def details(request, job_id):
         raise Http404("This job does not exist.")
 
     # Temporary measure until I figure out how to connect the jobs view to the jobsdetail
-    jobs_applied = [ 
+    jobs_applied = [
         i.job_id.job_id
         for i in Application.objects.filter(applicant_id=request.user.id)
     ]
@@ -117,19 +117,19 @@ def bookmark_call(request):
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse(status=204)
+            raise Http404()
 
         # Check if there is a bookmark already
         bookmarks = Bookmark.objects.filter(user_id=user.id,job_id=job_id)
         bookmark_exists = len(bookmarks) == 0
-        
+
         if not bookmark_exists:
             bookmarks.delete()
 
             return render(
                 request, "htmx/bookmark-unmark-alert.html", {"job": jobs[0]}
             )
-        
+
         # Creates the bookmark
         new_bookmark = Bookmark(user_id=user, job_id=jobs[0])
         new_bookmark.save()
@@ -139,7 +139,7 @@ def bookmark_call(request):
         )
 
     # If it is not POST
-    return HttpResponse(status=204)
+    raise Http404()
 
 def apply_call(request):
     """Create a new application record in database."""
@@ -152,13 +152,13 @@ def apply_call(request):
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse(status=204)
+            raise Http404()
 
         # Check if there is an application already
         applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
         application_exists = len(applications) == 0
         if not application_exists:
-            return HttpResponse(status=204)
+            raise Http404()
 
         # Create the application
         new_apply = Application(applicant_id=user, job_id=jobs[0])
@@ -169,7 +169,7 @@ def apply_call(request):
         )
 
     # If it is not POST
-    return HttpResponse(status=204)
+    raise Http404()
 
 
 def report_call(request):
@@ -182,7 +182,7 @@ def report_call(request):
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse(status=204)
+            raise Http404()
 
         # Since this functionality is not yet implemented, we have to send back
         # the job to be able to click again, as it was possible with JS.
@@ -191,4 +191,4 @@ def report_call(request):
         )
 
     # If it is not POST
-    return HttpResponse(status=204)
+    raise Http404()

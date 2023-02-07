@@ -145,27 +145,27 @@ class WithdrawButtonCase(LoginRequiredTestCase):
     def test_page(self):
         # test availability via URL
         response = self.client.get("/profile/withdraw")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_available_by_name(self):
         # test availability via name of page
         response = self.client.get(reverse("withdraw"))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_no_job(self):
         # test without sending a job id
         response = self.client.post("/profile/withdraw")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_not_valid(self):
         # test with a wrong job id
         response = self.client.post("/profile/withdraw", {"job_id": 5})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_no_application_exists(self):
         # test with an application which does not exist
         response = self.client.post("/profile/withdraw", {"job_id": 2})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job(self):
         # test works
@@ -199,32 +199,32 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
     def test_page(self):
         # test availability via URL
         response = self.client.get("/profile/selectapplicant")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_available_by_name(self):
         # test availability via name of page
         response = self.client.get(reverse("selectapplicant"))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_no_job(self):
         # test without sending a job id
         response = self.client.post("/profile/selectapplicant")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_not_valid(self):
         # test with a wrong job id
         response = self.client.post("/profile/selectapplicant", {"job_id": 5})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_user_not_valid(self):
         # test with a wrong user id
         response = self.client.post("/profile/selectapplicant", {"accept": 5})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_no_application_exists(self):
         # test with an application which does not exist
         response = self.client.post("/profile/selectapplicant", {"job_id": 2, "accept": 2})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job(self):
         # test works
@@ -282,27 +282,27 @@ class JobDoneButtonCase(LoginRequiredTestCase):
     def test_page(self):
         # test availability via URL
         response = self.client.get("/profile/jobdone")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_available_by_name(self):
         # test availability via name of page
         response = self.client.get(reverse("jobdone"))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_no_job(self):
         # test without sending a job id
         response = self.client.post("/profile/jobdone")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_not_valid(self):
         # test with a wrong job id
         response = self.client.post("/profile/jobdone", {"job_id": 5})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_no_application_exists(self):
         # test with an application which does not exist
         response = self.client.post("/profile/jobdone", {"job_id": 2})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_noone_was_accepted(self):
         # test works
@@ -330,7 +330,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
         application = Application(applicant_id=user2, job_id=job_object)
 
         response = self.client.post("/profile/jobdone", {"job_id": 2})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job(self):
         # test works

@@ -89,13 +89,13 @@ def withdraw_call(request):
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse(status=204)
+            raise Http404()
 
         # Check if there is an application
         applications = Application.objects.filter(applicant_id=user.id, job_id=job_id)
         application_exists = len(applications) == 1
         if not application_exists:
-            return HttpResponse(status=204)
+            raise Http404()
 
         # Withdraw
         application = applications[0]
@@ -107,7 +107,7 @@ def withdraw_call(request):
         )
 
     # If it is not POST
-    return HttpResponse(status=204)
+    raise Http404()
 
 def selectapplicant_call(request):
     """Select an applicant for a job."""
@@ -121,14 +121,14 @@ def selectapplicant_call(request):
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse(status=204)
+            raise Http404()
         job = jobs[0]
 
         # Check if there is at least one application
         applications = Application.objects.filter(job_id=job_id, status="AP")
         no_application = len(applications) == 0
         if no_application:
-            return HttpResponse(status=204)
+            raise Http404()
 
         # Assign the job
         job.assigned = True
@@ -179,7 +179,7 @@ def selectapplicant_call(request):
         )
 
     # If it is not POST
-    return HttpResponse(status=204)
+    raise Http404()
 
 def jobdone_call(request):
     """Finish a job."""
@@ -192,14 +192,14 @@ def jobdone_call(request):
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse(status=204)
+            raise Http404()
         job = jobs[0]
 
         # Check if there is an application
         applications = Application.objects.filter(job_id=job_id, status="AC")
         application_exists = len(applications) == 1
         if not application_exists:
-            return HttpResponse(status=204)
+            raise Http404()
         application = applications[0]
 
         # Get volunteer, poster
@@ -225,4 +225,4 @@ def jobdone_call(request):
         )
 
     # If it is not POST
-    return HttpResponse(status=204)
+    raise Http404()
