@@ -36,25 +36,33 @@ If you think we should add anything else, or change something, feel free to do i
 - Use "TODO" to state that a code is not working or complete.
 
 ## Developing stuff
+
 - If any test fails after your commit, please try to solve the problem or ask for help from the last person who edited that file. She/He might be able to help.
 
 - If you are not sure what a function/file does, ask the last person who edited that file.
 
+- If you created a new branch for your task, try to limit the lifespan of the branch to a maximum of 3 days. And try to keep the irrelevant changes as few as possible to avoid merge conflicts.
+
 ### Backend
+
 - Please use small comments if you add Python code to the project, and respect the comments of others (i.e., do not delete them).
 
 - If you've made any changes to the database via an action on the website, make sure to wipe the database and reload the data using the instructions found on the DB.md file.
 
 - If you are writing a test for an url not in the login app, then use ```LoginRequiredTestCase``` instead of the default ```TestCase```. (You can import like this: ```from Golf.utils import LoginRequiredTestCase```.)
 
-- Prioritize using HTMX over JS. Validating submitted values on the backend is still necessary.
+- Prioritize using [HTMX](https://htmx.org/) (and [Hyperscript](https://hyperscript.org/)) over JS. Validating submitted values on the backend is still necessary.
 
 - JS is used to control some responsive behaviors on the website. Use HTMX where possible, otherwise no sensitive information should be communicated via the JS functions and you should check the values on the backend.
 
 - Use ```f-strings``` for string formatting. [Examples](https://zetcode.com/python/fstring/)
 
 ### Frontend
+
 - Reminder: keep things consistent!
+
 - All styling should be placed in the styles.css file. The exception is the styling of the ```<body>``` tag, if you think this is necessary, consult other team members to see if other solutions are available, and if not, use the ```block style``` to incorporate in-document (but not in-line) styling.
+
 - Use current guidelines for HTML5, CSS3 and JS.
+
 - Try not to build components from scratch if alternatives exist. Check the Bootstrap *v5.3* (make sure the URL lists this version) documentation for many premade patterns you can readily integrate into the design.  
