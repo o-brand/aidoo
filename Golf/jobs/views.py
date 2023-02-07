@@ -103,18 +103,20 @@ class JobsView(ListView):
 def bookmark_call(request):
     """Create a new bookmark record in database."""
     if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
         user = request.user
-        job_id = request.POST["job_id"]
 
         # Check if the job ID is valid
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
-            return HttpResponse("")
+            return HttpResponse(status=204)
 
         # Check if there is a bookmark already
         bookmarks = Bookmark.objects.filter(user_id=user.id,job_id=job_id)
         bookmark_exists = len(bookmarks) == 0
+        
         if not bookmark_exists:
             bookmarks.delete()
 
@@ -131,7 +133,7 @@ def bookmark_call(request):
         )
 
     # If it is not POST
-    return HttpResponse("")
+    return HttpResponse(status=204)
 
 def apply_call(request):
     """Create a new application record in database."""
