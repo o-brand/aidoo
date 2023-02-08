@@ -1,6 +1,7 @@
 # Small Jobs App
 
 [![Coverage](https://github.com/o-brand/golf/actions/workflows/test_coverage.yml/badge.svg)](https://github.com/o-brand/golf/actions/workflows/test_coverage.yml)
+[![Django Tests](https://github.com/o-brand/golf/actions/workflows/django-tests.yml/badge.svg)](https://github.com/o-brand/golf/actions/workflows/django-tests.yml)
 
 ## Development Themes
 Scrip, UI and UX, user interactions, code (frontend to backend communication), human aspect
