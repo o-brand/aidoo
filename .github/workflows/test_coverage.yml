@@ -1,0 +1,35 @@
+name: Coverage
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run Tests
+      run: |
+        cd Golf/
+        coverage run --source=../Golf/ manage.py test
+        coverage report -m > cat coverage_report.md
+        
+    - name: Setup git config
+      run: |
+        git config user.name "Github Action Bot"
+        git config user.email "<>"
+    - name: Create commit
+      run: |
+        git add .
+        git commit -m "generate test coverage report"
+        git push origin main
