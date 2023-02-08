@@ -22,7 +22,7 @@ jobs:
       run: |
         cd Golf/
         coverage run --source=../Golf/ manage.py test 
-        coverage report --format=markdown -m > cat coverage_report.md
+        coverage report --format=markdown -m > coverage_report.md
         
     - name: Setup git config
       run: |
