@@ -11,4 +11,4 @@ sqlparse==0.4.3
 tzdata==2022.7
 whitenoise==6.3.0
 coverage==7.1.0
-django-profanity-filter==0.5.1
+django-profanity-filter==0.2.1
