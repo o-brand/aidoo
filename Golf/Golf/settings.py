@@ -28,7 +28,6 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "teamgolf.pythonanywhere.com",
     "127.0.0.1",
-    '*',
 ]
 
 

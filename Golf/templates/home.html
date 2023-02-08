@@ -14,7 +14,13 @@
 <div class="container">
   <div class="hello text-center justify-content-center">
     <h1>Hi {{ user.username }}!</h1>
-    <p>You can see the {{jobs_count}} available jobs here. </p>
+    {% if jobs_count == 0 %}
+      <p>There are no available jobs for this search term.</p>
+    {% elif jobs_count == 1 %}
+      <p>You can see the available job here. </p>
+    {% else %}
+      <p>You can see the {{jobs_count}} available jobs here. </p>
+    {% endif %}
     <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-pencil-square"></i>
     </button>
@@ -43,14 +49,12 @@
                   <i class="bi bi-list"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" id="sfl{{ job.job_id }}"
-                    href="javascript:bookmark('{{ user.id }}','{{ job.job_id }}')">
-                      {% if job.job_id in save_for_later %}
-                        Unmark
-                      {% else %}
-                        Bookmark
-                      {% endif %}
-                  </a>
+                  {% if job.job_id in save_for_later %}
+                    {% include 'htmx/bookmark-unmark.html' %}
+                  {% else %}
+                    {% include 'htmx/bookmark.html' %}
+                  {% endif %}
+                  
                   {% include 'htmx/report.html'%}
                 </div>
               </div>
@@ -79,35 +83,10 @@
                   $("#btncontain"+id).hide();//Hide the button read more
               }
           </script>
-          <style>
-              .main{
-                  width: 100%;
-              }
-              .contain{
-                  width: 100%;
-                  position: relative;
-                  margin: 0 auto;
-                  height: 100px;
-                  overflow: hidden;/*Set the height of the text container, any excess will be hidden*/
-                  text-align: center;
-              }
-              .open-btn{
-                  position: absolute;
-                  width: 100%;
-                  bottom: 0;
-                  height: 80px;
-                  background: linear-gradient(180deg,rgba(255,255,255,0),#fff);/*Implementing gradient effects, 
-                  masking effects*/
-              }
-              .open-btn a{
-                  text-decoration: none;
-                  color: chocolate;
-                  display: inline-block;
-                  margin-top: 60px;
-              }
-          </style>
+
           <br/>
           <br/>
+
 
             {% if job.job_id in jobs_applied %}
               {% include 'htmx/applied.html' %}
@@ -143,28 +122,6 @@
 
 <!--Modal behavior (JS)-->
 <script src="{% static 'js/dialog.js' %}"></script>
-
-<script>
-  // Bookmark a job.
-  function bookmark(uid, jid) {
-    $.ajax({
-      type: "POST",
-      url: "{% url 'generic' %}",
-      data: { csrfmiddlewaretoken: '{{ csrf_token }}', func: "bookmark", uid: uid, jid: jid},
-      success: function callback(response) {
-        if ($("#sfl"+jid).text().trim() == 'Bookmark') {
-          $("#sfl"+jid).text('Unmark');
-          msg = "bookmarked";
-        }
-        else {
-          $("#sfl"+jid).text('Bookmark');
-          msg = "unmarked";
-        }
-        alert(`You've successfully ${msg} the job. You can view the changes on your profile.`)
-      }
-    });
-  }
-</script>
 
 <script src="{% static 'js/home.js' %}"></script>
 {% endblock %}
