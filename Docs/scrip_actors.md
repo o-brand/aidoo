@@ -31,4 +31,3 @@ Charities might put stuff up in the store to be purchased by other users.
 - no purchasing from store
 - where do credits to post something come from if they don't complete jobs
 
-
