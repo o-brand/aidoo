@@ -127,7 +127,7 @@ def bookmark_call(request):
             bookmarks.delete()
 
             return render(
-                request, "htmx/bookmark-unmark-alert.html", {"job": jobs[0]}
+                request, "htmx/bookmark.html", {"job": jobs[0]}
             )
 
         # Creates the bookmark
@@ -135,7 +135,7 @@ def bookmark_call(request):
         new_bookmark.save()
 
         return render(
-            request, "htmx/bookmark-alert.html", {"job": jobs[0]}
+            request, "htmx/bookmark-unmark.html", {"job": jobs[0]}
         )
 
     # If it is not POST
@@ -165,7 +165,7 @@ def apply_call(request):
         new_apply.save()
 
         return render(
-            request, "htmx/applied-alert.html", {"job_id": job_id}
+            request, "htmx/applied.html", {"job_id": job_id}
         )
 
     # If it is not POST

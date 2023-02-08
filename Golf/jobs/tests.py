@@ -630,7 +630,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
         # test works
         response = self.client.post("/jobs/apply", {"job_id": 1})
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="htmx/applied-alert.html")
+        self.assertTemplateUsed(response, template_name="htmx/applied.html")
         self.assertEqual(len(Application.objects.all()), 1)
 
 class ReportButtonCase(LoginRequiredTestCase):
@@ -731,11 +731,11 @@ class BookmarkButtonCase(LoginRequiredTestCase):
 
         response = self.client.post("/jobs/bookmark", {"job_id": 1})
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="htmx/bookmark-unmark-alert.html")
+        self.assertTemplateUsed(response, template_name="htmx/bookmark.html")
 
     def test_page_post_job_bookmark_does_not_exist(self):
         # test for a unmarked job (bookmarking functionality)
 
         response = self.client.post("/jobs/bookmark", {"job_id": 1})
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="htmx/bookmark-alert.html")
+        self.assertTemplateUsed(response, template_name="htmx/bookmark-unmark.html")
