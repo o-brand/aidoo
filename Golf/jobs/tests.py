@@ -222,7 +222,51 @@ class BookmarkModelTestCase(TestCase):
         Bookmark.objects.create(**bookmark)
         with self.assertRaises(IntegrityError):
             Bookmark.objects.create(**bookmark)
+            
+class ApplicationModelTestCasae(TestCase):
+    """Test for Application model."""
 
+    def fake_time(self):
+        """Returns a timezone aware time to prevent warnings."""
+        fake = Faker()
+        tz = timezone.get_current_timezone()
+        return timezone.make_aware(fake.date_time(), tz, True)
+
+    def setUp(self):
+        fake = Faker()
+
+        #create 1 user in the database
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "0"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = datetime.datetime.now()
+        User.objects.create_user(**credentials)
+        credentials.clear()
+
+        # Write 1 job into the job model
+        job = dict()
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = 1
+        Job.objects.create(**job)
+
+    def test_unique_constraint(self):
+        application = dict()
+        application["applicant_id"] = User(pk=1)
+        application["job_id"] = Job(pk=1)
+        application["status"] = "AP"  #imo should be AP as it's default
+        application["time_of_application"] = self.fake_time()
+        application["time_of_final_status"] = self.fake_time()
+
+        #creates an object
+        Application.objects.create(**app)
+        #raise error if duplicate found
+        with self.assertRaises(IntegrityError):
+            Application.objects.create(**app)
 
 class PostPageCase(LoginRequiredTestCase):
     """Tests for Post page."""
