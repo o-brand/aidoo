@@ -361,3 +361,42 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(data=new_user)
         self.assertEqual(1, len(form.errors))
+
+    def test_profane_first_name(self):
+        new_user = {
+            "first_name": "kondums",
+            "last_name": "MadeUp",
+            "email": "madeupuser@madeupuser.com",
+            "username": "madeupuser",
+            "password1": "madeuppassword",
+            "password2": "madeuppassword",
+            "date_of_birth": datetime.date(2000, 1, 1),
+        }
+        form = RegisterForm(data=new_user)
+        self.assertEqual(1, len(form.errors))
+    
+    def test_profane_last_name(self):
+        new_user = {
+            "first_name": "User",
+            "last_name": "kondums",
+            "email": "madeupuser@madeupuser.com",
+            "username": "madeupuser",
+            "password1": "madeuppassword",
+            "password2": "madeuppassword",
+            "date_of_birth": datetime.date(2000, 1, 1),
+        }
+        form = RegisterForm(data=new_user)
+        self.assertEqual(1, len(form.errors))
+
+    def test_profane_username(self):
+        new_user = {
+            "first_name": "User",
+            "last_name": "MadeUp",
+            "email": "madeupuser@madeupuser.com",
+            "username": "kondums",
+            "password1": "madeuppassword",
+            "password2": "madeuppassword",
+            "date_of_birth": datetime.date(2000, 1, 1),
+        }
+        form = RegisterForm(data=new_user)
+        self.assertEqual(1, len(form.errors))

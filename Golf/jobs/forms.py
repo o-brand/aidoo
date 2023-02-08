@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from Golf.utils import create_date_string
 from .validators import validate_deadline
 from .models import Job
+from profanity.validators import validate_is_profane
 
 
 class JobForm(ModelForm):
@@ -18,6 +19,7 @@ class JobForm(ModelForm):
             }
         ),
         label="Job title",
+        validators=[validate_is_profane],
     )
 
     job_short_description = forms.CharField(
@@ -29,6 +31,7 @@ class JobForm(ModelForm):
             }
         ),
         label="Job short description",
+        validators=[validate_is_profane],
     )
 
     job_description = forms.CharField(
@@ -42,6 +45,7 @@ class JobForm(ModelForm):
             }
         ),
         label="Job description",
+        validators=[validate_is_profane],
     )
 
     location = forms.CharField(

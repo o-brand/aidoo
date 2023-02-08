@@ -182,6 +182,47 @@ class JobModelTestCase(TestCase):
         with self.assertRaises(ValidationError):
             created_job.full_clean()
 
+    def test_profane_job_title(self):
+        job = dict()
+        job["job_title"] = "kondums"
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = random.randint(1, 10)
+        created_job = Job.objects.create(**job)
+
+        with self.assertRaises(ValidationError):
+            created_job.full_clean()
+    
+    def test_profane_job_short_description(self):
+        job = dict()
+        job["job_short_description"] = "kondums"
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = random.randint(1, 10)
+        created_job = Job.objects.create(**job)
+
+        with self.assertRaises(ValidationError):
+            created_job.full_clean()
+    
+    def test_profane_job_long_description(self):
+        job = dict()
+        job["job_description"] = " kondums" * 20
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = random.randint(1, 10)
+        created_job = Job.objects.create(**job)
+
+        with self.assertRaises(ValidationError):
+            created_job.full_clean()
+
+
+
 class BookmarkModelTestCase(TestCase):
     """Tests for Bookmark model."""
 

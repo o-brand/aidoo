@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from Golf.utils import create_date_string
 from .validators import validate_dob
+from profanity.validators import validate_is_profane
 
 
 # Get actual user model.
@@ -20,7 +21,9 @@ class RegisterForm(UserCreationForm):
                 "class": "form-control",
             }
         ),
+        validators=[validate_is_profane],
     )
+
     last_name = forms.CharField(
         max_length=100,
         widget=forms.TextInput(
@@ -29,6 +32,7 @@ class RegisterForm(UserCreationForm):
                 "class": "form-control",
             }
         ),
+        validators=[validate_is_profane],
     )
 
     username = forms.CharField(
@@ -39,6 +43,7 @@ class RegisterForm(UserCreationForm):
                 "class": "form-control",
             }
         ),
+        validators=[validate_is_profane],
     )
 
     email = forms.EmailField(

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "userprofile.apps.UserprofileConfig",
     "chat.apps.ChatConfig",
     "store.apps.StoreConfig",
+    "profanity",
 ]
 
 MIDDLEWARE = [
