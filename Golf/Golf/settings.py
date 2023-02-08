@@ -96,22 +96,11 @@ WSGI_APPLICATION = "Golf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+import heroku_db
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "d5igcq490qf7bb",
-        "USER": "vmckibhwnrgrcy",
-        "PASSWORD": "226fad9766738bf6206a43c57c34f7257215b4b382afc9538f07ee48e1071cb4",
-        "HOST": "ec2-63-32-248-14.eu-west-1.compute.amazonaws.com",
-        "PORT": "5432",
-    }
+    "default": heroku_db.database('test' in sys.argv, False)
 }
 
-if 'test' in sys.argv:
-    DATABASES['default'] = {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
