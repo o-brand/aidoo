@@ -11,7 +11,6 @@ from .forms import JobForm
 # Get actual user model.
 User = get_user_model()
 
-
 def details(request, job_id):
     """Shows the details of a job. It is a static page."""
 
@@ -21,9 +20,16 @@ def details(request, job_id):
     except Job.DoesNotExist:
         raise Http404("This job does not exist.")
 
+    # Temporary measure until I figure out how to connect the jobs view to the jobsdetail
+    jobs_applied = [
+        i.job_id.job_id
+        for i in Application.objects.filter(applicant_id=request.user.id)
+    ]
+
     # Give the found job to the template
     context = {
         "job": job,
+        "jobs_applied": jobs_applied
     }
 
     # Render the page
@@ -53,7 +59,7 @@ class FormView(View):
             post.points = (duration_days * 24 + duration_hours) * 5
             post.save()
 
-            return redirect("/jobs/")
+            return HttpResponse(status=204) # No content
 
         return render(
             request, self.template_name, {"form": form, "poster_id": request.user.id}
@@ -75,7 +81,7 @@ class JobsView(ListView):
             Q(job_description__icontains=filter_val) |
             Q(job_short_description__icontains=filter_val) |
             Q(location__icontains=filter_val),
-            hidden=False, 
+            hidden=False,
             assigned=False
         ).exclude(poster_id_id=self.request.user.id)
 
@@ -102,49 +108,87 @@ class JobsView(ListView):
 
 def bookmark_call(request):
     """Create a new bookmark record in database."""
-    user_id = int(request.POST["uid"])
-    job_id = int(request.POST["jid"])
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
 
-    try:
-        u = Bookmark.objects.get(user_id=user_id, job_id=job_id)
-    except Bookmark.DoesNotExist:
-        new_bookmark = Bookmark(  # Make new Bookmark record
-            user_id=User.objects.get(pk=user_id), job_id=Job.objects.get(pk=job_id)
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            raise Http404()
+
+        # Check if there is a bookmark already
+        bookmarks = Bookmark.objects.filter(user_id=user.id,job_id=job_id)
+        bookmark_exists = len(bookmarks) == 0
+
+        if not bookmark_exists:
+            bookmarks.delete()
+
+            return render(
+                request, "htmx/bookmark-unmark-alert.html", {"job": jobs[0]}
+            )
+
+        # Creates the bookmark
+        new_bookmark = Bookmark(user_id=user, job_id=jobs[0])
+        new_bookmark.save()
+
+        return render(
+            request, "htmx/bookmark-alert.html", {"job": jobs[0]}
         )
-        new_bookmark.save()  # Save new Bookmark record in database table
-    else:
-        u.delete()
-    finally:
-        return HttpResponse("ok")
 
+    # If it is not POST
+    raise Http404()
 
 def apply_call(request):
     """Create a new application record in database."""
-    uid = int(request.POST["uid"])
-    jid = int(request.POST["jid"])
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
 
-    try:
-        u = Application.objects.get(applicant_id=uid, job_id=jid)
-    except Application.DoesNotExist:
-        new_apply = Application(
-            applicant_id=User.objects.get(pk=uid),
-            job_id=Job.objects.get(pk=jid),
-        )
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            raise Http404()
+
+        # Check if there is an application already
+        applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
+        application_exists = len(applications) == 0
+        if not application_exists:
+            raise Http404()
+
+        # Create the application
+        new_apply = Application(applicant_id=user, job_id=jobs[0])
         new_apply.save()
-    finally:
-        return HttpResponse("ok")
+
+        return render(
+            request, "htmx/applied-alert.html", {"job_id": job_id}
+        )
+
+    # If it is not POST
+    raise Http404()
 
 
 def report_call(request):
     """Do something related to reporting a job post TBD."""
-    return HttpResponse("ok")
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
 
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            raise Http404()
 
-# This is used in generic_call to map a string to a function.
-function_dict = {"bookmark": bookmark_call, "app": apply_call, "report": report_call}
+        # Since this functionality is not yet implemented, we have to send back
+        # the job to be able to click again, as it was possible with JS.
+        return render(
+            request, "htmx/report-alert.html", {"job": jobs[0]}
+        )
 
-
-def generic_call(request):
-    """Run a function from dict as specified by the request on the front end."""
-    return function_dict[request.POST["func"]](request)
-    # Make sure that your functions return HttpResponse object or similar
+    # If it is not POST
+    raise Http404()

@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import sys
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,11 +28,16 @@ SECRET_KEY = "django-insecure-ygkairtzpyop9eyg6n&1xd6@i*2mn1jfuq&b(jy!4*g9q6sa=f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+# For security (run python manage.py check --deploy to check the problems)
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 ALLOWED_HOSTS = [
     "teamgolf.pythonanywhere.com",
     "127.0.0.1",
+    "aidoo.herokuapp.com",
 ]
-
 
 # OUR EXTENDED USER
 AUTH_USER_MODEL = "userprofile.User"
@@ -47,6 +55,7 @@ INSTALLED_APPS = [
     "login.apps.LoginConfig",
     "jobs.apps.JobsConfig",
     "userprofile.apps.UserprofileConfig",
+    "chat.apps.ChatConfig",
 ]
 
 MIDDLEWARE = [
@@ -58,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "Golf.middlewares.LoginRequiredMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "Golf.urls"
@@ -86,11 +96,20 @@ WSGI_APPLICATION = "Golf.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "d5igcq490qf7bb",
+        "USER": "vmckibhwnrgrcy",
+        "PASSWORD": "226fad9766738bf6206a43c57c34f7257215b4b382afc9538f07ee48e1071cb4",
+        "HOST": "ec2-63-32-248-14.eu-west-1.compute.amazonaws.com",
+        "PORT": "5432",
     }
 }
 
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -126,10 +145,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
-STATICFILES_DIRS = (
-    BASE_DIR / "static/",
-)
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 
 # Default primary key field type
@@ -148,4 +166,10 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
 EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
+
 EMAIL_USE_TLS = True
+
+# HEROKU
+if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
+    import django_heroku
+    django_heroku.settings(locals())

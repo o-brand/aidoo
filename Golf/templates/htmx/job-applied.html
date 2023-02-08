@@ -1,0 +1,21 @@
+<p>Status: {{ status }}</p>
+{% if status == "AC" %}
+    <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
+{% elif status == "AP" %}
+    <button class="btn btn-outline-danger"
+        _="on click add @disabled to me"
+        hx-post="{% url 'withdraw' %}"
+        hx-target="closest span"
+        hx-swap="innerHTML"
+        hx-vals='{"job_id": {{ job.job_id }} }'
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Withdraw</button>
+    <p>If you withdraw, you cannot apply again.</p>
+{% elif status == "WD" %}
+    <p>You withdrew from this job.</p>
+{% elif status == "RE" %}
+    <p>The poster rejected your application. Sorry.</p>
+{% elif status == "DN" %}
+    <p>You finished this job.</p>
+{% elif status == "C" %}
+    <p>There is a conflict between you and the poster. We are working on it.</p>
+{% endif %}

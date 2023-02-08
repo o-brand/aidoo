@@ -1,9 +1,12 @@
-import logging
+from django.core.mail import send_mail
 from django.urls import reverse
 from django.shortcuts import render, redirect
-from django.http import Http404
+from django.http import HttpResponse, Http404
 from django.contrib.auth import get_user_model
+from django.db.models import Q
+from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
+from django.template.loader import render_to_string
 
 
 # Get actual user model.
@@ -12,70 +15,27 @@ User = get_user_model()
 
 def userdetails(request, user_id):
     """Public pofile page with just the basic information."""
+    requester = request.user #The user who is currently signed in
 
     try:
         user_extended = User.objects.get(pk=user_id)
     except User.DoesNotExist:
         raise Http404("User does not exist.")
 
+    posted_active = Job.objects.filter(poster_id=user_id, completed=False)
+    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user_id)
     context = {
-        "user": user_extended,
+        "user": requester,
+        "viewed_user": user_extended,
+        "posted_active": posted_active,
+        "posted_inactive": posted_inactive,
     }
     return render(request, "userprofile/public.html", context)
 
 
 def me(request):
     """Private pofile page with more data."""
-
     actual_user_id = request.user.id
-
-    # If there is a form
-    if request.method == "POST":
-        try:
-            # If the user marks a job as "done"
-            if request.POST["kind"] == "exchange":
-                jid = int(request.POST["jid"]) # Job in question
-                appid = int(request.POST["appid"]) # ID of applicant
-                release_points(actual_user_id, jid, appid)
-
-                # Redirect to clear POST
-                return redirect(reverse("me") + "#posted")
-
-            #If the user decides to "Unapply" 
-            elif request.POST["kind"] == "unapply":
-                jid = request.POST["job_id"]
-                applicant = Application.objects.get(job_id=jid, applicant_id=actual_user_id)
-                applicant.status = "WD"
-                applicant.save()
-
-                # Redirect to clear POST
-                return redirect(reverse("me") + "#applied")
-
-            #If the user accepts applicant for a job
-            elif request.POST["kind"] == "accept":
-                user_id = request.POST["accept"][0]
-                job_id = request.POST["accepted"]
-
-                # we get row from the table with the job id
-                job = Job.objects.get(pk=job_id)
-                job.assigned = True
-                job.save()
-
-                # change status of applicants - only those status where "AP"
-                set_rejected = Application.objects.filter(job_id=job_id, status="AP")
-                for user in set_rejected:
-                    if str(user.applicant_id.id) != user_id:
-                        user.status = "RE"
-                        user.save()
-                    else:
-                        user.status = "AC"
-                        user.save()
-
-                # Redirect to clear POST
-                return redirect(reverse("me") + "#posted")
-
-        except logging.exception("Unknown error requesting POST."):
-            return None
 
     try:
         user_extended = User.objects.get(pk=actual_user_id)
@@ -115,26 +75,154 @@ def me(request):
         "applied": applied_jobs,
         "posted": posted_jobs,
     }
-    return render(request, "userprofile/private.html",context)
+    return render(request, "userprofile/private.html", context)
 
-def release_points(rid, jid, appid): #rid = id of requester
-    try:
-        post = Job.objects.get(job_id=jid) # Job post
-        if rid != post.poster_id.id:
-            return None
-        volunteer = User.objects.get(id=appid) # Applicant
-        poster = User.objects.get(id=post.poster_id.id) # Job poster
-        application = Application.objects.get(job_id=jid, applicant_id=appid) # Job process (?)
-    except (User.DoesNotExist, Job.DoesNotExist, Application.DoesNotExist):
-        return None
-    
-    else:
-        poster.balance = poster.balance - post.points # Deduct points from job poster
-        volunteer.balance = volunteer.balance + post.points # Pay points to volunteer
-        post.completed = True # Set the post to completed
+
+def withdraw_call(request):
+    """Withdraw from a job."""
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
+
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            raise Http404()
+
+        # Check if there is an application
+        applications = Application.objects.filter(applicant_id=user.id, job_id=job_id)
+        application_exists = len(applications) == 1
+        if not application_exists:
+            raise Http404()
+
+        # Withdraw
+        application = applications[0]
+        application.status = "WD"
+        application.save()
+
+        return render(
+            request, "htmx/job-applied.html", {"job": jobs[0], "status": application.status}
+        )
+
+    # If it is not POST
+    raise Http404()
+
+def selectapplicant_call(request):
+    """Select an applicant for a job."""
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        applicant_id = request.POST.get("accept", [-1])
+
+
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            raise Http404()
+        job = jobs[0]
+
+        # Check if there is at least one application
+        applications = Application.objects.filter(job_id=job_id, status="AP")
+        no_application = len(applications) == 0
+        if no_application:
+            raise Http404()
+
+        # Assign the job
+        job.assigned = True
+        job.save()
+
+        # change status of applicants - only those status where "AP"
+        for user in applications:
+            if str(user.applicant_id.id) != applicant_id:
+                # send an email to the rejected applicant
+                message = render_to_string(
+                    "emails/application_rejection.html",
+                    {
+                        "user": user.applicant_id.username,
+                        "job_title": job.job_title,
+                        "poster": job.poster_id.username,
+                    },
+                )
+                send_mail(
+                    'Sorry!',
+                    message,
+                    None,
+                    [user.applicant_id.email],
+                )
+
+                user.status = "RE"
+                user.save()
+            else:
+                # send an email to the accepted applicant
+                message = render_to_string(
+                    "emails/application_acceptance.html",
+                    {
+                        "user": user.applicant_id.username,
+                        "job_title": job.job_title,
+                        "poster": job.poster_id.username,
+                    },
+                )
+                send_mail(
+                    'Congratulations!',
+                    message,
+                    None,
+                    [user.applicant_id.email],
+                )
+
+                user.status = "AC"
+                user.save()
+        return render(
+            request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
+        )
+
+    # If it is not POST
+    raise Http404()
+
+def jobdone_call(request):
+    """Finish a job."""
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
+
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            raise Http404()
+        job = jobs[0]
+
+        # Check if there is an application
+        applications = Application.objects.filter(job_id=job_id, status="AC")
+        application_exists = len(applications) == 1
+        if not application_exists:
+            raise Http404()
+        application = applications[0]
+
+        # Get volunteer, poster
+        volunteer = User.objects.get(pk=application.applicant_id.id)
+        poster = User.objects.get(id=user.id) # Job poster
+
+        # Work...
+        poster.balance = poster.balance - job.points # Deduct points from job poster
+        volunteer.balance = volunteer.balance + job.points # Pay points to volunteer
+        job.completed = True # Set the post to completed
         application.status = "DN" # Set the job process to done
+        application.time_of_final_status = timezone.now() # Set the time of the final status
 
         poster.save()
         volunteer.save()
-        post.save()
+        job.save()
         application.save()
+
+        applicants = list(Application.objects.filter(job_id=job.job_id))
+
+        return render(
+            request, "htmx/job-applicants.html", {"job": job, "applicants": applicants}
+        )
+
+    # If it is not POST
+    raise Http404()

@@ -3,33 +3,70 @@
 {% block title %}Profile of {{ user.username }}{% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <a class="navbar-brand" href="{% url 'home' %}"><img class="img-fluid" width="60" height="70" src="../../static/assets/logo_full.png"/></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'me' %}">My Profile</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'post' %}">Post a Job</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav ms-auto">
-      <li class="nav-item">
-        <a class="btn btn-outline-dark" href="{% url 'logout' %}">Log Out</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+{% include 'navigation.html' %}
 
 <div class="container my-4">
-  <h1>Their username: {{ user.username }}</h1>
+  <div class="row flex-column flex-md-row">
+    <div class="col col-sm-3 mb-4">
+      <div class="card">
+        <img src="../static/assets/pfp/{{viewed_user.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
+        <div class="card-body">
+          <h5 class="card-title mb-0">{{ viewed_user.first_name }} {{ viewed_user.last_name }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{ viewed_user.username }}</h6>
+          <p class="card-text">Joined: {{ viewed_user.date_joined | date:'d M Y'}}<br/>
+            Rating: {{ viewed_user.rating }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="mb-5">
+        <h5>Current jobs</h5>
+        {% if posted_active %}
+          {% for job in posted_active %}
+            <div class="card mb-1 job-card">
+              <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                  {{ job.posting_time | date:'d M Y' }} 
+                  -
+                  {% if job.deadline is not None %}
+                    {{ job.deadline | date:'d M Y' }}
+                  {% else %}
+                    None
+                  {% endif %}
+                </h6>
+                <p class="card-text">{{ job.points }} Points · {{ job.location }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+        <p>{{viewed_user.first_name}} doesn't have any active jobs.</p>
+        {% endif %}
+      </div>
 
-  <p>Joined: {{ user.date_joined }}</p>
-  <p>Rating: {{ user.rating }}</p>
+      <h5>Past jobs</h5>
+      {% if posted_inactive %}
+        {% for job in posted_inactive %}
+          <div class="card mb-1 job-card-archived">
+            <div class="card-body">
+              <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ job.posting_time | date:'d M Y' }} 
+                -
+                {% if job.deadline is not None %}
+                  {{ job.deadline | date:'d M Y' }}
+                {% else %}
+                  None
+                {% endif %}
+              </h6>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>{{viewed_user.first_name}} doesn't have any archived jobs.</p>
+      {% endif %}
+    </div>
+  </div>
 
   <p><a href="{{ request.META.HTTP_REFERER }}">Go back</a></p>
 </div>

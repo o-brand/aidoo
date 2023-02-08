@@ -1,13 +1,12 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Post a new job{% endblock %}
-
-{% block content %}
-<div class="container my-4">
-  <h1>Hi! You can post a new job here.</h1>
-
-  <form action="" method="post" id="form">
-    {% csrf_token %}
+<form action="" class="modal-content" hx-post="post" id="form">
+  {% csrf_token %}
+  <div class="modal-header">
+    <h5 class="modal-title">New Job Post</h5>
+    <button class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body">
     <p>
       {{ form.job_title.label_tag }}
       {{ form.job_title }}
@@ -67,43 +66,10 @@
         {% endfor %}
       {% endif %}
     </p>
+  </div>
+  <div class="modal-footer">
     <input type="hidden" name="poster_id" value="{{ poster_id }}" />
-    <input type="submit" value="Submit" class="btn btn-primary"/>
-  </form>
-  <br/>
-  <p><a href="{{ request.META.HTTP_REFERER }}">Go back</a></p>
-</div>
-
-<script>
-  //Points
-  var points = 5;
-  var days = 0;
-  var hours = 1;
-
-  // Recalculate points
-  $("select[name='duration_days']").on("input", function (e) {
-    value = Number.parseFloat(e.target.value);
-
-    //If the new value is a normal number
-    if(!Number.isNaN(value)) {
-      points += (value - days) * 24 * 5;
-      days = value;
-
-      //Display the new points
-      $("#points").html(points);
-    }
-  });
-  $("select[name='duration_hours']").on("input", function (e) {
-    value = Number.parseFloat(e.target.value);
-
-    //If the new value is a normal number
-    if(!Number.isNaN(value)) {
-      points += (value - hours) * 5;
-      hours = value;
-
-      //Display the new points
-      $("#points").html(points);
-    }
-  });
-</script>
-{% endblock %}
+    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    <input type="submit" value="Post" class="btn btn-primary"/>
+  </div>
+</form>

@@ -4,6 +4,14 @@ from . import views
 
 # Be aware that the url already includes "profile/"
 urlpatterns = [
-    path("<int:user_id>", views.userdetails, name="userdetails"), # Details of a user
-    path("me", views.me, name="me") # My profile
+    # Details of a user
+    path("<int:user_id>", views.userdetails, name="userdetails"),
+    # My profile
+    path("me", views.me, name="me"),
+    # Withdrawing from a job, used by HTMX
+    path("withdraw", views.withdraw_call, name="withdraw"),
+    # Selecting an applicant, used by HTMX
+    path("selectapplicant", views.selectapplicant_call, name="selectapplicant"),
+    # Finishing a job, used by HTMX
+    path("jobdone", views.jobdone_call, name="jobdone"),
 ]

@@ -10,6 +10,10 @@ urlpatterns = [
     path("post", views.FormView.as_view(), name="post"),
     # Details of a job
     path("<int:job_id>", views.details, name="jobdetails"),
-     # Generic function to communicate with Django via JavaScript
-    path("generic", views.generic_call, name="generic"),
+    # Applying for a job, used by HTMX
+    path("apply", views.apply_call, name="apply"),
+    # Reporting a job, used by HTMX
+    path("report", views.report_call, name="report"),
+    # Bookmarking a job, used by HTMX
+    path("bookmark", views.bookmark_call, name="bookmark"),
 ]

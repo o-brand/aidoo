@@ -1,0 +1,1 @@
+web sh -c 'cd ./Golf/ && gunicorn Golf.wsgi --log-file -'
