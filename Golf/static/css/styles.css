@@ -45,7 +45,19 @@ body {
   vertical-align: text-top;
 }
 
+.navbar-nav img {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  border: 1.5px rgb(183, 183, 183) solid;
+  transition: border 0.1s;
+}
 
+.navbar-nav img:hover {
+  border: 1.5px rgb(153, 153, 153) solid
+}
+
+/* Home Page */
 .hello {
   margin-bottom: 2.5%;
 }
@@ -67,17 +79,17 @@ body {
 .job-card {
     border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
     border-radius: 15px;
-    margin-left: 0px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 3%;
 }
 
-.job-card img {
+.job-card img, .details-card img {
     width: 32px;
     height: 32px;
     margin-right: 8px;
-    border-radius: 30px;
+    border-radius: 100%;
+}
+
+.job-card i {
+  font-size: 18px;
 }
 
 .login-form {
@@ -85,28 +97,83 @@ body {
     margin-bottom: 4%;
 }
 
+.hello i {
+  font-size: 28px;
+}
+
+.hello button, .hello a {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+}
+
+.post-button {
+  background-color: #d9534f;
+  border-color: #d9534f;
+  transition: 0.1s;
+}
+
+.post-button:hover {
+  background-color: #c5433f;
+  border-color: #a9332f;
+}
+
+.post-button:active:focus {
+  background-color: #bf3e3a;
+  border-color: #a12e2a;
+}
+
+.chat-button {
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+  transition: 0.1s;
+}
+
+.chat-button:hover {
+  background-color: #48abc9;
+  border-color: #3b93ae;
+}
+
+.chat-button:active:focus {
+  background-color: rgb(60, 152, 181);
+  border-color: rgb(48, 131, 157);
+}
+
+.shop-button {
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+  transition: 0.1s;
+}
+
+.shop-button:hover {
+  background-color: #49a149;
+  border-color: #388538;
+}
+
+.shop-button:active:focus {
+  background-color: rgb(59, 140, 59);
+  border-color: #368436;
+}
+
+#btn-back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none;
+}
+
+
 /* PROFILE PAGES */
 .profile-pic {
-  height: auto;
-  max-width: 60%;
+  max-width: 125px;
+  height: 125px;
   border-radius: 100%;
-  border: 2px solid lightgray;
 }
 
-.user-sidebar h5 {
-  color: rgb(115, 115, 115);
-}
-
-.user-sidebar h4 {
-  margin-bottom: 0px;
-}
-
-.user-jobs td, th {
-  text-align: center;
-}
-
-.mini-job-card {
-  border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
+.job-card-archived {
+  border: 2px solid rgb(149, 173, 147); /*originally: #80e27e;*/
   border-radius: 15px;
 }
 

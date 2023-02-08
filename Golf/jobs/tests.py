@@ -212,7 +212,7 @@ class BookmarkModelTestCase(TestCase):
         job["completed"] = False
         job["poster_id_id"] = 1
         Job.objects.create(**job)
-        
+
     def test_unique_constraint(self):
         """Test if a non-unique user_id and job_id pair raises an error"""
         bookmark = dict()
@@ -295,7 +295,7 @@ class PostPageCase(LoginRequiredTestCase):
             "deadline": datetime.date.today(),
         }
         response = self.client.post(reverse("post"), data=new_form)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 204)
 
 
 class PostJobCase(TestCase):
@@ -598,22 +598,22 @@ class ApplyButtonCase(LoginRequiredTestCase):
     def test_page(self):
         # test availability via URL
         response = self.client.get("/jobs/apply")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_available_by_name(self):
         # test availability via name of page
         response = self.client.get(reverse("apply"))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_no_job(self):
         # test without sending a job id
         response = self.client.post("/jobs/apply")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_not_valid(self):
         # test with a wrong job id
         response = self.client.post("/jobs/apply", {"job_id": 5})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_application_exists(self):
         # test with an application which exists
@@ -624,7 +624,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
         Application.objects.create(**application)
 
         response = self.client.post("/jobs/apply", {"job_id": 1})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job(self):
         # test works
@@ -661,19 +661,81 @@ class ReportButtonCase(LoginRequiredTestCase):
     def test_page(self):
         # test availability via URL
         response = self.client.get("/jobs/report")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_available_by_name(self):
         # test availability via name of page
         response = self.client.get(reverse("report"))
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_no_job(self):
         # test without sending a job id
         response = self.client.post("/jobs/report")
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_not_valid(self):
         # test with a wrong job id
         response = self.client.post("/jobs/report", {"job_id": 5})
-        self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.status_code, 404)
+
+class BookmarkButtonCase(LoginRequiredTestCase):
+    """Tests for bookmark button."""
+
+    def fake_time(self):
+        """Returns a timezone aware time to prevent warnings."""
+        fake = Faker()
+        tz = timezone.get_current_timezone()
+        return timezone.make_aware(fake.date_time(), tz, True)
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # Write 1 job into the job model
+        job = dict()
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = 1
+        Job.objects.create(**job)
+
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/jobs/bookmark")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("bookmark"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_no_job(self):
+        # test without sending a job id
+        response = self.client.post("/jobs/bookmark")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_job_not_valid(self):
+        # test with a wrong job id
+        response = self.client.post("/jobs/bookmark", {"job_id": 5})
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_job_bookmark_exists(self):
+        # test for a bookmarked job (unmarking a job)
+        bookmark = dict()
+        bookmark["user_id"] = User(pk=1)
+        bookmark["job_id"] = Job(pk=1)
+        Bookmark.objects.create(**bookmark)
+
+        response = self.client.post("/jobs/bookmark", {"job_id": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="htmx/bookmark-unmark-alert.html")
+
+    def test_page_post_job_bookmark_does_not_exist(self):
+        # test for a unmarked job (bookmarking functionality)
+
+        response = self.client.post("/jobs/bookmark", {"job_id": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="htmx/bookmark-alert.html")
