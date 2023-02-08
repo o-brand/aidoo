@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "jobs.apps.JobsConfig",
     "userprofile.apps.UserprofileConfig",
     "chat.apps.ChatConfig",
+    "store.apps.StoreConfig",
 ]
 
 MIDDLEWARE = [

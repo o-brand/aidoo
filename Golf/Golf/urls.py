@@ -22,5 +22,6 @@ urlpatterns = [
     path("", include("login.urls")),  # Login pages + Welcome page
     path("jobs/", include("jobs.urls")),  # Jobs pages
     path("profile/", include("userprofile.urls")),  # Profile pages
-    path("chat/", include("chat.urls")),
+    path("chat/", include("chat.urls")), # Chats pages
+    path("store/", include("store.urls")), # Store pages
 ]
