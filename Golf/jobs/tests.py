@@ -263,10 +263,10 @@ class ApplicationModelTestCasae(TestCase):
         application["time_of_final_status"] = self.fake_time()
 
         #creates an object
-        Application.objects.create(**app)
+        Application.objects.create(**application)
         #raise error if duplicate found
         with self.assertRaises(IntegrityError):
-            Application.objects.create(**app)
+            Application.objects.create(**application)
 
 class PostPageCase(LoginRequiredTestCase):
     """Tests for Post page."""
