@@ -67,6 +67,27 @@
             </div>
             <p class="">{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
             <p class="">{{ job.job_short_description }}</p>
+            <div class="main">
+              <div class="contain" id="textcontain{{ job.job_id }}"> 
+                  <p>{{ job.job_description }}</p>
+                  <div class="open-btn" id="btncontain{{ job.job_id }}">
+                      <a onclick="showMore('{{ job.job_id }}')">read more</ a>
+                  </div>
+              </div>
+          </div>
+          <script>
+              // When you click on the read more button
+              function showMore(id) {
+                console.log(id);
+                  $("#textcontain"+id).height("auto");//Removing the height limit on text containers
+                  $("#btncontain"+id).hide();//Hide the button read more
+              }
+          </script>
+
+          <br/>
+          <br/>
+
+
             {% if job.job_id in jobs_applied %}
               {% include 'htmx/applied.html' %}
             {% else %}

@@ -4,9 +4,19 @@
 
 {% block content %}
 <div class="center my-4">
+  <div class="container text-center mt-5 mb-5">
+    {% load static %}
+    <p> 
+      <img src="{% static '../static/assets/logo_full.png' %}" alt="logo" width="150 " >
+    </p>
   <h2>Sign up</h2>
-
-  <p>Requirements:
+  <br/>
+  <h5>Let's go Join us! You will have a brilliant volunteer experience.</h5>
+  </div>
+  <br/>
+  <br/>
+  <p>
+    <h3>Requirements:</h3>
     <ul>
       <li>The maximum length for the <b>username</b> is 100 characters.</li>
       <li>Your <b>password</b> can't be too similar to your other personal information.</li>
@@ -15,6 +25,8 @@
       <li>Your password can't be entirely numeric.</li>
     </ul>
   </p>
+  <br/>
+  <br/>
 
   <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
@@ -96,10 +108,15 @@
     {% endif %}
     </p>
     <br/>
-    <button class="btn btn-primary" type="submit">Sign Up</button>
+    <div class="container text-center mt-5 mb-5">
+      <button class="btn btn-primary" type="submit">Sign Up</button>
+    </div>
+ 
   </form>
-  <br/>
-  <p>Already have an account? <a href="{% url 'login' %}">Login.</a></p>
-  <p>You can read our Privacy Policy <a href="{% url 'privacy' %}">here.</a></p>
+  <div class="container text-center mt-5 mb-5">
+    <p>Already have an account? <a href="{% url 'login' %}">Login.</a></p>
+    <p>You can read our Privacy Policy <a href="{% url 'privacy' %}">here.</a></p>
+  </div>
+
 </div>
 {% endblock %}

@@ -45,20 +45,10 @@ body {
   vertical-align: text-top;
 }
 
-.navbar-nav img {
-  width: 32px;
-  height: 32px;
-  border-radius: 100%;
-  border: 1.5px rgb(183, 183, 183) solid;
-  transition: border 0.1s;
-}
 
-.navbar-nav img:hover {
-  border: 1.5px rgb(153, 153, 153) solid
-}
+/*  styles the "Hi <usr>" message in .../jobs/ */
+.greeting-user {
 
-/* Home Page */
-.hello {
   margin-bottom: 2.5%;
 }
 
@@ -221,7 +211,70 @@ body {
   to {opacity: 1;}
 }
 
+.bottom {
+  margin-bottom: 0px;
+  border-bottom: none;
+}
+
+/* styles the logo in the nav bar */
+.img-banner{
+  max-width: 50%;
+  height: auto;
+  padding: 10%;
+}
+
+/* styles the bg image on the welcome page*/
+.bg-image{
+  margin: 0px;
+  background-image: url("../assets/bg.jpg");
+  background-attachment: fixed;
+  background-size: contain;
+  background-size: 100%;
+  height:fit-content; 
+  background-repeat: no-repeat; 
+  padding-bottom: 2%; 
+  padding-top: 2%;
+}
+
+/* styles the text on the welcome page */
+.app-desc{
+  padding: 5%;
+  color: white;
+  font-family: 'Lato', sans-serif;
+}
+
+.txt-fmt{
+  margin-right: 25%;
+}
+
+
+/* styles in expanding the block*/
+.main{
+    width: 100%;
+}
+.contain{
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+    height: 100px;
+    overflow: hidden;/*Set the height of the text container, any excess will be hidden*/
+    text-align: center;
+}
+.open-btn{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 80px;
+    background: linear-gradient(180deg,rgba(255,255,255,0),#fff);/*Implementing gradient effects, 
+    masking effects*/
+}
+.open-btn a{
+    text-decoration: none;
+    color: chocolate;
+    display: inline-block;
+    margin-top: 60px;
 
 a:hover {
   cursor:pointer;
+
 }
