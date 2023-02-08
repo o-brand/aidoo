@@ -3,7 +3,7 @@
 | Golf/\_\_init\_\_.py                    |        0 |        0 |    100% |           |
 | Golf/asgi.py                            |        4 |        4 |      0% |     10-15 |
 | Golf/middlewares.py                     |       15 |        1 |     93% |        26 |
-| Golf/settings.py                        |       38 |        2 |     95% |   174-175 |
+| Golf/settings.py                        |       38 |        2 |     95% |   175-176 |
 | Golf/tests.py                           |       33 |        0 |    100% |           |
 | Golf/urls.py                            |        3 |        0 |    100% |           |
 | Golf/utils.py                           |       13 |        0 |    100% |           |
@@ -34,6 +34,12 @@
 | login/validators.py                     |       11 |        0 |    100% |           |
 | login/views.py                          |       45 |       11 |     76% |77, 83-101 |
 | manage.py                               |       12 |        2 |     83% |     12-13 |
+| store/\_\_init\_\_.py                   |        0 |        0 |    100% |           |
+| store/apps.py                           |        4 |        0 |    100% |           |
+| store/migrations/\_\_init\_\_.py        |        0 |        0 |    100% |           |
+| store/tests.py                          |        1 |        0 |    100% |           |
+| store/urls.py                           |        3 |        0 |    100% |           |
+| store/views.py                          |        3 |        1 |     67% |         6 |
 | userprofile/\_\_init\_\_.py             |        0 |        0 |    100% |           |
 | userprofile/admin.py                    |        8 |        0 |    100% |           |
 | userprofile/apps.py                     |        4 |        0 |    100% |           |
@@ -43,4 +49,4 @@
 | userprofile/tests.py                    |      240 |        0 |    100% |           |
 | userprofile/urls.py                     |        3 |        0 |    100% |           |
 | userprofile/views.py                    |      113 |       11 |     90% |42-44, 52, 60, 69-70, 131, 141-157 |
-|                               **TOTAL** | **1369** |   **42** | **97%** |           |
+|                               **TOTAL** | **1380** |   **43** | **97%** |           |
