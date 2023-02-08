@@ -1,214 +1,232 @@
 body {
-    background-color: #ffffff;
-    color: #000;
+  background-color: #ffffff;
+  color: #000;
 }
 
 .error {
-    color: red;
-    font-weight: bold;
+  color: red;
+  font-weight: bold;
 }
 
 .center {
-    margin: auto;
-    width: 50%;
+  margin: auto;
+  width: 50%;
 }
 
 @media (max-width: 768px) {
-    .center {
-        width: 100%;
-    }
+  .center {
+      width: 100%;
   }
+}
 
 /* NAVIGATION TEMPLATE */
 .navbar {
-  padding-left: 1.5%;
-  padding-right: 1.5%;
-  margin-bottom: 1.5%;
-  border-bottom: 1px solid rgb(222, 222, 222);
+padding-left: 1.5%;
+padding-right: 1.5%;
+margin-bottom: 1.5%;
+border-bottom: 1px solid rgb(222, 222, 222);
 }
 
 .navbar-nav > li{
-  padding-left:7px;
-  padding-right:7px;
+padding-left:7px;
+padding-right:7px;
 }
 
 .nav-link {
-  color: rgb(46, 45, 45);
+color: rgb(46, 45, 45);
 }
 
 .navbar-brand {
-  margin-left: 0.5%;
+margin-left: 0.5%;
 }
 .navbar-brand img { 
-  width: 60px;
-  height: 20px;
-  vertical-align: text-top;
+width: 60px;
+height: 20px;
+vertical-align: text-top;
 }
 
+.navbar-nav img {
+width: 32px;
+height: 32px;
+border-radius: 100%;
+border: 1.5px rgb(183, 183, 183) solid;
+transition: border 0.1s;
+}
 
-/*  styles the "Hi <usr>" message in .../jobs/ */
-.greeting-user {
+.navbar-nav img:hover {
+border: 1.5px rgb(153, 153, 153) solid
+}
 
-  margin-bottom: 2.5%;
+/* Home Page */
+.hello {
+margin-bottom: 2.5%;
 }
 
 .searchform {
-  margin-bottom: 1.5%;
+margin-bottom: 1.5%;
 }
 .searchbar {
-  width: 40%;
-  margin-right: 0.5%;
+width: 40%;
+margin-right: 0.5%;
 }
 
 .jobs-scroll {
-    overflow: auto;
-    margin-left: 14%;
-    margin-right: 14%;
+  overflow: auto;
+  margin-left: 14%;
+  margin-right: 14%;
 }
 
 .job-card {
-    border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
-    border-radius: 15px;
+  border: 2px solid rgb(45,203,43); /*originally: #80e27e;*/
+  border-radius: 15px;
 }
 
 .job-card img, .details-card img {
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
-    border-radius: 100%;
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+  border-radius: 100%;
 }
 
 .job-card i {
-  font-size: 18px;
+font-size: 18px;
 }
 
 .login-form {
-    margin-top: 2%;
-    margin-bottom: 4%;
+  margin-top: 2%;
+  margin-bottom: 4%;
+}
+
+.login-logo {
+  width: 150px;
 }
 
 .hello i {
-  font-size: 28px;
+font-size: 28px;
 }
 
 .hello button, .hello a {
-  width: 60px;
-  height: 60px;
-  border-radius: 100%;
-  margin-left: 0.5%;
-  margin-right: 0.5%;
+width: 60px;
+height: 60px;
+border-radius: 100%;
+margin-left: 0.5%;
+margin-right: 0.5%;
 }
 
 .post-button {
-  background-color: #d9534f;
-  border-color: #d9534f;
-  transition: 0.1s;
+background-color: #d9534f;
+border-color: #d9534f;
+transition: 0.1s;
 }
 
 .post-button:hover {
-  background-color: #c5433f;
-  border-color: #a9332f;
+background-color: #c5433f;
+border-color: #a9332f;
 }
 
 .post-button:active:focus {
-  background-color: #bf3e3a;
-  border-color: #a12e2a;
+background-color: #bf3e3a;
+border-color: #a12e2a;
 }
 
 .chat-button {
-  background-color: #5bc0de;
-  border-color: #5bc0de;
-  transition: 0.1s;
+background-color: #5bc0de;
+border-color: #5bc0de;
+transition: 0.1s;
 }
 
 .chat-button:hover {
-  background-color: #48abc9;
-  border-color: #3b93ae;
+background-color: #48abc9;
+border-color: #3b93ae;
 }
 
 .chat-button:active:focus {
-  background-color: rgb(60, 152, 181);
-  border-color: rgb(48, 131, 157);
+background-color: rgb(60, 152, 181);
+border-color: rgb(48, 131, 157);
 }
 
 .shop-button {
-  background-color: #5cb85c;
-  border-color: #5cb85c;
-  transition: 0.1s;
+background-color: #5cb85c;
+border-color: #5cb85c;
+transition: 0.1s;
 }
 
 .shop-button:hover {
-  background-color: #49a149;
-  border-color: #388538;
+background-color: #49a149;
+border-color: #388538;
 }
 
 .shop-button:active:focus {
-  background-color: rgb(59, 140, 59);
-  border-color: #368436;
+background-color: rgb(59, 140, 59);
+border-color: #368436;
 }
 
 #btn-back-to-top {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: none;
+position: fixed;
+bottom: 20px;
+right: 20px;
+display: none;
 }
 
 
 /* PROFILE PAGES */
 .profile-pic {
-  max-width: 125px;
-  height: 125px;
-  border-radius: 100%;
+max-width: 125px;
+height: 125px;
+border-radius: 100%;
 }
 
 .job-card-archived {
-  border: 2px solid rgb(149, 173, 147); /*originally: #80e27e;*/
-  border-radius: 15px;
+border: 2px solid rgb(149, 173, 147); /*originally: #80e27e;*/
+border-radius: 15px;
 }
 
 /* PRIVATE PROFILE PAGE */
 /* Style the tab */
 .tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+overflow: hidden;
+border: 1px solid #ccc;
+background-color: #f1f1f1;
 }
 
 /* Style the buttons that are used to open the tab content */
 .tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
+background-color: inherit;
+float: left;
+border: none;
+outline: none;
+cursor: pointer;
+padding: 14px 16px;
+transition: 0.3s;
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #ddd;
+background-color: #ddd;
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #ccc;
+background-color: #ccc;
 }
 
 /* Style the tab content */
 .tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+display: none;
+padding: 6px 12px;
+border: 1px solid #ccc;
+border-top: none;
+animation: fadeEffect 1s; /* Fading effect takes 1 second */
 }
 
 /* Go from zero to full opacity */
 @keyframes fadeEffect {
-  from {opacity: 0;}
-  to {opacity: 1;}
+from {opacity: 0;}
+to {opacity: 1;}
+}
+
+a:hover {
+  cursor:pointer;
 }
 
 .bottom {
@@ -245,36 +263,4 @@ body {
 
 .txt-fmt{
   margin-right: 25%;
-}
-
-
-/* styles in expanding the block*/
-.main{
-    width: 100%;
-}
-.contain{
-    width: 100%;
-    position: relative;
-    margin: 0 auto;
-    height: 100px;
-    overflow: hidden;/*Set the height of the text container, any excess will be hidden*/
-    text-align: center;
-}
-.open-btn{
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    height: 80px;
-    background: linear-gradient(180deg,rgba(255,255,255,0),#fff);/*Implementing gradient effects, 
-    masking effects*/
-}
-.open-btn a{
-    text-decoration: none;
-    color: chocolate;
-    display: inline-block;
-    margin-top: 60px;
-
-a:hover {
-  cursor:pointer;
-
 }

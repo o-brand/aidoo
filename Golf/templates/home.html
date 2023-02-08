@@ -66,28 +66,13 @@
               <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
             </div>
             <p class="">{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
-            <p class="">{{ job.job_short_description }}</p>
-            <div class="main">
-              <div class="contain" id="textcontain{{ job.job_id }}"> 
-                  <p>{{ job.job_description }}</p>
-                  <div class="open-btn" id="btncontain{{ job.job_id }}">
-                      <a onclick="showMore('{{ job.job_id }}')">read more</ a>
-                  </div>
-              </div>
-          </div>
-          <script>
-              // When you click on the read more button
-              function showMore(id) {
-                console.log(id);
-                  $("#textcontain"+id).height("auto");//Removing the height limit on text containers
-                  $("#btncontain"+id).hide();//Hide the button read more
-              }
-          </script>
-
-          <br/>
-          <br/>
-
-
+            <p>{{ job.job_short_description }}</p>
+            <!-- TODO: show more show less, not working properly
+            <p class="short-desc" id="short-desc-{{ job.job_id }}">{{ job.job_short_description }}</p>
+            <span class="long-desc" id="long-desc-{{ job.job_id }}">{{ job.job_description }}</span>
+            <a onclick="showMore('{{ job.job_id }}')">read more</a>
+            <br/>
+            -->
             {% if job.job_id in jobs_applied %}
               {% include 'htmx/applied.html' %}
             {% else %}
@@ -124,4 +109,20 @@
 <script src="{% static 'js/dialog.js' %}"></script>
 
 <script src="{% static 'js/home.js' %}"></script>
+
+<!-- TODO: show more show less, not working properly
+<script>
+  // When you click on the read more button
+  function showMore(id) {
+    if ($("#long-desc-"+id).is(":hidden")) {
+      $("#short-desc-"+id).hide()
+      $("#long-desc-"+id).show()
+    }
+    else {
+      $("#long-desc-"+id).hide()
+      $("#short-desc-"+id).show()
+    }
+    //$("#textcontain"+id).height("auto");//Removing the height limit on text containers
+  }
+</script>-->
 {% endblock %}
