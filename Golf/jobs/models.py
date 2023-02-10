@@ -74,67 +74,67 @@ class Bookmark(models.Model):
             )
         ]
 
-"""
-# Currently not migrated, should be in the models of the admin app
-class Report(models.Model):
-    """This model is used to represent a report filed against a job or user"""
 
-    class ReportType(models.TextChoices):
-        """This class stores the available values for the report type."""
-        PROFILE = 'Profile', ('Profile')
-        COMMENT = 'Comment', ('Comment')
-        JOB = 'Job', ('Job')
-        CHAT = 'Chat', ('Chat')
+# # Currently not migrated, should be in the models of the admin app
+# class Report(models.Model):
+#     """This model is used to represent a report filed against a job or user"""
 
-    class ReportStatus(models.TextChoices):
-        """This class stores the available values for the status."""
-        OPEN = 'Open', ('Open')
-        TICKETED = 'Ticketed', ('Ticketed')
-        RESOLVED = 'Resolved', ('Resolved')
+#     class ReportType(models.TextChoices):
+#         """This class stores the available values for the report type."""
+#         PROFILE = 'Profile', ('Profile')
+#         COMMENT = 'Comment', ('Comment')
+#         JOB = 'Job', ('Job')
+#         CHAT = 'Chat', ('Chat')
+
+#     class ReportStatus(models.TextChoices):
+#         """This class stores the available values for the status."""
+#         OPEN = 'Open', ('Open')
+#         TICKETED = 'Ticketed', ('Ticketed')
+#         RESOLVED = 'Resolved', ('Resolved')
     
-    # Primary key
-    report_id = models.BigAutoField(primary_key=True)
+#     # Primary key
+#     report_id = models.BigAutoField(primary_key=True)
     
-    # ID of reported job, if the report concerns a job post
-    reported_job = models.ForeignKey(Job,
-        on_delete=models.CASCADE,
-        default=None)
+#     # ID of reported job, if the report concerns a job post
+#     reported_job = models.ForeignKey(Job,
+#         on_delete=models.CASCADE,
+#         default=None)
     
-    # ID of reported job, if the report concerns a chat
-    reported_room = models.ForeignKey(Room, 
-        on_delete=models.CASCADE,
-        default=None)
+#     # ID of reported job, if the report concerns a chat
+#     reported_room = models.ForeignKey(Room, 
+#         on_delete=models.CASCADE,
+#         default=None)
     
-    # User being reported
-    reported_user = models.ForeignKey(User,
-        related_name="reported",
-        on_delete=models.CASCADE)
+#     # User being reported
+#     reported_user = models.ForeignKey(User,
+#         related_name="reported",
+#         on_delete=models.CASCADE)
     
-    # User filing the report
-    reporting_user = models.ForeignKey(User,
-        related_name="reporting", 
-        on_delete=models.CASCADE)
+#     # User filing the report
+#     reporting_user = models.ForeignKey(User,
+#         related_name="reporting", 
+#         on_delete=models.CASCADE)
     
-    # Content of the complaint, should take an adequate min length
-    complaint = models.CharField(max_length=1000)
+#     # Content of the complaint, should take an adequate min length
+#     complaint = models.CharField(max_length=1000)
     
-    # The time at which the report was first filed
-    reporting_time = models.DateTimeField(default=timezone.now)
+#     # The time at which the report was first filed
+#     reporting_time = models.DateTimeField(default=timezone.now)
    
-   # The time at which the report last changed status
-    last_update_time = models.DateTimeField(default=None)
+#    # The time at which the report last changed status
+#     last_update_time = models.DateTimeField(default=None)
     
-    # The status of dealing with the report
-    status = models.CharField(choices=ReportStatus.choices, max_length=10)
+#     # The status of dealing with the report
+#     status = models.CharField(choices=ReportStatus.choices, max_length=10)
     
-    # The type of report
-    type = models.CharField(choices=ReportType.choices, max_length=10)
+#     # The type of report
+#     type = models.CharField(choices=ReportType.choices, max_length=10)
 
 
-# Should be in the models of the admin app
-class ReportTicket(models.Model):
-    pass
-"""
+# # Should be in the models of the admin app
+# class ReportTicket(models.Model):
+#     pass
+
 
 class Application(models.Model):
     """This model is used to represent an application for a job by a user."""
