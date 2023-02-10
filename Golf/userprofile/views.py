@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
 from django.template.loader import render_to_string
+from chat.models import Room
 
 
 # Get actual user model.
@@ -24,11 +25,13 @@ def userdetails(request, user_id):
 
     posted_active = Job.objects.filter(poster_id=user_id, completed=False)
     posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user_id)
+    chat_started = len(Room.objects.filter(Q(user_1=requester, user_2=user_id) | Q(user_2=requester, user_1=user_id))) == 1
     context = {
         "user": requester,
         "viewed_user": user_extended,
         "posted_active": posted_active,
         "posted_inactive": posted_inactive,
+        "chat_started": chat_started,
     }
     return render(request, "userprofile/public.html", context)
 
@@ -115,7 +118,6 @@ def selectapplicant_call(request):
         # Get the job ID or -1 if it is not found
         job_id = request.POST.get("job_id", -1)
         applicant_id = request.POST.get("accept", [-1])
-
 
         # Check if the job ID is valid
         jobs = Job.objects.filter(pk=job_id)

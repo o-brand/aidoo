@@ -15,6 +15,11 @@
           <h6 class="card-subtitle mb-2 text-muted">{{ viewed_user.username }}</h6>
           <p class="card-text">Joined: {{ viewed_user.date_joined | date:'d M Y'}}<br/>
             Rating: {{ viewed_user.rating }}</p>
+            {% if chat_started %}
+                {% include 'htmx/chat_button.html' %}
+            {% else %}
+                {% include 'htmx/chat_button_new.html' %}
+            {% endif %}
         </div>
       </div>
     </div>
