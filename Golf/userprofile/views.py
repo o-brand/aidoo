@@ -36,6 +36,32 @@ def userdetails(request, user_id):
     return render(request, "userprofile/public.html", context)
 
 
+def startchat_call(request):
+    """Start chat."""
+    if request.method == "POST":
+        # Get the user ID or -1 if it is not found
+        user_id = request.POST.get("user_id", -1)
+        user = request.user
+
+        # Check if the user ID is valid
+        users = User.objects.filter(pk=user_id)
+        user_id_exists = len(users) == 1
+        if not user_id_exists:
+            raise Http404()
+        other_user = users[0]
+
+        # Create room
+        room = dict()
+        room["user_1"] = user
+        room["user_2"] = other_user
+        Room.objects.create(**room)
+
+        return render(request, "htmx/chat_button.html")
+
+    # If it is not POST
+    raise Http404()
+
+
 def me(request):
     """Private pofile page with more data."""
     actual_user_id = request.user.id

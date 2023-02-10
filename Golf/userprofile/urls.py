@@ -14,4 +14,6 @@ urlpatterns = [
     path("selectapplicant", views.selectapplicant_call, name="selectapplicant"),
     # Finishing a job, used by HTMX
     path("jobdone", views.jobdone_call, name="jobdone"),
+    # Starting a chat, used by HTMX
+    path("startchat", views.startchat_call, name="startchat"),
 ]
