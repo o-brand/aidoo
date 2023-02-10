@@ -30,11 +30,17 @@ def searching_call(request):
         # Get the user ID or -1 if it is not found
         user_name = request.POST.get("user_name", -1)
         print(user_name)
-        user = request.user
+        me = request.user
         if len(user_name) == 0:
             return HttpResponse()
         # Check if the user ID is valid
-        users = User.objects.filter(username__icontains=user_name).exclude(pk=user.id)
-        return render(request, "htmx/searching.html", {"users": users})
+        users = User.objects.filter(username__icontains=user_name).exclude(pk=me.id)
+
+        users_with_chat_status = []
+        for user in users:
+            chat_started = len(Room.objects.filter(Q(user_1=me, user_2=user.id) | Q(user_2=me, user_1=user.id))) == 1
+            users_with_chat_status.append([user, chat_started])
+
+        return render(request, "htmx/searching.html", {"users": users_with_chat_status})
     # If it is not POST
     raise Http404()
