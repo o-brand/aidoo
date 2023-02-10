@@ -1,1 +1,6 @@
-<button>start a chat</button>
+<button
+
+  hx-post="{% url 'startchat' %}"
+  hx-vals='{"user_id": {{ viewed_user.id }} }'
+  hx-swap="outerHTML"
+  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>start a chat</button>

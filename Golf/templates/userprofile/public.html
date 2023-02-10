@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Profile of {{ user.username }}{% endblock %}
+
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 {% include 'navigation.html' %}
