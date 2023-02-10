@@ -6,4 +6,10 @@
 {% block content %}
 {% include 'navigation.html' %}
 
+<h1>Your chats</h1>
+
+{% for room in rooms %}
+    <p>{{ room.user_1.username }} - {{ room.user_2.username }}</p>
+{% endfor %}
+
 {% endblock %}
