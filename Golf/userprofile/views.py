@@ -1,7 +1,6 @@
 from django.core.mail import send_mail
-from django.urls import reverse
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.shortcuts import render
+from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
@@ -16,19 +15,27 @@ User = get_user_model()
 
 def userdetails(request, user_id):
     """Public pofile page with just the basic information."""
-    requester = request.user #The user who is currently signed in
+    requester = request.user # The user who is currently signed in
 
-    try:
-        user_extended = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        raise Http404("User does not exist.")
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    viewed_user = users[0]
 
-    posted_active = Job.objects.filter(poster_id=user_id, completed=False)
-    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user_id)
-    chat_started = len(Room.objects.filter(Q(user_1=requester, user_2=user_id) | Q(user_2=requester, user_1=user_id))) == 1
+    posted_active = Job.objects.filter(poster_id=viewed_user.id, completed=False)
+    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=viewed_user.id)
+    chat_started = (
+        len(
+            Room.objects.filter(
+                Q(user_1=requester, user_2=viewed_user.id) | Q(user_2=requester, user_1=viewed_user.id)
+            )
+        ) == 1
+    )
     context = {
         "user": requester,
-        "viewed_user": user_extended,
+        "viewed_user": viewed_user,
         "posted_active": posted_active,
         "posted_inactive": posted_inactive,
         "chat_started": chat_started,
@@ -36,41 +43,16 @@ def userdetails(request, user_id):
     return render(request, "userprofile/public.html", context)
 
 
-def startchat_call(request):
-    """Start chat."""
-    if request.method == "POST":
-        # Get the user ID or -1 if it is not found
-        user_id = request.POST.get("user_id", -1)
-        user = request.user
-
-        # Check if the user ID is valid
-        users = User.objects.filter(pk=user_id)
-        user_id_exists = len(users) == 1
-        if not user_id_exists:
-            raise Http404()
-        other_user = users[0]
-
-        # Create room
-        room = dict()
-        room["user_1"] = user
-        room["user_2"] = other_user
-        Room.objects.create(**room)
-
-        return render(request, "htmx/chat_button.html")
-
-    # If it is not POST
-    raise Http404()
-
-
 def me(request):
     """Private pofile page with more data."""
     actual_user_id = request.user.id
 
-    try:
-        user_extended = User.objects.get(pk=actual_user_id)
-    except User.DoesNotExist:
-        # This should not happen.
-        raise Http404("User does not exist.")
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    user_extended = users[0]
 
     # Saved jobs
     saved_jobs = []

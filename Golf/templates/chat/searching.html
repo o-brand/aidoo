@@ -9,7 +9,7 @@
     </span>
     <input class="form-control" type="search" 
         name="user_name" placeholder="Begin Typing To Search Users..."
-        hx-post="{% url 'search' %}"
+        hx-post="{% url 'chat-search' %}"
         hx-trigger="keyup changed delay:500ms, search" 
         hx-target="#search-results" 
         hx-indicator=".htmx-indicator"
