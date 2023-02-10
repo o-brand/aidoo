@@ -11,15 +11,25 @@
 {% block content %}
 {% include 'navigation.html' %}
 
-<h1>Your chats</h1>
+<div class="container">
+  <div class="hello text-center justify-content-center">
+    <h1>Your chats</h1>
 
-<button class="btn btn-secondary" hx-get="{% url 'chat-searching' %}" hx-target="#dialog">
-    <i class="bi bi-search"></i>
-</button>
+    <button class="btn btn-secondary" hx-get="{% url 'chat-searching' %}" hx-target="#dialog">
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
 
-{% for room in rooms %}
-    <p>{{ room.user_1.username }} - {{ room.user_2.username }}</p>
-{% endfor %}
+  <div class="row d-flex justify-content-center">
+    {% if rooms %}
+      {% for room in rooms %}
+        <p>{{ room.user_1.username }} - {{ room.user_2.username }}</p>
+      {% endfor %}
+    {% else %}
+      <p>You have no chats. Start chatting by searching for someone.</p>
+    {% endif %}
+  </div>
+</div>
 
 <!--Reusable modal-->
 <div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">

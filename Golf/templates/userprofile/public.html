@@ -18,7 +18,7 @@
         <img src="../static/assets/pfp/{{ viewed_user.id }}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
         <div class="card-body">
           <h5 class="card-title mb-0">{{ viewed_user.first_name }} {{ viewed_user.last_name }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ viewed_user.viewed_username }}</h6>
+          <h6 class="card-subtitle mb-2 text-muted">{{ viewed_user.username }}</h6>
           <p class="card-text">Joined: {{ viewed_user.date_joined | date:'d M Y'}}<br/>
             Rating: {{ viewed_user.rating }}</p>
             {% if chat_started %}
