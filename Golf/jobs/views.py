@@ -155,7 +155,7 @@ def apply_call(request):
             raise Http404()
 
         # Check if there is an application already
-        applications = Application.objects.filter(applicant_id=user.id,job_id=job_id)
+        applications = Application.objects.filter(applicant_id=user.id, job_id=job_id)
         application_exists = len(applications) == 0
         if not application_exists:
             raise Http404()

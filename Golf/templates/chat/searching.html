@@ -8,12 +8,12 @@
         Searching... 
     </span>
     <input class="form-control" type="search" 
-        name="search" placeholder="Begin Typing To Search Users..." 
-        hx-post="/search" 
+        name="user_name" placeholder="Begin Typing To Search Users..."
+        hx-post="{% url 'search' %}"
         hx-trigger="keyup changed delay:500ms, search" 
         hx-target="#search-results" 
-        hx-indicator=".htmx-indicator">
-
+        hx-indicator=".htmx-indicator"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <table class="table" id="search-results">
     </table>
   </div>

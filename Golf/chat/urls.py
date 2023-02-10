@@ -8,4 +8,6 @@ urlpatterns = [
     path("", views.RoomsView.as_view(), name="chat"),
     # Searching by username
     path("searching", views.searching, name="searching"),
+    #
+    path("search", views.searching_call, name="search"),
 ]

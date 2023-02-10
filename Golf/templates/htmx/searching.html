@@ -1,0 +1,19 @@
+{% if users %}
+
+<thead>
+    <tr>
+        <th>username</th>
+        <th></th>
+    </tr>
+</thead>
+
+
+{% for user in users %}
+<tr>
+    <td>{{ user.username }}</td>
+    <td><button>Chat</button></td>
+</tr>
+{% endfor %}
+{% else %}
+No user found
+{% endif %}
