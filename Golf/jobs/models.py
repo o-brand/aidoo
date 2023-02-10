@@ -74,6 +74,7 @@ class Bookmark(models.Model):
             )
         ]
 
+"""
 # Currently not migrated, should be in the models of the admin app
 class Report(models.Model):
     """This model is used to represent a report filed against a job or user"""
@@ -133,7 +134,7 @@ class Report(models.Model):
 # Should be in the models of the admin app
 class ReportTicket(models.Model):
     pass
-
+"""
 
 class Application(models.Model):
     """This model is used to represent an application for a job by a user."""
