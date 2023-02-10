@@ -3,13 +3,29 @@
 
 {% block title %}Chats{% endblock %}
 
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 {% include 'navigation.html' %}
 
 <h1>Your chats</h1>
 
+
+    <button class="btn btn-secondary" hx-get="{% url 'searching' %}" hx-target="#dialog">
+        <i class="bi bi-search"></i>
+    </button>
+
 {% for room in rooms %}
     <p>{{ room.user_1.username }} - {{ room.user_2.username }}</p>
 {% endfor %}
 
+<!--Reusable modal-->
+<div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div id="dialog" class="modal-dialog" hx-target="this"></div>
+</div>
+
+<!--Modal behavior (JS)-->
+<script src="{% static 'js/dialog.js' %}"></script>
 {% endblock %}

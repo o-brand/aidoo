@@ -6,4 +6,6 @@ from . import views
 urlpatterns = [
     # Homepage
     path("", views.RoomsView.as_view(), name="chat"),
+    # Searching by username
+    path("searching", views.searching, name="searching"),
 ]

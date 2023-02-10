@@ -1,0 +1,23 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Search</h5>
+    <button class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body">
+    <span class="htmx-indicator"> 
+        Searching... 
+    </span>
+    <input class="form-control" type="search" 
+        name="search" placeholder="Begin Typing To Search Users..." 
+        hx-post="/search" 
+        hx-trigger="keyup changed delay:500ms, search" 
+        hx-target="#search-results" 
+        hx-indicator=".htmx-indicator">
+
+    <table class="table" id="search-results">
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+  </div>
+</div>

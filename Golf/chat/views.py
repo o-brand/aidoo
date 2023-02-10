@@ -18,3 +18,6 @@ class RoomsView(ListView):
         """Reads rooms from the database."""
         me = self.request.user
         return Room.objects.filter(Q(user_1=me) | Q(user_2=me))
+
+def searching(request):
+    return render(request, "chat/searching.html")
