@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .models import Room
 
+
 #Get actual user model
 User = get_user_model()
 
@@ -64,7 +65,7 @@ def startchat_call(request):
     raise Http404()
 
 
-def searching(request):
+def searching_modal(request):
     """Searching modal."""
     return render(request, "chat/searching.html")
 
@@ -75,14 +76,18 @@ def searching_call(request):
         me = request.user
 
         # Get the user ID or -1 if it is not found
-        user_name = request.POST.get("user_name", -1)
+        username = request.POST.get("username", -1)
+
+        # If no username was given
+        if username == -1:
+            raise Http404()
 
         # Do not display anything if no text entered
-        if len(user_name) == 0:
+        if len(username) == 0:
             return HttpResponse()
 
         # Get users
-        users = User.objects.filter(username__icontains=user_name).exclude(pk=me.id)
+        users = User.objects.filter(username__icontains=username).exclude(pk=me.id)
 
         # Iterate over to display the adequate button
         users_with_chat_status = []

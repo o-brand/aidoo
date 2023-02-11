@@ -9,7 +9,7 @@ urlpatterns = [
     # Starting a chat, used by HTMX
     path("startchat", views.startchat_call, name="chat-startchat"),
     # Searching by username, displayed in a modal
-    path("searching", views.searching, name="chat-searching"),
+    path("searching-modal", views.searching_modal, name="chat-searching-modal"),
     # Searching, used by HTMX
-    path("search", views.searching_call, name="chat-search"),
+    path("searching", views.searching_call, name="chat-searching"),
 ]
