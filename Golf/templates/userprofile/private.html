@@ -15,6 +15,78 @@
 
   <h1>My username: {{ user.username }}</h1>
 
+  {% if bookmarks %}
+  <div>
+    {% for bookmark in bookmarks %}
+      <div class="card mb-2 job-card">
+        <div class="card-body">
+          <h5 class="card-title"><a href="{% url 'jobdetails' bookmark.job_id.job_id %}">{{bookmark.job_id.job_title }}</a></h5>
+          <p class="card-text">
+            <i class="bi bi-geo-alt"></i>
+            {{ bookmark.job_id.location }}
+            &nbsp;
+            <i class="bi bi-hourglass-split"></i>
+            {% if bookmark.job_id.deadline is not None %}
+              {{ bookmark.job_id.deadline | date:'d M Y' }}
+            {% else %}
+              None
+            {% endif %}
+            &nbsp;
+            <i class="bi bi-stars"></i>
+            {{ bookmark.job_id.points }}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      {% if bookmarks.paginator.num_pages > 1 %}
+        <li class="page-item">
+          {% if bookmarks.has_previous %}
+            <a class="page-link"
+              href="?bpage=1">
+              First</a>
+          {% else %}
+            <p class="page-link disabled">First</p>
+          {% endif %}
+        </li>
+      {% endif %}
+      <li class="page-item">
+        {% if bookmarks.has_previous %}
+          <a class="page-link"
+            href="?bpage={{bookmarks.previous_page_number}}">
+            Previous</a>
+        {% else %}
+          <p class="page-link disabled">Previous</p>
+        {% endif %}
+      </li>
+      <li class="page-item active"><p class="page-link">{{bookmarks.number}}</p></li>
+      <li class="page-item">
+        {% if bookmarks.has_next %}
+          <a class="page-link"
+          href="?bpage={{bookmarks.next_page_number}}">
+          Next</a>
+        {% else %}
+          <p class="page-link disabled">Next</p>
+        {% endif %}
+      </li>
+      {% if bookmarks.paginator.num_pages > 1 %}
+        <li class="page-item">
+          {% if bookmarks.has_next %}
+            <a class="page-link"
+            href="?bpage={{bookmarks.paginator.num_pages}}">
+            Last</a></li>
+          {% else %}
+            <p class="page-link disabled">Last</p>
+          {% endif %}
+      {% endif %}
+    </ul>
+  </nav>
+{% else %}
+  <p>No jobs posted yet!</p>
+{% endif %}
+
   <div class="tab">
     <button class="tablinks" id="details_tab">Personal details</button>
     <button class="tablinks" id="saved_tab">Bookmarked jobs</button>

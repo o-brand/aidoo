@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
 from django.template.loader import render_to_string
-
+from django.core.paginator import Paginator
 
 # Get actual user model.
 User = get_user_model()
@@ -51,6 +51,10 @@ def me(request):
     for job in saved:
         saved_jobs.append([job.job_id, job.saving_time])
 
+    bookmark_paginator = Paginator(saved, 2)
+    bookmark_page = request.GET.get("bpage")
+    bookmarks = bookmark_paginator.get_page(bookmark_page)
+
     # Applied jobs
     applied_jobs = []
 
@@ -74,6 +78,7 @@ def me(request):
         "saved": saved_jobs,
         "applied": applied_jobs,
         "posted": posted_jobs,
+        "bookmarks": bookmarks,
     }
     return render(request, "userprofile/private.html", context)
 
