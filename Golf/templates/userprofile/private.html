@@ -4,8 +4,8 @@
 {% block title %}My profile{% endblock %}
 
 {% block head_extra %}
-<script src="{% static 'js/htmx-1.8.5.min.js' %}" defer></script>
-<script src="{% static 'js/hyperscript-0.9.7.min.js' %}" defer></script>
+<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,10 @@
   {% if posts or applications or bookmarks %}
   <div class="row mb-3">
     <div class="col">
-      <h5>My details</h5>
+      <div class="d-flex justify-content-between">
+        <h5>My details</h5>
+        <button><i class="bi bi-pencil"></i></button>
+      </div>
       <div class="card">
         <img src="../static/assets/pfp/{{user.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
         <div class="card-body">
@@ -32,18 +35,21 @@
       </div>
     </div>
     <div class="col">
-      <h5>My posts</h5>
+      <div class="d-flex justify-content-between">
+        <h5>My posts</h5>
+        <button hx-get="{% url 'post' %}" hx-target="#dialog">
+          <i class="bi bi-plus-square"></i>
+        </button>
+      </div>
       {% if posts %}
         <div>
           {% for job, applicants in posts %}
             <div class="card mb-2 job-card">
               <div class="card-body">
                 <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a></h5>
-                <p class="card-text">
-                  <span>
-                    {% include 'htmx/job-applicants.html' %}
-                  </span>
-                </p>
+                <span>
+                  {% include 'htmx/job-applicants.html' %}
+                </span>
               </div>
             </div>
           {% endfor %}
@@ -122,11 +128,9 @@
                   <i class="bi bi-stars"></i>
                   {{ job.points }}
                 </p>
-                <p>
-                  <span>
-                    {% include 'htmx/job-applied.html' %}
-                  </span>
-                </p>
+                <span>
+                  {% include 'htmx/job-applied.html' %}
+                </span>
               </div>
             </div>
           {% endfor %}
@@ -262,7 +266,13 @@
   <p><a href="{% url 'home' %}">Go back</a></p>
 </div>
 
+<!--Reusable modal-->
+<div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div id="dialog" class="modal-dialog" hx-target="this"></div>
+</div>
 
+<!--Modal behavior (JS)-->
+<script src="{% static 'js/dialog.js' %}"></script>
 
 <script src="{% static 'js/private.js' %}"></script>
 {% endblock %}
