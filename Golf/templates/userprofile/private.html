@@ -113,8 +113,17 @@
           {% for job, status in applications %}
             <div class="card mb-2 job-card">
               <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a></h5>
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title">
+                    <a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a>
+                  </h5>
+                </div>
                 <p class="card-text">
+                  <i class="bi bi-activity"></i>
+                  <strong>
+                    {{ status }}
+                  </strong>
+                  &nbsp;
                   <i class="bi bi-geo-alt"></i>
                   {{ job.location }}
                   &nbsp;
@@ -206,6 +215,9 @@
                   &nbsp;
                   <i class="bi bi-stars"></i>
                   {{ bookmark.job_id.points }}
+                </p>
+                <p>
+                  Saved on {{bookmark.saving_time | date:'d M Y' }}
                 </p>
               </div>
             </div>
