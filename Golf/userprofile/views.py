@@ -63,6 +63,10 @@ def me(request):
     for job in applied:
         applied_jobs.append([job.job_id, job.status])
 
+    application_paginator = Paginator(applied_jobs, 2)
+    application_page = request.GET.get("apage")
+    applications = application_paginator.get_page(application_page)
+
     # Posted jobs
     posted_jobs = []
 
@@ -73,12 +77,15 @@ def me(request):
         applicants = list(Application.objects.filter(job_id=job.job_id))
         posted_jobs.append([job, applicants])
 
+    posts_paginator = Paginator(posted_jobs, 2)
+    posts_page = request.GET.get("ppage")
+    posts = posts_paginator.get_page(posts_page)
+
     context = {
         "user": user_extended,
-        "saved": saved_jobs,
-        "applied": applied_jobs,
-        "posted": posted_jobs,
         "bookmarks": bookmarks,
+        "posts": posts,
+        "applications": applications,
     }
     return render(request, "userprofile/private.html", context)
 
