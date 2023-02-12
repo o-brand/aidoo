@@ -3,7 +3,57 @@
 
 {% block title %}Chats{% endblock %}
 
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 {% include 'navigation.html' %}
 
+<div class="container">
+  <div class="hello text-center justify-content-center">
+    <h1>Your chats</h1>
+
+    <button class="btn btn-secondary" hx-get="{% url 'chat-searching-modal' %}" hx-target="#dialog">
+      <i class="bi bi-search"></i>
+    </button>
+  </div>
+
+  <div class="row d-flex justify-content-center">
+    {% if rooms %}
+      <div class="col jobs-scroll mb-5">
+        {% for room in rooms %}
+          <div class="card job-card mb-2">
+            <div class="card-body">
+              <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
+                <a href="{% url 'userdetails' room.user_2.id %}">
+                  <img src="../static/assets/pfp/{{room.user_2.id}}.jpeg">
+                </a>
+                <h5><a href="{% url 'userdetails' room.user_2.id %}">{{ room.user_2.username }}</a></h5>
+              </div>
+              {% if room.me_started %}
+                You started the chat on {{ room.creation_time | date:'d M Y' }}.
+              {% else %}
+                {{ room.user_2.username }} started the chat on {{ room.creation_time | date:'d M Y' }}.
+              {% endif %}
+              <p><i>The last message will appear here.</i></p>
+              {% include 'htmx/chat_button.html' %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>You have no chats. Start chatting by searching for someone.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!--Reusable modal-->
+<div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div id="dialog" class="modal-dialog" hx-target="this"></div>
+</div>
+
+<!--Modal behavior (JS)-->
+<script src="{% static 'js/dialog.js' %}"></script>
 {% endblock %}

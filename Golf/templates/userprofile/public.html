@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Profile of {{ user.username }}{% endblock %}
+{% block title %}Profile of {{ viewed_user.username }}{% endblock %}
+
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 {% include 'navigation.html' %}
@@ -9,12 +15,17 @@
   <div class="row flex-column flex-md-row">
     <div class="col col-sm-3 mb-4">
       <div class="card">
-        <img src="../static/assets/pfp/{{viewed_user.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
+        <img src="../static/assets/pfp/{{ viewed_user.id }}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
         <div class="card-body">
           <h5 class="card-title mb-0">{{ viewed_user.first_name }} {{ viewed_user.last_name }}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{ viewed_user.username }}</h6>
           <p class="card-text">Joined: {{ viewed_user.date_joined | date:'d M Y'}}<br/>
             Rating: {{ viewed_user.rating }}</p>
+            {% if chat_started %}
+                {% include 'htmx/chat_button.html' %}
+            {% else %}
+                {% include 'htmx/chat_button_new.html' %}
+            {% endif %}
         </div>
       </div>
     </div>
@@ -40,7 +51,7 @@
             </div>
           {% endfor %}
         {% else %}
-        <p>{{viewed_user.first_name}} doesn't have any active jobs.</p>
+        <p>{{ viewed_user.first_name }} doesn't have any active jobs.</p>
         {% endif %}
       </div>
 
@@ -63,7 +74,7 @@
           </div>
         {% endfor %}
       {% else %}
-        <p>{{viewed_user.first_name}} doesn't have any archived jobs.</p>
+        <p>{{ viewed_user.first_name }} doesn't have any archived jobs.</p>
       {% endif %}
     </div>
   </div>

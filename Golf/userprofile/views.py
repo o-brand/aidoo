@@ -1,13 +1,13 @@
 from django.core.mail import send_mail
-from django.urls import reverse
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.shortcuts import render
+from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
-from jobs.models import Job, Bookmark, Application
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
+from jobs.models import Job, Bookmark, Application
+from chat.models import Room
 
 # Get actual user model.
 User = get_user_model()
@@ -15,20 +15,30 @@ User = get_user_model()
 
 def userdetails(request, user_id):
     """Public pofile page with just the basic information."""
-    requester = request.user #The user who is currently signed in
+    requester = request.user # The user who is currently signed in
 
-    try:
-        user_extended = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        raise Http404("User does not exist.")
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    viewed_user = users[0]
 
-    posted_active = Job.objects.filter(poster_id=user_id, completed=False)
-    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user_id)
+    posted_active = Job.objects.filter(poster_id=viewed_user.id, completed=False)
+    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=viewed_user.id)
+    chat_started = (
+        len(
+            Room.objects.filter(
+                Q(user_1=requester, user_2=viewed_user.id) | Q(user_2=requester, user_1=viewed_user.id)
+            )
+        ) == 1
+    )
     context = {
         "user": requester,
-        "viewed_user": user_extended,
+        "viewed_user": viewed_user,
         "posted_active": posted_active,
         "posted_inactive": posted_inactive,
+        "chat_started": chat_started,
     }
     return render(request, "userprofile/public.html", context)
 
@@ -37,11 +47,12 @@ def me(request):
     """Private pofile page with more data."""
     actual_user_id = request.user.id
 
-    try:
-        user_extended = User.objects.get(pk=actual_user_id)
-    except User.DoesNotExist:
-        # This should not happen.
-        raise Http404("User does not exist.")
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    user_extended = users[0]
 
     # Saved jobs
     saved_jobs = []
@@ -128,7 +139,6 @@ def selectapplicant_call(request):
         # Get the job ID or -1 if it is not found
         job_id = request.POST.get("job_id", -1)
         applicant_id = request.POST.get("accept", [-1])
-
 
         # Check if the job ID is valid
         jobs = Job.objects.filter(pk=job_id)
