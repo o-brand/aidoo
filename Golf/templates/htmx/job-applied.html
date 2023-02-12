@@ -1,4 +1,3 @@
-<p>Status: {{ status }}</p>
 {% if status == "AC" %}
     <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
 {% elif status == "AP" %}

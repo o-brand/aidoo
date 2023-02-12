@@ -3,7 +3,20 @@
 
 {% block title %}Store{% endblock %}
 
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 {% include 'navigation.html' %}
 
+<div class="container">
+  <h2>"The Store"</h2>
+  {% for item in items %}
+    <span>
+      {% include "htmx/buy-item.html" %}
+    </span>
+  {% endfor %}
+</div>
 {% endblock %}

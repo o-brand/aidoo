@@ -6,4 +6,5 @@ from . import views
 urlpatterns = [
     # Homepage
     path("", views.home, name="store"),
+    path("buyitem", views.buyitem_call, name="buyitem"),
 ]

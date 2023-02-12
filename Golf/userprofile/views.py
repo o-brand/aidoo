@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
 from django.template.loader import render_to_string
-from django.core.paginator import Paginatorfrom 
+from django.core.paginator import Paginator
 from django.views import View
 
 # Get actual user model.
