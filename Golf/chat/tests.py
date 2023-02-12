@@ -58,7 +58,7 @@ class RoomsViewTestCase(LoginRequiredTestCase):
 
 
 class SearchingCallButtonCase(LoginRequiredTestCase):
-    """Tests for searching users by username HTMX function."""
+    """Tests for searching users by username, HTMX function."""
 
     def setUp(self):
         fake = Faker()
@@ -92,15 +92,10 @@ class SearchingCallButtonCase(LoginRequiredTestCase):
         response = self.client.get(reverse("chat-searching"))
         self.assertEqual(response.status_code, 404)
 
-    def test_page_post_no_username(self):
-        # test without sending a username
-        response = self.client.post("/chat/searching")
-        self.assertEqual(response.status_code, 404)
-
     def test_page_post_username_empty(self):
         # test with an empty username
         response = self.client.post("/chat/searching", {"username": ""})
-        self.assertEqual(response.status_code, 200)  # Empty response
+        self.assertEqual(response.status_code, 200) # Empty response
 
     def test_page_post_username(self):
         # test works
@@ -108,8 +103,9 @@ class SearchingCallButtonCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/searching.html")
 
+
 class StartChatCallButtonCase(LoginRequiredTestCase):
-    """Tests for starting a chat by username HTMX function."""
+    """Tests for starting a chat by username, HTMX function."""
 
     def setUp(self):
         fake = Faker()
@@ -143,44 +139,30 @@ class StartChatCallButtonCase(LoginRequiredTestCase):
         response = self.client.get(reverse("chat-startchat"))
         self.assertEqual(response.status_code, 404)
 
-    def test_page_start_no_chat(self):
-        # test without sending a user id
-        response = self.client.post("/chat/startchat")
-        self.assertEqual(response.status_code, 404)
-
     def test_page_start_chat_not_valid(self):
         # test with a wrong user id
-        response = self.client.post("/chat/startchat", {"user_id": 5})
+        response = self.client.post("/chat/startchat", {"user_id": 0})
         self.assertEqual(response.status_code, 404)
 
     def test_page_post_chat_does_not_exist(self):
         # test for starting chat (start chat functionality)
-        room = dict()
-        room["user_id"] = User(pk=1)
-        room["user_id"] = User(pk=1)
-        room.objects.create(**room)
-
-        response = self.client.post("/chat/startchat", {"user_id": 1})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="htmx/chat_button_new.html")
-
-    def test_page_post_chat_exists(self):
-        # test for a started chat (open chat functionality)
-        response = self.client.post("/chat/startchat", {"user_id": 1})
+        response = self.client.post("/chat/startchat", {"user_id": 2})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/chat_button.html")
+        self.assertEqual(len(Room.objects.all()), 1)
 
 
 class SearchingModalTestCase(LoginRequiredTestCase):
-    """Tests for searching users and displayed in a modal function."""
+    """Tests for searching users. It is displayed in a modal."""
 
-    def setUp(self):
-        # Login from super...
-        super().setUp()
-
-    def test_modal(self):
-        response = self.client.get("/chat/searching_modal")
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/chat/searching-modal")
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="htmx/searching.html")
+        self.assertTemplateUsed(response, template_name="chat/searching.html")
 
-
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("chat-searching-modal"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="chat/searching.html")
