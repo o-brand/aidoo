@@ -7,7 +7,8 @@ from django.db.models import Q
 from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
 from django.template.loader import render_to_string
-from django.core.paginator import Paginator
+from django.core.paginator import Paginatorfrom 
+from django.views import View
 
 # Get actual user model.
 User = get_user_model()
@@ -89,6 +90,11 @@ def me(request):
     }
     return render(request, "userprofile/private.html", context)
 
+def settings(request):
+    "Page for account settings"
+    context = {
+    }
+    return render(request, "userprofile/usersettings.html", context)
 
 def withdraw_call(request):
     """Withdraw from a job."""
@@ -149,43 +155,48 @@ def selectapplicant_call(request):
         # change status of applicants - only those status where "AP"
         for user in applications:
             if str(user.applicant_id.id) != applicant_id:
-                # send an email to the rejected applicant
-                message = render_to_string(
-                    "emails/application_rejection.html",
-                    {
-                        "user": user.applicant_id.username,
-                        "job_title": job.job_title,
-                        "poster": job.poster_id.username,
-                    },
-                )
-                send_mail(
-                    'Sorry!',
-                    message,
-                    None,
-                    [user.applicant_id.email],
-                )
+                if user.applicant_id.opt_in_emails == True:
+                    # send an email to the rejected applicant
+                    message = render_to_string(
+                        "emails/application_rejection.html",
+                        {
+                            "user": user.applicant_id.username,
+                            "job_title": job.job_title,
+                            "poster": job.poster_id.username,
+                        },
+                    )
+                    send_mail(
+                        'Sorry!',
+                        message,
+                        None,
+                        [user.applicant_id.email],
+                    )
 
-                user.status = "RE"
-                user.save()
+                    user.status = "RE"
+                    user.save()
             else:
-                # send an email to the accepted applicant
-                message = render_to_string(
-                    "emails/application_acceptance.html",
-                    {
-                        "user": user.applicant_id.username,
-                        "job_title": job.job_title,
-                        "poster": job.poster_id.username,
-                    },
-                )
-                send_mail(
-                    'Congratulations!',
-                    message,
-                    None,
-                    [user.applicant_id.email],
-                )
+                if user.applicant_id.opt_in_emails == True:
+                    # send an email to the accepted applicant
+                    message = render_to_string(
+                        "emails/application_acceptance.html",
+                        {
+                            "user": user.applicant_id.username,
+                            "job_title": job.job_title,
+                            "poster": job.poster_id.username,
+                        },
+                    )
+                    send_mail(
+                        'Congratulations!',
+                        message,
+                        None,
+                        [user.applicant_id.email],
+                    )
 
-                user.status = "AC"
-                user.save()
+                    user.status = "AC"
+                    user.save()
+                else:
+                    user.status = "AC"
+                    user.save()
         return render(
             request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
         )
@@ -238,3 +249,34 @@ def jobdone_call(request):
 
     # If it is not POST
     raise Http404()
+
+class AccountSettingsView(View):
+    """It is used to render the account settings page."""
+
+    template_name = "userprofile/usersettings.html"
+
+    # Renders the form at the first time
+    def get(self, request, *args, **kwargs):
+        
+        user = request.user
+        return render(request, self.template_name, {"user":user})
+
+    # Processes the form after submit
+    def post(self, request, *args, **kwargs):
+        
+        #returns an empty list if button is unchecked otherwise returns ['on']
+        button_check = request.POST.getlist('opt_in')
+
+        user = request.user
+
+        # If checkbox state doesn't match email preference on submit
+        # then change the email preference
+        if user.opt_in_emails == True and button_check == []:
+            user.opt_in_emails = False
+        elif user.opt_in_emails == False and button_check == ['on']:
+            user.opt_in_emails = True
+        
+        user.save()
+
+        # Render the form again
+        return render(request, self.template_name, {"user":user})
