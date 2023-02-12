@@ -3,5 +3,4 @@
   hx-post="{% url 'bookmark' %}"
   hx-vals='{"job_id": {{ job.job_id }} }'
   hx-swap="outerHTML"
-  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-  {% block extra %}{% endblock %}>Unmark</a>
+  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Unmark</a>
