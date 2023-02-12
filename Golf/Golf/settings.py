@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     "chat.apps.ChatConfig",
     "store.apps.StoreConfig",
     "profanity",
-    "superadmin",
+    "superadmin.apps.SuperadminConfig",
 ]
 
 MIDDLEWARE = [
