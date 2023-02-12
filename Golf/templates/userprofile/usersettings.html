@@ -10,18 +10,39 @@
 
 {% block content %}
 {% include 'navigation.html' %}
-
-<h2>Account Settings:</h2>
-
-<form method="post" action="{% url 'settings' %}">
+<div class="container my-4">
+  <div class="row flex-column flex-md-row">
+    <div class="container text-center mt-5 mb-5">
+      <h2>Account Settings</h2>
+    </div>
+    <h3>Notifications</h3>
+    <br/>
+    <br/>
+<div class="card mb-1 Notifications">
+  <div class="card-body">
+    <h4>Automatically sending email</h4>
+    <h6 class="card-subtitle mb-2 text-muted">
+      When you click the button, it will automatically send the email.
+    </h6>
+  </div>
+  <div class="container text-center mt-5 mb-5">
+  <div method="post" action="{% url 'settings' %}">
     {% csrf_token %}
     <p>
       {{ form.opt_in_emails.label_tag }}
       <input type="checkbox" name="opt_in" {% if user.opt_in_emails %}checked{% endif %}>
     </p>
-
     <div class="container text-left mt-5 mb-5">
       <button class="btn btn-primary" type="submit">Apply</button>
     </div>
+  </div>
+  </div>
+</div>
+    <div class="container text-center mt-5 mb-5">
+    <p>Congratulations! you have finished the seeting</p>
+    <p><a href="http://127.0.0.1:8000/jobs/">Explore your job</a></p>
+    </div>
+  </div>    
+</div>
 
 {% endblock %}
