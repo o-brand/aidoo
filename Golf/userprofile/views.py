@@ -6,7 +6,6 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
 from jobs.models import Job, Bookmark, Application
-from .forms import AccountSettingsForm
 from django.template.loader import render_to_string
 from django.views import View
 
@@ -241,18 +240,16 @@ def jobdone_call(request):
 class AccountSettingsView(View):
     """It is used to render the account settings page."""
 
-    form_class = AccountSettingsForm
     template_name = "userprofile/usersettings.html"
 
     # Renders the form at the first time
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
+        
         user = request.user
-        return render(request, self.template_name, {"form": form, "user":user})
+        return render(request, self.template_name, {"user":user})
 
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
         
         #returns an empty list if button is unchecked otherwise returns ['on']
         button_check = request.POST.getlist('opt_in')
@@ -269,4 +266,4 @@ class AccountSettingsView(View):
         user.save()
 
         # Render the form again
-        return render(request, self.template_name, {"form": form, "user":user})
+        return render(request, self.template_name, {"user":user})
