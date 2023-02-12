@@ -6,7 +6,7 @@ from .models import Item, Sale
 User = get_user_model()
 
 def home(request):
-    # Render the page
+    # Render the main shop page
     actual_user_id = request.user.id
 
     try:
@@ -26,6 +26,7 @@ def home(request):
     return render(request, "store/index.html", context)
 
 def buyitem_call(request):
+    """User buys an item from the store"""
     if request.method == "POST":
         # Get the item ID or -1 if it is not found
         item_id = request.POST.get("item_id", -1)
