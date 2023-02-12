@@ -46,7 +46,8 @@ def me(request):
     # Saved jobs
     saved_jobs = []
 
-    saved = Bookmark.objects.filter(user_id=actual_user_id)
+    saved = Bookmark.objects.filter(user_id=actual_user_id
+        ).order_by("saving_time")
 
     for job in saved:
         saved_jobs.append([job.job_id, job.saving_time])
