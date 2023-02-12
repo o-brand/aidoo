@@ -32,6 +32,8 @@ DEBUG = True
 # For security (run python manage.py check --deploy to check the problems)
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+
 
 ALLOWED_HOSTS = [
     "teamgolf.pythonanywhere.com",
