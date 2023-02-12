@@ -57,53 +57,6 @@ class RoomsViewTestCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class SearchingCallButtonCase(LoginRequiredTestCase):
-    """Tests for searching users by username, HTMX function."""
-
-    def setUp(self):
-        fake = Faker()
-
-        # Login from super...
-        super().setUp()
-
-        # create 10 users in the database
-        for i in range(10):
-            if i == 0:
-                username = "qwe"
-            else:
-                username = fake.unique.name()
-
-            credentials = dict()
-            credentials["username"] = username
-            credentials["password"] = "a"
-            credentials["last_name"] = lambda: fake.last_name()
-            credentials["first_name"] = lambda: fake.first_name()
-            credentials["date_of_birth"] = datetime.datetime.now()
-            User.objects.create_user(**credentials)
-            credentials.clear()
-
-    def test_page(self):
-        # test availability via URL
-        response = self.client.get("/chat/searching")
-        self.assertEqual(response.status_code, 404)
-
-    def test_page_available_by_name(self):
-        # test availability via name of page
-        response = self.client.get(reverse("chat-searching"))
-        self.assertEqual(response.status_code, 404)
-
-    def test_page_post_username_empty(self):
-        # test with an empty username
-        response = self.client.post("/chat/searching", {"username": ""})
-        self.assertEqual(response.status_code, 200) # Empty response
-
-    def test_page_post_username(self):
-        # test works
-        response = self.client.post("/chat/searching", {"username": "qwe"})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="htmx/searching.html")
-
-
 class StartChatCallButtonCase(LoginRequiredTestCase):
     """Tests for starting a chat by username, HTMX function."""
 
@@ -166,3 +119,50 @@ class SearchingModalTestCase(LoginRequiredTestCase):
         response = self.client.get(reverse("chat-searching-modal"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="chat/searching.html")
+
+
+class SearchingCallButtonCase(LoginRequiredTestCase):
+    """Tests for searching users by username, HTMX function."""
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # create 10 users in the database
+        for i in range(10):
+            if i == 0:
+                username = "qwe"
+            else:
+                username = fake.unique.name()
+
+            credentials = dict()
+            credentials["username"] = username
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            User.objects.create_user(**credentials)
+            credentials.clear()
+
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/chat/searching")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("chat-searching"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_username_empty(self):
+        # test with an empty username
+        response = self.client.post("/chat/searching", {"username": ""})
+        self.assertEqual(response.status_code, 200) # Empty response
+
+    def test_page_post_username(self):
+        # test works
+        response = self.client.post("/chat/searching", {"username": "qwe"})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="htmx/searching.html")
