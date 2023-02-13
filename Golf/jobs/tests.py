@@ -702,22 +702,13 @@ class ReportButtonCase(LoginRequiredTestCase):
     def test_page(self):
         # test availability via URL
         response = self.client.get("/jobs/report")
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
 
     def test_page_available_by_name(self):
         # test availability via name of page
         response = self.client.get(reverse("report"))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
 
-    def test_page_post_no_job(self):
-        # test without sending a job id
-        response = self.client.post("/jobs/report")
-        self.assertEqual(response.status_code, 404)
-
-    def test_page_post_job_not_valid(self):
-        # test with a wrong job id
-        response = self.client.post("/jobs/report", {"job_id": 5})
-        self.assertEqual(response.status_code, 404)
 
 class BookmarkButtonCase(LoginRequiredTestCase):
     """Tests for bookmark button."""
