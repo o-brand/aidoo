@@ -23,7 +23,7 @@ def home(request):
         "items": items,
         "purchases": purchased_items
     }
-    return render(request, "store/index.html", context)
+    return render(request, "store/storefront.html", context)
 
 def buyitem_call(request):
     """User buys an item from the store"""
