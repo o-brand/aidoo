@@ -35,6 +35,8 @@ Then you have to update the db.json by this command:
 python manage.py dumpdata > ../db.json
 ```
 
+*You have to change the encoding of the JSON file to UTF-8 if an error occurred.*
+
 But before you do that, please be sure that you do not have any irrelevant changes in your database.
 
 If you are ready, then commit the modified file, and run these commands to update the database on Heroku as well:
@@ -58,5 +60,7 @@ python manage.py migrate --settings Golf.production
 python manage.py flush --settings Golf.production
 python manage.py loaddata ../db.json --settings Golf.production
 ```
+
+*You have to change the encoding of the JSON file to UTF-8 if an error occurred.*
 
 And commit the modified file. Plus, please update the date of the save in this file.

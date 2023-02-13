@@ -103,7 +103,7 @@ class JobsView(ListView):
 
     def get_queryset(self):
         """Reads jobs from the database."""
-        filter_val = self.request.GET.get("search_title", "")
+        filter_val = self.request.GET.get("search", "")
         return Job.objects.filter(
             Q(job_title__icontains=filter_val) |
             Q(job_description__icontains=filter_val) |
