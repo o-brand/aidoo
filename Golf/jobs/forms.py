@@ -5,7 +5,7 @@ from Golf.utils import create_date_string
 from .validators import validate_deadline
 from .models import Job
 #
-from .models import Report
+from superadmin.models import Report
 #
 from profanity.validators import validate_is_profane
 
