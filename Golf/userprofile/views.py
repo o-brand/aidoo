@@ -9,6 +9,8 @@ from django.views import View
 from django.core.paginator import Paginator
 from jobs.models import Job, Bookmark, Application
 from chat.models import Room
+from django.core.paginator import Paginator
+from django.views import View
 
 # Get actual user model.
 User = get_user_model()
