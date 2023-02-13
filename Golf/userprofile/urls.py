@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import AccountSettingsView
 
 
 # Be aware that the url already includes "profile/"
@@ -18,7 +17,7 @@ urlpatterns = [
     # User Settings
     path(
         route="settings",
-        view=AccountSettingsView.as_view(),
+        view=views.AccountSettingsView.as_view(),
         name="settings",
     ),
 ]

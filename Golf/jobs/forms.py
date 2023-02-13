@@ -1,3 +1,4 @@
+from profanity.validators import validate_is_profane
 from django import forms
 from django.forms import ModelForm
 from django.core.validators import RegexValidator
@@ -7,7 +8,6 @@ from .models import Job
 #
 from superadmin.models import Report
 #
-from profanity.validators import validate_is_profane
 
 
 class JobForm(ModelForm):

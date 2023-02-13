@@ -19,27 +19,27 @@ User = get_user_model()
 
 def userdetails(request, user_id):
     """Public pofile page with just the basic information."""
-    requester = request.user # The user who is currently signed in
+    me = request.user # The user who is currently signed in
 
     # Check if the user ID is valid
     users = User.objects.filter(pk=user_id)
     user_id_exists = len(users) == 1
     if not user_id_exists:
         raise Http404()
-    viewed_user = users[0]
+    user = users[0]
 
-    posted_active = Job.objects.filter(poster_id=viewed_user.id, completed=False)
-    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=viewed_user.id)
+    posted_active = Job.objects.filter(poster_id=user.id, completed=False)
+    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user.id)
     chat_started = (
         len(
             Room.objects.filter(
-                Q(user_1=requester, user_2=viewed_user.id) | Q(user_2=requester, user_1=viewed_user.id)
+                Q(user_1=me, user_2=user.id) | Q(user_2=me, user_1=user.id)
             )
         ) == 1
     )
     context = {
-        "user": requester,
-        "viewed_user": viewed_user,
+        "me": me,
+        "user": user,
         "posted_active": posted_active,
         "posted_inactive": posted_inactive,
         "chat_started": chat_started,
@@ -56,7 +56,7 @@ def me(request):
     user_id_exists = len(users) == 1
     if not user_id_exists:
         raise Http404()
-    user_extended = users[0]
+    me = users[0]
 
     # Saved jobs
     saved_jobs = []
@@ -98,7 +98,7 @@ def me(request):
     posts = posts_paginator.get_page(posts_page)
 
     context = {
-        "user": user_extended,
+        "me": me,
         "bookmarks": bookmarks,
         "posts": posts,
         "applications": applications,
@@ -107,10 +107,8 @@ def me(request):
 
 
 def settings(request):
-    "Page for account settings"
-    context = {
-    }
-    return render(request, "userprofile/usersettings.html", context)
+    """Page for account settings"""
+    return render(request, "userprofile/usersettings.html")
 
 
 def withdraw_call(request):
@@ -276,26 +274,24 @@ class AccountSettingsView(View):
 
     # Renders the form at the first time
     def get(self, request, *args, **kwargs):
-        
-        user = request.user
-        return render(request, self.template_name, {"user":user})
+        me = request.user
+        return render(request, self.template_name, {"me":me})
 
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
-        
         #returns an empty list if button is unchecked otherwise returns ['on']
         button_check = request.POST.getlist('opt_in')
 
-        user = request.user
+        me = request.user
 
         # If checkbox state doesn't match email preference on submit
         # then change the email preference
-        if user.opt_in_emails == True and button_check == []:
-            user.opt_in_emails = False
-        elif user.opt_in_emails == False and button_check == ['on']:
-            user.opt_in_emails = True
+        if me.opt_in_emails == True and button_check == []:
+            me.opt_in_emails = False
+        elif me.opt_in_emails == False and button_check == ['on']:
+            me.opt_in_emails = True
         
-        user.save()
+        me.save()
 
         # Render the form again
-        return render(request, self.template_name, {"user":user})
+        return render(request, self.template_name, {"me":me})

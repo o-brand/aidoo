@@ -222,7 +222,6 @@ class JobModelTestCase(TestCase):
             created_job.full_clean()
 
 
-
 class BookmarkModelTestCase(TestCase):
     """Tests for Bookmark model."""
 
@@ -263,7 +262,8 @@ class BookmarkModelTestCase(TestCase):
         Bookmark.objects.create(**bookmark)
         with self.assertRaises(IntegrityError):
             Bookmark.objects.create(**bookmark)
-            
+
+
 class ApplicationModelTestCasae(TestCase):
     """Test for Application model."""
 
@@ -308,6 +308,7 @@ class ApplicationModelTestCasae(TestCase):
         #raise error if duplicate found
         with self.assertRaises(IntegrityError):
             Application.objects.create(**application)
+
 
 class PostPageCase(LoginRequiredTestCase):
     """Tests for Post page."""
@@ -673,6 +674,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/applied.html")
         self.assertEqual(len(Application.objects.all()), 1)
+
 
 class ReportButtonCase(LoginRequiredTestCase):
     """Tests for report button."""

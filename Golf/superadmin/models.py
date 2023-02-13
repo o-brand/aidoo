@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from jobs.models import Job
-# from chat.models import Room # Activate when chats finalized
+from chat.models import Room
 
 
 # Get actual user model.

@@ -5,13 +5,12 @@ from django.views import View
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .models import Job, Bookmark, Application
-from .forms import JobForm
-#
-from .forms import ReportForm
-#
+from .forms import JobForm, ReportForm
+
 
 # Get actual user model.
 User = get_user_model()
+
 
 def details(request, job_id):
     """Shows the details of a job. It is a static page."""
@@ -66,6 +65,8 @@ class FormView(View):
         return render(
             request, self.template_name, {"form": form, "poster_id": request.user.id}
         )
+
+
 #
 class ReportFormView(View):
     """Displays form to report a job post"""
@@ -91,6 +92,7 @@ class ReportFormView(View):
             request, self.template_name, {"form": form, "poster_id": request.request.id}
         )
 #
+
 
 class JobsView(ListView):
     """Displays a list to show the available jobs."""
@@ -166,6 +168,7 @@ def bookmark_call(request):
 
     # If it is not POST
     raise Http404()
+
 
 def apply_call(request):
     """Create a new application record in database."""

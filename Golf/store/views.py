@@ -3,17 +3,20 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from .models import Item, Sale
 
+
+# Get actual user model.
 User = get_user_model()
+
 
 def home(request):
     # Render the main shop page
     actual_user_id = request.user.id
 
-    try:
-        _ = User.objects.get(pk=actual_user_id)
-    except User.DoesNotExist:
-        # This should not happen.
-        raise Http404("User does not exist.")
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
 
     items = Item.objects.filter(on_offer=True)
     purchases = Sale.objects.filter(buyer=request.user)
@@ -24,6 +27,7 @@ def home(request):
         "purchases": purchased_items
     }
     return render(request, "store/storefront.html", context)
+
 
 def buyitem_call(request):
     """User buys an item from the store"""
@@ -51,7 +55,7 @@ def buyitem_call(request):
         except ValueError:
             raise Http404()
         if quantity <= 0:
-            raise Http404() # Not sure if this is the right error code
+            raise Http404()
 
         # Create new sale instance
         sale = Sale.objects.create(
