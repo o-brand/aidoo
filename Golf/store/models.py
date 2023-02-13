@@ -2,7 +2,10 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
+
+# Get actual user model.
 User = get_user_model()
+
 
 class Item(models.Model):
     """This model is used to represent an item for sale in the shop."""
@@ -25,6 +28,7 @@ class Item(models.Model):
     # True if the item is on offer (i.e. displaying) in the shop
     on_offer = models.BooleanField()
 
+
 class Sale(models.Model):
     """This model is used to represent the sale of an item in the shop,
     where each item sold is recorded separately"""
@@ -43,5 +47,3 @@ class Sale(models.Model):
 
     # The time at which the sale was recorded
     time_of_sale = models.DateTimeField(default=timezone.now)
-
-

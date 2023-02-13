@@ -2,7 +2,6 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from chat.models import Room # Move to admin models when created
 
 
 # Get actual user model.
