@@ -4,6 +4,9 @@ from django.core.validators import RegexValidator
 from Golf.utils import create_date_string
 from .validators import validate_deadline
 from .models import Job
+#
+from .models import Report
+#
 from profanity.validators import validate_is_profane
 
 
@@ -114,3 +117,29 @@ class JobForm(ModelForm):
             "deadline",
             "poster_id",
         ]
+        
+#
+class ReportForm(ModelForm):
+    """Form to report a job post"""
+
+    description = forms.CharField(
+    max_length=1000,
+    min_length=50,
+    widget=forms.Textarea(
+            attrs={
+            "placeholder": "Explain the reason for reporting",
+            "class": "form-control",
+            "rows": 5,
+        }
+    ),
+    label="Report description",
+    validators=[validate_is_profane],
+    )
+    
+    class Meta:
+        model = Report
+        fields = [
+            "description"
+        ]
+    #
+    
