@@ -48,6 +48,13 @@ class Job(models.Model):
     # If the poster marked this job as completed, then this is True
     completed = models.BooleanField(default=False)
 
+#
+class Report(models.Model):
+    """This model is used to represent a form to submit report"""
+
+    #Field to describe the issue
+    description  = models.CharField(max_length=1000)
+#
 
 class Bookmark(models.Model):
     """This model is used to represent a bookmark for the user."""
