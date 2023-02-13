@@ -1,13 +1,14 @@
 from django.core.mail import send_mail
-from django.urls import reverse
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
+from django.shortcuts import render
+from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
-from jobs.models import Job, Bookmark, Application
 from django.template.loader import render_to_string
-
+from django.views import View
+from django.core.paginator import Paginator
+from jobs.models import Job, Bookmark, Application
+from chat.models import Room
 
 # Get actual user model.
 User = get_user_model()
@@ -15,20 +16,30 @@ User = get_user_model()
 
 def userdetails(request, user_id):
     """Public pofile page with just the basic information."""
-    requester = request.user #The user who is currently signed in
+    requester = request.user # The user who is currently signed in
 
-    try:
-        user_extended = User.objects.get(pk=user_id)
-    except User.DoesNotExist:
-        raise Http404("User does not exist.")
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    viewed_user = users[0]
 
-    posted_active = Job.objects.filter(poster_id=user_id, completed=False)
-    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user_id)
+    posted_active = Job.objects.filter(poster_id=viewed_user.id, completed=False)
+    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=viewed_user.id)
+    chat_started = (
+        len(
+            Room.objects.filter(
+                Q(user_1=requester, user_2=viewed_user.id) | Q(user_2=requester, user_1=viewed_user.id)
+            )
+        ) == 1
+    )
     context = {
         "user": requester,
-        "viewed_user": user_extended,
+        "viewed_user": viewed_user,
         "posted_active": posted_active,
         "posted_inactive": posted_inactive,
+        "chat_started": chat_started,
     }
     return render(request, "userprofile/public.html", context)
 
@@ -37,19 +48,25 @@ def me(request):
     """Private pofile page with more data."""
     actual_user_id = request.user.id
 
-    try:
-        user_extended = User.objects.get(pk=actual_user_id)
-    except User.DoesNotExist:
-        # This should not happen.
-        raise Http404("User does not exist.")
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    user_extended = users[0]
 
     # Saved jobs
     saved_jobs = []
 
-    saved = Bookmark.objects.filter(user_id=actual_user_id)
+    saved = Bookmark.objects.filter(user_id=actual_user_id
+        ).order_by("saving_time")
 
     for job in saved:
         saved_jobs.append([job.job_id, job.saving_time])
+
+    bookmark_paginator = Paginator(saved, 2)
+    bookmark_page = request.GET.get("bpage")
+    bookmarks = bookmark_paginator.get_page(bookmark_page)
 
     # Applied jobs
     applied_jobs = []
@@ -58,6 +75,10 @@ def me(request):
 
     for job in applied:
         applied_jobs.append([job.job_id, job.status])
+
+    application_paginator = Paginator(applied_jobs, 2)
+    application_page = request.GET.get("apage")
+    applications = application_paginator.get_page(application_page)
 
     # Posted jobs
     posted_jobs = []
@@ -69,14 +90,23 @@ def me(request):
         applicants = list(Application.objects.filter(job_id=job.job_id))
         posted_jobs.append([job, applicants])
 
+    posts_paginator = Paginator(posted_jobs, 2)
+    posts_page = request.GET.get("ppage")
+    posts = posts_paginator.get_page(posts_page)
+
     context = {
         "user": user_extended,
-        "saved": saved_jobs,
-        "applied": applied_jobs,
-        "posted": posted_jobs,
+        "bookmarks": bookmarks,
+        "posts": posts,
+        "applications": applications,
     }
     return render(request, "userprofile/private.html", context)
 
+def settings(request):
+    "Page for account settings"
+    context = {
+    }
+    return render(request, "userprofile/usersettings.html", context)
 
 def withdraw_call(request):
     """Withdraw from a job."""
@@ -116,7 +146,6 @@ def selectapplicant_call(request):
         job_id = request.POST.get("job_id", -1)
         applicant_id = request.POST.get("accept", [-1])
 
-
         # Check if the job ID is valid
         jobs = Job.objects.filter(pk=job_id)
         job_id_exists = len(jobs) == 1
@@ -137,43 +166,48 @@ def selectapplicant_call(request):
         # change status of applicants - only those status where "AP"
         for user in applications:
             if str(user.applicant_id.id) != applicant_id:
-                # send an email to the rejected applicant
-                message = render_to_string(
-                    "emails/application_rejection.html",
-                    {
-                        "user": user.applicant_id.username,
-                        "job_title": job.job_title,
-                        "poster": job.poster_id.username,
-                    },
-                )
-                send_mail(
-                    'Sorry!',
-                    message,
-                    None,
-                    [user.applicant_id.email],
-                )
+                if user.applicant_id.opt_in_emails == True:
+                    # send an email to the rejected applicant
+                    message = render_to_string(
+                        "emails/application_rejection.html",
+                        {
+                            "user": user.applicant_id.username,
+                            "job_title": job.job_title,
+                            "poster": job.poster_id.username,
+                        },
+                    )
+                    send_mail(
+                        'Sorry!',
+                        message,
+                        None,
+                        [user.applicant_id.email],
+                    )
 
-                user.status = "RE"
-                user.save()
+                    user.status = "RE"
+                    user.save()
             else:
-                # send an email to the accepted applicant
-                message = render_to_string(
-                    "emails/application_acceptance.html",
-                    {
-                        "user": user.applicant_id.username,
-                        "job_title": job.job_title,
-                        "poster": job.poster_id.username,
-                    },
-                )
-                send_mail(
-                    'Congratulations!',
-                    message,
-                    None,
-                    [user.applicant_id.email],
-                )
+                if user.applicant_id.opt_in_emails == True:
+                    # send an email to the accepted applicant
+                    message = render_to_string(
+                        "emails/application_acceptance.html",
+                        {
+                            "user": user.applicant_id.username,
+                            "job_title": job.job_title,
+                            "poster": job.poster_id.username,
+                        },
+                    )
+                    send_mail(
+                        'Congratulations!',
+                        message,
+                        None,
+                        [user.applicant_id.email],
+                    )
 
-                user.status = "AC"
-                user.save()
+                    user.status = "AC"
+                    user.save()
+                else:
+                    user.status = "AC"
+                    user.save()
         return render(
             request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
         )
@@ -226,3 +260,34 @@ def jobdone_call(request):
 
     # If it is not POST
     raise Http404()
+
+class AccountSettingsView(View):
+    """It is used to render the account settings page."""
+
+    template_name = "userprofile/usersettings.html"
+
+    # Renders the form at the first time
+    def get(self, request, *args, **kwargs):
+        
+        user = request.user
+        return render(request, self.template_name, {"user":user})
+
+    # Processes the form after submit
+    def post(self, request, *args, **kwargs):
+        
+        #returns an empty list if button is unchecked otherwise returns ['on']
+        button_check = request.POST.getlist('opt_in')
+
+        user = request.user
+
+        # If checkbox state doesn't match email preference on submit
+        # then change the email preference
+        if user.opt_in_emails == True and button_check == []:
+            user.opt_in_emails = False
+        elif user.opt_in_emails == False and button_check == ['on']:
+            user.opt_in_emails = True
+        
+        user.save()
+
+        # Render the form again
+        return render(request, self.template_name, {"user":user})

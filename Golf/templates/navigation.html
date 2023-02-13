@@ -10,9 +10,9 @@
           <img src="../static/assets/pfp/{{user.id}}.jpeg">
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="{% url 'me' %}">Profile</a></li>
+          <li><a class="dropdown-item" href="{% url 'me' %}">Dashboard</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
         </ul>

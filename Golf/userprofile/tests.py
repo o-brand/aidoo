@@ -81,6 +81,10 @@ class UserTableTestCase(TestCase):
         u = User.objects.get(pk=1)
         self.assertGreaterEqual(u.rating, 0)
 
+    def test_email_preferences(self):
+        #checks if the email preference exists and is either True or False
+        u = User.objects.get(pk=1)
+        self.assertIn(u.opt_in_emails, {True:False})
 
 class PublicProfileTestCase(LoginRequiredTestCase):
     """Tests for the PUBLIC profile page."""
@@ -363,3 +367,18 @@ class JobDoneButtonCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/job-applicants.html")
         self.assertEqual(Application.objects.get(applicant_id=2,job_id=2).status, "DN")
+
+class AccountSettingsTestCase(LoginRequiredTestCase):
+    """Tests for the Account Settings page."""
+
+    # test if the account settings page is reachable and uses the right template
+    def test_account_settings(self):
+        response = self.client.get(reverse("settings"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_account_settings_available_by_name(self):
+        response = self.client.get(reverse("settings"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="userprofile/usersettings.html")
+
+    

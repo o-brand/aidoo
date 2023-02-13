@@ -6,6 +6,8 @@ Keep things consistent!
 
 If you think we should add anything else, or change something, feel free to do it, but notify everybody about the changes.
 
+***If you write a new function, write tests for it!!***
+
 ## Code quality
 
 - Naming variables, functions, classes, & objects: Python - snake_case; JS - camelCase; HTML and CSS - dash-case. The names should be meaningful and complete.
@@ -41,7 +43,9 @@ If you think we should add anything else, or change something, feel free to do i
 
 - If you are not sure what a function/file does, ask the last person who edited that file.
 
-- If you created a new branch for your task, try to limit the lifespan of the branch to a maximum of 3 days. And try to keep the irrelevant changes as few as possible to avoid merge conflicts.
+- If you created a new branch for your task, try to limit the lifespan of the branch to a maximum of 3 days. And try to keep the irrelevant changes as few as possible to avoid merge conflicts. ***Always create a new branch from main.***
+
+- If somebody else's task depends on you task, try to finish it before the weekend.
 
 ### Backend
 

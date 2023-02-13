@@ -1,0 +1,8 @@
+<button
+  class="btn btn-primary"
+  _="on click add @disabled to me"
+  hx-post="{% url 'chat-startchat' %}"
+  hx-vals='{"user_id": {{ viewed_user.id }} }'
+  hx-swap="outerHTML"
+  hx-target="this"
+  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Start chat</button>

@@ -1,0 +1,24 @@
+{% if users %}
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  {% for viewed_user, chat_started in users %}
+    <tr>
+      <td>{{ viewed_user.username }}</td>
+      <td>
+        {% if chat_started %}
+          {% include 'htmx/chat_button.html' %}
+        {% else %}
+          {% include 'htmx/chat_button_new.html' %}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+{% else %}
+  <br>
+  <p>No user found.</p>
+{% endif %}

@@ -29,10 +29,6 @@ SECRET_KEY = "django-insecure-ygkairtzpyop9eyg6n&1xd6@i*2mn1jfuq&b(jy!4*g9q6sa=f
 DEBUG = True
 
 
-# For security (run python manage.py check --deploy to check the problems)
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 ALLOWED_HOSTS = [
     "teamgolf.pythonanywhere.com",
     "127.0.0.1",
@@ -58,6 +54,7 @@ INSTALLED_APPS = [
     "chat.apps.ChatConfig",
     "store.apps.StoreConfig",
     "profanity",
+    "superadmin.apps.SuperadminConfig",
 ]
 
 MIDDLEWARE = [
