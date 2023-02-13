@@ -6,9 +6,9 @@
     </tr>
   </thead>
 
-  {% for viewed_user, chat_started in users %}
+  {% for user, chat_started in users %}
     <tr>
-      <td>{{ viewed_user.username }}</td>
+      <td>{{ user.username }}</td>
       <td>
         {% if chat_started %}
           {% include 'htmx/chat_button.html' %}

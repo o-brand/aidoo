@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 {% load static %}
 
 {% block title %}My profile{% endblock %}
@@ -21,16 +21,16 @@
         <button><i class="bi bi-pencil"></i></button>
       </div>
       <div class="card">
-        <img src="../static/assets/pfp/{{user.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
+        <img src="../static/assets/pfp/{{me.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
         <div class="card-body">
-          <h5 class="card-title mb-0">{{ user.first_name }} {{ user.last_name }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ user.username }}</h6>
+          <h5 class="card-title mb-0">{{ me.first_name }} {{ me.last_name }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{ me.username }}</h6>
           <p class="card-text">
-            Email address: {{ user.email }}<br/>
-            Date of birth: {{ user.date_of_birth }}<br/>
-            Joined: {{ user.date_joined | date:'d M Y'}}<br/>
-            Rating: {{ user.rating }}<br/>
-            Balance: {{ user.balance }} points<br/>
+            Email address: {{ me.email }}<br/>
+            Date of birth: {{ me.date_of_birth }}<br/>
+            Joined: {{ me.date_joined | date:'d M Y'}}<br/>
+            Rating: {{ me.rating }}<br/>
+            Balance: {{ me.balance }} points<br/>
         </div>
       </div>
     </div>
@@ -118,25 +118,6 @@
                     <a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a>
                   </h5>
                 </div>
-                <p class="card-text">
-                  <i class="bi bi-activity"></i>
-                  <strong>
-                    {{ status }}
-                  </strong>
-                  &nbsp;
-                  <i class="bi bi-geo-alt"></i>
-                  {{ job.location }}
-                  &nbsp;
-                  <i class="bi bi-hourglass-split"></i>
-                  {% if job.deadline is not None %}
-                    {{ job.deadline | date:'d M Y' }}
-                  {% else %}
-                    None
-                  {% endif %}
-                  &nbsp;
-                  <i class="bi bi-stars"></i>
-                  {{ job.points }}
-                </p>
                 <span>
                   {% include 'htmx/job-applied.html' %}
                 </span>
@@ -278,13 +259,7 @@
   <p><a href="{% url 'home' %}">Go back</a></p>
 </div>
 
-<!--Reusable modal-->
-<div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div id="dialog" class="modal-dialog" hx-target="this"></div>
-</div>
-
-<!--Modal behavior (JS)-->
-<script src="{% static 'js/dialog.js' %}"></script>
+{{ block.super }}
 
 <script src="{% static 'js/private.js' %}"></script>
 {% endblock %}

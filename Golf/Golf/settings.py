@@ -81,6 +81,7 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "Golf.processors.auth", # To have "me" in the templates.
                 "django.contrib.messages.context_processors.messages",
             ],
         },

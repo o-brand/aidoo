@@ -1,19 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 {% load static %}
 
 {% block title %}Home{% endblock %}
-
-{% block head_extra %}
-<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
-<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
-{% endblock %}
 
 {% block content %}
 {% include 'navigation.html' %}
 
 <div class="container">
   <div class="hello text-center justify-content-center">
-    <h1>Hi {{ user.username }}!</h1>
+    <h1>Hi {{ me.username }}!</h1>
     {% if jobs_count == 0 %}
       <p>There are no available jobs for this search term.</p>
     {% elif jobs_count == 1 %}
@@ -99,15 +94,8 @@
   </button>
 </div>
 
-<!-- Right now this is the only page where we use the modal, so moved from base.html -->
-<!--Reusable modal-->
-<div id="modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false">
-  <div id="dialog" class="modal-dialog" hx-target="this"></div>
-</div>
 
-<!--Modal behavior (JS)-->
-<script src="{% static 'js/dialog.js' %}"></script>
-
+{{ block.super }}
 <script src="{% static 'js/home.js' %}"></script>
 
 <!-- TODO: show more show less, not working properly
