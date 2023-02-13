@@ -12,6 +12,7 @@ from chat.models import Room
 from django.core.paginator import Paginator
 from django.views import View
 
+
 # Get actual user model.
 User = get_user_model()
 
@@ -104,11 +105,13 @@ def me(request):
     }
     return render(request, "userprofile/private.html", context)
 
+
 def settings(request):
     "Page for account settings"
     context = {
     }
     return render(request, "userprofile/usersettings.html", context)
+
 
 def withdraw_call(request):
     """Withdraw from a job."""
@@ -140,6 +143,7 @@ def withdraw_call(request):
 
     # If it is not POST
     raise Http404()
+
 
 def selectapplicant_call(request):
     """Select an applicant for a job."""
@@ -217,6 +221,7 @@ def selectapplicant_call(request):
     # If it is not POST
     raise Http404()
 
+
 def jobdone_call(request):
     """Finish a job."""
     if request.method == "POST":
@@ -262,6 +267,7 @@ def jobdone_call(request):
 
     # If it is not POST
     raise Http404()
+
 
 class AccountSettingsView(View):
     """It is used to render the account settings page."""

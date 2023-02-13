@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     "userprofile.apps.UserprofileConfig",
     "chat.apps.ChatConfig",
     "store.apps.StoreConfig",
-    "profanity",
     "superadmin.apps.SuperadminConfig",
+    "profanity",
 ]
 
 MIDDLEWARE = [
@@ -154,8 +154,8 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
 EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
-
 EMAIL_USE_TLS = True
+
 
 # HEROKU
 if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:

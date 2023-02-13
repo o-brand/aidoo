@@ -86,6 +86,7 @@ class UserTableTestCase(TestCase):
         u = User.objects.get(pk=1)
         self.assertIn(u.opt_in_emails, {True:False})
 
+
 class PublicProfileTestCase(LoginRequiredTestCase):
     """Tests for the PUBLIC profile page."""
 
@@ -178,6 +179,7 @@ class WithdrawButtonCase(LoginRequiredTestCase):
         self.assertTemplateUsed(response, template_name="htmx/job-applied.html")
         self.assertEqual(Application.objects.get(applicant_id=self.user.id,job_id=1).status, "WD")
 
+
 class SelectApplicantButtonCase(LoginRequiredTestCase):
     """Tests for selecting an applicant button."""
 
@@ -260,6 +262,7 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/job-applicants.html")
         self.assertEqual(Application.objects.get(applicant_id=2,job_id=2).status, "AC")
+
 
 class JobDoneButtonCase(LoginRequiredTestCase):
     """Tests for job done button."""
@@ -368,6 +371,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
         self.assertTemplateUsed(response, template_name="htmx/job-applicants.html")
         self.assertEqual(Application.objects.get(applicant_id=2,job_id=2).status, "DN")
 
+
 class AccountSettingsTestCase(LoginRequiredTestCase):
     """Tests for the Account Settings page."""
 
@@ -380,5 +384,3 @@ class AccountSettingsTestCase(LoginRequiredTestCase):
         response = self.client.get(reverse("settings"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="userprofile/usersettings.html")
-
-    
