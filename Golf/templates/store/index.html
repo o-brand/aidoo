@@ -14,9 +14,17 @@
 <div class="container">
   <h2>"The Store"</h2>
   {% for item in items %}
-    <span>
-      {% include "htmx/buy-item.html" %}
-    </span>
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">
+          <h4>{{item.item_name}}</h4>
+        </div>
+        <div class="card-text">
+          <p>{{item.description}}</p>
+          <span>{% include "htmx/buy-item.html" %}</span>
+        </div>
+      </div>
+    </div>
   {% endfor %}
 </div>
 {% endblock %}

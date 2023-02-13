@@ -72,7 +72,7 @@ def buyitem_call(request):
         buyer.save()
         sale.save()
 
-        return HttpResponse("Bought!")
+        return render(request, "htmx/buy-item-bought.html")
 
     # If it is not POST
     raise Http404()

@@ -6,5 +6,6 @@ from . import views
 urlpatterns = [
     # Homepage
     path("", views.home, name="store"),
+    # Buy an item from the store, uses HTMX
     path("buyitem", views.buyitem_call, name="buyitem"),
 ]
