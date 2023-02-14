@@ -89,7 +89,7 @@ class ReportFormView(View):
 
             return HttpResponse(status=204)
         return render(
-            request, self.template_name, {"form": form, "poster_id": request.request.id}
+            request, self.template_name, {"form": form, "poster_id": request.user.id}
         )
 #
 
