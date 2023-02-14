@@ -62,7 +62,11 @@ class Report(models.Model):
     last_update_time = models.DateTimeField(default=None)
     
     # The status of dealing with the report
-    status = models.CharField(choices=ReportStatus.choices, max_length=10)
+    status = models.CharField(
+        choices=ReportStatus.choices, 
+        max_length=10, 
+        default=ReportStatus.OPEN
+    )
     
     # The type of report
     type = models.CharField(choices=ReportType.choices, max_length=10)
