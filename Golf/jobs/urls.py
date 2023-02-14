@@ -12,11 +12,6 @@ urlpatterns = [
     path("<int:job_id>", views.details, name="jobdetails"),
     # Applying for a job, used by HTMX
     path("apply", views.apply_call, name="apply"),
-    # Reporting a job, used by HTMX
-
-    #path("report", views.report_call, name="report"),
-    path("report", views.ReportFormView.as_view(), name="report"),
-    
     # Bookmarking a job, used by HTMX
     path("bookmark", views.bookmark_call, name="bookmark"),
 ]

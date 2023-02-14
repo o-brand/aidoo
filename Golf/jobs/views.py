@@ -5,7 +5,7 @@ from django.views import View
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .models import Job, Bookmark, Application
-from .forms import JobForm, ReportForm
+from .forms import JobForm
 
 
 # Get actual user model.
@@ -65,33 +65,6 @@ class FormView(View):
         return render(
             request, self.template_name, {"form": form, "poster_id": request.user.id}
         )
-
-
-#
-class ReportFormView(View):
-    """Displays form to report a job post"""
-
-    form_class = ReportForm
-    template_name = "postreport.html"
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(
-            request, self.template_name, {"form": form, "poster_id": request.user.id}
-        )
-    
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-
-            return HttpResponse(status=204)
-        return render(
-            request, self.template_name, {"form": form, "poster_id": request.user.id}
-        )
-#
 
 
 class JobsView(ListView):
