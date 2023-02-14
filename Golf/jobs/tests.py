@@ -703,7 +703,7 @@ class ReportButtonCase(LoginRequiredTestCase):
 
     def test_page(self):
         # test availability via URL
-        response = self.client.get("/jobs/report")
+        response = self.client.get("/superadmin/report")
         self.assertEqual(response.status_code, 200)
 
     def test_page_available_by_name(self):
