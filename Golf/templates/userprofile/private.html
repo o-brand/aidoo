@@ -132,7 +132,7 @@
                 <li class="page-item">
                   {% if applications.has_previous %}
                     <a class="page-link"
-                      href="?apage=1{% if posts %}&ppage={{posts.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
+                      href="?{% if posts %}ppage={{posts.number}}&{% endif %}apage=1{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
                       First</a>
                   {% else %}
                     <p class="page-link disabled">First</p>
@@ -142,7 +142,7 @@
               <li class="page-item">
                 {% if applications.has_previous %}
                   <a class="page-link"
-                    href="?apage={{applications.previous_page_number}}{% if posts %}&ppage={{posts.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
+                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}apage={{applications.previous_page_number}}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
                     Previous</a>
                 {% else %}
                   <p class="page-link disabled">Previous</p>
@@ -152,7 +152,7 @@
               <li class="page-item">
                 {% if applications.has_next %}
                   <a class="page-link"
-                  href="?apage={{applications.next_page_number}}{% if posts %}&ppage={{posts.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
+                  href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if bookmarks %}apage={{applications.next_page_number}}&bpage={{bookmarks.number}}{% endif %}">
                   Next</a>
                 {% else %}
                   <p class="page-link disabled">Next</p>
@@ -162,7 +162,7 @@
                 <li class="page-item">
                   {% if applications.has_next %}
                     <a class="page-link"
-                    href="?apage={{applications.paginator.num_pages}}{% if posts %}&ppage={{posts.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
+                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}apage={{applications.paginator.num_pages}}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
                     Last</a></li>
                   {% else %}
                     <p class="page-link disabled">Last</p>
@@ -211,7 +211,7 @@
                 <li class="page-item">
                   {% if bookmarks.has_previous %}
                     <a class="page-link"
-                      href="?bpage=1{% if applications %}&apage={{applications.number}}{% endif %}{% if posts %}&ppage={{posts.number}}{% endif %}">
+                      href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage=1">
                       First</a>
                   {% else %}
                     <p class="page-link disabled">First</p>
@@ -221,7 +221,7 @@
               <li class="page-item">
                 {% if bookmarks.has_previous %}
                   <a class="page-link"
-                    href="?bpage={{bookmarks.previous_page_number}}{% if applications %}&apage={{applications.number}}{% endif %}{% if posts %}&ppage={{posts.number}}{% endif %}">
+                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage={{bookmarks.previous_page_number}}">
                     Previous</a>
                 {% else %}
                   <p class="page-link disabled">Previous</p>
@@ -231,7 +231,7 @@
               <li class="page-item">
                 {% if bookmarks.has_next %}
                   <a class="page-link"
-                  href="?bpage={{bookmarks.next_page_number}}{% if applications %}&apage={{applications.number}}{% endif %}{% if posts %}&ppage={{posts.number}}{% endif %}">
+                  href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage={{bookmarks.next_page_number}}">
                   Next</a>
                 {% else %}
                   <p class="page-link disabled">Next</p>
@@ -241,7 +241,7 @@
                 <li class="page-item">
                   {% if bookmarks.has_next %}
                     <a class="page-link"
-                    href="?bpage={{bookmarks.paginator.num_pages}}{% if applications %}&apage={{applications.number}}{% endif %}{% if posts %}&ppage={{posts.number}}{% endif %}">
+                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage={{bookmarks.paginator.num_pages}}">
                     Last</a></li>
                   {% else %}
                     <p class="page-link disabled">Last</p>
