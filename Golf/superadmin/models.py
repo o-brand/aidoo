@@ -59,7 +59,9 @@ class Report(models.Model):
     reporting_time = models.DateTimeField(default=timezone.now)
    
    # The time at which the report last changed status
-    last_update_time = models.DateTimeField(default=None)
+    last_update_time = models.DateTimeField(blank=True, 
+        default=None, 
+        null=True)
     
     # The status of dealing with the report
     status = models.CharField(

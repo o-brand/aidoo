@@ -3,4 +3,7 @@
   hx-post="{% url 'report' %}"
   hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
   hx-target = "#dialog"
-  {% block extra %}{% endblock %}>Report</a>
+  hx-vals = '{"job_id": {{ job.job_id }}, 
+    "user_id": {{ job.poster_id.id }}}'
+  >Report
+</a>
