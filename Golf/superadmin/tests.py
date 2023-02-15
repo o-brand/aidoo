@@ -37,7 +37,6 @@ class ReportingTestCase(LoginRequiredTestCase):
             "poster_id": self.user,
             "location": "AB21 3EW",
             "job_title": "Walking a dog",
-            "job_short_description": "Please walk my dog",
             "job_description": "Nothing",
             "points": 10,
         }
