@@ -189,6 +189,7 @@ def selectapplicant_call(request):
                         message,
                         None,
                         [user.applicant_id.email],
+                        html_message=message,
                     )
 
                 user.status = "RE"
@@ -209,6 +210,7 @@ def selectapplicant_call(request):
                         message,
                         None,
                         [user.applicant_id.email],
+                        html_message=message,
                     )
 
                 user.status = "AC"
