@@ -80,7 +80,6 @@ class JobsView(ListView):
         return Job.objects.filter(
             Q(job_title__icontains=filter_val) |
             Q(job_description__icontains=filter_val) |
-            Q(job_short_description__icontains=filter_val) |
             Q(location__icontains=filter_val),
             hidden=False,
             assigned=False

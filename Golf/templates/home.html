@@ -60,7 +60,7 @@
               <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
             </div>
             <p class="">{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
-            <p>{{ job.job_short_description }}</p>
+            <p>{{ job.job_description }}</p>
             <!-- TODO: show more show less, not working properly
             <p class="short-desc" id="short-desc-{{ job.job_id }}">{{ job.job_short_description }}</p>
             <span class="long-desc" id="long-desc-{{ job.job_id }}">{{ job.job_description }}</span>

@@ -23,10 +23,7 @@ class Job(models.Model):
     # Title of the job
     job_title = models.CharField(max_length=50)
 
-    # Short description. It is displayed in the list.
-    job_short_description = models.CharField(max_length=50)
-
-    # Long description. It is displayed in the details page.
+    # Description. It is displayed in the list (part of it) and the whole in the details.
     job_description = models.CharField(max_length=1000)
 
     # The time of posting (it has default value)
