@@ -12,6 +12,7 @@
       // Hides dialog after form is submitted
       if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
         modal.hide();
+        modal.css('display','none');
         e.detail.shouldSwap = false;
       }
     });
@@ -19,5 +20,6 @@
   htmx.on("hidden.bs.modal", (e) => {
     // Clear form after modal is hidden
     document.getElementById("dialog").innerHTML = "";
+    modal.css('display','none');
   });
 })()

@@ -28,6 +28,11 @@ class Item(models.Model):
     # True if the item is on offer (i.e. displaying) in the shop
     on_offer = models.BooleanField()
 
+    # The maximum amount of this item that a user can buy
+    limit_per_user = models.IntegerField(blank=True, 
+        default=None, 
+        null=True)
+
 
 class Sale(models.Model):
     """This model is used to represent the sale of an item in the shop,
