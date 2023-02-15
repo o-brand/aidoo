@@ -23,17 +23,18 @@
 | jobs/\_\_init\_\_.py                                                                    |        0 |        0 |    100% |           |
 | jobs/admin.py                                                                           |        5 |        0 |    100% |           |
 | jobs/apps.py                                                                            |        4 |        0 |    100% |           |
-| jobs/forms.py                                                                           |       20 |        0 |    100% |           |
+| jobs/forms.py                                                                           |       19 |        0 |    100% |           |
 | jobs/migrations/0001\_initial.py                                                        |        7 |        0 |    100% |           |
 | jobs/migrations/0002\_initial.py                                                        |        7 |        0 |    100% |           |
 | jobs/migrations/0003\_report.py                                                         |        4 |        0 |    100% |           |
 | jobs/migrations/0004\_delete\_report.py                                                 |        4 |        0 |    100% |           |
+| jobs/migrations/0005\_remove\_job\_job\_short\_description.py                           |        4 |        0 |    100% |           |
 | jobs/migrations/\_\_init\_\_.py                                                         |        0 |        0 |    100% |           |
-| jobs/models.py                                                                          |       41 |        0 |    100% |           |
-| jobs/tests.py                                                                           |      445 |        2 |     99% |  509, 535 |
+| jobs/models.py                                                                          |       40 |        0 |    100% |           |
+| jobs/tests.py                                                                           |      423 |        2 |     99% |  474, 499 |
 | jobs/urls.py                                                                            |        3 |        0 |    100% |           |
 | jobs/validators.py                                                                      |       11 |        0 |    100% |           |
-| jobs/views.py                                                                           |       90 |       11 |     88% |21-22, 65, 179-196 |
+| jobs/views.py                                                                           |       90 |       11 |     88% |21-22, 65, 178-195 |
 | login/\_\_init\_\_.py                                                                   |        0 |        0 |    100% |           |
 | login/apps.py                                                                           |        4 |        0 |    100% |           |
 | login/forms.py                                                                          |       18 |        0 |    100% |           |
@@ -72,4 +73,4 @@
 | userprofile/tests.py                                                                    |      251 |        0 |    100% |           |
 | userprofile/urls.py                                                                     |        3 |        0 |    100% |           |
 | userprofile/views.py                                                                    |      149 |       22 |     85% |58, 68, 80, 93-94, 111, 164, 173-191, 213-214, 283-297 |
-|                                                                               **TOTAL** | **1858** |  **119** | **94%** |           |
+|                                                                               **TOTAL** | **1838** |  **119** | **94%** |           |
