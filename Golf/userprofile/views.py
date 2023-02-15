@@ -1,3 +1,4 @@
+from random import choice
 from django.core.mail import send_mail
 from django.shortcuts import render
 from django.http import Http404
@@ -167,10 +168,13 @@ def selectapplicant_call(request):
         job.assigned = True
         job.save()
 
-        # change status of applicants - only those status where "AP"
+        # Select applicant randomly
+        selected_application = choice(applications)
+
+        # Change status of applicants - only those status where "AP"
         for user in applications:
-            if str(user.applicant_id.id) != applicant_id:
-                if user.applicant_id.opt_in_emails == True:
+            if user.applicant_id.id != selected_application.applicant_id.id:
+                if user.applicant_id.opt_in_emails:
                     # send an email to the rejected applicant
                     message = render_to_string(
                         "emails/application_rejection.html",
@@ -187,10 +191,10 @@ def selectapplicant_call(request):
                         [user.applicant_id.email],
                     )
 
-                    user.status = "RE"
-                    user.save()
+                user.status = "RE"
+                user.save()
             else:
-                if user.applicant_id.opt_in_emails == True:
+                if user.applicant_id.opt_in_emails:
                     # send an email to the accepted applicant
                     message = render_to_string(
                         "emails/application_acceptance.html",
@@ -207,15 +211,12 @@ def selectapplicant_call(request):
                         [user.applicant_id.email],
                     )
 
-                    user.status = "AC"
-                    user.save()
-                else:
-                    user.status = "AC"
-                    user.save()
+                user.status = "AC"
+                user.save()
         return render(
             request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
         )
-
+        
     # If it is not POST
     raise Http404()
 
