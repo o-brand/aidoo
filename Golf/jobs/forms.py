@@ -22,18 +22,6 @@ class JobForm(ModelForm):
         validators=[validate_is_profane],
     )
 
-    job_short_description = forms.CharField(
-        max_length=50,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Job short description",
-                "class": "form-control",
-            }
-        ),
-        label="Job short description",
-        validators=[validate_is_profane],
-    )
-
     job_description = forms.CharField(
         max_length=1000,
         min_length=50,
@@ -106,7 +94,6 @@ class JobForm(ModelForm):
         model = Job
         fields = [
             "job_title",
-            "job_short_description",
             "job_description",
             "location",
             "duration_days",
