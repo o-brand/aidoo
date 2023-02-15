@@ -1,25 +1,26 @@
 {% load static %}
-
-<form action="" class="modal-content" hx-post="{% url 'report' %}" id="form">
-  {% csrf_token %}
+<div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title">Report job</h5>
     <button class="btn-close" data-bs-dismiss="modal"></button>
   </div>
-  <div class="modal-body">
-    <p>
-      {{ form.complaint.label_tag }}
-      {{ form.complaint }}
-    </p>
-  </div>
-  <div class="modal-footer">
-    <input type="hidden" name="reported_job" value="{{ reported_job }}" />
-    <input type="hidden" name="reported_user" value="{{ reported_user }}" />
-    <input type="hidden" name="reporting_user" value="{{ reporting_user }}" />
-    <input type="hidden" name="type" value="Job" />
-    <!--if we ever allow reports on chats/comments/user create similar input-->
-    
-    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-    <input type="submit" class="btn btn-primary"/>
-  </div>
-</form>
+  <form action="" hx-post="{% url 'report' %}" id="form">
+    {% csrf_token %}
+    <div class="modal-body">
+      <p>
+        {{ form.complaint.label_tag }}
+        {{ form.complaint }}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <input type="hidden" name="reported_job" value="{{ reported_job }}" />
+      <input type="hidden" name="reported_user" value="{{ reported_user }}" />
+      <input type="hidden" name="reporting_user" value="{{ reporting_user }}" />
+      <input type="hidden" name="type" value="Job" />
+      <!--if we ever allow reports on chats/comments/user create similar input-->
+      
+      <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      <input type="submit" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>

@@ -12,7 +12,6 @@
       // Hides dialog after form is submitted
       if (e.detail.target.id == "dialog" && !e.detail.xhr.response) {
         modal.hide();
-        modal.css('display','none');
         e.detail.shouldSwap = false;
       }
     });
