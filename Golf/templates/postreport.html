@@ -1,6 +1,6 @@
 {% load static %}
 
-<form action="" class="modal-content" hx-post="../superadmin/report" id="form">
+<form action="" class="modal-content" hx-post="{% url 'report' %}" id="form">
   {% csrf_token %}
   <div class="modal-header">
     <h5 class="modal-title">Report job</h5>
