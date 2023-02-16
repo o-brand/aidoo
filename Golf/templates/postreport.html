@@ -4,7 +4,7 @@
     <h5 class="modal-title">Report job</h5>
     <button class="btn-close" data-bs-dismiss="modal"></button>
   </div>
-  <form action="" hx-post="{% url 'report' %}" id="form">
+  <form action="" hx-post="{% url 'report' %}" hx-trigger="submit" id="form">
     {% csrf_token %}
     <div class="modal-body">
       <p>
@@ -19,7 +19,7 @@
       <input type="hidden" name="type" value="Job" />
       <!--if we ever allow reports on chats/comments/user create similar input-->
       
-      <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
       <input type="submit" class="btn btn-primary"/>
     </div>
   </form>

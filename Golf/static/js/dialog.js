@@ -19,6 +19,5 @@
   htmx.on("hidden.bs.modal", (e) => {
     // Clear form after modal is hidden
     document.getElementById("dialog").innerHTML = "";
-    modal.css('display','none');
   });
 })()
