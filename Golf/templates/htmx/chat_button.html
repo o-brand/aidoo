@@ -1,5 +1,5 @@
 {% if room %}
-    <a href="{% url 'room' room.user_2.id %}" class="btn btn-primary">Open chat</a>
+    <a href="{% url 'chat-room' room.user_2.id %}" class="btn btn-primary">Open chat</a>
 {% else %}
-    <a href="{% url 'room' user.id %}" class="btn btn-primary">Open chat</a>
+    <a href="{% url 'chat-room' user.id %}" class="btn btn-primary">Open chat</a>
 {% endif %}

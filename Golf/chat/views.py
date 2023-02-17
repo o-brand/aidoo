@@ -11,37 +11,8 @@ from .models import Room
 User = get_user_model()
 
 
-class RoomsView(ListView):
-    """Displays a list to show the available rooms."""
-
-    model = Room
-    template_name = "chat/index.html"
-    context_object_name = "rooms"
-
-    def get_queryset(self):
-        """Reads rooms from the database."""
-        me = self.request.user
-        rooms = Room.objects.filter(Q(user_1=me) | Q(user_2=me))
-
-        # Change room object for the template
-        rooms_changed = []
-        for room in rooms:
-            if room.user_2 == me:
-                other = room.user_1
-                room.user_1 = me
-                room.user_2 = other
-                room.me_started = False
-            else:
-                room.me_started = True
-
-            rooms_changed.append(room)
-
-        return rooms_changed
-
-
-def refreshrooms_call(request):
-    """Refresh rooms."""
-    me = request.user
+def _query_rooms(me):
+    """Query the rooms where one of the users is me."""
     rooms = Room.objects.filter(Q(user_1=me) | Q(user_2=me))
 
     # Change room object for the template
@@ -57,8 +28,26 @@ def refreshrooms_call(request):
 
         rooms_changed.append(room)
 
-    return render(request, "htmx/rooms-list.html", {"rooms": rooms_changed})
+    return rooms_changed
 
+
+class RoomsView(ListView):
+    """Displays a list to show the available rooms."""
+
+    model = Room
+    template_name = "chat/index.html"
+    context_object_name = "rooms"
+
+    def get_queryset(self):
+        """Reads rooms from the database."""
+        me = self.request.user
+        return _query_rooms(me)
+
+
+def refreshrooms_call(request):
+    """Refresh rooms."""
+    me = request.user
+    return render(request, "htmx/rooms-list.html", {"rooms": _query_rooms(me)})
 
 
 def startchat_call(request):
@@ -81,7 +70,7 @@ def startchat_call(request):
         room["user_2"] = invitee
         Room.objects.create(**room)
 
-        return render(request, "htmx/chat_button.html")
+        return render(request, "htmx/chat_button.html", {"user": invitee})
 
     # If it is not POST
     raise Http404()

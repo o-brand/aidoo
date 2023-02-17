@@ -3,11 +3,6 @@
 
 {% block title %}Chats{% endblock %}
 
-{% block head_extra %}
-<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
-<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 {% include 'navigation.html' %}
 
@@ -30,5 +25,5 @@
 </div>
 
 {{ block.super }}
-    <script src="{% static 'js/room-list.js' %}"></script>
+<script src="{% static 'js/rooms.js' %}"></script>
 {% endblock %}
