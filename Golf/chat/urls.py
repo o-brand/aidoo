@@ -15,5 +15,5 @@ urlpatterns = [
     # Refreshing rooms list, used by HTMX
     path("refresh-rooms", views.refreshrooms_call, name="chat-refresh-rooms"),
     # A room with another user
-    path("room/<int:user_id>/", views.room, name="chat-room"),
+    path("room/<int:user_id>", views.room, name="chat-room"),
 ]

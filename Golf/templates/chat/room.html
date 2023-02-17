@@ -1,74 +1,72 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block title %}Chat with {{ room.user_2 }}{% endblock %}
 
 {% block content %}
-    {% include 'navigation.html' %}
-    <div class="container my-4">
+  {% include "navigation.html" %}
+  <div class="container my-4">
     <div class="row flex-column flex-md-row">
-    <div class="col col-sm-3 mb-4">
-        {% include 'userprofile/data-card.html' %}
-    </div>
-    <div class="col">
-        <div
-                class="chat_container"
-                id="chat_container">
-            <div id="chat-messages"></div>
-            <input id="chat-message-input" type="text" size="100">
-            <br>
-            <input id="chat-message-submit" type="button" value="Send">
+      <div class="col col-sm-3 mb-4">
+          {% include "userprofile/data-card.html" %}
+      </div>
+
+      <div class="col">
+        <div class="chat_container">
+          <div id="chat-messages"></div>
+          <input id="chat-message-input" type="text" style="width: 100%;">
+          <br>
+          <input id="chat-message-submit" type="button" value="Send">
         </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const roomID = {{ room.room_id }};
+  <script>
+    const chatSocket = new WebSocket(
+        "ws://" + window.location.host + "/ws/chat/{{ room.room_id }}"
+    );
 
-        const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chat/'
-            + roomID
-            + '/'
-        );
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data);
 
-        chatSocket.onmessage = function (e) {
-            const data = JSON.parse(e.data);
-
-            if (data.message) {
-                document.querySelector('#chat-messages').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
-            } else {
-                alert('The message was empty!')
+        if (data.message) {
+            var tag = "<div "
+            if (data.me) {
+              tag += "class='message-me text-end'";
             }
-        };
-
-        chatSocket.onclose = function (e) {
-            console.log(e);
-            console.error('Chat socket closed unexpectedly');
-        };
-
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function (e) {
-            if (e.keyCode === 13) {
-                document.querySelector('#chat-message-submit').click();
+            else {
+              tag += "class='message-other'";
             }
-        };
+            tag += ("><div class='message-username'>" + data.username + "</div><div class='message-text'>" + data.message + "</div></div>");
+            document.querySelector("#chat-messages").innerHTML += tag;
+        } else {
+            alert("The message was empty!")
+        }
+    };
 
-        document.querySelector('#chat-message-submit').onclick = function (e) {
-            e.preventDefault();
+    document.querySelector("#chat-message-input").focus();
+    document.querySelector("#chat-message-input").onkeyup = function (e) {
+        if (e.keyCode === 13) {
+            document.querySelector("#chat-message-submit").click();
+        }
+    };
 
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
+    document.querySelector("#chat-message-submit").onclick = function (e) {
+        e.preventDefault();
 
-            chatSocket.send(JSON.stringify({
-                'message': message,
-                'user_id': {{ me.id }},
-                'room_id': {{ room.room_id }}
-            }));
+        const messageInputDom = document.querySelector("#chat-message-input");
+        const message = messageInputDom.value;
 
-            messageInputDom.value = '';
+        chatSocket.send(JSON.stringify({
+            "message": message,
+            "username": "{{ me.username }}",
+        }));
 
-            return false;
-        };
-    </script>
+        messageInputDom.value = "";
+
+        return false;
+    };
+  </script>
 {% endblock %}

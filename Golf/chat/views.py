@@ -112,8 +112,9 @@ def searching_call(request):
     # If it is not POST
     raise Http404()
 
-def room(request, user_id):
 
+def room(request, user_id):
+    """Displaying a room with the given user."""
     me = request.user
 
     # Check if the user ID is valid
