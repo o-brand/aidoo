@@ -4,52 +4,70 @@
 {% block title %}Chat with {{ room.user_2 }}{% endblock %}
 
 {% block content %}
-{% include 'navigation.html' %}
-<div class="container my-4">
-  <div class="row flex-column flex-md-row">
+    {% include 'navigation.html' %}
+    <div class="container my-4">
+    <div class="row flex-column flex-md-row">
     <div class="col col-sm-3 mb-4">
-    {% include 'userprofile/data-card.html' %}
+        {% include 'userprofile/data-card.html' %}
     </div>
     <div class="col">
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+        <div
+                class="chat_container"
+                id="chat_container">
+            <div id="chat-message"></div>
+            <input id="chat-message-input" type="text" size="100">
+            <br>
+            <input id="chat-message-submit" type="button" value="Send">
+        </div>
     </div>
-    
+
     <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const roomID = JSON.parse(document.getElementById({{ room.room_id }}).textContent);
 
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/chat/'
-            + roomName
+            + roomID
             + '/'
         );
 
-        chatSocket.onmessage = function(e) {
+        chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').value += (data.message + '\n');
+
+            if (data.message) {
+                document.querySelector('#chat-messages').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+            } else {
+                alert('The message was empty!')
+            }
         };
 
-        chatSocket.onclose = function(e) {
+        chatSocket.onclose = function (e) {
             console.error('Chat socket closed unexpectedly');
         };
 
         document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {
                 document.querySelector('#chat-message-submit').click();
             }
         };
 
-        document.querySelector('#chat-message-submit').onclick = function(e) {
+        document.querySelector('#chat-message-submit').onclick = function (e) {
+            e.preventDefault();
+
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
+
             chatSocket.send(JSON.stringify({
-                'message': message
+                'message': message,
+                'user_id': {{ me.id }},
+                'room_id': {{ room.room_id }}
             }));
+
             messageInputDom.value = '';
+
+            return false;
         };
     </script>
 {% endblock %}
