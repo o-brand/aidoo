@@ -91,6 +91,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Golf.wsgi.application"
 ASGI_APPLICATION = "Golf.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 
 # Database

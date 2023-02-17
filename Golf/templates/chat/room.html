@@ -22,7 +22,7 @@
     </div>
 
     <script>
-        const roomID = JSON.parse(document.getElementById({{ room.room_id }}).textContent);
+        const roomID = {{ room.room_id }};
 
         const chatSocket = new WebSocket(
             'ws://'
@@ -43,6 +43,7 @@
         };
 
         chatSocket.onclose = function (e) {
+            console.log(e);
             console.error('Chat socket closed unexpectedly');
         };
 
