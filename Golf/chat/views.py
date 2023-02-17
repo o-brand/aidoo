@@ -39,6 +39,28 @@ class RoomsView(ListView):
         return rooms_changed
 
 
+def refreshrooms_call(request):
+    """Refresh rooms."""
+    me = request.user
+    rooms = Room.objects.filter(Q(user_1=me) | Q(user_2=me))
+
+    # Change room object for the template
+    rooms_changed = []
+    for room in rooms:
+        if room.user_2 == me:
+            other = room.user_1
+            room.user_1 = me
+            room.user_2 = other
+            room.me_started = False
+        else:
+            room.me_started = True
+
+        rooms_changed.append(room)
+
+    return render(request, "htmx/rooms-list.html")
+
+
+
 def startchat_call(request):
     """Start chat."""
     if request.method == "POST":
