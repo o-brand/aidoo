@@ -57,7 +57,7 @@ def refreshrooms_call(request):
 
         rooms_changed.append(room)
 
-    return render(request, "htmx/rooms-list.html")
+    return render(request, "htmx/rooms-list.html", {"rooms": rooms_changed})
 
 
 
