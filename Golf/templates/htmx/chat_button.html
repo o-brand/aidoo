@@ -1,1 +1,5 @@
-<button class="btn btn-primary">Open chat</button>
+{% if room %}
+    <a href="{% url 'room' room.user_2.id %}" class="btn btn-primary">Open chat</a>
+{% else %}
+    <a href="{% url 'room' user.id %}" class="btn btn-primary">Open chat</a>
+{% endif %}

@@ -119,6 +119,8 @@ def room(request, user_id):
         return redirect('userdetails', user_id=user_id)
     room = rooms[0]
 
+    if room.user_2 == me:
+        room.user_1 = me
+        room.user_2 = other_user
 
-
-    return render(request, "chat/room.html")
+    return render(request, "chat/room.html", {"room": room, "user": other_user, "in_room": True})
