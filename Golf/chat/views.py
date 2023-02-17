@@ -44,19 +44,19 @@ def startchat_call(request):
     if request.method == "POST":
         # Get the user ID or -1 if it is not found
         user_id = request.POST.get("user_id", -1)
-        user = request.user
+        me = request.user
 
         # Check if the user ID is valid
         users = User.objects.filter(pk=user_id)
         user_id_exists = len(users) == 1
         if not user_id_exists:
             raise Http404()
-        other_user = users[0]
+        invitee = users[0]
 
         # Create room
         room = dict()
-        room["user_1"] = user
-        room["user_2"] = other_user
+        room["user_1"] = me
+        room["user_2"] = invitee
         Room.objects.create(**room)
 
         return render(request, "htmx/chat_button.html")
@@ -90,13 +90,13 @@ def searching_call(request):
         users = User.objects.filter(username__icontains=username).exclude(pk=me.id)
 
         # Iterate over to display the adequate button
-        users_with_chat_status = []
+        users_with_chat_started = []
         for user in users:
             chat_started = len(Room.objects.filter(Q(user_1=me, user_2=user.id) | Q(user_2=me, user_1=user.id))) == 1
-            users_with_chat_status.append([user, chat_started])
+            users_with_chat_started.append([user, chat_started])
 
         # Render the page
-        return render(request, "htmx/searching.html", {"users": users_with_chat_status})
+        return render(request, "htmx/searching.html", {"users": users_with_chat_started})
 
     # If it is not POST
     raise Http404()

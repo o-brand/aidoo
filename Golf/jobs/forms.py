@@ -2,10 +2,9 @@ from django import forms
 from django.forms import ModelForm
 from django.core.validators import RegexValidator
 from Golf.utils import create_date_string
+from Golf.validators import validate_profanity
 from .validators import validate_deadline
 from .models import Job
-from profanity.validators import validate_is_profane
-
 
 class JobForm(ModelForm):
     """It is used to post a job."""
@@ -19,19 +18,7 @@ class JobForm(ModelForm):
             }
         ),
         label="Job title",
-        validators=[validate_is_profane],
-    )
-
-    job_short_description = forms.CharField(
-        max_length=50,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Job short description",
-                "class": "form-control",
-            }
-        ),
-        label="Job short description",
-        validators=[validate_is_profane],
+        validators=[validate_profanity],
     )
 
     job_description = forms.CharField(
@@ -45,7 +32,7 @@ class JobForm(ModelForm):
             }
         ),
         label="Job description",
-        validators=[validate_is_profane],
+        validators=[validate_profanity],
     )
 
     location = forms.CharField(
@@ -106,7 +93,6 @@ class JobForm(ModelForm):
         model = Job
         fields = [
             "job_title",
-            "job_short_description",
             "job_description",
             "location",
             "duration_days",
@@ -114,3 +100,4 @@ class JobForm(ModelForm):
             "deadline",
             "poster_id",
         ]
+        

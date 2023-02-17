@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My profile{% endblock %}
+
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}" defer></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+{% include 'navigation.html' %}
+
+<div class="container my-4">
+  <div class="row flex-column flex-md-row">
+    <div class="container text-center mt-5 mb-5">
+      <h2>Account Settings</h2>
+    </div>
+    <h3>Notifications</h3>
+    <br/>
+    <br/>
+    <div class="card mb-1 Notifications">     
+      <form method="post" action="{% url 'settings' %}">
+        {% csrf_token %}
+
+        <div class="card-body">
+          <h4>Email notifications</h4>
+          <h6 class="card-subtitle mb-2 text-muted">
+            Notify me by email when I am accepted or rejected from a job:
+            <input type="checkbox" name="opt_in" {% if me.opt_in_emails %}checked{% endif %}>
+          </h6>
+        </div>
+      </div>
+
+      <div class="container text-left mt-5 mb-5">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

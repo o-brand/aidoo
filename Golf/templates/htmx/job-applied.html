@@ -1,3 +1,22 @@
+<p class="card-text">
+    <i class="bi bi-activity"></i>
+    <strong>
+      {{ status }}
+    </strong>
+    &nbsp;
+    <i class="bi bi-geo-alt"></i>
+    {{ job.location }}
+    &nbsp;
+    <i class="bi bi-hourglass-split"></i>
+    {% if job.deadline is not None %}
+      {{ job.deadline | date:'d M Y' }}
+    {% else %}
+      None
+    {% endif %}
+    &nbsp;
+    <i class="bi bi-stars"></i>
+    {{ job.points }}
+  </p>
 {% if status == "AC" %}
     <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
 {% elif status == "AP" %}

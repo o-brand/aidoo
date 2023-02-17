@@ -5,7 +5,7 @@ from .models import User
 
 
 class UserAdmin(BaseUserAdmin):
-    """Extended Admin, just for developers. To create a view of data in the https://teamgolf.pythonanywhere.com/admin/ page."""
+    """Extended Admin, just for developers. To create a view of data in the /admin/ page."""
 
     # The fields to be used in displaying the User model.
     fieldsets = (
@@ -37,6 +37,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
+
 
 # Register the new User and UserAdmin.
 admin.site.register(User, UserAdmin)

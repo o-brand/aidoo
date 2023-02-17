@@ -14,4 +14,10 @@ urlpatterns = [
     path("selectapplicant", views.selectapplicant_call, name="selectapplicant"),
     # Finishing a job, used by HTMX
     path("jobdone", views.jobdone_call, name="jobdone"),
+    # User Settings
+    path(
+        route="settings",
+        view=views.AccountSettingsView.as_view(),
+        name="settings",
+    ),
 ]

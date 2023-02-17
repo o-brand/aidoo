@@ -11,6 +11,7 @@ from .forms import JobForm
 # Get actual user model.
 User = get_user_model()
 
+
 def details(request, job_id):
     """Shows the details of a job. It is a static page."""
 
@@ -75,11 +76,10 @@ class JobsView(ListView):
 
     def get_queryset(self):
         """Reads jobs from the database."""
-        filter_val = self.request.GET.get("search_title", "")
+        filter_val = self.request.GET.get("search", "")
         return Job.objects.filter(
             Q(job_title__icontains=filter_val) |
             Q(job_description__icontains=filter_val) |
-            Q(job_short_description__icontains=filter_val) |
             Q(location__icontains=filter_val),
             hidden=False,
             assigned=False
@@ -140,6 +140,7 @@ def bookmark_call(request):
 
     # If it is not POST
     raise Http404()
+
 
 def apply_call(request):
     """Create a new application record in database."""

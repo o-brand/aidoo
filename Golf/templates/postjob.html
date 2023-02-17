@@ -1,75 +1,76 @@
 {% load static %}
-
-<form action="" class="modal-content" hx-post="post" id="form">
-  {% csrf_token %}
+<div class="modal-content">
   <div class="modal-header">
     <h5 class="modal-title">New Job Post</h5>
     <button class="btn-close" data-bs-dismiss="modal"></button>
   </div>
-  <div class="modal-body">
-    <p>
-      {{ form.job_title.label_tag }}
-      {{ form.job_title }}
-      {% if form.errors %}
-        {% for key, value in form.errors.items %}
-          {% if key == "job_title" %}
-            <p class="error">{{ value.as_text }}</p>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </p>
-    <p>
-      {{ form.job_short_description.label_tag }}
-      {{ form.job_short_description }}
-      {% if form.errors %}
-        {% for key, value in form.errors.items %}
-          {% if key == "job_short_description" %}
-            <p class="error">{{ value.as_text }}</p>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </p>
-    <p>
-      {{ form.job_description.label_tag }}
-      {{ form.job_description }}
-      {% if form.errors %}
-        {% for key, value in form.errors.items %}
-          {% if key == "job_description" %}
-            <p class="error">{{ value.as_text }}</p>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </p>
-    <p>
-      {{ form.location.label_tag }}
-      {{ form.location }}
-      {% if form.errors %}
-        {% for key, value in form.errors.items %}
-          {% if key == "location" %}
-            <p class="error">{{ value.as_text }}</p>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </p>
-    <p>
-      The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
-      {{ form.duration_days }} days {{ form.duration_hours }} hours. This means <span id="points">5</span> points.
-    </p>
-    <p>
-      {{ form.deadline.label_tag }}<br/>
-      {{ form.deadline }}<br/>
-      {% if form.errors %}
-        {% for key, value in form.errors.items %}
-          {% if key == "deadline" %}
-            <p class="error">{{ value.as_text }}</p>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    </p>
-  </div>
-  <div class="modal-footer">
-    <input type="hidden" name="poster_id" value="{{ poster_id }}" />
-    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-    <input type="submit" value="Post" class="btn btn-primary"/>
-  </div>
-</form>
+  <form action="" hx-post="{% url 'post' %}" hx-trigger="submit" id="form">
+    {% csrf_token %}
+    <div class="modal-body">
+      <p>
+        {{ form.job_title.label_tag }}
+        {{ form.job_title }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+            {% if key == "job_title" %}
+              <p class="error">{{ value.as_text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
+      <p>
+        {{ form.job_short_description.label_tag }}
+        {{ form.job_short_description }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+            {% if key == "job_short_description" %}
+              <p class="error">{{ value.as_text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
+      <p>
+        {{ form.job_description.label_tag }}
+        {{ form.job_description }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+            {% if key == "job_description" %}
+              <p class="error">{{ value.as_text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
+      <p>
+        {{ form.location.label_tag }}
+        {{ form.location }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+            {% if key == "location" %}
+              <p class="error">{{ value.as_text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
+      <p>
+        The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
+        {{ form.duration_days }} days {{ form.duration_hours }} hours. This means <span id="points">5</span> points.
+      </p>
+      <p>
+        {{ form.deadline.label_tag }}<br/>
+        {{ form.deadline }}<br/>
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+            {% if key == "deadline" %}
+              <p class="error">{{ value.as_text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
+    </div>
+    <div class="modal-footer">
+      <input type="hidden" name="poster_id" value="{{ poster_id }}" />
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      <input type="submit" value="Post" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>

@@ -2,3 +2,4 @@
 Golf/db.sqlite3
 *.DS_Store
 .idea/*
+Golf/.coverage

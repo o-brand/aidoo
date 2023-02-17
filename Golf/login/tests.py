@@ -39,9 +39,6 @@ class PrivacyTestCase(TestCase):
 
 class LoginTestCase(TestCase):
     """Tests for the login and the logout page"""
-    # can the login page be reached
-    # is the user redirected after logging in
-
 
     def test_login(self):
         credentials = {

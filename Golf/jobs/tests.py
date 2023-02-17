@@ -31,7 +31,6 @@ class DetailsTestCase(LoginRequiredTestCase):
             "poster_id": self.user,
             "location": "AB21 3EW",
             "job_title": "Walking a dog",
-            "job_short_description": "Please walk my dog",
             "job_description": "Nothing",
             "points": 10,
         }
@@ -143,19 +142,6 @@ class JobModelTestCase(TestCase):
         with self.assertRaises(ValidationError):
             created_job.full_clean()
 
-    def test_too_long_job_short_description(self):
-        job = dict()
-        job["job_short_description"] = "x" * 51
-        job["posting_time"] = self.fake_time()
-        job["points"] = random.randint(0, 100)
-        job["assigned"] = False
-        job["completed"] = False
-        job["poster_id_id"] = random.randint(1, 10)
-        created_job = Job.objects.create(**job)
-
-        with self.assertRaises(ValidationError):
-            created_job.full_clean()
-
     def test_too_long_job_description(self):
         job = dict()
         job["job_description"] = "x" * 1001
@@ -195,19 +181,6 @@ class JobModelTestCase(TestCase):
         with self.assertRaises(ValidationError):
             created_job.full_clean()
     
-    def test_profane_job_short_description(self):
-        job = dict()
-        job["job_short_description"] = "kondums"
-        job["posting_time"] = self.fake_time()
-        job["points"] = random.randint(0, 100)
-        job["assigned"] = False
-        job["completed"] = False
-        job["poster_id_id"] = random.randint(1, 10)
-        created_job = Job.objects.create(**job)
-
-        with self.assertRaises(ValidationError):
-            created_job.full_clean()
-    
     def test_profane_job_long_description(self):
         job = dict()
         job["job_description"] = " kondums" * 20
@@ -220,7 +193,6 @@ class JobModelTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             created_job.full_clean()
-
 
 
 class BookmarkModelTestCase(TestCase):
@@ -263,7 +235,8 @@ class BookmarkModelTestCase(TestCase):
         Bookmark.objects.create(**bookmark)
         with self.assertRaises(IntegrityError):
             Bookmark.objects.create(**bookmark)
-            
+
+
 class ApplicationModelTestCasae(TestCase):
     """Test for Application model."""
 
@@ -309,6 +282,7 @@ class ApplicationModelTestCasae(TestCase):
         with self.assertRaises(IntegrityError):
             Application.objects.create(**application)
 
+
 class PostPageCase(LoginRequiredTestCase):
     """Tests for Post page."""
 
@@ -328,7 +302,6 @@ class PostPageCase(LoginRequiredTestCase):
         new_form = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "write the tests for me",
             "job_description": "This is a cry for help, I actually have no skills of writing tests, but wanted to do it on my own cause i wanna learn.",
             "location": "AB25 1GN",
             "duration_days": "0",
@@ -356,7 +329,7 @@ class PostJobCase(TestCase):
         # behviour if empty form is submitted
         form = JobForm(data={"poster_id": "1"})
 
-        self.assertEqual(6, len(form.errors))
+        self.assertEqual(5, len(form.errors))
 
         for key in form.errors:
             error_now = form.errors[key]
@@ -367,7 +340,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
         }
         form = JobForm(data=new_application)
 
@@ -384,7 +356,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "!" * 1001,
         }
         form = JobForm(data=new_application)
@@ -409,7 +380,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "!",
         }
         form = JobForm(data=new_application)
@@ -432,7 +402,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
         }
         form = JobForm(data=new_application)
@@ -450,7 +419,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "00000000",
         }
@@ -474,7 +442,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
         }
@@ -491,7 +458,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_days": "20",
@@ -517,7 +483,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_hours": "30",
@@ -542,7 +507,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_days": "0",
@@ -555,7 +519,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_days": "0",
@@ -571,7 +534,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_days": "0",
@@ -593,7 +555,6 @@ class PostJobCase(TestCase):
         new_application = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_short_description": "short",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_days": "0",
@@ -674,6 +635,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
         self.assertTemplateUsed(response, template_name="htmx/applied.html")
         self.assertEqual(len(Application.objects.all()), 1)
 
+
 class ReportButtonCase(LoginRequiredTestCase):
     """Tests for report button."""
     # We need to write more tests when the function is fully implemented.
@@ -701,23 +663,14 @@ class ReportButtonCase(LoginRequiredTestCase):
 
     def test_page(self):
         # test availability via URL
-        response = self.client.get("/jobs/report")
-        self.assertEqual(response.status_code, 404)
+        response = self.client.get("/superadmin/report")
+        self.assertEqual(response.status_code, 200)
 
     def test_page_available_by_name(self):
         # test availability via name of page
         response = self.client.get(reverse("report"))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
 
-    def test_page_post_no_job(self):
-        # test without sending a job id
-        response = self.client.post("/jobs/report")
-        self.assertEqual(response.status_code, 404)
-
-    def test_page_post_job_not_valid(self):
-        # test with a wrong job id
-        response = self.client.post("/jobs/report", {"job_id": 5})
-        self.assertEqual(response.status_code, 404)
 
 class BookmarkButtonCase(LoginRequiredTestCase):
     """Tests for bookmark button."""

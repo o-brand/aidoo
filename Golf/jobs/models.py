@@ -2,7 +2,6 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from chat.models import Room # Move to admin models when created
 
 
 # Get actual user model.
@@ -24,10 +23,7 @@ class Job(models.Model):
     # Title of the job
     job_title = models.CharField(max_length=50)
 
-    # Short description. It is displayed in the list.
-    job_short_description = models.CharField(max_length=50)
-
-    # Long description. It is displayed in the details page.
+    # Description. It is displayed in the list (part of it) and the whole in the details.
     job_description = models.CharField(max_length=1000)
 
     # The time of posting (it has default value)
@@ -73,67 +69,6 @@ class Bookmark(models.Model):
                 fields=["user_id", "job_id"], name="bookmark_user_job_combo"
             )
         ]
-
-
-# # Currently not migrated, should be in the models of the admin app
-# class Report(models.Model):
-#     """This model is used to represent a report filed against a job or user"""
-
-#     class ReportType(models.TextChoices):
-#         """This class stores the available values for the report type."""
-#         PROFILE = 'Profile', ('Profile')
-#         COMMENT = 'Comment', ('Comment')
-#         JOB = 'Job', ('Job')
-#         CHAT = 'Chat', ('Chat')
-
-#     class ReportStatus(models.TextChoices):
-#         """This class stores the available values for the status."""
-#         OPEN = 'Open', ('Open')
-#         TICKETED = 'Ticketed', ('Ticketed')
-#         RESOLVED = 'Resolved', ('Resolved')
-    
-#     # Primary key
-#     report_id = models.BigAutoField(primary_key=True)
-    
-#     # ID of reported job, if the report concerns a job post
-#     reported_job = models.ForeignKey(Job,
-#         on_delete=models.CASCADE,
-#         default=None)
-    
-#     # ID of reported job, if the report concerns a chat
-#     reported_room = models.ForeignKey(Room, 
-#         on_delete=models.CASCADE,
-#         default=None)
-    
-#     # User being reported
-#     reported_user = models.ForeignKey(User,
-#         related_name="reported",
-#         on_delete=models.CASCADE)
-    
-#     # User filing the report
-#     reporting_user = models.ForeignKey(User,
-#         related_name="reporting", 
-#         on_delete=models.CASCADE)
-    
-#     # Content of the complaint, should take an adequate min length
-#     complaint = models.CharField(max_length=1000)
-    
-#     # The time at which the report was first filed
-#     reporting_time = models.DateTimeField(default=timezone.now)
-   
-#    # The time at which the report last changed status
-#     last_update_time = models.DateTimeField(default=None)
-    
-#     # The status of dealing with the report
-#     status = models.CharField(choices=ReportStatus.choices, max_length=10)
-    
-#     # The type of report
-#     type = models.CharField(choices=ReportType.choices, max_length=10)
-
-
-# # Should be in the models of the admin app
-# class ReportTicket(models.Model):
-#     pass
 
 
 class Application(models.Model):

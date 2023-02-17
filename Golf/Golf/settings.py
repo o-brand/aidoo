@@ -29,10 +29,6 @@ SECRET_KEY = "django-insecure-ygkairtzpyop9eyg6n&1xd6@i*2mn1jfuq&b(jy!4*g9q6sa=f
 DEBUG = True
 
 
-# For security (run python manage.py check --deploy to check the problems)
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 ALLOWED_HOSTS = [
     "teamgolf.pythonanywhere.com",
     "127.0.0.1",
@@ -58,6 +54,7 @@ INSTALLED_APPS = [
     "userprofile.apps.UserprofileConfig",
     "chat.apps.ChatConfig",
     "store.apps.StoreConfig",
+    "superadmin.apps.SuperadminConfig",
     "profanity",
 ]
 
@@ -85,6 +82,7 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
+                "Golf.processors.auth", # To have "me" in the templates.
                 "django.contrib.messages.context_processors.messages",
             ],
         },
@@ -159,8 +157,8 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
 EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
-
 EMAIL_USE_TLS = True
+
 
 # HEROKU
 if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
