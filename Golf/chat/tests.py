@@ -159,7 +159,7 @@ class SearchingCallButtonCase(LoginRequiredTestCase):
     def test_page_post_username_empty(self):
         # test with an empty username
         response = self.client.post("/chat/searching", {"username": ""})
-        self.assertEqual(response.status_code, 200) # Empty response
+        self.assertEqual(response.status_code, 200)  # Empty response
 
     def test_page_post_username(self):
         # test works

@@ -100,3 +100,25 @@ def searching_call(request):
 
     # If it is not POST
     raise Http404()
+
+def room(request, user_id):
+
+    me = request.user
+
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    other_user = users[0]
+
+    # Check if it is a room
+    rooms = Room.objects.filter(Q(user_1=me, user_2=other_user) | Q(user_2=me, user_1=other_user))
+    room_exists = len(rooms) == 1
+    if not room_exists:
+        return redirect('userdetails', user_id=user_id)
+    room = rooms[0]
+
+
+
+    return render(request, "chat/room.html")
