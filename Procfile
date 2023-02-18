@@ -1,1 +1,1 @@
-web sh -c 'cd ./Golf/ && python -m uvicorn --host=0.0.0.0 Golf.asgi:application'
+web sh -c 'cd ./Golf/ && python -m uvicorn Golf.asgi --host=0.0.0.0 --port=${PORT:-5000}'
