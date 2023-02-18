@@ -1,1 +1,1 @@
-web sh -c 'cd ./Golf/ && gunicorn Golf.wsgi --log-file -'
+web sh -c 'cd ./Golf/ && uvicorn Golf.asgi --log-file -'
