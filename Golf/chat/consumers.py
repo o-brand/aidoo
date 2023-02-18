@@ -6,8 +6,8 @@ from asgiref.sync import sync_to_async
 class ChatConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
-        # Join room based on name in the URL
-        self.room_id = self.scope['url_route']['kwargs']['room_id']
+        # Join room based on id in the URL
+        room_id = self.scope['url_route']['kwargs']['room_id']
         self.room_group_name = 'chat_%d' % self.room_id
         self.me = self.scope['user'].username
 
@@ -26,8 +26,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    # Receive message from WebSocket
     async def receive(self, text_data):
+        # Receive message from WebSocket
         data = json.loads(text_data)
         message = data['message']
         username = data['username']
@@ -42,8 +42,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # Receive message from room group
     async def chat_message(self, event):
+        # Receive message from room group
         message = event['message']
         username = event['username']
 
