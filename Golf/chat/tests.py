@@ -159,10 +159,66 @@ class SearchingCallButtonCase(LoginRequiredTestCase):
     def test_page_post_username_empty(self):
         # test with an empty username
         response = self.client.post("/chat/searching", {"username": ""})
-        self.assertEqual(response.status_code, 200)  # Empty response
+        self.assertEqual(response.status_code, 200) # Empty response
 
     def test_page_post_username(self):
         # test works
         response = self.client.post("/chat/searching", {"username": "qwe"})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/searching.html")
+
+
+class RoomCase(LoginRequiredTestCase):
+    """Tests for room view."""
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # create 10 users in the database
+        for i in range(10):
+            if i == 0:
+                username = "qwe"
+            else:
+                username = fake.unique.name()
+
+            credentials = dict()
+            credentials["username"] = username
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            User.objects.create_user(**credentials)
+            credentials.clear()
+        
+        room = dict()
+        room["user_1"] = User(pk=1)
+        room["user_2"] = User(pk=2)
+        Room.objects.create(**room)
+
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/chat/room/2")
+        self.assertEqual(response.status_code, 200)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("chat-room", kwargs = {"user_id": 2}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_page_user_id_not_valid(self):
+        # test with a wrong user id
+        response = self.client.post("/chat/room/0")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_no_room(self):
+        # test with a user with who there is not a room
+        response = self.client.post("/chat/room/8")
+        self.assertEqual(response.status_code, 302) # Redirect
+
+    def test_page_fine(self):
+        response = self.client.post("/chat/room/2")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="chat/room.html")
