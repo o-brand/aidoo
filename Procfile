@@ -1,1 +1,1 @@
-web sh -c 'cd ./Golf/ && uvicorn Golf.asgi --log-file -'
+web sh -c 'cd ./Golf/ && uvicorn Golf.asgi'

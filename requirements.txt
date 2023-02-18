@@ -12,4 +12,3 @@ tzdata==2022.7
 whitenoise==6.3.0
 coverage==7.1.0
 django-profanity-filter==0.2.1
-uvicorn==0.20.0
