@@ -1,1 +1,1 @@
-web sh -c 'cd ./Golf/ && uvicorn Golf.asgi:application'
+web sh -c 'cd ./Golf/ && python -m uvicorn Golf.asgi:application'
