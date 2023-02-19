@@ -22,13 +22,12 @@ class User(AbstractUser):
 
 class Notifications(models.Model):
     """This model represents notifications."""
-    Me  = get_user_model()
 
     #Primary key
     notification_id = models.BigAutoField(primary_key=True)
 
     #Foreign Key to user who got the notification
-    user_id = models.ForeignKey(Me, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     #Content of the notification
     content = models.CharField(max_length=50)
