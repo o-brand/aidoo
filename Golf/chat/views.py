@@ -4,7 +4,8 @@ from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .models import Room
+from .models import Room, Message
+from Golf.settings import CHAT_MESSAGE_TTL
 
 
 #Get actual user model
@@ -134,5 +135,17 @@ def room(request, user_id):
     if room.user_2 == me:
         room.user_1 = me
         room.user_2 = other_user
+    
+    messages = Message.objects.filter(room_id=room.room_id)
 
-    return render(request, "chat/room.html", {"room": room, "user": other_user, "in_room": True})
+    return render(
+        request,
+        "chat/room.html",
+        {
+            "room": room,
+            "user": other_user,
+            "messages": messages,
+            "in_room": True,
+            "ttl": CHAT_MESSAGE_TTL,
+        }
+    )

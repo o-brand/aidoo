@@ -8,12 +8,28 @@
   <div class="container my-4">
     <div class="row flex-column flex-md-row">
       <div class="col col-sm-3 mb-4">
-          {% include 'userprofile/data-card.html' %}
+        {% include 'userprofile/data-card.html' %}
+        <br>
+        <p>The messages are only stored for {{ ttl }} days. After that, they are completely deleted.</p>
       </div>
 
       <div class="col">
         <div class="chat_container">
-          <div id="chat-messages"></div>
+          <div id="chat-messages">
+            {% for message in messages %}
+              {% if message.user_id == me %}
+                <div class="message-me text-end">
+                  <div class='message-username'>{{ message.user_id.username }}</div>
+                  <div class='message-text'>{{ message.content }}</div>
+                </div>
+              {% else %}
+                <div class="message-other">
+                  <div class='message-username'>{{ message.user_id.username }}</div>
+                  <div class='message-text'>{{ message.content }}</div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
           <input id="chat-message-input" type="text" style="width: 100%;">
           <br>
           <input id="chat-message-submit" type="button" value="Send">

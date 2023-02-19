@@ -164,6 +164,12 @@ EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
 EMAIL_USE_TLS = True
 
 
+# CHAT
+
+# The maximum number of days of storing a message
+CHAT_MESSAGE_TTL = 31
+
+
 # HEROKU
 if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
     import django_heroku
