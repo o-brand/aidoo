@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)http://127.0.0.1:8000/store/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" coupert-item="9AF8D9A4E502F3784AD24272D81F0381"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="Content-Language" content="en">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!--jQuery-->
+  <script src="./Store_files/jquery-3.6.1.min.js"></script>
+
+  <!--Bootstrap CSS-->
+  <link href="./Store_files/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+  <!--Base stylesheet-->
+  <link rel="stylesheet" type="text/css" href="./Store_files/styles.css">
+
+  <!--Google Fonts-->
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./Store_files/css2" rel="stylesheet">
+
+  <!--Bootstrap Icons-->
+  <link rel="stylesheet" href="./Store_files/bootstrap-icons.css">
+
+  <!--Favicon-->
+  <link rel="icon" type="image/x-icon" href="http://127.0.0.1:8000/static/assets/fav.ico">
+
+  <title>Store</title>
+  
+
+  
+<script src="./Store_files/htmx-1.8.5.min.js"></script><style>undefined</style>
+<script src="./Store_files/hyperscript-0.9.7.min.js"></script>
+
+<style>                      .htmx-indicator{opacity:0;transition: opacity 200ms ease-in;}                      .htmx-request .htmx-indicator{opacity:1}                      .htmx-request.htmx-indicator{opacity:1}                    </style><meta name="shimejiBrowserExtensionId" content="gohjpllcolmccldfdggmamodembldgpc" data-version="1.6.5"><style type="text/css">
+@charset "UTF-8";
+/*!
+ * jQuery contextMenu - Plugin for simple contextMenu handling
+ *
+ * Version: v2.5.0
+ *
+ * Authors: Björn Brala (SWIS.nl), Rodney Rehm, Addy Osmani (patches for FF)
+ * Web: http://swisnl.github.io/jQuery-contextMenu/
+ *
+ * Copyright (c) 2011-2017 SWIS BV and contributors
+ *
+ * Licensed under
+ *   MIT License http://www.opensource.org/licenses/mit-license
+ *
+ * Date: 2017-05-25T11:30:28.663Z
+ */
+@-webkit-keyframes cm-spin {
+  0% {
+    -webkit-transform: translateY(-50%) rotate(0deg);
+            transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translateY(-50%) rotate(359deg);
+            transform: translateY(-50%) rotate(359deg);
+  }
+}
+@-o-keyframes cm-spin {
+  0% {
+    -webkit-transform: translateY(-50%) rotate(0deg);
+         -o-transform: translateY(-50%) rotate(0deg);
+            transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translateY(-50%) rotate(359deg);
+         -o-transform: translateY(-50%) rotate(359deg);
+            transform: translateY(-50%) rotate(359deg);
+  }
+}
+@keyframes cm-spin {
+  0% {
+    -webkit-transform: translateY(-50%) rotate(0deg);
+         -o-transform: translateY(-50%) rotate(0deg);
+            transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translateY(-50%) rotate(359deg);
+         -o-transform: translateY(-50%) rotate(359deg);
+            transform: translateY(-50%) rotate(359deg);
+  }
+}
+
+@font-face {
+  font-family: "context-menu-icons";
+  font-style: normal;
+  font-weight: normal;
+
+  src: url("font/context-menu-icons.eot?4yg1f");
+  src: url("font/context-menu-icons.eot?4yg1f#iefix") format("embedded-opentype"), url("font/context-menu-icons.woff2?4yg1f") format("woff2"), url("font/context-menu-icons.woff?4yg1f") format("woff"), url("font/context-menu-icons.ttf?4yg1f") format("truetype");
+}
+
+.context-menu-icon-add:before {
+  content: "EA01";
+}
+
+.context-menu-icon-copy:before {
+  content: "EA02";
+}
+
+.context-menu-icon-cut:before {
+  content: "EA03";
+}
+
+.context-menu-icon-delete:before {
+  content: "EA04";
+}
+
+.context-menu-icon-edit:before {
+  content: "EA05";
+}
+
+.context-menu-icon-loading:before {
+  content: "EA06";
+}
+
+.context-menu-icon-paste:before {
+  content: "EA07";
+}
+
+.context-menu-icon-quit:before {
+  content: "EA08";
+}
+
+.context-menu-icon::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 2em;
+  font-family: "context-menu-icons";
+  font-size: 1em;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  color: #2980b9;
+  text-align: center;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+       -o-transform: translateY(-50%);
+          transform: translateY(-50%);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.context-menu-icon.context-menu-hover:before {
+  color: #fff;
+}
+
+.context-menu-icon.context-menu-disabled::before {
+  color: #bbb;
+}
+
+.context-menu-icon.context-menu-icon-loading:before {
+  -webkit-animation: cm-spin 2s infinite;
+       -o-animation: cm-spin 2s infinite;
+          animation: cm-spin 2s infinite;
+}
+
+.context-menu-icon.context-menu-icon--fa {
+  display: list-item;
+  font-family: inherit;
+}
+.context-menu-icon.context-menu-icon--fa::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 2em;
+  font-family: FontAwesome;
+  font-size: 1em;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  color: #2980b9;
+  text-align: center;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+       -o-transform: translateY(-50%);
+          transform: translateY(-50%);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.context-menu-icon.context-menu-icon--fa.context-menu-hover:before {
+  color: #fff;
+}
+.context-menu-icon.context-menu-icon--fa.context-menu-disabled::before {
+  color: #bbb;
+}
+
+.context-menu-list {
+  position: absolute;
+  display: inline-block;
+  min-width: 13em;
+  max-width: 26em;
+  padding: .25em 0;
+  margin: .3em;
+  font-family: inherit;
+  font-size: inherit;
+  list-style-type: none;
+  background: #fff;
+  border: 1px solid #bebebe;
+  border-radius: .2em;
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+          box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+}
+
+.context-menu-item {
+  position: relative;
+  padding: .2em 2em;
+  color: #2f2f2f;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-color: #fff;
+}
+
+.context-menu-separator {
+  padding: 0;
+  margin: .35em 0;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.context-menu-item > label > input,
+.context-menu-item > label > textarea {
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+}
+
+.context-menu-item.context-menu-hover {
+  color: #fff;
+  cursor: pointer;
+  background-color: #2980b9;
+}
+
+.context-menu-item.context-menu-disabled {
+  color: #bbb;
+  cursor: default;
+  background-color: #fff;
+}
+
+.context-menu-input.context-menu-hover {
+  color: #2f2f2f;
+  cursor: default;
+}
+
+.context-menu-submenu:after {
+  position: absolute;
+  top: 50%;
+  right: .5em;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  content: '';
+  border-color: transparent transparent transparent #2f2f2f;
+  border-style: solid;
+  border-width: .25em 0 .25em .25em;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+       -o-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+/**
+ * Inputs
+ */
+.context-menu-item.context-menu-input {
+  padding: .3em .6em;
+}
+
+/* vertically align inside labels */
+.context-menu-input > label > * {
+  vertical-align: top;
+}
+
+/* position checkboxes and radios as icons */
+.context-menu-input > label > input[type="checkbox"],
+.context-menu-input > label > input[type="radio"] {
+  position: relative;
+  top: .12em;
+  margin-right: .4em;
+}
+
+.context-menu-input > label {
+  margin: 0;
+}
+
+.context-menu-input > label,
+.context-menu-input > label > input[type="text"],
+.context-menu-input > label > textarea,
+.context-menu-input > label > select {
+  display: block;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.context-menu-input > label > textarea {
+  height: 7em;
+}
+
+.context-menu-item > .context-menu-list {
+  top: .3em;
+  /* re-positioned by js */
+  right: -.3em;
+  display: none;
+}
+
+.context-menu-item.context-menu-visible > .context-menu-list {
+  display: block;
+}
+
+.context-menu-accesskey {
+  text-decoration: underline;
+}
+</style><style type="text/css">
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+.context-menu-list {
+  font-family: 'Lato', sans-serif !important;
+  font-size: 14px;
+  text-align: left;
+  font-weight: normal;
+  width: 200px;
+}
+.context-menu-item {
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: left;
+}
+.contextmenu-item-custom.contextmenu-item-custom__accent:not(:hover) {
+  background-color: #f8ffeb;
+}
+.contextmenu-item-custom.contextmenu-item-custom__success:not(:hover) {
+  background-color: #eeffcd;
+}
+</style><style>
+        @font-face{
+            font-family: 'Circular'; 
+            font-weight: 400;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.eot);
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.eot?#iefix) format('embedded-opentype'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.woff2) format('woff2'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.woff) format('woff'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.ttf) format('truetype'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Regular.svg) format('svg');
+        }
+        @font-face{
+            font-family: 'Circular'; 
+            font-weight: 700;
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.eot);
+            src: url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.eot?#iefix) format('embedded-opentype'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.woff2) format('woff2'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.woff) format('woff'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.ttf) format('truetype'),
+                url(chrome-extension://mfidniedemcgceagapgdekdbmanojomk/font/Circular-Pro-Black-Bold.svg) format('svg');
+        }
+    </style><link rel="preconnect" href="https://fonts.googleapis.com/" crossorigin="true"><link rel="preconnect" href="https://fonts.gstatic.com/"><link rel="stylesheet" href="./Store_files/css2(1)"></head>
+
+<body>
+  <!--Bootstrap JS (please don't move istg trust me)-->
+  <script src="./Store_files/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <a class="navbar-brand" href="http://127.0.0.1:8000/jobs/"><img class="img-fluid" width="60" height="70" src="./Store_files/logo_full.png"></a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="http://127.0.0.1:8000/store/#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="./Store_files/1.jpeg">
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="http://127.0.0.1:8000/profile/me">Dashboard</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="http://127.0.0.1:8000/profile/settings">Settings</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="http://127.0.0.1:8000/logout">Log out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="container">
+  <section class="text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Get your reward</h1>
+        <p class="lead text-muted">A place to pick a reward for your earned aidoo coins.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="album py-1 bg-light">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+
+  </div>
+
+<div class="row row-cols-md-3 d-flex justify-content-center">
+
+  
+  <div class="col-sm-6 jobs-scroll mb-5">
+  <!--connect items-->
+    <div class="card rounded-4 shadow-sm">
+      <div class="card-body">
+        <div class="card-title">
+          <h4>Coffee voucher</h4>
+          <!--picture-->
+          <svg class="bd-placeholder-img card-img-top" role="img" aria-label="Placeholder: Thumbnail"><rect fill="#ffffff"></rect><text fill="#eceeef">Picture</text></svg>
+
+        </div>
+        <div class="card-text">
+          <p>10% discount on a cup of coffee at the local coffee shop.</p>
+          <span>
+  <button class="btn btn-primary" _="on click add @disabled to me" hx-post="/store/buyitem" hx-swap="innerHTML" hx-target="closest span" hx-vals="{&quot;item_id&quot;: 1, &quot;quantity&quot;: 1}" hx-headers="{&quot;X-CSRFToken&quot;: &quot;PUvXKkjAw1dblvV6x4DpDCc256OoFFacjoynp46MpoxSH3ytXtdUqnwO8kD8YJ9a&quot;}">Get for 40$</button>
+
+</span>
+          <small class="text-muted"></small>
+        </div>
+       
+      </div>  
+        </div>
+      
+      </div>
+    </div>
+  
+  </div>
+
+
+
+
+
+
+<div id="shimai-world" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 2147483647; pointer-events: none; background: transparent;"></div></body><div id="033f98cd-4c99-4575-a844-e458d72f975f" style="display: block !important; z-index: 2147483647 !important;"></div></html>
