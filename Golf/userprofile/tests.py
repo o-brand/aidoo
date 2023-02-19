@@ -400,7 +400,7 @@ class NotificationsModelTestCase(TestCase):
         for i in range(10):
             notifications = dict()
             notifications["notification_id"] = i
-            notifications["user_id"] = random.randint(0,10)
+            notifications["user_id"] = User(pk=1)
             notifications["content"] = lambda: fake.text()
             notifications["link"] = lambda: fake.sentence()
             notifications["seen"] = False
@@ -413,11 +413,11 @@ class NotificationsModelTestCase(TestCase):
 
     def test_create_notification(self):
         fake = Faker()
-        len1=len(Notifications.object.all())
+        len1=len(Notifications.objects.all())
 
         notifications = dict()
         notifications["notification_id"] = random.randint(0,10)
-        notifications["user_id"] = random.randint(0,10)
+        notifications["user_id"] = User(pk=1)
         notifications["content"] = lambda: fake.text()
         notifications["link"] = lambda: fake.sentence()
         notifications["seen"] = False
@@ -427,7 +427,7 @@ class NotificationsModelTestCase(TestCase):
         self.assertEqual(len1+1, len2)
     
     def test_delete_notification(self):
-        n = Notifications.object.get(pk=1)
+        n = Notifications.objects.get(pk=1)
         len1 = len(Job.objects.all())
         
         n.delete()
@@ -439,7 +439,7 @@ class NotificationsModelTestCase(TestCase):
         fake = Faker()
         notifications = dict()
         notifications["notification_id"] = random.randint(0,10)
-        notifications["user_id"] = random.randint(0,10)
+        notifications["user_id"] = User(pk=1)
         notifications["content"] = "x" * 101
         notifications["link"] = lambda: fake.sentence()
         notifications["seen"] = False
@@ -452,7 +452,7 @@ class NotificationsModelTestCase(TestCase):
         fake = Faker()
         notifications = dict()
         notifications["notification_id"] = random.randint(0,10)
-        notifications["user_id"] = random.randint(0,10)
+        notifications["user_id"] = User(pk=1)
         notifications["content"] = lambda: fake.text()
         notifications["link"] = "x"*51
         notifications["seen"] = False
