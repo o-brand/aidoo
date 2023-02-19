@@ -155,7 +155,7 @@ class PostReportCase(TestCase):
             "reported_job": "1",
             "complaint": "!",
         }
-        form = ReportForm(data=new_application)
+        form = ReportForm(data=new_report)
         self.assertEqual(1, len(form.errors))
         self.assertIn("Ensure this field has at least 10 characters", form.errors[0])
         print("short")
