@@ -267,6 +267,6 @@ a:hover {
 
 /* Scrolling to the bottom */
 #chat-messages {
-    height: 400px;
-    overflow-y: auto;
+  height: 400px;
+  overflow-y: auto;
 }

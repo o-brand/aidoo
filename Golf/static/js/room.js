@@ -21,7 +21,9 @@ chatSocket.onmessage = function (e) {
     else {
       tag += "class='message-other'";
     }
-    tag += ("><div class='message-username'>" + data.username + "</div><div class='message-text'>" + data.message + "</div></div>");
+    tag += ("><div class='message-text'>" + data.message + 
+      "</div><div class='message-date'>" + data.date_time + 
+      "</div><div class='message-username'>" + data.username +"</div></div>");
     document.querySelector("#chat-messages").innerHTML += tag;
   }
   scrollToBottom();
@@ -49,5 +51,4 @@ document.querySelector("#chat-message-submit").onclick = function (e) {
   return false;
 };
 
-
-
+scrollToBottom();

@@ -19,13 +19,15 @@
             {% for message in messages %}
               {% if message.user_id == me %}
                 <div class="message-me text-end">
-                  <div class='message-username'>{{ message.user_id.username }}</div>
                   <div class='message-text'>{{ message.content }}</div>
+                  <div class='message-date'>{{ message.date_time }}</div>
+                  <div class='message-username'>{{ message.user_id.username }}</div>
                 </div>
               {% else %}
                 <div class="message-other">
-                  <div class='message-username'>{{ message.user_id.username }}</div>
                   <div class='message-text'>{{ message.content }}</div>
+                  <div class='message-date'>{{ message.date_time }}</div>
+                  <div class='message-username'>{{ message.user_id.username }}</div>
                 </div>
               {% endif %}
             {% endfor %}
