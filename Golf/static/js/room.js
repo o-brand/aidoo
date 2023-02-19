@@ -25,6 +25,7 @@ chatSocket.onmessage = function (e) {
       "</div><div class='message-date'>" + data.date_time + 
       "</div><div class='message-username'>" + data.username +"</div></div>");
     document.querySelector("#chat-messages").innerHTML += tag;
+    scrollToBottom();
   }
   scrollToBottom();
 };
