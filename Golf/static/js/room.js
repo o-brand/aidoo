@@ -23,7 +23,15 @@ chatSocket.onmessage = function (e) {
     }
     tag += ("><div class='message-text'>" + data.message + 
       "</div><div class='message-date'>" + data.date_time + 
-      "</div><div class='message-username'>" + data.username +"</div></div>");
+      "</div><div class='message-username'>");
+
+    if (data.me) {
+      tag += "Me";
+    }
+    else {
+      tag += data.username;
+    }
+    tag += data.username +"</div></div>";
     document.querySelector("#chat-messages").innerHTML += tag;
   }
   scrollToBottom();
