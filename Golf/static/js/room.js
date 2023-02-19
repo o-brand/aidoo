@@ -2,6 +2,14 @@ const chatSocket = new WebSocket(
   "ws://" + window.location.host + "/ws/chat/" + room_id
 );
 
+/**
+* A function for finding the message element, and scroll to the bottom of it.
+*/
+function scrollToBottom() {
+    let objDiv = document.getElementById("chat-messages");
+    objDiv.scrollTop = objDiv.scrollHeight;
+}
+
 chatSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
 
@@ -16,7 +24,9 @@ chatSocket.onmessage = function (e) {
     tag += ("><div class='message-username'>" + data.username + "</div><div class='message-text'>" + data.message + "</div></div>");
     document.querySelector("#chat-messages").innerHTML += tag;
   }
+  scrollToBottom();
 };
+
 
 document.querySelector("#chat-message-input").focus();
 document.querySelector("#chat-message-input").onkeyup = function (e) {
@@ -35,8 +45,9 @@ document.querySelector("#chat-message-submit").onclick = function (e) {
       "message": message,
       "username": username,
   }));
-
   messageInputDom.value = "";
-
   return false;
 };
+
+
+

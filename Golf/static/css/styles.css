@@ -264,3 +264,9 @@ a:hover {
 .txt-fmt{
   margin-right: 25%;
 }
+
+/* Scrolling to the bottom */
+#chat-messages {
+    height: 400px;
+    overflow-y: auto;
+}
