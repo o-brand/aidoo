@@ -1,0 +1,24 @@
+<!-- Currently doesn't display the notifications within the navbar.-->
+<a
+  hx-post="{% url 'notification_nav' %}"
+  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="../static/assets/bell.svg">
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li><a class="dropdown-item text-center" href="{% url 'notifications' %}">Notifications{{notifications.content}}</a></li>
+      <li><hr class="dropdown-divider"></li>
+      {% for notifications in notifs %}
+        <li><a class="dropdown-item text-center" href="#">{{notifications.content}}</a></li>
+      {% endfor %}
+        </ul>
+  </li>
+</a>
+
+
+
+
+
+
+

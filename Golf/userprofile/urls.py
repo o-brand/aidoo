@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
 
-
 # Be aware that the url already includes "profile/"
 urlpatterns = [
     # Details of a user
@@ -20,4 +19,20 @@ urlpatterns = [
         view=views.AccountSettingsView.as_view(),
         name="settings",
     ),
+    # Notifications page
+    path(
+        route="notifications",
+        view=views.NotificationsPageView.as_view(),
+        name="notifications",
+    ),
+    # Marks a notification as seen, used by HTMX
+    path("notification_seen", views.notification_seen, name="notification_seen"),
+    
+    # Notifications on navigation bar
+    path(
+        route="notification_nav",
+        view=views.NotificationsNavView.as_view(),
+        name="notification_nav",
+    ),
+
 ]

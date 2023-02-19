@@ -5,6 +5,9 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ms-auto">
+      
+      {% include 'htmx/navnotifications.html' %}
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="../static/assets/pfp/{{me.id}}.jpeg">

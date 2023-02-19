@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
-from .models import User
+from .models import User, Notifications
 
 
 class UserAdmin(BaseUserAdmin):
@@ -11,6 +11,10 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         (_("Personal info"), {"fields": ("first_name", "last_name", "email", "date_of_birth")}),
+        (_("Account Settings info"), 
+            {"fields": ("opt_in_emails_application", 
+                        "opt_in_site_application", 
+                        "opt_in_site_applicant")}),
         (_("Extra info"), {"fields": ("rating", "balance")}),
         (
             _("Permissions"),
@@ -41,3 +45,4 @@ class UserAdmin(BaseUserAdmin):
 
 # Register the new User and UserAdmin.
 admin.site.register(User, UserAdmin)
+admin.site.register(Notifications)
