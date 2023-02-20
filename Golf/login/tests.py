@@ -5,6 +5,11 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from Golf.utils import create_date_string
 from .forms import RegisterForm
+from .validators import validate_dob
+from django.core.exceptions import ValidationError
+from datetime import timedelta
+from django.utils import timezone
+
 
 
 # Get actual user model.
@@ -397,3 +402,19 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(data=new_user)
         self.assertEqual(1, len(form.errors))
+
+
+class ValidatorsTestCase(TestCase):
+    def test_validate_dob(self):
+        """
+        Test the validate_dob function.
+        """
+        # Test invalid dates.
+        with self.assertRaises(ValidationError):
+            validate_dob(datetime.datetime.strptime("2022-02-19", "%Y-%m-%d").date())  # Too young.
+        with self.assertRaises(ValidationError):
+            validate_dob(datetime.datetime.strptime("1910-02-19", "%Y-%m-%d").date())  # Too old.
+
+        # Test valid dates.
+        self.assertIsNone(validate_dob(datetime.datetime.strptime("1990-02-19", "%Y-%m-%d").date()))
+        self.assertIsNone(validate_dob(datetime.datetime.strptime("2005-02-19", "%Y-%m-%d").date()))
