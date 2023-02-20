@@ -4,11 +4,32 @@ from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .models import Room
+from .models import Room, Message
+from Golf.settings import CHAT_MESSAGE_TTL
 
 
 #Get actual user model
 User = get_user_model()
+
+
+def _query_rooms(me):
+    """Query the rooms where one of the users is me."""
+    rooms = Room.objects.filter(Q(user_1=me) | Q(user_2=me))
+
+    # Change room object for the template
+    rooms_changed = []
+    for room in rooms:
+        if room.user_2 == me:
+            other = room.user_1
+            room.user_1 = me
+            room.user_2 = other
+            room.me_started = False
+        else:
+            room.me_started = True
+
+        rooms_changed.append(room)
+
+    return rooms_changed
 
 
 class RoomsView(ListView):
@@ -21,22 +42,13 @@ class RoomsView(ListView):
     def get_queryset(self):
         """Reads rooms from the database."""
         me = self.request.user
-        rooms = Room.objects.filter(Q(user_1=me) | Q(user_2=me))
+        return _query_rooms(me)
 
-        # Change room object for the template
-        rooms_changed = []
-        for room in rooms:
-            if room.user_2 == me:
-                other = room.user_1
-                room.user_1 = me
-                room.user_2 = other
-                room.me_started = False
-            else:
-                room.me_started = True
 
-            rooms_changed.append(room)
-
-        return rooms_changed
+def refreshrooms_call(request):
+    """Refresh rooms."""
+    me = request.user
+    return render(request, "htmx/rooms-list.html", {"rooms": _query_rooms(me)})
 
 
 def startchat_call(request):
@@ -59,7 +71,7 @@ def startchat_call(request):
         room["user_2"] = invitee
         Room.objects.create(**room)
 
-        return render(request, "htmx/chat_button.html")
+        return render(request, "htmx/chat_button.html", {"user": invitee})
 
     # If it is not POST
     raise Http404()
@@ -100,3 +112,40 @@ def searching_call(request):
 
     # If it is not POST
     raise Http404()
+
+
+def room(request, user_id):
+    """Displaying a room with the given user."""
+    me = request.user
+
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    other_user = users[0]
+
+    # Check if it is a room
+    rooms = Room.objects.filter(Q(user_1=me, user_2=other_user) | Q(user_2=me, user_1=other_user))
+    room_exists = len(rooms) == 1
+    if not room_exists:
+        return redirect('userdetails', user_id=user_id)
+    room = rooms[0]
+
+    if room.user_2 == me:
+        room.user_1 = me
+        room.user_2 = other_user
+    
+    messages = Message.objects.filter(room_id=room.room_id)
+
+    return render(
+        request,
+        "chat/room.html",
+        {
+            "room": room,
+            "user": other_user,
+            "messages": messages,
+            "in_room": True,
+            "ttl": CHAT_MESSAGE_TTL,
+        }
+    )

@@ -1,5 +1,6 @@
 <button
   class="btn btn-primary"
+  id="start-chat"
   _="on click add @disabled to me"
   hx-post="{% url 'chat-startchat' %}"
   hx-vals='{"user_id": {{ user.id }} }'
