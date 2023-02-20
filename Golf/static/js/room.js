@@ -14,24 +14,19 @@ chatSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
 
   if (data.message) {
-    var tag = "<div "
+    var tag = '';
     if (data.me) {
-      tag += "class='message-me text-end'";
+      tag += ('<div class="chat"><div><img src="/static/assets/pfp/' + me_id
+      + '.jpeg" class="chat-profile-pic-right" alt="profile picture"></div><div '
+      + '<div class="message-me"><div class="message-text-right">' + data.message 
+      + '</div><br><div class="message-date-right">' + data.date_time + '</div></div></div>');
     }
     else {
-      tag += "class='message-other'";
+      tag += ('<div class="chat"><div><img src="/static/assets/pfp/' + other_user_id
+      + '.jpeg" class="chat-profile-pic-left" alt="profile picture"></div><div '
+      + '<div class="message-me"><div class="message-text-left">' + data.message 
+      + '</div><br><div class="message-date-left">' + data.date_time + '</div></div></div>');
     }
-    tag += ("><div class='message-text'>" + data.message + 
-      "</div><div class='message-date'>" + data.date_time + 
-      "</div><div class='message-username'>");
-
-    if (data.me) {
-      tag += "Me";
-    }
-    else {
-      tag += data.username;
-    }
-    tag += data.username +"</div></div>";
     document.querySelector("#chat-messages").innerHTML += tag;
     scrollToBottom();
   }
