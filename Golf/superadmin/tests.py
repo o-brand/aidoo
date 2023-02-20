@@ -140,7 +140,7 @@ class PostReportCase(TestCase):
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
-        job["poster_id_id"] = random.randint(1, 10)
+        job["poster_id_id"] = 1
         Job.objects.create(**job)
     
     def test_empty_form(self):
@@ -150,7 +150,10 @@ class PostReportCase(TestCase):
         form = ReportForm(data={})
 
         self.assertEqual(5, len(form.errors))
-        self.assertIn("This field is required", form.errors[0])
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required", form.errors[key][0])
 
     def test_added_complaint(self):
         new_report = {
@@ -176,8 +179,10 @@ class PostReportCase(TestCase):
         }
         form = ReportForm(data=new_report)
         self.assertEqual(1, len(form.errors))
-        self.assertIn("Ensure this field has at least 10 characters", form.errors[0])
-
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("Ensure this value has at least 10 characters (it has 1).", form.errors[key][0])
 
     def test_complaint_too_long(self):
         #complaint is exceeding character limit
@@ -191,8 +196,10 @@ class PostReportCase(TestCase):
         form = ReportForm(data=new_report)
 
         self.assertEqual(1, len(form.errors))
-        self.assertIn("Ensure this value has at most 1000 characters", form.errors[0])
-
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("Ensure this value has at most 1000 characters", form.errors[key][0])
 
         
 
