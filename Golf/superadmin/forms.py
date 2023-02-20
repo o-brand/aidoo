@@ -7,12 +7,9 @@ from .models import Report
 class ReportForm(ModelForm):
     """Form to report a job post"""
 
-    #WRITE CONSTRAINTS
-
-
     complaint = forms.CharField(
     max_length=1000,
-    min_length=50,
+    min_length=10,
     widget=forms.Textarea(
             attrs={
             "placeholder": "Explain the reason for reporting",

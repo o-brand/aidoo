@@ -14,3 +14,21 @@ class User(AbstractUser):
 
     # Only used to create a superuser.
     REQUIRED_FIELDS = ["first_name", "last_name", "email", "date_of_birth"]
+    
+class Notifications(models.Model):
+    """This model represents notifications."""
+
+    #Primary key
+    notification_id = models.BigAutoField(primary_key=True)
+
+    #Foreign Key to user who got the notification
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    #Content of the notification
+    content = models.CharField(max_length=100)
+
+    #Link to resolve the notification
+    link = models.CharField(max_length=50)
+
+    #Notification reviewed
+    seen = models.BooleanField(default=False) 

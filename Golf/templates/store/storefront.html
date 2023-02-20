@@ -12,19 +12,51 @@
 {% include 'navigation.html' %}
 
 <div class="container">
-  <h2>"The Store"</h2>
+  <section class="text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Get your reward</h1>
+        <p class="lead text-muted">A place to pick a reward for your earned aidoo coins.</p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="album py-1 bg-light">
+  <div class="btn-group justify-content-end">
+    <button type="button" class="btn btn-secondary shop-button"><i class="bi bi-basket2-fill"></i></button>
+    <button type="button" class="btn btn-secondary shop-button"><i class="bi bi-sort-up"></i></button>
+    <button type="button" class="btn btn-secondary shop-button"><i class="bi bi-sort-down"></i></button>
+
+  </div>
+
+<div class="row row-cols-md-3 d-flex justify-content-center">
+
   {% for item in items %}
-    <div class="card">
+  <div class="col-sm-6 jobs-scroll mb-5">
+  <!--connect items-->
+    <div class="card rounded-4 shadow-sm">
       <div class="card-body">
         <div class="card-title">
           <h4>{{item.item_name}}</h4>
+          <!--picture-->
+          <svg class="bd-placeholder-img card-img-top" role="img" aria-label="Placeholder: Thumbnail" ><rect fill="#ffffff"/><text fill="#eceeef">Picture</text></svg>
+
         </div>
         <div class="card-text">
           <p>{{item.description}}</p>
           <span>{% include "htmx/buy-item.html" %}</span>
+          <small class="text-muted">{{item.limit}}</small>
         </div>
+       
+      </div>  
+        </div>
+      
       </div>
     </div>
   {% endfor %}
+  </div>
+</div>
 </div>
 {% endblock %}

@@ -3,10 +3,12 @@ import datetime
 import random
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase
-from jobs.models import Job, Application
+from jobs.models import Job, Application 
+from userprofile.models import Notifications
 
 
 # Get actual user model.
@@ -387,3 +389,82 @@ class AccountSettingsTestCase(LoginRequiredTestCase):
         response = self.client.get(reverse("settings"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="userprofile/usersettings.html")
+
+class NotificationsModelTestCase(TestCase):
+    """Tests for Notifications model"""
+
+    def setUp(self):
+        fake = Faker()
+
+        # create 10 users in the database
+        for i in range(10):
+            credentials = dict()
+            credentials["username"] = fake.unique.name()
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            User.objects.create_user(**credentials)
+            credentials.clear()
+
+        #create 10 notifications in db
+        for i in range(10):
+            notifications = dict()
+            notifications["user_id"] = User(pk=1)
+            notifications["content"] = lambda: fake.text()
+            notifications["link"] = lambda: fake.sentence()
+            notifications["seen"] = False
+            
+            Notifications.objects.create(**notifications)
+
+    def test_retrieve_notification(self):
+        notifications = Notifications.objects.get(pk=1)
+        self.assertEqual(notifications.notification_id, 1)
+
+    def test_create_notification(self):
+        fake = Faker()
+        len1=len(Notifications.objects.all())
+
+        notifications = dict()
+        notifications["user_id"] = User(pk=1)
+        notifications["content"] = lambda: fake.text()
+        notifications["link"] = lambda: fake.sentence()
+        notifications["seen"] = False
+        Notifications.objects.create(**notifications)
+
+        len2 = len(Notifications.objects.all())
+        self.assertEqual(len1+1, len2)
+    
+    def test_delete_notification(self):
+        n = Notifications.objects.get(pk=1)
+        len1 = len(Notifications.objects.all())
+        
+        n.delete()
+
+        len2=len(Notifications.objects.all())
+        self.assertEqual(len1-1, len2)
+
+    def test_too_long_content(self):
+        fake = Faker()
+        notifications = dict()
+        notifications["user_id"] = User(pk=1)
+        notifications["content"] = "x" * 101
+        notifications["link"] = lambda: fake.sentence()
+        notifications["seen"] = False
+        created_notification=Notifications.objects.create(**notifications)
+
+        with self.assertRaises(ValidationError):
+            created_notification.full_clean()
+
+    def test_too_long_link(self):
+        fake = Faker()
+        notifications = dict()
+        notifications["user_id"] = User(pk=1)
+        notifications["content"] = lambda: fake.text()
+        notifications["link"] = "x"*51
+        notifications["seen"] = False
+
+        created_notification=Notifications.objects.create(**notifications)
+
+        with self.assertRaises(ValidationError):
+            created_notification.full_clean()
