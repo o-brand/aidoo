@@ -1,7 +1,6 @@
 from faker import Faker
 import datetime
 import random
-from django.utils.html import strip_tags
 from django.test import TestCase
 from django.utils import timezone
 from Golf.utils import LoginRequiredTestCase
@@ -203,4 +202,3 @@ class PostReportCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("Ensure this value has at most 1000 characters", form.errors[key][0])
-
