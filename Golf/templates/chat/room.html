@@ -15,47 +15,48 @@
 
       <div class="col">
         <div class="chat_container">
-            <div class="chat_top">{{ room.user_2 }}</div>
-            <div class="line"></div>
-            <div id="chat-messages">
+          <div class="chat_top">{{ room.user_2 }}</div>
+          <div class="line"></div>
+          <div id="chat-messages">
             {% for message in messages %}
               {% if message.user_id == me %}
-                  <div class="chat">
-                      <div><img src="/static/assets/pfp/{{ message.user_id.id }}.jpeg"
-                                class="chat-profile-pic-right" alt="profile picture"></div>
-                      <div class="message-me text-end ">
-                          <div class='message-text-right'>{{ message.content }}</div>
-                          <br>
-                          <div class='message-date-right'>{{ message.date_time }}</div>
-                      </div>
+                <div class="chat">
+                  <div>
+                    <img src="/static/assets/pfp/{{ message.user_id.id }}.jpeg"
+                      class="chat-profile-pic-right" alt="profile picture">
                   </div>
+                  <div class="message-me">
+                    <div class='message-text-right'>{{ message.content }}</div>
+                    <br>
+                    <div class='message-date-right'>{{ message.date_time }}</div>
+                  </div>
+                </div>
               {% else %}
-                  <div class="chat">
-                      <div><img src="/static/assets/pfp/{{ message.user_id.id }}.jpeg"
-                                class="chat-profile-pic-left" alt="profile picture"></div>
-                      <div class="message-other">
-                          <div class='message-text-left'>{{ message.content }}</div>
-                          <br>
-                          <div class='message-date-left'>{{ message.date_time }}</div>
-
-                      </div>
+                <div class="chat">
+                  <div>
+                    <img src="/static/assets/pfp/{{ message.user_id.id }}.jpeg"
+                      class="chat-profile-pic-left" alt="profile picture">
                   </div>
-
+                  <div class="message-other">
+                    <div class='message-text-left'>{{ message.content }}</div>
+                    <br>
+                    <div class='message-date-left'>{{ message.date_time }}</div>
+                  </div>
+                </div>
               {% endif %}
             {% endfor %}
           </div>
-            <!-- foot -->
         </div>
-          <div class="chat-foot">
-              <div>
-                  <input id="chat-message-input" type="text" style="width: 100%;" placeholder="Text..." required>
-                  <button id="chat-message-submit" type="button">Send</button>
-              </div>
+        <div class="chat-foot">
+          <div>
+            <input id="chat-message-input" type="text" style="width: 100%;" placeholder="Text..." required>
+            <button id="chat-message-submit" type="button">Send</button>
           </div>
+        </div>
       </div>
     </div>
   </div>
-    <script>
+  <script>
     const room_id = "{{ room.room_id }}";
     const username = "{{ me.username }}";
   </script>
