@@ -349,6 +349,12 @@ class NotificationsPageView(ListView):
     def notif_count(self):
         """Returns the number of notifications."""
         return self.get_queryset().count()
+    
+    # Returns a count of all unseen notifications
+    def notif_seen_count(self):
+        """Returns the number of unseen notifications."""
+        me = self.request.user
+        return self.get_queryset().filter(seen=False).count()
 
     # Creates the context to send to the template
     def get_context_data(self, **kwargs):
@@ -357,6 +363,8 @@ class NotificationsPageView(ListView):
         context = super().get_context_data(**kwargs)
 
         context["notif_count"] = self.notif_count()
+
+        context["notif_seen_count"] = self.notif_seen_count()
 
         return context
     
@@ -376,6 +384,12 @@ class NotificationsNavView(ListView):
     def notif_count(self):
         """Returns the number of notifications."""
         return self.get_queryset().count()
+    
+    # Returns a count of all unseen notifications
+    def notif_seen_count(self):
+        """Returns the number of unseen notifications."""
+        me = self.request.user
+        return Notifications.objects.filter(user_id=me.id, seen=False).count()
 
     # Creates the context to send to the template
     def get_context_data(self, **kwargs):
@@ -396,6 +410,7 @@ def notification_seen(request):
 
         # Obtain the instance in the database for the clicked notification
         notification = Notifications.objects.filter(notification_id=n_id)[0]
+
         notification.seen = True
         notification.save()
 

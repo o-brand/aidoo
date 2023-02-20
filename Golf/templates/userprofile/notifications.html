@@ -20,36 +20,25 @@
         <h6>No new notifications.</h6>
     </div>
 {% else %}
-    <div class="container-sm text-center mt-1 mb-1">
-        <h6>Unseen</h6>
-    </div>
     {% for notifications in notifs %}
         {% if notifications.seen == False %}
-            <div class="container my-4">
-                <div class="container text-center mt-1 mb-1">
-                    <div class="card mb-1 Notifications">     
+                <div class="container text-center w-25 p-30">
+                    <div class="card mb-1 Notifications" data-item="{{notifications.notification_id}}">     
                         <div class="card-body">
+                            <span class="badge bg-secondary position-absolute top-0 start-0">New</span>
                             <h6>{{notifications.content}}</h6>
-                        </div>
-                        {% include 'htmx/notifications-seen.html' %}    
+                            {% include 'htmx/notifications-seen.html' %}
+                        </div>   
+                        
                     </div>
                 </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-    <div class="container text-center mt-1 mb-1">
-        <h6>Seen</h6>
-    </div>
-    {% for notifications in notifs %}
-        {% if notifications.seen == True %}
-            <div class="container my-4">
-                <div class="container-{50} text-center mt-1 mb-1">
-                    <div class="card mb-1 Notifications">     
-                        <div class="card-body">
-                            <h6>{{notifications.content}}</h6>
-                        </div>
-                        <a href="{{notifications.link}}" class="stretched-link"></a>    
-                    </div>
+        {% else %}
+            <div class="container text-center w-25 p-30">
+                <div class="card mb-1 Notifications">     
+                    <div class="card-body">
+                        <h6>{{notifications.content}}</h6>
+                    </div> 
+                    <a href="{{notifications.link}}" class="stretched-link"></a>    
                 </div>
             </div>
         {% endif %}

@@ -9,10 +9,16 @@
     <ul class="dropdown-menu dropdown-menu-end">
       <li><a class="dropdown-item text-center" href="{% url 'notifications' %}">Notifications{{notifications.content}}</a></li>
       <li><hr class="dropdown-divider"></li>
+      {% if notif_seen_count == 0 %}
+        <li><a class="dropdown-item text-center disabled" href="#">No new notifications.</a></li>
+      {% endif %}
       {% for notifications in notifs %}
-        <li><a class="dropdown-item text-center" href="#">{{notifications.content}}</a></li>
+        {% if notifications.seen == False %}
+          <li><a class="dropdown-item text-center" href="{{notifications.link}}">{{notifications.content}}</a></li>
+          {% include 'htmx/notifications-seen.html' %}
+        {% endif %}
       {% endfor %}
-        </ul>
+    </ul>
   </li>
 </a>
 
