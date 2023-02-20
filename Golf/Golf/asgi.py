@@ -15,8 +15,10 @@ from chat.routing import websocket_urlpatterns
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Golf.settings")
 
+asgi_app = get_asgi_application()
+
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
+    "http": asgi_app,
     "websocket": AuthMiddlewareStack(
         URLRouter(
             websocket_urlpatterns
