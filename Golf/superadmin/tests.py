@@ -149,9 +149,8 @@ class PostReportCase(TestCase):
         #behaviour if empty form is submitted
         form = ReportForm(data={})
 
-        self.assertEqual(1, len(form.errors))
+        self.assertEqual(5, len(form.errors))
         self.assertIn("This field is required", form.errors[0])
-        print("empty")
 
     def test_added_complaint(self):
         new_report = {
@@ -178,7 +177,6 @@ class PostReportCase(TestCase):
         form = ReportForm(data=new_report)
         self.assertEqual(1, len(form.errors))
         self.assertIn("Ensure this field has at least 10 characters", form.errors[0])
-        print("short")
 
 
     def test_complaint_too_long(self):
@@ -194,7 +192,6 @@ class PostReportCase(TestCase):
 
         self.assertEqual(1, len(form.errors))
         self.assertIn("Ensure this value has at most 1000 characters", form.errors[0])
-        print("long")
 
 
         
