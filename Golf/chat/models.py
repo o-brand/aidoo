@@ -31,3 +31,28 @@ class Room(models.Model):
                 fields=["user_1", "user_2"], name="user_user_combo"
             )
         ]
+
+
+class Message(models.Model):
+    """This model is used to store a message for a room."""
+
+    # Primary key
+    message_id = models.BigAutoField(primary_key=True)
+
+    # The room which the message belongs to
+    room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
+
+    # The user who sent the message
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    # The content of the message
+    content = models.TextField()
+
+    # The time the message was sent
+    date_time = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        """This class specifies the order for the model."""
+
+        # Ordering
+        ordering = ('date_time',)

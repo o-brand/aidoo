@@ -266,7 +266,7 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
         self.assertTrue(Application.objects.get(applicant_id=2,job_id=2).status in {"AC", "RE"})
         
         # At least one application is successful
-        self.assertTrue("AC" in [a.status for a in Application.objects.all()])
+        self.assertTrue("AC" in [a.status for a in Application.objects.filter(job_id=2)])
 
 
 class JobDoneButtonCase(LoginRequiredTestCase):

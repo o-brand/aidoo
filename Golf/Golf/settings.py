@@ -42,6 +42,7 @@ AUTH_USER_MODEL = "userprofile.User"
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -88,7 +89,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "Golf.wsgi.application"
+ASGI_APPLICATION = "Golf.asgi.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 
 # Database
@@ -156,6 +162,12 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
 EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
 EMAIL_USE_TLS = True
+
+
+# CHAT
+
+# The maximum number of days of storing a message
+CHAT_MESSAGE_TTL = 31
 
 
 # HEROKU

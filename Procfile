@@ -1,1 +1,1 @@
-web sh -c 'cd ./Golf/ && uvicorn Golf.asgi:application'
+web sh -c 'cd ./Golf/ && gunicorn -w 4 -k uvicorn.workers.UvicornWorker Golf.asgi:application'

@@ -14,22 +14,7 @@
 <div class="container my-4">
   <div class="row flex-column flex-md-row">
     <div class="col col-sm-3 mb-4">
-      <div class="card">
-        <img src="../static/assets/pfp/{{ user.id }}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
-        <div class="card-body">
-          <h5 class="card-title mb-0">{{ user.first_name }} {{ user.last_name }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ user.username }}</h6>
-          <p class="card-text">Joined: {{ user.date_joined | date:'d M Y'}}<br/>
-            Rating: {{ user.rating }}</p>
-            {% if me != user %}
-              {% if chat_started %}
-                {% include 'htmx/chat_button.html' %}
-              {% else %}
-                {% include 'htmx/chat_button_new.html' %}
-              {% endif %}
-            {% endif %}
-        </div>
-      </div>
+    {% include 'userprofile/data-card.html' %}
     </div>
     <div class="col">
       <div class="mb-5">
