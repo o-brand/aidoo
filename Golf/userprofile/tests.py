@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase
 from jobs.models import Job, Application 
-from userprofile.models import Notifications
+from userprofile.models import Notification
 
 
 # Get actual user model.
@@ -390,8 +390,8 @@ class AccountSettingsTestCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="userprofile/usersettings.html")
 
-class NotificationsModelTestCase(TestCase):
-    """Tests for Notifications model"""
+class NotificationModelTestCase(TestCase):
+    """Tests for Notification model"""
 
     def setUp(self):
         fake = Faker()
@@ -415,33 +415,33 @@ class NotificationsModelTestCase(TestCase):
             notifications["link"] = lambda: fake.sentence()
             notifications["seen"] = False
             
-            Notifications.objects.create(**notifications)
+            Notification.objects.create(**notifications)
 
     def test_retrieve_notification(self):
-        notifications = Notifications.objects.get(pk=1)
+        notifications = Notification.objects.get(pk=1)
         self.assertEqual(notifications.notification_id, 1)
 
     def test_create_notification(self):
         fake = Faker()
-        len1=len(Notifications.objects.all())
+        len1=len(Notification.objects.all())
 
         notifications = dict()
         notifications["user_id"] = User(pk=1)
         notifications["content"] = lambda: fake.text()
         notifications["link"] = lambda: fake.sentence()
         notifications["seen"] = False
-        Notifications.objects.create(**notifications)
+        Notification.objects.create(**notifications)
 
-        len2 = len(Notifications.objects.all())
+        len2 = len(Notification.objects.all())
         self.assertEqual(len1+1, len2)
     
     def test_delete_notification(self):
-        n = Notifications.objects.get(pk=1)
-        len1 = len(Notifications.objects.all())
+        n = Notification.objects.get(pk=1)
+        len1 = len(Notification.objects.all())
         
         n.delete()
 
-        len2=len(Notifications.objects.all())
+        len2=len(Notification.objects.all())
         self.assertEqual(len1-1, len2)
 
     def test_too_long_content(self):
@@ -451,7 +451,7 @@ class NotificationsModelTestCase(TestCase):
         notifications["content"] = "x" * 101
         notifications["link"] = lambda: fake.sentence()
         notifications["seen"] = False
-        created_notification=Notifications.objects.create(**notifications)
+        created_notification=Notification.objects.create(**notifications)
 
         with self.assertRaises(ValidationError):
             created_notification.full_clean()
@@ -464,7 +464,7 @@ class NotificationsModelTestCase(TestCase):
         notifications["link"] = "x"*51
         notifications["seen"] = False
 
-        created_notification=Notifications.objects.create(**notifications)
+        created_notification=Notification.objects.create(**notifications)
 
         with self.assertRaises(ValidationError):
             created_notification.full_clean()
