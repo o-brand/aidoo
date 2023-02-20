@@ -396,10 +396,20 @@ class NotificationsModelTestCase(TestCase):
     def setUp(self):
         fake = Faker()
 
+        # create 10 users in the database
+        for i in range(10):
+            credentials = dict()
+            credentials["username"] = fake.unique.name()
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            User.objects.create_user(**credentials)
+            credentials.clear()
+
         #create 10 notifications in db
         for i in range(10):
             notifications = dict()
-            notifications["notification_id"] = i
             notifications["user_id"] = User(pk=1)
             notifications["content"] = lambda: fake.text()
             notifications["link"] = lambda: fake.sentence()
@@ -416,7 +426,6 @@ class NotificationsModelTestCase(TestCase):
         len1=len(Notifications.objects.all())
 
         notifications = dict()
-        notifications["notification_id"] = random.randint(0,10)
         notifications["user_id"] = User(pk=1)
         notifications["content"] = lambda: fake.text()
         notifications["link"] = lambda: fake.sentence()
@@ -428,7 +437,7 @@ class NotificationsModelTestCase(TestCase):
     
     def test_delete_notification(self):
         n = Notifications.objects.get(pk=1)
-        len1 = len(Job.objects.all())
+        len1 = len(Notifications.objects.all())
         
         n.delete()
 
@@ -438,7 +447,6 @@ class NotificationsModelTestCase(TestCase):
     def test_too_long_content(self):
         fake = Faker()
         notifications = dict()
-        notifications["notification_id"] = random.randint(0,10)
         notifications["user_id"] = User(pk=1)
         notifications["content"] = "x" * 101
         notifications["link"] = lambda: fake.sentence()
@@ -451,7 +459,6 @@ class NotificationsModelTestCase(TestCase):
     def test_too_long_link(self):
         fake = Faker()
         notifications = dict()
-        notifications["notification_id"] = random.randint(0,10)
         notifications["user_id"] = User(pk=1)
         notifications["content"] = lambda: fake.text()
         notifications["link"] = "x"*51

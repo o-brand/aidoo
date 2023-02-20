@@ -1,6 +1,8 @@
 from faker import Faker
 import datetime
+import random
 from django.test import TestCase
+from django.utils import timezone
 from Golf.utils import LoginRequiredTestCase
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -114,8 +116,16 @@ class ReportingTestCase(LoginRequiredTestCase):
 class PostReportCase(TestCase):
     """Tests for reporting a job."""
 
+    def fake_time(self):
+        """Returns a timezone aware time to prevent warnings."""
+        fake = Faker()
+        tz = timezone.get_current_timezone()
+        return timezone.make_aware(fake.date_time(), tz, True)
+
     def setUp(self):
-        """Create user before every test."""
+        """Create user and a job before every test."""
+
+        #user
         credentials = {
             "username": "asd",
             "password": "asd123",
@@ -123,12 +133,21 @@ class PostReportCase(TestCase):
 
         }
         User.objects.create_user(**credentials)
+
+        #job
+        job = dict()
+        job["posting_time"] = self.fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = random.randint(1, 10)
+        Job.objects.create(**job)
     
     def test_empty_form(self):
+
+        job = Job.objects.get(pk=1)
         #behaviour if empty form is submitted
-        form = ReportForm(data={"reporting_user": "1",
-            "reported_user": "1",
-            "reported_job": "1", })
+        form = ReportForm(data={})
 
         self.assertEqual(1, len(form.errors))
         self.assertIn("This field is required", form.errors[0])
@@ -138,22 +157,23 @@ class PostReportCase(TestCase):
         new_report = {
             "reporting_user": "1",
             "reported_user": "1",
-            "reported_job": "1",
+            "reported_job": Job.objects.get(pk=1),
             "complaint": "!"*11, 
+            "type":"Job"
         }
         form = ReportForm(data=new_report)
 
         #No errors.
         self.assertEqual(0, len(form.errors))
-        print("ok")
 
     def test_complaint_too_short(self):
         #complaint has not enough characters
         new_report = {
             "reporting_user": "1",
             "reported_user": "1",
-            "reported_job": "1",
+            "reported_job": Job.objects.get(pk=1),
             "complaint": "!",
+            "type":"Job"
         }
         form = ReportForm(data=new_report)
         self.assertEqual(1, len(form.errors))
@@ -166,8 +186,9 @@ class PostReportCase(TestCase):
         new_report = {
             "reporting_user": "1",
             "reported_user": "1",
-            "reported_job": "1",
+            "reported_job": Job.objects.get(pk=1),
             "complaint": "!"*1001,
+            "type":"Job"
         }
         form = ReportForm(data=new_report)
 
