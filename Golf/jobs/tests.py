@@ -11,6 +11,8 @@ from Golf.utils import create_date_string
 from Golf.utils import LoginRequiredTestCase
 from jobs.models import Job, Bookmark, Application
 from .forms import JobForm
+from jobs.validators import validate_deadline
+from datetime import date, timedelta
 
 
 # Get actual user model.
@@ -733,3 +735,32 @@ class BookmarkButtonCase(LoginRequiredTestCase):
         response = self.client.post("/jobs/bookmark", {"job_id": 1})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/bookmark-unmark.html")
+
+class DeadlineValidationTestCase(TestCase):
+    def test_valid_deadline(self):
+        """
+        Test a valid deadline date.
+        """
+        today = date.today()
+        deadline = today + timedelta(days=30)  # set deadline 30 days from today
+        validate_deadline(deadline)  # should not raise ValidationError
+
+    def test_invalid_past_deadline(self):
+        """
+        Test an invalid deadline date in the past.
+        """
+        today = date.today()
+        deadline = today - timedelta(days=1)  # set deadline 1 day in the past
+        with self.assertRaises(ValidationError) as cm:
+            validate_deadline(deadline)
+        self.assertEqual(str(cm.exception), f"['{deadline} is not a valid date. The minimum deadline is today.']")
+
+    def test_invalid_future_deadline(self):
+        """
+        Test an invalid deadline date more than 1 year in the future.
+        """
+        today = date.today()
+        deadline = today + timedelta(days=365) + timedelta(days=1)  # set deadline more than 1 year in the future
+        with self.assertRaises(ValidationError) as cm:
+            validate_deadline(deadline)
+        self.assertEqual(str(cm.exception), f"['{deadline} is not a valid date. The deadline cannot be more than 1 year from now.']")
