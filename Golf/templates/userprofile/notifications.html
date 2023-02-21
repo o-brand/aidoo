@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My profile{% endblock %}
+
+{% block head_extra %}
+<script src="{% static 'js/htmx-1.8.5.min.js' %}" defer></script>
+<script src="{% static 'js/hyperscript-0.9.7.min.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+{% include 'navigation.html' %}
+
+<div class="container text-center w-50">
+    <div class="card mb-1 Notifications">
+        <div class="container-sm text-center mt-1 mb-1 p-1">
+            <h1>Notifications</h1>
+        </div>
+
+        <hr class="bg-secondary border-3">
+
+        {% if notif_count == 0 %}
+            <div class="container-sm text-center mt-1 mb-1">
+                <h6>No new notifications.</h6>
+            </div>
+        {% else %}
+            {% for notifications in notifs %}
+                {% if notifications.seen == False %}
+                        <div class="container-fluid position-relative">
+                            <h6><strong>{{notifications.content}}</strong></h6>
+                            {% include 'htmx/notifications-seen.html' %}
+                            <hr class="bg-secondary border-1">
+                        </div>
+                {% else %}
+                    <div class="container-fluid position-relative">
+                        <h6>{{notifications.content}}</h6>
+                        <a href="{{notifications.link}}" class="stretched-link"></a>
+                        <hr class="bg-secondary border-1">
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+    
+{% endblock %}
