@@ -11,7 +11,7 @@ User = get_user_model()
 
 
 class StoreTestCase(LoginRequiredTestCase):
-    """TODO"""
+    """Tests for the store front page."""
     def setUp(self):
         super().setUp()
 
