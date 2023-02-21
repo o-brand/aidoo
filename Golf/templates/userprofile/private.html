@@ -18,7 +18,9 @@
     <div class="col mb-3">
       <div class="d-flex justify-content-between">
         <h5>My details</h5>
-        <button><i class="bi bi-pencil"></i></button>
+        <button hx-get="{% url 'post' %}" hx-target="#dialog">
+          <i class="bi bi-pencil"></i>
+        </button>
       </div>
       <div class="card">
         <img src="../static/assets/pfp/{{me.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
