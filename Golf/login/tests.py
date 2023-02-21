@@ -4,12 +4,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from Golf.utils import create_date_string
+from django.core.exceptions import ValidationError
 from .forms import RegisterForm
 from .validators import validate_dob
-from django.core.exceptions import ValidationError
-from datetime import timedelta
-from django.utils import timezone
-
 
 
 # Get actual user model.
@@ -164,7 +161,8 @@ class ActivationTestCase(TestCase):
     def test_activation_success_page_available_by_name(self):
         response = self.client.get(reverse("activation_success"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="login/activation_success.html")
+        self.assertTemplateUsed(response, 
+            template_name="login/activation_success.html")
 
     def test_activation_failure_page(self):
         response = self.client.get("/activation/failure")
@@ -173,7 +171,8 @@ class ActivationTestCase(TestCase):
     def test_activation_failure_page_available_by_name(self):
         response = self.client.get(reverse("activation_failure"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="login/activation_failure.html")
+        self.assertTemplateUsed(response, 
+            template_name="login/activation_failure.html")
 
 
 class RegisterFormTestCase(TestCase):
@@ -406,15 +405,17 @@ class RegisterFormTestCase(TestCase):
 
 class ValidatorsTestCase(TestCase):
     def test_validate_dob(self):
-        """
-        Test the validate_dob function.
-        """
+        """Test the validate_dob function."""
         # Test invalid dates.
         with self.assertRaises(ValidationError):
-            validate_dob(datetime.datetime.strptime("2022-02-19", "%Y-%m-%d").date())  # Too young.
+            validate_dob(datetime.datetime.strptime("2022-02-19", 
+                "%Y-%m-%d").date())  # Too young.
         with self.assertRaises(ValidationError):
-            validate_dob(datetime.datetime.strptime("1910-02-19", "%Y-%m-%d").date())  # Too old.
+            validate_dob(datetime.datetime.strptime("1910-02-19",
+                "%Y-%m-%d").date())  # Too old.
 
         # Test valid dates.
-        self.assertIsNone(validate_dob(datetime.datetime.strptime("1990-02-19", "%Y-%m-%d").date()))
-        self.assertIsNone(validate_dob(datetime.datetime.strptime("2005-02-19", "%Y-%m-%d").date()))
+        self.assertIsNone(validate_dob(datetime.datetime.strptime("1990-02-19",
+            "%Y-%m-%d").date()))
+        self.assertIsNone(validate_dob(datetime.datetime.strptime("2005-02-19",
+            "%Y-%m-%d").date()))

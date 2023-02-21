@@ -14,7 +14,6 @@ from .forms import JobForm
 from jobs.validators import validate_deadline
 
 
-
 # Get actual user model.
 User = get_user_model()
 
