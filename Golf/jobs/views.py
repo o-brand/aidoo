@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from .models import Job, Bookmark, Application
 from .forms import JobForm
-from userprofile.models import Notifications
+from userprofile.models import Notification
 
 
 # Get actual user model.
@@ -170,7 +170,7 @@ def apply_call(request):
         # Checks if the job poster allows on site notifications first
 
         if jobs[0].poster_id.opt_in_site_applicant == True:
-            Notifications.objects.create(
+            Notification.objects.create(
                 user_id=jobs[0].poster_id,
                 content=str(user.username) + " applied to your job: " + str(jobs[0].job_title),
                 link="/profile/me"

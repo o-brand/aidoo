@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from django.views import View
 from django.core.paginator import Paginator
 from jobs.models import Job, Bookmark, Application
-from .models import Notifications
+from .models import Notification
 from chat.models import Room
 from django.core.paginator import Paginator
 from django.views import View
@@ -194,7 +194,7 @@ def selectapplicant_call(request):
                 # Checks if the user accepts on site notifications
                 # If true, create a new notification in the database
                 if user.applicant_id.opt_in_site_application == True:
-                    Notifications.objects.create(
+                    Notification.objects.create(
                         user_id = user.applicant_id, 
                         content = "You've been rejected from the job: " + str(job.job_title), 
                         link = "/jobs/" + str(job.job_id)
@@ -225,7 +225,7 @@ def selectapplicant_call(request):
                 # Checks if the user accepts on site notifications
                 # If true, create a new notification in the database
                 if user.applicant_id.opt_in_site_application == True:
-                    Notifications.objects.create(
+                    Notification.objects.create(
                         user_id = user.applicant_id, 
                         content = "You've been accepted for the job: " + str(job.job_title), 
                         link = "/jobs/" + str(job.job_id)
@@ -336,14 +336,14 @@ class AccountSettingsView(View):
 class NotificationsPageView(ListView):
     """It is used to render the notifications page."""
 
-    model = Notifications
+    model = Notification
     context_object_name = "notifs"
     template_name = "userprofile/notifications.html"
     
     # Returns a query of all notifications for the logged in user
     def get_queryset(self):
         me = self.request.user
-        return Notifications.objects.filter(user_id=me.id)
+        return Notification.objects.filter(user_id=me.id)
     
     # Returns a count of all notifications for the logged in user
     def notif_count(self):
@@ -376,7 +376,7 @@ def notification_seen(request):
         n_id = request.POST['id']
 
         # Obtain the instance in the database for the clicked notification
-        notification = Notifications.objects.filter(notification_id=n_id)[0]
+        notification = Notification.objects.filter(notification_id=n_id)[0]
 
         notification.seen = True
         notification.save()
