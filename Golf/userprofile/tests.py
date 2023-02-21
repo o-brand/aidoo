@@ -10,7 +10,6 @@ from Golf.utils import LoginRequiredTestCase
 from jobs.models import Job, Application 
 from userprofile.models import Notification
 
-
 # Get actual user model.
 User = get_user_model()
 
@@ -423,6 +422,7 @@ class NotificationModelTestCase(TestCase):
 
     def test_create_notification(self):
         fake = Faker()
+
         len1=len(Notification.objects.all())
 
         notifications = dict()
@@ -430,6 +430,7 @@ class NotificationModelTestCase(TestCase):
         notifications["content"] = lambda: fake.text()
         notifications["link"] = lambda: fake.sentence()
         notifications["seen"] = False
+
         Notification.objects.create(**notifications)
 
         len2 = len(Notification.objects.all())
@@ -451,6 +452,7 @@ class NotificationModelTestCase(TestCase):
         notifications["content"] = "x" * 101
         notifications["link"] = lambda: fake.sentence()
         notifications["seen"] = False
+
         created_notification=Notification.objects.create(**notifications)
 
         with self.assertRaises(ValidationError):

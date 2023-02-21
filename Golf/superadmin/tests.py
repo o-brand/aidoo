@@ -148,12 +148,13 @@ class PostReportCase(TestCase):
         job = Job.objects.get(pk=1)
         #behaviour if empty form is submitted
         form = ReportForm(data={})
-
         self.assertEqual(5, len(form.errors))
+
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required", form.errors[key][0])
+
 
     def test_added_complaint(self):
         new_report = {
@@ -179,6 +180,7 @@ class PostReportCase(TestCase):
         }
         form = ReportForm(data=new_report)
         self.assertEqual(1, len(form.errors))
+
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
@@ -194,13 +196,9 @@ class PostReportCase(TestCase):
             "type":"Job"
         }
         form = ReportForm(data=new_report)
-
         self.assertEqual(1, len(form.errors))
+
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("Ensure this value has at most 1000 characters", form.errors[key][0])
-
-        
-
-
