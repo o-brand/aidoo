@@ -11,38 +11,36 @@
 {% block content %}
 {% include 'navigation.html' %}
 
-<div class="container-sm text-center mt-1 mb-1">
-    <h1>Notifications</h1>
-</div>
+<div class="container text-center w-50">
+    <div class="card mb-1 Notifications">
+        <div class="container-sm text-center mt-1 mb-1 p-1">
+            <h1>Notifications</h1>
+        </div>
 
-{% if notif_count == 0 %}
-    <div class="container-sm text-center mt-1 mb-1">
-        <h6>No new notifications.</h6>
-    </div>
-{% else %}
-    {% for notifications in notifs %}
-        {% if notifications.seen == False %}
-                <div class="container text-center w-25 p-30">
-                    <div class="card mb-1 Notifications" data-item="{{notifications.notification_id}}">     
-                        <div class="card-body">
-                            <span class="badge bg-secondary position-absolute top-0 start-0">New</span>
-                            <h6>{{notifications.content}}</h6>
-                            {% include 'htmx/notifications-seen.html' %}
-                        </div>   
-                        
-                    </div>
-                </div>
-        {% else %}
-            <div class="container text-center w-25 p-30">
-                <div class="card mb-1 Notifications">     
-                    <div class="card-body">
-                        <h6>{{notifications.content}}</h6>
-                    </div> 
-                    <a href="{{notifications.link}}" class="stretched-link"></a>    
-                </div>
+        <hr class="bg-secondary border-3">
+
+        {% if notif_count == 0 %}
+            <div class="container-sm text-center mt-1 mb-1">
+                <h6>No new notifications.</h6>
             </div>
+        {% else %}
+            {% for notifications in notifs %}
+                {% if notifications.seen == False %}
+                        <div class="container-fluid position-relative">
+                            <h6><strong>{{notifications.content}}</strong></h6>
+                            {% include 'htmx/notifications-seen.html' %}
+                            <hr class="bg-secondary border-1">
+                        </div>
+                {% else %}
+                    <div class="container-fluid position-relative">
+                        <h6>{{notifications.content}}</h6>
+                        <a href="{{notifications.link}}" class="stretched-link"></a>
+                        <hr class="bg-secondary border-1">
+                    </div>
+                {% endif %}
+            {% endfor %}
         {% endif %}
-    {% endfor %}
-{% endif %}
+    </div>
+</div>
     
 {% endblock %}

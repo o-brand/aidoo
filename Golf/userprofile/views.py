@@ -368,39 +368,6 @@ class NotificationsPageView(ListView):
 
         return context
     
-class NotificationsNavView(ListView):
-    """It is used to render the notifications page."""
-
-    model = Notifications
-    context_object_name = "notifs"
-    template_name = "htmx/navnotifications.html"
-    
-    # Returns a query of all notifications for the logged in user
-    def get_queryset(self):
-        me = self.request.user
-        return Notifications.objects.filter(user_id=me.id)
-    
-    # Returns a count of all notifications for the logged in user
-    def notif_count(self):
-        """Returns the number of notifications."""
-        return self.get_queryset().count()
-    
-    # Returns a count of all unseen notifications
-    def notif_seen_count(self):
-        """Returns the number of unseen notifications."""
-        me = self.request.user
-        return Notifications.objects.filter(user_id=me.id, seen=False).count()
-
-    # Creates the context to send to the template
-    def get_context_data(self, **kwargs):
-        """Adds data to the template."""
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-
-        context["notif_count"] = self.notif_count()
-
-        return context
-    
 def notification_seen(request):
     """Marks a notification as seen when clicked by the user."""
     if request.method == "POST":
