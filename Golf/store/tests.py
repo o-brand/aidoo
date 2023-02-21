@@ -1,18 +1,15 @@
-import datetime
-import random
-from faker import Faker
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.db.utils import IntegrityError
-from Golf.utils import create_date_string
 from Golf.utils import LoginRequiredTestCase
 from .models import Item, Sale
 
 
-# TODO tests
+# Get actual user model.
+User = get_user_model()
+
+
 class StoreTestCase(LoginRequiredTestCase):
     """TODO"""
     def setUp(self):
@@ -34,9 +31,6 @@ class StoreTestCase(LoginRequiredTestCase):
         response = self.client.get(reverse("store"))
         self.assertEqual(response.status_code, 200)
 
-
-# Get actual user model.
-User = get_user_model()
 
 class ItemModelTest(TestCase):
     """Test the Item model."""
@@ -87,6 +81,7 @@ class ItemModelTest(TestCase):
         item = Item.objects.get(item_name='Test Item')       
         self.assertEqual(item.limit_per_user, 2)
 
+
 class SaleModelTest(LoginRequiredTestCase):
     """Test the Sale model."""
 
@@ -102,56 +97,30 @@ class SaleModelTest(LoginRequiredTestCase):
             limit_per_user=2
         )
 
+        self.sale = Sale.objects.create(
+            purchase=self.item,
+            buyer=self.user,
+            quantity=2,
+            time_of_sale=timezone.now()
+        )
 
     def test_sale_creation(self):
         """Test that a Sale can be created and saved."""
-        sale = Sale.objects.create(
-            purchase=self.item,
-            buyer=self.user,
-            quantity=2,
-            time_of_sale=timezone.now()
-        )
-        
         sale_count = Sale.objects.count()
         self.assertEqual(sale_count, 1)
 
-
     def test_sale_attributes_purchase(self):
-        """Test that the Sale attributes are correct."""
-        sale = Sale.objects.create(
-            purchase=self.item,
-            buyer=self.user,
-            quantity=2,
-            time_of_sale=timezone.now()
-        )
-        self.assertEqual(sale.purchase, self.item)
+        """Test that the sale item is correct."""
+        self.assertEqual(self.sale.purchase, self.item)
         
     def test_sale_attributes_buyers(self):
-        """Test that the Sale attributes are correct."""
-        sale = Sale.objects.create(
-            purchase=self.item,
-            buyer=self.user,
-            quantity=2,
-            time_of_sale=timezone.now()
-        )
-        self.assertEqual(sale.buyer, self.user)
+        """Test that the buyer is correct."""
+        self.assertEqual(self.sale.buyer, self.user)
 
     def test_sale_attributes_quantity(self):
-        """Test that the Sale attributes are correct."""
-        sale = Sale.objects.create(
-            purchase=self.item,
-            buyer=self.user,
-            quantity=2,
-            time_of_sale=timezone.now()
-        )
-        self.assertEqual(sale.quantity, 2)
+        """Test that the time of quantity is correct."""
+        self.assertEqual(self.sale.quantity, 2)
 
     def test_sale_attributes_time_of_sale(self):
-        """Test that the Sale attributes are correct."""
-        sale = Sale.objects.create(
-            purchase=self.item,
-            buyer=self.user,
-            quantity=2,
-            time_of_sale=timezone.now()
-        )
-        self.assertIsNotNone(sale.time_of_sale)
+        """Test that the time of sale is correct."""
+        self.assertIsNotNone(self.sale.time_of_sale)
