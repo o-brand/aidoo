@@ -1,0 +1,6 @@
+<a
+    hx-post="{% url 'notification_seen' %}"
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+    hx-vals='{"id":"{{notifications.notification_id}}"}'
+    class="stretched-link">
+</a>

@@ -22,20 +22,28 @@
     <div class="card mb-1 Notifications">     
       <form method="post" action="{% url 'settings' %}">
         {% csrf_token %}
-
         <div class="card-body">
           <h4>Email notifications</h4>
           <h6 class="card-subtitle mb-2 text-muted">
             Notify me by email when I am accepted or rejected from a job:
-            <input type="checkbox" name="opt_in" {% if me.opt_in_emails %}checked{% endif %}>
+            <input type="checkbox" name="opt_in_1" {% if me.opt_in_emails_application %}checked{% endif %}>
+          </h6>
+        </div>
+        <div class="card-body">
+          <h4>On site notifications</h4>
+          <h6 class="card-subtitle mb-2 text-muted">
+            Notify me on the site when I am accepted or rejected from a job:
+            <input type="checkbox" name="opt_in_2" {% if me.opt_in_site_application %}checked{% endif %}>
+          </h6>
+          <h6 class="card-subtitle mb-2 text-muted">
+            Notify me on the site when a user applies for one of my posted jobs:
+            <input type="checkbox" name="opt_in_3" {% if me.opt_in_site_applicant %}checked{% endif %}>
           </h6>
         </div>
       </div>
-
       <div class="container text-left mt-5 mb-5">
         <button class="btn btn-primary" type="submit">Submit</button>
       </div>
-
     </div>
   </div>
 </div>

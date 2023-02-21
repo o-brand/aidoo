@@ -82,10 +82,23 @@ class UserTableTestCase(TestCase):
         u = User.objects.get(pk=1)
         self.assertGreaterEqual(u.rating, 0)
 
-    def test_email_preferences(self):
-        #checks if the email preference exists and is either True or False
+    def test_email_preferences_application(self):
+        # checks if the email preference exists and is either True or False
+        # for notification to user when accepted or rejected from a job
         u = User.objects.get(pk=1)
-        self.assertIn(u.opt_in_emails, {True:False})
+        self.assertIn(u.opt_in_emails_application, {True:False})
+
+    def test_site_preferences_application(self):
+        # checks if the site preference exists and is either True or False
+        # for notification to user when accepted or rejected from a job
+        u = User.objects.get(pk=1)
+        self.assertIn(u.opt_in_site_application, {True:False})
+    
+    def test_site_preferences_applicant(self):
+        # checks if the site preference exists and is either True or False
+        # for notification to job poster when user applies for their job
+        u = User.objects.get(pk=1)
+        self.assertIn(u.opt_in_site_applicant, {True:False})
 
 
 class PublicProfileTestCase(LoginRequiredTestCase):

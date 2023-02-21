@@ -9,9 +9,12 @@ from django.template.loader import render_to_string
 from django.views import View
 from django.core.paginator import Paginator
 from jobs.models import Job, Bookmark, Application
+from .models import Notification
 from chat.models import Room
 from django.core.paginator import Paginator
 from django.views import View
+from django.views.generic import ListView
+from django.http import HttpResponse
 
 
 # Get actual user model.
@@ -107,11 +110,6 @@ def me(request):
     return render(request, "userprofile/private.html", context)
 
 
-def settings(request):
-    """Page for account settings"""
-    return render(request, "userprofile/usersettings.html")
-
-
 def withdraw_call(request):
     """Withdraw from a job."""
     if request.method == "POST":
@@ -174,7 +172,8 @@ def selectapplicant_call(request):
         # Change status of applicants - only those status where "AP"
         for user in applications:
             if user.applicant_id.id != selected_application.applicant_id.id:
-                if user.applicant_id.opt_in_emails:
+                # Check if user accepts email notifications before email send
+                if user.applicant_id.opt_in_emails_application:
                     # send an email to the rejected applicant
                     message = render_to_string(
                         "emails/application_rejection.html",
@@ -192,10 +191,20 @@ def selectapplicant_call(request):
                         html_message=message,
                     )
 
+                # Checks if the user accepts on site notifications
+                # If true, create a new notification in the database
+                if user.applicant_id.opt_in_site_application == True:
+                    Notification.objects.create(
+                        user_id = user.applicant_id, 
+                        content = "You've been rejected from the job: " + str(job.job_title), 
+                        link = "/jobs/" + str(job.job_id)
+                        )
+
                 user.status = "RE"
                 user.save()
             else:
-                if user.applicant_id.opt_in_emails:
+                # Checks if user accepts email notifications before email send
+                if user.applicant_id.opt_in_emails_application:
                     # send an email to the accepted applicant
                     message = render_to_string(
                         "emails/application_acceptance.html",
@@ -212,6 +221,15 @@ def selectapplicant_call(request):
                         [user.applicant_id.email],
                         html_message=message,
                     )
+
+                # Checks if the user accepts on site notifications
+                # If true, create a new notification in the database
+                if user.applicant_id.opt_in_site_application == True:
+                    Notification.objects.create(
+                        user_id = user.applicant_id, 
+                        content = "You've been accepted for the job: " + str(job.job_title), 
+                        link = "/jobs/" + str(job.job_id)
+                        )
 
                 user.status = "AC"
                 user.save()
@@ -283,18 +301,87 @@ class AccountSettingsView(View):
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
         #returns an empty list if button is unchecked otherwise returns ['on']
-        button_check = request.POST.getlist('opt_in')
+        button_check_1 = request.POST.getlist('opt_in_1')
+        button_check_2 = request.POST.getlist('opt_in_2')
+        button_check_3 = request.POST.getlist('opt_in_3')
 
         me = request.user
 
         # If checkbox state doesn't match email preference on submit
         # then change the email preference
-        if me.opt_in_emails == True and button_check == []:
-            me.opt_in_emails = False
-        elif me.opt_in_emails == False and button_check == ['on']:
-            me.opt_in_emails = True
+        if me.opt_in_emails_application == True and button_check_1 == []:
+            me.opt_in_emails_application = False
+        elif me.opt_in_emails_application == False and button_check_1 == ['on']:
+            me.opt_in_emails_application = True
+        
+        # If checkbox state doesn't match email preference on submit
+        # then change the on site preference
+        if me.opt_in_site_application == True and button_check_2 == []:
+            me.opt_in_site_application = False
+        elif me.opt_in_site_application == False and button_check_2 == ['on']:
+            me.opt_in_site_application = True
+        
+        # If checkbox state doesn't match email preference on submit
+        # then change the email preference
+        if me.opt_in_site_applicant == True and button_check_3 == []:
+            me.opt_in_site_applicant = False
+        elif me.opt_in_site_applicant == False and button_check_3 == ['on']:
+            me.opt_in_site_applicant = True
         
         me.save()
 
         # Render the form again
         return render(request, self.template_name, {"me":me})
+
+class NotificationsPageView(ListView):
+    """It is used to render the notifications page."""
+
+    model = Notification
+    context_object_name = "notifs"
+    template_name = "userprofile/notifications.html"
+    
+    # Returns a query of all notifications for the logged in user
+    def get_queryset(self):
+        me = self.request.user
+        return Notification.objects.filter(user_id=me.id)
+    
+    # Returns a count of all notifications for the logged in user
+    def notif_count(self):
+        """Returns the number of notifications."""
+        return self.get_queryset().count()
+    
+    # Returns a count of all unseen notifications
+    def notif_seen_count(self):
+        """Returns the number of unseen notifications."""
+        me = self.request.user
+        return self.get_queryset().filter(seen=False).count()
+
+    # Creates the context to send to the template
+    def get_context_data(self, **kwargs):
+        """Adds data to the template."""
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        context["notif_count"] = self.notif_count()
+
+        context["notif_seen_count"] = self.notif_seen_count()
+
+        return context
+    
+def notification_seen(request):
+    """Marks a notification as seen when clicked by the user."""
+    if request.method == "POST":
+
+        # Obtains the id for the notification through htmx include
+        n_id = request.POST['id']
+
+        # Obtain the instance in the database for the clicked notification
+        notification = Notification.objects.filter(notification_id=n_id)[0]
+
+        notification.seen = True
+        notification.save()
+
+        # Redirect the user to the link saved in the notification
+        response = HttpResponse()
+        response["HX-Redirect"] = notification.link
+        return response
