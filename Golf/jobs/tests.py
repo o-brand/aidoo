@@ -12,7 +12,7 @@ from Golf.utils import LoginRequiredTestCase
 from jobs.models import Job, Bookmark, Application
 from .forms import JobForm
 from jobs.validators import validate_deadline
-from datetime import date, timedelta
+
 
 
 # Get actual user model.
@@ -304,7 +304,9 @@ class PostPageCase(LoginRequiredTestCase):
         new_form = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_description": "This is a cry for help, I actually have no skills of writing tests, but wanted to do it on my own cause i wanna learn.",
+            "job_description": ("This is a cry for help, I actually have no "
+                "skills of writing tests, but wanted to do it on my own cause "
+                "i wanna learn."),
             "location": "AB25 1GN",
             "duration_days": "0",
             "duration_hours": "1",
@@ -372,7 +374,8 @@ class PostJobCase(TestCase):
 
             if key == "job_description":
                 self.assertIn(
-                    "Ensure this value has at most 1000 characters", form.errors[key][0]
+                    "Ensure this value has at most 1000 characters",
+                    form.errors[key][0]
                 )
             else:
                 self.assertIn("This field is required.", form.errors[key][0])
@@ -394,7 +397,8 @@ class PostJobCase(TestCase):
 
             if key == "job_description":
                 self.assertIn(
-                    "Ensure this value has at least 50 characters", form.errors[key][0]
+                    "Ensure this value has at least 50 characters", 
+                    form.errors[key][0]
                 )
             else:
                 self.assertIn("This field is required.", form.errors[key][0])
@@ -433,7 +437,8 @@ class PostJobCase(TestCase):
 
             if key == "location":
                 self.assertIn(
-                    "The postcode format is not valid. You must use capital letters.",
+                    ("The postcode format is not valid. You must use capital "
+                    "letters."),
                     form.errors[key][0],
                 )
             else:
@@ -474,7 +479,8 @@ class PostJobCase(TestCase):
 
             if key == "duration_days":
                 self.assertIn(
-                    "Select a valid choice. That choice is not one of the available choices.",
+                    ("Select a valid choice. That choice is not one of the " 
+                    "available choices."),
                     form.erros[key][0],
                 )
             else:
@@ -499,7 +505,8 @@ class PostJobCase(TestCase):
 
             if key == "duration_hours":
                 self.assertIn(
-                    "Select a valid choice. That choice is not one of the available choices.",
+                    ("Select a valid choice. That choice is not one of the " 
+                    "available choices."),
                     form.erros[key][0],
                 )
             else:
@@ -570,7 +577,8 @@ class PostJobCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn(
-                "is not a valid date. The deadline cannot be more than 1 year from now.",
+                ("is not a valid date. The deadline cannot be more than 1 " 
+                "year from now."),
                 form.errors[key][0],
             )
 
@@ -640,7 +648,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
 
 class ReportButtonCase(LoginRequiredTestCase):
     """Tests for report button."""
-    # We need to write more tests when the function is fully implemented.
+    # TODO We need to write more tests when the function is fully implemented.
 
     def fake_time(self):
         """Returns a timezone aware time to prevent warnings."""
@@ -649,8 +657,6 @@ class ReportButtonCase(LoginRequiredTestCase):
         return timezone.make_aware(fake.date_time(), tz, True)
 
     def setUp(self):
-        fake = Faker()
-
         # Login from super...
         super().setUp()
 
@@ -684,8 +690,6 @@ class BookmarkButtonCase(LoginRequiredTestCase):
         return timezone.make_aware(fake.date_time(), tz, True)
 
     def setUp(self):
-        fake = Faker()
-
         # Login from super...
         super().setUp()
 
@@ -731,36 +735,34 @@ class BookmarkButtonCase(LoginRequiredTestCase):
 
     def test_page_post_job_bookmark_does_not_exist(self):
         # test for a unmarked job (bookmarking functionality)
-
         response = self.client.post("/jobs/bookmark", {"job_id": 1})
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="htmx/bookmark-unmark.html")
+        self.assertTemplateUsed(response, 
+            template_name="htmx/bookmark-unmark.html")
+
 
 class DeadlineValidationTestCase(TestCase):
     def test_valid_deadline(self):
-        """
-        Test a valid deadline date.
-        """
-        today = date.today()
-        deadline = today + timedelta(days=30)  # set deadline 30 days from today
+        """Test a valid deadline date."""
+        today = datetime.date.today()
+        deadline = today + datetime.timedelta(days=30)  # set deadline 30 days from today
         validate_deadline(deadline)  # should not raise ValidationError
 
     def test_invalid_past_deadline(self):
-        """
-        Test an invalid deadline date in the past.
-        """
-        today = date.today()
-        deadline = today - timedelta(days=1)  # set deadline 1 day in the past
+        """Test an invalid deadline date in the past."""
+        today = datetime.date.today()
+        deadline = today - datetime.timedelta(days=1)  # set deadline 1 day in the past
         with self.assertRaises(ValidationError) as cm:
             validate_deadline(deadline)
-        self.assertEqual(str(cm.exception), f"['{deadline} is not a valid date. The minimum deadline is today.']")
+        self.assertEqual(str(cm.exception), (f"['{deadline} is not a valid "
+            "date. The minimum deadline is today.']"))
 
     def test_invalid_future_deadline(self):
-        """
-        Test an invalid deadline date more than 1 year in the future.
-        """
-        today = date.today()
-        deadline = today + timedelta(days=365) + timedelta(days=1)  # set deadline more than 1 year in the future
+        """Test an invalid deadline date more than 1 year in the future."""
+        today = datetime.date.today()
+        year = datetime.timedelta(days=365) + datetime.timedelta(days=1)  
+        deadline = today + year # set deadline more than 1 year in the future
         with self.assertRaises(ValidationError) as cm:
             validate_deadline(deadline)
-        self.assertEqual(str(cm.exception), f"['{deadline} is not a valid date. The deadline cannot be more than 1 year from now.']")
+        self.assertEqual(str(cm.exception), (f"['{deadline} is not a valid "
+            "date. The deadline cannot be more than 1 year from now.']"))
