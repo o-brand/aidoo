@@ -21,6 +21,7 @@ class UserAdmin(BaseUserAdmin):
             {
                 "fields": (
                     "is_active",
+                    "verified",
                     "is_staff",
                     "is_superuser",
                     "groups",
