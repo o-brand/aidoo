@@ -55,7 +55,7 @@
             </div>
             <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
               <a href="{% url 'userdetails' job.poster_id.id %}">
-                <img src="../static/assets/pfp/{{job.poster_id.id}}.jpeg">
+                <img src="/static/assets/pfp/{{job.poster_id.id}}.jpeg">
               </a>
               <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
             </div>
