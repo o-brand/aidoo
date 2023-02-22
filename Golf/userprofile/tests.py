@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.test import TestCase
-from Golf.utils import LoginRequiredTestCase
+from Golf.utils import LoginRequiredTestCase, fake_time
 from jobs.models import Job, Application 
 from userprofile.models import Notification
 
@@ -134,12 +134,6 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
 class WithdrawButtonCase(LoginRequiredTestCase):
     """Tests for withdraw button."""
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         # Login from super...
         super().setUp()
@@ -147,7 +141,7 @@ class WithdrawButtonCase(LoginRequiredTestCase):
         # Write 1 job into the job model
         for i in range(2):
             job = dict()
-            job["posting_time"] = self.fake_time()
+            job["posting_time"] = fake_time(self)
             job["points"] = random.randint(0, 100)
             job["assigned"] = False
             job["completed"] = False
@@ -197,19 +191,13 @@ class WithdrawButtonCase(LoginRequiredTestCase):
 class SelectApplicantButtonCase(LoginRequiredTestCase):
     """Tests for selecting an applicant button."""
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         # Login from super...
         super().setUp()
 
         # Write 2 job into the job model
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -252,7 +240,7 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
 
         # Create a new job
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -284,19 +272,13 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
 class JobDoneButtonCase(LoginRequiredTestCase):
     """Tests for job done button."""
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         # Login from super...
         super().setUp()
 
         # Write 2 job into the job model
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -334,7 +316,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
 
         # Create a new job
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -362,7 +344,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
 
         # Create a new job
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False

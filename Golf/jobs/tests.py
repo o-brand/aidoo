@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
-from Golf.utils import create_date_string
+from Golf.utils import create_date_string, fake_time
 from Golf.utils import LoginRequiredTestCase
 from jobs.models import Job, Bookmark, Application
 from .forms import JobForm
@@ -55,12 +55,6 @@ class DetailsTestCase(LoginRequiredTestCase):
 class JobModelTestCase(TestCase):
     """Tests for Job model."""
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         fake = Faker()
 
@@ -78,7 +72,7 @@ class JobModelTestCase(TestCase):
         # Write 10 jobs into the job model
         for i in range(10):
             job = dict()
-            job["posting_time"] = self.fake_time()
+            job["posting_time"] = fake_time(self)
             job["points"] = random.randint(0, 100)
             job["assigned"] = False
             job["completed"] = False
@@ -97,7 +91,7 @@ class JobModelTestCase(TestCase):
         len1 = len(Job.objects.all())
 
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -120,7 +114,7 @@ class JobModelTestCase(TestCase):
     def test_too_long_location(self):
         job = dict()
         job["location"] = "x" * 9
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -133,7 +127,7 @@ class JobModelTestCase(TestCase):
     def test_too_long_title(self):
         job = dict()
         job["job_title"] = "x" * 51
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -146,7 +140,7 @@ class JobModelTestCase(TestCase):
     def test_too_long_job_description(self):
         job = dict()
         job["job_description"] = "x" * 1001
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -159,7 +153,7 @@ class JobModelTestCase(TestCase):
     def test_too_small_points(self):
         job = dict()
         job["points"] = 0
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -172,7 +166,7 @@ class JobModelTestCase(TestCase):
     def test_profane_job_title(self):
         job = dict()
         job["job_title"] = "kondums"
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -185,7 +179,7 @@ class JobModelTestCase(TestCase):
     def test_profane_job_long_description(self):
         job = dict()
         job["job_description"] = " kondums" * 20
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -198,12 +192,6 @@ class JobModelTestCase(TestCase):
 
 class BookmarkModelTestCase(TestCase):
     """Tests for Bookmark model."""
-
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
 
     def setUp(self):
         fake = Faker()
@@ -220,7 +208,7 @@ class BookmarkModelTestCase(TestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -232,7 +220,7 @@ class BookmarkModelTestCase(TestCase):
         bookmark = dict()
         bookmark["user_id"] = User(pk=1)
         bookmark["job_id"] = Job(pk=1)
-        bookmark["saving_time"] = self.fake_time()
+        bookmark["saving_time"] = fake_time(self)
         Bookmark.objects.create(**bookmark)
         with self.assertRaises(IntegrityError):
             Bookmark.objects.create(**bookmark)
@@ -240,12 +228,6 @@ class BookmarkModelTestCase(TestCase):
 
 class ApplicationModelTestCasae(TestCase):
     """Test for Application model."""
-
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
 
     def setUp(self):
         fake = Faker()
@@ -262,7 +244,7 @@ class ApplicationModelTestCasae(TestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -274,8 +256,8 @@ class ApplicationModelTestCasae(TestCase):
         application["applicant_id"] = User(pk=1)
         application["job_id"] = Job(pk=1)
         application["status"] = "AP"  #imo should be AP as it's default
-        application["time_of_application"] = self.fake_time()
-        application["time_of_final_status"] = self.fake_time()
+        application["time_of_application"] = fake_time(self)
+        application["time_of_final_status"] = fake_time(self)
 
         #creates an object
         Application.objects.create(**application)
@@ -585,12 +567,6 @@ class PostJobCase(TestCase):
 class ApplyButtonCase(LoginRequiredTestCase):
     """Tests for apply button."""
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         fake = Faker()
 
@@ -599,7 +575,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -649,19 +625,13 @@ class ReportButtonCase(LoginRequiredTestCase):
     """Tests for report button."""
     # TODO We need to write more tests when the function is fully implemented.
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         # Login from super...
         super().setUp()
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -682,19 +652,13 @@ class ReportButtonCase(LoginRequiredTestCase):
 class BookmarkButtonCase(LoginRequiredTestCase):
     """Tests for bookmark button."""
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         # Login from super...
         super().setUp()
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False

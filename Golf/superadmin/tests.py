@@ -3,7 +3,7 @@ import datetime
 import random
 from django.test import TestCase
 from django.utils import timezone
-from Golf.utils import LoginRequiredTestCase
+from Golf.utils import LoginRequiredTestCase, fake_time
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -116,12 +116,6 @@ class ReportingTestCase(LoginRequiredTestCase):
 class PostReportCase(TestCase):
     """Tests for reporting a job."""
 
-    def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
-
     def setUp(self):
         """Create user and a job before every test."""
 
@@ -136,7 +130,7 @@ class PostReportCase(TestCase):
 
         #job
         job = dict()
-        job["posting_time"] = self.fake_time()
+        job["posting_time"] = fake_time(self)
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
