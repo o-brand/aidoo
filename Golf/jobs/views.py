@@ -172,15 +172,19 @@ def apply_call(request):
         new_apply = Application(applicant_id=user, job_id=jobs[0])
         new_apply.save()
 
-        # Send on site notification to the job poster when a user applies
+        # Send on site notification to the job poster
+        # It lets them know that the job is ready to select an applicant
+        # only sends once per job
         # Checks if the job poster allows on site notifications first
 
         if jobs[0].poster_id.opt_in_site_applicant == True:
-            Notification.objects.create(
-                user_id=jobs[0].poster_id,
-                content=str(user.username) + " applied to your job: " + str(jobs[0].job_title),
-                link="/profile/me"
-                )
+
+            if Application.objects.filter(job_id=jobs[0], status="AP").count() < 2:
+                Notification.objects.create(
+                    user_id=jobs[0].poster_id,
+                    content="You can now choose an applicant for the job: " + str(jobs[0].job_title),
+                    link="/profile/me"
+                    )
         
         return render(
             request, "htmx/applied.html", {"job_id": job_id}
