@@ -61,6 +61,12 @@ class FormView(View):
             post.points = (duration_days * 24 + duration_hours) * 5
             post.save()
 
+            # Freeze points
+            me = request.user
+            me.frozen_balance = me.frozen_balance + post.points
+            me.balance = me.balance - post.points
+            me.save()
+
             return HttpResponse(status=204) # No content
 
         return render(

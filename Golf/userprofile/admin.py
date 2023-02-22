@@ -10,12 +10,12 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     fieldsets = (
         (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email", "date_of_birth")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email", "date_of_birth", "biography")}),
         (_("Account Settings info"), 
             {"fields": ("opt_in_emails_application", 
                         "opt_in_site_application", 
                         "opt_in_site_applicant")}),
-        (_("Extra info"), {"fields": ("rating", "balance")}),
+        (_("Extra info"), {"fields": ("rating", "balance", "frozen_balance")}),
         (
             _("Permissions"),
             {

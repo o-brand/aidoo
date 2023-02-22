@@ -267,7 +267,7 @@ def jobdone_call(request):
         poster = User.objects.get(id=user.id) # Job poster
 
         # Work...
-        poster.balance = poster.balance - job.points # Deduct points from job poster
+        poster.frozen_balance = poster.frozen_balance - job.points # Deduct points from job poster
         volunteer.balance = volunteer.balance + job.points # Pay points to volunteer
         job.completed = True # Set the post to completed
         application.status = "DN" # Set the job process to done
