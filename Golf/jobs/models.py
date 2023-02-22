@@ -70,6 +70,32 @@ class Bookmark(models.Model):
             )
         ]
 
+class Comment(models.Model):
+    """ model for the comments on a job """
+
+    # primary key (unique identifier of comment)
+    comment_id = models.BigAutoField(primary_key=True)
+
+    # what job is commented on
+    job_id = models.ForeignKey(Job, on_delete=models.CASCADE)
+
+    # who commented
+    commeter = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    # content of Comment
+    content = models.CharField(max_length=2000)
+
+    # time of posting
+    post_time = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        """ class for ordering the comments """
+
+        # Ordering
+        ordering = ('post_time',)
+
+
+
 
 class Application(models.Model):
     """This model is used to represent an application for a job by a user."""
