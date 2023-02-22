@@ -6,7 +6,7 @@ from django.db.models import constraints
 class User(AbstractUser):
     """Extends new fields for the Django provided AbstractUser model."""
 
-    balance = models.IntegerField(default=0)
+    balance = models.IntegerField(default=24)
     date_of_birth = models.DateField()
     rating = models.FloatField(default=0)
     # Recieve email notification when accepted or rejected from job
