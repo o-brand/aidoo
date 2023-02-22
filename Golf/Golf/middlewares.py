@@ -1,4 +1,10 @@
-from django.http import HttpResponseRedirect
+from django.http import (
+    HttpResponseRedirect,
+    HttpResponseBadRequest,
+    HttpResponseNotFound,
+    HttpResponseForbidden,
+    HttpResponseServerError,
+)
 
 
 # These are the urls which are available (even) if the user is NOT
@@ -16,6 +22,16 @@ class LoginRequiredMiddleware:
     def __call__(self, request):
         """This function is called when communication starts with Django."""
         response = self.get_response(request)
+
+        # If this is an error page...
+        if (
+            response.status_code == 404 # HttpResponseNotFound
+            or response.status_code == 400 # HttpResponseBadRequest
+            or response.status_code == 403 # HttpResponseForbidden
+            or response.status_code == 500 # HttpResponseServerError
+        ):
+            return response
+
 
         # Check if the user is authenticated
         if not request.user.is_authenticated:

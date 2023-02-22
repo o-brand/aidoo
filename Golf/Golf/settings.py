@@ -178,4 +178,4 @@ if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
     django_heroku.settings(locals())
 
     DEBUG = False
-    DEBUG_PROPAGATE_EXCEPTIONS = True
+    DEBUG_PROPAGATE_EXCEPTIONS = True # We can see the errors in the logs.
