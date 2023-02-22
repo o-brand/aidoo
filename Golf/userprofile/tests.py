@@ -424,7 +424,7 @@ class NotificationModelTestCase(TestCase):
             notifications = dict()
             notifications["user_id"] = User(pk=1)
             notifications["content"] = lambda: fake.text()
-            notifications["link"] = lambda: fake.sentence()
+            notifications["link"] = lambda: fake.url()
             notifications["seen"] = False
             
             Notification.objects.create(**notifications)
@@ -441,7 +441,7 @@ class NotificationModelTestCase(TestCase):
         notifications = dict()
         notifications["user_id"] = User(pk=1)
         notifications["content"] = lambda: fake.text()
-        notifications["link"] = lambda: fake.sentence()
+        notifications["link"] = lambda: fake.url()
         notifications["seen"] = False
 
         Notification.objects.create(**notifications)
@@ -463,7 +463,7 @@ class NotificationModelTestCase(TestCase):
         notifications = dict()
         notifications["user_id"] = User(pk=1)
         notifications["content"] = "x" * 101
-        notifications["link"] = lambda: fake.sentence()
+        notifications["link"] = lambda: fake.url()
         notifications["seen"] = False
 
         created_notification=Notification.objects.create(**notifications)
@@ -476,7 +476,7 @@ class NotificationModelTestCase(TestCase):
         notifications = dict()
         notifications["user_id"] = User(pk=1)
         notifications["content"] = lambda: fake.text()
-        notifications["link"] = "x"*51
+        notifications["link"] = fake.url() + "x"*200
         notifications["seen"] = False
 
         created_notification=Notification.objects.create(**notifications)
