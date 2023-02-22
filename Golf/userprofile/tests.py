@@ -458,28 +458,48 @@ class NotificationModelTestCase(TestCase):
         len2=len(Notification.objects.all())
         self.assertEqual(len1-1, len2)
 
-    def test_too_long_content(self):
-        fake = Faker()
-        notifications = dict()
-        notifications["user_id"] = User(pk=1)
-        notifications["content"] = "x" * 101
-        notifications["link"] = lambda: fake.url()
-        notifications["seen"] = False
+    # Tests the notif_data function for valid data
+    # Will fail if there's a validation error
+    def test_correct_data(self):
 
-        created_notification=Notification.objects.create(**notifications)
+        created_notification=notif_data()
+
+        raised=False
+
+        try:
+            created_notification.full_clean()
+        except ValidationError:
+            raised=True
+        
+        self.assertFalse(raised)
+
+    def test_too_long_content(self):
+
+        created_notification=notif_data()
+
+        created_notification.content = "x"*101
 
         with self.assertRaises(ValidationError):
             created_notification.full_clean()
 
     def test_too_long_link(self):
-        fake = Faker()
-        notifications = dict()
-        notifications["user_id"] = User(pk=1)
-        notifications["content"] = lambda: fake.text()
-        notifications["link"] = fake.url() + "x"*200
-        notifications["seen"] = False
 
-        created_notification=Notification.objects.create(**notifications)
+        created_notification=notif_data()
+
+        fake = Faker()
+
+        created_notification.link=fake.url() + "x"*200
 
         with self.assertRaises(ValidationError):
             created_notification.full_clean()
+
+# Creates an instance in the notifications model when called
+def notif_data():
+    fake = Faker()
+    notifications = dict()
+    notifications["user_id"] = User(pk=1)
+    notifications["content"] = lambda: fake.text()
+    notifications["link"] = fake.url()
+    notifications["seen"] = False
+
+    return Notification.objects.create(**notifications)
