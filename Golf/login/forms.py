@@ -36,6 +36,17 @@ class RegisterForm(UserCreationForm):
         validators=[validate_profanity],
     )
 
+    biography = forms.CharField(
+        max_length=250,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Biography",
+                "class": "form-control",
+            }
+        ),
+        validators=[validate_profanity],
+    )
+
     username = forms.CharField(
         max_length=100,
         widget=forms.TextInput(
@@ -99,6 +110,7 @@ class RegisterForm(UserCreationForm):
         fields = [
             "first_name",
             "last_name",
+            "biography",
             "username",
             "email",
             "password1",
