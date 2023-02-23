@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "store.apps.StoreConfig",
     "superadmin.apps.SuperadminConfig",
     "profanity",
+    "cloudinary_storage",
+    "cloudinary",
 ]
 
 MIDDLEWARE = [
@@ -92,8 +94,8 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "Golf.asgi.application"
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
 
@@ -103,7 +105,7 @@ CHANNEL_LAYERS = {
 
 import heroku_db
 DATABASES = {
-    "default": heroku_db.database('test' in sys.argv, False)
+    "default": heroku_db.database("test" in sys.argv, False)
 }
 
 
@@ -145,6 +147,18 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# Media files (uploaded by users)
+# https://pypi.org/project/django-cloudinary-storage/
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "htylsn6uq",
+    "API_KEY": "788656644488616",
+    "API_SECRET": "qbkrT2mfRDOBbHAXNj0MfDTaeVc",
+}
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+MEDIA_URL = "/media/"
 
 
 # Default primary key field type
