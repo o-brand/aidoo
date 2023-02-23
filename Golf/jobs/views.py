@@ -4,7 +4,7 @@ from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .models import Job, Bookmark, Application
+from .models import Job, Bookmark, Application, Comment
 from .forms import JobForm
 from userprofile.models import Notification
 
@@ -28,10 +28,14 @@ def details(request, job_id):
         for i in Application.objects.filter(applicant_id=request.user.id)
     ]
 
+    # Comments for the job
+    comments = Comment.objects.filter(job_id=job.job_id)
+
     # Give the found job to the template
     context = {
         "job": job,
-        "jobs_applied": jobs_applied
+        "jobs_applied": jobs_applied,
+        "comments": comments,
     }
 
     # Render the page

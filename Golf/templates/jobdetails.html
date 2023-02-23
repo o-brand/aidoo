@@ -42,7 +42,7 @@
       </ul>
     </div>
     <div class="card-footer">
-      {% if job.job_id in jobs_applied %} 
+      {% if job.job_id in jobs_applied %}
         {% include 'htmx/applied.html' %}
         {% else %}
           <button class="btn btn-primary"
@@ -56,6 +56,45 @@
     </div>
   </div>
 
+  <div class="col" id="comments">
+    {% for comment in comments %}
+      <div class="card details-card mb-2">
+        <div class="card-body">
+          <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
+            <a href="{% url 'userdetails' comment.commenter_id.id %}">
+              <img src="/static/assets/pfp/{{comment.commenter_id.id}}.jpeg">
+            </a>
+            <h5>
+              <a href="{% url 'userdetails' comment.commenter_id.id %}">
+                {{ comment.commenter_id.username }}
+                {% if comment.commenter_id == job.poster_id %}
+                  (Poster)
+                {% endif %}
+              </a>
+            </h5>
+          </div>
+          <p>{{ comment.content }}</p>
+          <p>{{ comment.post_time }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="job-foot">
+    <div>
+      <input id="job-message-input" type="text" style="width: 100%;" placeholder="Ask a question..." required>
+      <button id="job-message-submit" type="button">Send</button>
+    </div>
+  </div>
+
   <p><a href="{{ request.META.HTTP_REFERER }}">Go back</a></p>
 </div>
+
+<script>
+  const job_id = "{{ job.job_id }}";
+  const username = "{{ me.username }}";
+  const me_id = "{{ me.id }}";
+  const poster_id = "{{ job.poster_id.id }}";
+</script>
+<script src="{% static 'js/jobdetails.js' %}"></script>
 {% endblock %}

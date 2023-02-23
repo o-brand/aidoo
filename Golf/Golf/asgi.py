@@ -17,13 +17,14 @@ asgi_app = get_asgi_application()
 
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-from chat.routing import websocket_urlpatterns
+from chat.routing import websocket_urlpatterns as chat_url
+from jobs.routing import websocket_urlpatterns as jobs_url
 
 application = ProtocolTypeRouter({
     "http": asgi_app,
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            websocket_urlpatterns
+            chat_url + jobs_url
         )
     )
 })
