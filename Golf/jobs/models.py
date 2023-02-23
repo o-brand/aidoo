@@ -70,8 +70,9 @@ class Bookmark(models.Model):
             )
         ]
 
+
 class Comment(models.Model):
-    """ model for the comments on a job """
+    """Model for the comments on a job."""
 
     # primary key (unique identifier of comment)
     comment_id = models.BigAutoField(primary_key=True)
@@ -80,7 +81,7 @@ class Comment(models.Model):
     job_id = models.ForeignKey(Job, on_delete=models.CASCADE)
 
     # who commented
-    commeter = models.ForeignKey(User, on_delete=models.CASCADE)
+    commenter_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # content of Comment
     content = models.CharField(max_length=2000)
