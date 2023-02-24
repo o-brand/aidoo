@@ -1,0 +1,23 @@
+<div 
+  class="card" 
+  hx-trigger="profile_edit from:body" 
+  hx-swap="outerHTML" 
+  hx-get="{% url 'privatecard' %}" 
+  hx-target="this">
+  <img src="/static/assets/pfp/{{me.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
+  <div class="card-body">
+    <h5 class="card-title mb-0">{{ me.first_name }} {{ me.last_name }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">{{ me.username }}</h6>
+    <p class="card-text">
+      Email address: {{ me.email }}<br/>
+      Date of birth: {{ me.date_of_birth }}<br/>
+      Joined: {{ me.date_joined | date:'d M Y'}}<br/>
+      Bio: {{ me.biography }}</br>
+      Rating: {{ me.rating }}<br/>
+      Balance: {{ me.balance }} points<br/>
+      <br/>
+      <a href="{% url 'userdetails' me.id %}">
+        View your public profile page
+      </a>
+  </div>
+</div>
