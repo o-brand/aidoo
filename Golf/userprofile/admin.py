@@ -16,6 +16,7 @@ class UserAdmin(BaseUserAdmin):
                         "opt_in_site_application", 
                         "opt_in_site_applicant")}),
         (_("Extra info"), {"fields": ("rating", "balance", "frozen_balance")}),
+        (_("Images"), {"fields": ("profile_picture", "profile_id")}),
         (
             _("Permissions"),
             {

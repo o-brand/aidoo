@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.db.models import constraints
+from cloudinary.models import CloudinaryField
 
 class User(AbstractUser):
     """Extends new fields for the Django provided AbstractUser model."""
@@ -18,7 +19,10 @@ class User(AbstractUser):
     biography = models.CharField(max_length=250, default="")
     frozen_balance = models.IntegerField(default=0)
     verified = models.BooleanField(default=False)
-
+    # Used to store the profile picture    
+    profile_picture = models.ImageField(upload_to='profilepics/', default='profilepics/default.png')
+    # Used to store the identity verification
+    profile_id = models.ImageField(upload_to='ids/', default='ids/empty.png')
     # Only used to create a superuser.
     REQUIRED_FIELDS = ["first_name", "last_name", "email", "date_of_birth"]
     
