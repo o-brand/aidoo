@@ -1,20 +1,18 @@
 from random import choice
 from django.core.mail import send_mail
 from django.shortcuts import render
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
+from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.views import View
-from django.core.paginator import Paginator
+from django.views.generic import ListView
 from jobs.models import Job, Bookmark, Application
 from .models import Notification
 from chat.models import Room
-from django.core.paginator import Paginator
-from django.views import View
-from django.views.generic import ListView
-from django.http import HttpResponse
+from .forms import ProfileEditForm
 
 
 # Get actual user model.
@@ -109,6 +107,32 @@ def me(request):
     }
     return render(request, "userprofile/private.html", context)
 
+class ProfileEditView(View):
+    """Displays a form for editing profile details."""
+
+    form_class = ProfileEditForm
+    template_name = "editdetails.html"
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(
+            request, self.template_name, {"form": form, "poster_id": request.user.id}
+        )
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        me = request.user
+
+        if form.is_valid():
+            # Recalculate points (because of security - the user could change the calculated value)
+            me.email = form.cleaned_data["email"]
+            me.biography = form.cleaned_data["biography"]
+            me.save()
+            return HttpResponse(status=204) # No content
+
+        return render(
+            request, self.template_name, {"form": form, "poster_id": request.user.id}
+        )
 
 def withdraw_call(request):
     """Withdraw from a job."""

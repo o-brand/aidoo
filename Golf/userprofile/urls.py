@@ -26,6 +26,10 @@ urlpatterns = [
         name="notifications",
     ),
     # Marks a notification as seen, used by HTMX
-    path("notification_seen", views.notification_seen, name="notification_seen"),
-
+    path(
+        "notification_seen",
+        views.notification_seen,
+        name="notification_seen"),
+    # Profile editing form
+    path(route="editprofile", view=views.ProfileEditView.as_view(), name="editprofile"),
 ]

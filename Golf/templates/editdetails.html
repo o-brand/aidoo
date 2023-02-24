@@ -1,0 +1,25 @@
+{% load static %}
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Edit profile details</h5>
+    <button class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <form action="" hx-post="{% url 'editprofile' %}" hx-trigger="submit" id="form">
+    {% csrf_token %}
+    <div class="modal-body">
+      <p>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+      </p>
+      <p>
+        {{ form.biography.label_tag }}
+        {{ form.biography }}
+      </p>
+      
+    </div>
+    <div class="modal-footer">      
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      <input type="submit" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>
