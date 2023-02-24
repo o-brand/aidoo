@@ -28,7 +28,7 @@
   <br/>
   <br/>
 
-  <form method="post" action="{% url 'signup' %}">
+  <form method="post" action="{% url 'signup' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <p>
       {{ form.first_name.label_tag }}<br>
@@ -102,6 +102,17 @@
       {% if form.errors %}
         {% for key, value in form.errors.items %}
             {% if key == "date_of_birth" %}
+                <strong class="error">{{ value.as_text }}</strong>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    </p>
+    <p>
+      {{ form.profile_id.label_tag }}<br>
+      {{ form.profile_id }}
+      {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == "profile_id" %}
                 <strong class="error">{{ value.as_text }}</strong>
             {% endif %}
         {% endfor %}

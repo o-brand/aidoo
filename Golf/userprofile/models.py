@@ -18,6 +18,7 @@ class User(AbstractUser):
     opt_in_site_applicant = models.BooleanField(default=True)
     biography = models.CharField(max_length=250, default="")
     frozen_balance = models.IntegerField(default=0)
+    # Used to keep track if the email is verified
     verified = models.BooleanField(default=False)
     # Used to store the profile picture    
     profile_picture = models.ImageField(upload_to='profilepics/', default='profilepics/default.png')

@@ -90,6 +90,10 @@ class RegisterForm(UserCreationForm):
         validators=[validate_dob],
     )
 
+    profile_id = forms.ImageField(
+        label="Please upload an image of an ID",
+    )
+
     class Meta:
         model = User
         fields = [
@@ -100,4 +104,5 @@ class RegisterForm(UserCreationForm):
             "password1",
             "password2",
             "date_of_birth",
+            "profile_id",
         ]
