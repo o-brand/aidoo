@@ -33,7 +33,7 @@ class SignUpView(View):
 
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
 
         # Validate the form
         if form.is_valid():
@@ -86,16 +86,16 @@ def activateAccount(request, uidb64, token):
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         # Failure
-        return redirect("/confirm_email/failure/")
+        return redirect("/activation/failure")
     else:
         # Check the token
         if account_activation_token.check_token(user, token):
             # Activate the account and save it to the DB
-            user.is_active = 1
+            user.verified = 1
             user.save()
 
             # Redirect
-            return redirect("/confirm_email/success/")
+            return redirect("/activation/success")
         else:
             # Failure
-            return redirect("/confirm_email/failure/")
+            return redirect("/activation/failure")
