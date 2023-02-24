@@ -11,19 +11,39 @@
 {% block content %}
 {% include 'navigation.html' %}
 
-<div class="container text-center w-50">
+<div class="container-sm text-center mt-1 mb-1 p-1">
+    <h1>Notifications</h1>
+</div>
+<br>
+<div class="container text-center w-70 ">
     <div class="card mb-1 Notifications">
-        <div class="container-sm text-center mt-1 mb-1 p-1">
-            <h1>Notifications</h1>
-        </div>
-
-        <hr class="bg-secondary border-3">
 
         {% if notif_count == 0 %}
             <div class="container-sm text-center mt-1 mb-1">
-                <h6>No new notifications.</h6>
+                <div class="card-subtitle mb-2 text-muted">
+            <br/>     
+                <br/>   
+                <h6>Sorry, No new notifications.</h6>
+                </div>
             </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
         {% else %}
+        <br/>
             {% for notifications in notifs %}
                 {% if notifications.seen == False %}
                         <div class="container-fluid position-relative">
@@ -33,13 +53,19 @@
                         </div>
                 {% else %}
                     <div class="container-fluid position-relative">
-                        <h6>{{notifications.content}}</h6>
+                        <h5>{{notifications.content}}</h5>
                         <a href="{{notifications.link}}" class="stretched-link"></a>
                         <hr class="bg-secondary border-1">
                     </div>
                 {% endif %}
             {% endfor %}
         {% endif %}
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
     </div>
 </div>
     
