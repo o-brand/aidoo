@@ -53,7 +53,7 @@
       </p>
       <p>
         The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
-        {{ form.duration_days }} days {{ form.duration_hours }} hours. This means <span id="points">5</span> points.
+        {{ form.duration_hours }} <span id="hourstxt">hour</span> and {{ form.duration_half_hours }} minutes. This means <span id="points">12</span> points.
       </p>
       <p>
         {{ form.deadline.label_tag }}<br/>
@@ -74,3 +74,5 @@
     </div>
   </form>
 </div>
+
+<script src="{% static 'js/postjob.js' %}"></script>

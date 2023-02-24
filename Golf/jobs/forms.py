@@ -53,24 +53,24 @@ class JobForm(ModelForm):
     )
 
     # Fields to display a dropdown for the duration of the job
-    days = [(day, day) for day in range(0, 15)]
-    hours = [(hour, hour) for hour in range(1, 25)]
-    duration_days = forms.DecimalField(
+    half_hours = [(hhour, hhour) for hhour in range(0, 31, 30)]
+    hours = [(hour, hour) for hour in range(1, 9)]
+    duration_hours = forms.DecimalField(
         widget=forms.Select(
             attrs={
                 "class": "form-control",
                 "style":"width: auto; display: initial;",
             },
-            choices=days,
+            choices=hours,
         ),
     )
-    duration_hours = forms.DecimalField(
+    duration_half_hours = forms.DecimalField(
         widget=forms.Select(
             attrs={
                 "class": "form-control",
                 "style": "width: auto; display: initial;",
             },
-            choices=hours,
+            choices=half_hours,
         ),
     )
 
@@ -95,8 +95,8 @@ class JobForm(ModelForm):
             "job_title",
             "job_description",
             "location",
-            "duration_days",
             "duration_hours",
+            "duration_half_hours",
             "deadline",
             "poster_id",
         ]

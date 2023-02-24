@@ -289,8 +289,8 @@ class PostPageCase(LoginRequiredTestCase):
                 "skills of writing tests, but wanted to do it on my own cause "
                 "i wanna learn."),
             "location": "AB25 1GN",
-            "duration_days": "0",
-            "duration_hours": "1",
+            "duration_hours": "0",
+            "duration_half_hours": "1",
             "deadline": datetime.date.today(),
         }
         response = self.client.post(reverse("post"), data=new_form)
@@ -441,32 +441,6 @@ class PostJobCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required.", form.errors[key][0])
 
-    def test_duration_days_not_valid(self):
-        # behaviour if the duration is too long
-        new_application = {
-            "poster_id": "1",
-            "job_title": "Job",
-            "job_description": "l" * 50,
-            "location": "AB25 3SR",
-            "duration_days": "20",
-        }
-
-        form = JobForm(data=new_application)
-        self.assertEqual(1, len(form.errors))
-
-        for key in form.errors:
-            error_now = form.errors[key]
-            self.assertEqual(1, len(error_now))
-
-            if key == "duration_days":
-                self.assertIn(
-                    ("Select a valid choice. That choice is not one of the " 
-                    "available choices."),
-                    form.erros[key][0],
-                )
-            else:
-                self.assertIn("This field is required.", form.errors[key][0])
-
     def test_duration_hours_not_valid(self):
         # behaviour if the duration is too long
         new_application = {
@@ -474,7 +448,7 @@ class PostJobCase(TestCase):
             "job_title": "Job",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
-            "duration_hours": "30",
+            "duration_hours": "20",
         }
 
         form = JobForm(data=new_application)
@@ -488,7 +462,33 @@ class PostJobCase(TestCase):
                 self.assertIn(
                     ("Select a valid choice. That choice is not one of the " 
                     "available choices."),
-                    form.erros[key][0],
+                    form.errors[key][0],
+                )
+            else:
+                self.assertIn("This field is required.", form.errors[key][0])
+
+    def test_duration_half_hours_not_valid(self):
+        # behaviour if the duration is too long
+        new_application = {
+            "poster_id": "1",
+            "job_title": "Job",
+            "job_description": "l" * 50,
+            "location": "AB25 3SR",
+            "duration_half_hours": "1",
+        }
+
+        form = JobForm(data=new_application)
+        self.assertEqual(1, len(form.errors))
+
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+
+            if key == "duration_half_hours":
+                self.assertIn(
+                    ("Select a valid choice. That choice is not one of the " 
+                    "available choices."),
+                    form.errors[key][0],
                 )
             else:
                 self.assertIn("This field is required.", form.errors[key][0])
@@ -499,8 +499,8 @@ class PostJobCase(TestCase):
             "job_title": "Job",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
-            "duration_days": "0",
-            "duration_hours": "1",
+            "duration_hours": "0",
+            "duration_half_hours": "1",
         }
         form = JobForm(data=new_application)
         self.assertEqual(0, len(form.errors))
@@ -511,8 +511,8 @@ class PostJobCase(TestCase):
             "job_title": "Job",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
-            "duration_days": "0",
-            "duration_hours": "1",
+            "duration_hours": "0",
+            "duration_half_hours": "1",
             "deadline": create_date_string(0),
         }
         form = JobForm(data=new_application)
@@ -526,8 +526,8 @@ class PostJobCase(TestCase):
             "job_title": "Job",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
-            "duration_days": "0",
-            "duration_hours": "1",
+            "duration_hours": "0",
+            "duration_half_hours": "1",
             "deadline": create_date_string(5),
         }
         form = JobForm(data=new_application)
@@ -547,8 +547,8 @@ class PostJobCase(TestCase):
             "job_title": "Job",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
-            "duration_days": "0",
-            "duration_hours": "1",
+            "duration_hours": "0",
+            "duration_half_hours": "1",
             "deadline": create_date_string(-100),
         }
         form = JobForm(data=new_application)

@@ -59,10 +59,10 @@ class FormView(View):
 
         if form.is_valid():
             # Recalculate points (because of security - the user could change the calculated value)
-            duration_days = form.cleaned_data["duration_days"]
             duration_hours = form.cleaned_data["duration_hours"]
+            duration_half_hours = form.cleaned_data["duration_half_hours"]
             post = form.save(commit=False)
-            post.points = (duration_days * 24 + duration_hours) * 5
+            post.points = (duration_hours * 12) + (duration_half_hours/60) * 12
             post.save()
 
             # Freeze points
