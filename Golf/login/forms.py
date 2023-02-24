@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from Golf.utils import create_date_string
 from Golf.validators import validate_profanity
-from .validators import validate_dob
+from .validators import validate_dob, validate_username
 
 
 
@@ -44,7 +44,7 @@ class RegisterForm(UserCreationForm):
                 "class": "form-control",
             }
         ),
-        validators=[validate_profanity],
+        validators=[validate_profanity, validate_username],
     )
 
     email = forms.EmailField(

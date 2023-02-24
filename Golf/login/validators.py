@@ -24,3 +24,9 @@ def validate_dob(dobInput):
             _("%(value)s is not a valid date. You are too young for this platform."),
             params={"value": dobInput},
         )
+
+
+def validate_username(value):
+    """Validates the username to not be 'default'."""
+    if value == "default":
+        raise ValidationError("This username is not allowed.")
