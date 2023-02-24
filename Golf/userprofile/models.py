@@ -29,9 +29,9 @@ class User(AbstractUser):
     # Used to keep track if the email is verified
     verified = models.BooleanField(default=False)
     # Used to store the profile picture
-    profile_picture = models.ImageField(upload_to=profile_picture_rename, default='profilepics/default.png')
+    profile_picture = models.ImageField(upload_to=profile_picture_rename, default='profilepics/default')
     # Used to store the identity verification
-    profile_id = models.ImageField(upload_to=profile_id_rename, default='ids/empty.png')
+    profile_id = models.ImageField(upload_to=profile_id_rename)
     # Only used to create a superuser.
     REQUIRED_FIELDS = ["first_name", "last_name", "email", "date_of_birth"]
 
