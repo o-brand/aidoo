@@ -30,6 +30,8 @@ urlpatterns = [
         "notification_seen",
         views.notification_seen,
         name="notification_seen"),
+    # Private profile card
+    path("privatecard", views.my_details, name="privatecard"),
     # Profile editing form
     path(route="editprofile", view=views.ProfileEditView.as_view(), name="editprofile"),
 ]

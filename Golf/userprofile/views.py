@@ -48,6 +48,22 @@ def userdetails(request, user_id):
     }
     return render(request, "userprofile/public.html", context)
 
+def my_details(request):
+    """Private details card"""
+    actual_user_id = request.user.id
+
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    me = users[0]
+
+    context = {
+        "me": me,
+    }
+    return render(request, "userprofile/private-card.html", context)
+
 
 def me(request):
     """Private pofile page with more data."""
