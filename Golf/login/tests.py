@@ -1,10 +1,11 @@
 import datetime
+from django.contrib.auth import get_user_model
 from django.core import mail
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 from Golf.utils import create_date_string
-from django.core.exceptions import ValidationError
 from .forms import RegisterForm
 from .validators import validate_dob
 
@@ -84,6 +85,7 @@ class SignupTestCase(TestCase):
 
     # test if signing up works if correct data given and user is redirected after
     def test_signup_flow(self):
+        upload_file = open('../fortest.jpeg', 'rb')
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
@@ -92,6 +94,7 @@ class SignupTestCase(TestCase):
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
+            "profile_id": SimpleUploadedFile(upload_file.name, upload_file.read())
         }
         response = self.client.post(reverse("signup"), data=new_user)
 
@@ -179,11 +182,17 @@ class RegisterFormTestCase(TestCase):
     """Tests for RegisterForm."""
     # PasswordInput is already tested well, so we do not test it here.
 
+    def setUp(self):
+        self.upload_file = open('../fortest.jpeg', 'rb')
+        self.file_dict = {
+            "profile_id": SimpleUploadedFile(self.upload_file.name, self.upload_file.read(), content_type='image/jpeg')
+        }
+
     def test_nothing_entered(self):
         # behaviour if form is empty
         form = RegisterForm(data={})
 
-        self.assertEqual(7, len(form.errors))
+        self.assertEqual(8, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -197,8 +206,8 @@ class RegisterFormTestCase(TestCase):
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
-        }
-        form = RegisterForm(data=new_user)
+        } 
+        form = RegisterForm(new_user, self.file_dict)
 
         # Name must be ok
         self.assertEqual(5, len(form.errors))
@@ -216,7 +225,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "username": "a" * 101,
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
 
         # Name must be ok
         self.assertEqual(5, len(form.errors))
@@ -242,7 +251,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "username": "madeupuser",
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
 
         # Name, username must be ok
         self.assertEqual(4, len(form.errors))
@@ -263,7 +272,7 @@ class RegisterFormTestCase(TestCase):
             "email": "madeupusermadeupuser.com",
             "username": "madeupuser",
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
 
         # Name, username must be ok
         self.assertEqual(4, len(form.errors))
@@ -290,7 +299,7 @@ class RegisterFormTestCase(TestCase):
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
 
         # Name, email, username must be ok
         self.assertEqual(3, len(form.errors))
@@ -312,7 +321,7 @@ class RegisterFormTestCase(TestCase):
             "password1": "madeuppassword",
             "password2": "madeuppassword2",
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
 
         # Name, email, username must be ok
         self.assertEqual(2, len(form.errors))
@@ -333,7 +342,7 @@ class RegisterFormTestCase(TestCase):
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(0, len(form.errors))
 
     def test_DoB_out_of_range_too_young(self):
@@ -347,7 +356,7 @@ class RegisterFormTestCase(TestCase):
             "password2": "madeuppassword",
             "date_of_birth": create_date_string(0),
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(1, len(form.errors))
 
     def test_DoB_out_of_range_too_old(self):
@@ -360,7 +369,7 @@ class RegisterFormTestCase(TestCase):
             "password2": "madeuppassword",
             "date_of_birth": create_date_string(123),
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(1, len(form.errors))
 
     def test_profane_first_name(self):
@@ -373,7 +382,7 @@ class RegisterFormTestCase(TestCase):
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(1, len(form.errors))
     
     def test_profane_last_name(self):
@@ -386,7 +395,7 @@ class RegisterFormTestCase(TestCase):
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(1, len(form.errors))
 
     def test_profane_username(self):
@@ -399,7 +408,20 @@ class RegisterFormTestCase(TestCase):
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
         }
-        form = RegisterForm(data=new_user)
+        form = RegisterForm(new_user, self.file_dict)
+        self.assertEqual(1, len(form.errors))
+    
+    def test_image(self):
+        new_user = {
+            "first_name": "User",
+            "last_name": "MadeUp",
+            "email": "madeupuser@madeupuser.com",
+            "username": "madeupuser",
+            "password1": "madeuppassword",
+            "password2": "madeuppassword",
+            "date_of_birth": datetime.date(2000, 1, 1),
+        }
+        form = RegisterForm(new_user)
         self.assertEqual(1, len(form.errors))
 
 
