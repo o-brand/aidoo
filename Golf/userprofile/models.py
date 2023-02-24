@@ -4,6 +4,14 @@ from django.contrib.auth import get_user_model
 from django.db.models import constraints
 from cloudinary.models import CloudinaryField
 
+
+def profile_id_rename(instance, filename):
+    return '/'.join(['ids', instance.username])
+
+def profile_picture_rename(instance, filename):
+    return '/'.join(['profilepics', instance.username])
+
+
 class User(AbstractUser):
     """Extends new fields for the Django provided AbstractUser model."""
 
@@ -20,13 +28,13 @@ class User(AbstractUser):
     frozen_balance = models.IntegerField(default=0)
     # Used to keep track if the email is verified
     verified = models.BooleanField(default=False)
-    # Used to store the profile picture    
-    profile_picture = models.ImageField(upload_to='profilepics/', default='profilepics/default.png')
+    # Used to store the profile picture
+    profile_picture = models.ImageField(upload_to=profile_picture_rename, default='profilepics/default.png')
     # Used to store the identity verification
-    profile_id = models.ImageField(upload_to='ids/', default='ids/empty.png')
+    profile_id = models.ImageField(upload_to=profile_id_rename, default='ids/empty.png')
     # Only used to create a superuser.
     REQUIRED_FIELDS = ["first_name", "last_name", "email", "date_of_birth"]
-    
+
 
 class Notification(models.Model):
     """This model represents notifications."""
