@@ -201,7 +201,7 @@ a:hover {
 /* styles the bg image on the welcome page*/
 .bg-image {
   margin: 0px;
-  background-image: url("static/assets/bg.jpg");
+  background-image: url("../assets/bg.jpg");
   background-attachment: fixed;
   background-size: contain;
   background-size: 100%;
