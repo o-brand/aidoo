@@ -165,7 +165,7 @@ class ActivationTestCase(TestCase):
     def test_activation_success_page_available_by_name(self):
         response = self.client.get(reverse("activation_success"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 
+        self.assertTemplateUsed(response,
             template_name="login/activation_success.html")
 
     def test_activation_failure_page(self):
@@ -175,7 +175,7 @@ class ActivationTestCase(TestCase):
     def test_activation_failure_page_available_by_name(self):
         response = self.client.get(reverse("activation_failure"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 
+        self.assertTemplateUsed(response,
             template_name="login/activation_failure.html")
 
 
@@ -207,7 +207,7 @@ class RegisterFormTestCase(TestCase):
         new_user = {
             "first_name": "User",
             "last_name": "MadeUp",
-        } 
+        }
         form = RegisterForm(new_user, self.file_dict)
 
         # Name must be ok
@@ -390,7 +390,7 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(1, len(form.errors))
-    
+
     def test_profane_last_name(self):
         new_user = {
             "first_name": "User",
@@ -418,7 +418,7 @@ class RegisterFormTestCase(TestCase):
         }
         form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(1, len(form.errors))
-    
+
     def test_image(self):
         new_user = {
             "first_name": "User",
@@ -433,13 +433,26 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user)
         self.assertEqual(1, len(form.errors))
 
+    def test_biography(self):
+        new_user = {
+            "first_name": "User",
+            "last_name": "MadeUp",
+            "email": "madeupuser@madeupuser.com",
+            "username": "madeupuser",
+            "password1": "madeuppassword",
+            "password2": "madeuppassword",
+            "date_of_birth": datetime.date(2000, 1, 1),
+        }
+        form = RegisterForm(new_user, self.file_dict)
+        self.assertEqual(1, len(form.errors))
+
 
 class ValidatorsTestCase(TestCase):
     def test_validate_dob(self):
         """Test the validate_dob function."""
         # Test invalid dates.
         with self.assertRaises(ValidationError):
-            validate_dob(datetime.datetime.strptime("2022-02-19", 
+            validate_dob(datetime.datetime.strptime("2022-02-19",
                 "%Y-%m-%d").date())  # Too young.
         with self.assertRaises(ValidationError):
             validate_dob(datetime.datetime.strptime("1910-02-19",

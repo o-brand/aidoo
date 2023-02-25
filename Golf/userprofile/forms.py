@@ -40,4 +40,3 @@ class ProfileEditForm(ModelForm):
             "email",
             "biography",
         ]
-        

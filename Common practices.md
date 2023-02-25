@@ -25,7 +25,7 @@ If you think we should add anything else, or change something, feel free to do i
   + Django libraries
   + Our project
 
-- End of file: every file should end with an empty line.
+- End of file: ***every file should end with an empty line***.
 
 ### Comments
 
