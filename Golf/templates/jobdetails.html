@@ -37,13 +37,17 @@
           &nbsp;&nbsp;
           <i class="bi bi-stars"></i>
           {{ job.points }}
+          {% if status == "AC" %}
           &nbsp;&nbsp;
           <i class="bi bi-activity"></i>
-          {% if status == "AC" %}
           <h9><b>Accepted</b></h9>
           {% elif status == "WD" %}
+          &nbsp;&nbsp;
+          <i class="bi bi-activity"></i>
           <h9><b>Withdrawn</b></h9>
           {% elif status == "RE" %}
+          &nbsp;&nbsp;
+          <i class="bi bi-activity"></i>
           <h9><b>Rejected</b></h9>
           {% endif %}
         </li>
