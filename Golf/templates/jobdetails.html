@@ -37,6 +37,15 @@
           &nbsp;&nbsp;
           <i class="bi bi-stars"></i>
           {{ job.points }}
+          &nbsp;&nbsp;
+          <i class="bi bi-activity"></i>
+          {% if status == "AC" %}
+          <h9><b>Accepted</b></h9>
+          {% elif status == "WD" %}
+          <h9><b>Withdrawn</b></h9>
+          {% elif status == "RE" %}
+          <h9><b>Rejected</b></h9>
+          {% endif %}
         </li>
         <li class="list-group-item">{{ job.job_description }}</li>
       </ul>

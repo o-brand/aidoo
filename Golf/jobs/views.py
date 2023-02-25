@@ -31,11 +31,18 @@ def details(request, job_id):
     # Comments for the job
     comments = Comment.objects.filter(job_id=job.job_id)
 
+    # Obtains the status of the logged in user for the viewed job
+    try:
+        status = Application.objects.filter(job_id=job.job_id)[0].status
+    except:
+        status = ''
+
     # Give the found job to the template
     context = {
         "job": job,
         "jobs_applied": jobs_applied,
         "comments": comments,
+        "status" : status
     }
 
     # Render the page
@@ -218,3 +225,4 @@ def report_call(request):
 
     # If it is not POST
     raise Http404()
+
