@@ -1,0 +1,33 @@
+.server-error {
+  max-width: 767px;
+  width: 100%;
+  line-height: 1.4;
+  padding: 0px 15px;
+}
+
+.server-error h2 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.server-error p {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.server-error a {
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  background: #5c91fe;
+  padding: 10px 40px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 1px;
+  margin-top: 15px;
+}
+
+.server-error a:hover {
+  opacity: 0.8;
+}

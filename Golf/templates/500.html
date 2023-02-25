@@ -1,0 +1,16 @@
+{% extends 'base-modal.html' %}
+{% load static %}
+
+{% block title %}Error{% endblock %}
+
+{% block head_extra %}
+    <meta name="robots" content="noindex, follow">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/errors.css' %}"/>
+{% endblock %}
+
+{% block content %}
+  <div class="server-error">
+    <h2>Oops! An error occured</h2>
+    <p>Sorry but an error occured on the server. Please try again later.</p>
+  </div>
+{% endblock %}

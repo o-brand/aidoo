@@ -1,0 +1,17 @@
+{% extends 'base-modal.html' %}
+{% load static %}
+
+{% block title %}Error{% endblock %}
+
+{% block head_extra %}
+    <meta name="robots" content="noindex, follow">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/errors.css' %}"/>
+{% endblock %}
+
+{% block content %}
+  <div class="server-error">
+    <h2>Oops! You cannot open this page</h2>
+    <p>Sorry but you do not have access to this page.</p>
+    <a href="/">Go To Homepage</a>
+  </div>
+{% endblock %}
