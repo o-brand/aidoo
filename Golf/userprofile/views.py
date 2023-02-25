@@ -237,7 +237,7 @@ def selectapplicant_call(request):
 
                 # Checks if the user accepts on site notifications
                 # If true, create a new notification in the database
-                if user.applicant_id.opt_in_site_application == True:
+                if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
                         user_id = user.applicant_id, 
                         content = "You've been rejected from the job: " + str(job.job_title), 
@@ -268,7 +268,7 @@ def selectapplicant_call(request):
 
                 # Checks if the user accepts on site notifications
                 # If true, create a new notification in the database
-                if user.applicant_id.opt_in_site_application == True:
+                if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
                         user_id = user.applicant_id, 
                         content = "You've been accepted for the job: " + str(job.job_title), 
@@ -353,23 +353,23 @@ class AccountSettingsView(View):
 
         # If checkbox state doesn't match email preference on submit
         # then change the email preference
-        if me.opt_in_emails_application == True and button_check_1 == []:
+        if me.opt_in_emails_application and button_check_1 == []:
             me.opt_in_emails_application = False
-        elif me.opt_in_emails_application == False and button_check_1 == ['on']:
+        elif not me.opt_in_emails_application and button_check_1 == ['on']:
             me.opt_in_emails_application = True
         
         # If checkbox state doesn't match email preference on submit
         # then change the on site preference
-        if me.opt_in_site_application == True and button_check_2 == []:
+        if me.opt_in_site_application and button_check_2 == []:
             me.opt_in_site_application = False
-        elif me.opt_in_site_application == False and button_check_2 == ['on']:
+        elif not me.opt_in_site_application and button_check_2 == ['on']:
             me.opt_in_site_application = True
         
         # If checkbox state doesn't match email preference on submit
         # then change the email preference
-        if me.opt_in_site_applicant == True and button_check_3 == []:
+        if me.opt_in_site_applicant and button_check_3 == []:
             me.opt_in_site_applicant = False
-        elif me.opt_in_site_applicant == False and button_check_3 == ['on']:
+        elif not me.opt_in_site_applicant and button_check_3 == ['on']:
             me.opt_in_site_applicant = True
         
         me.save()

@@ -388,3 +388,8 @@ a:hover {
   border-color: #4F7cff;
   position: absolute;
 }
+
+.new-notification {
+  width: fit-content;
+  height: fit-content;
+}

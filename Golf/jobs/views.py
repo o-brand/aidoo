@@ -181,7 +181,7 @@ def apply_call(request):
         # only sends once per job
         # Checks if the job poster allows on site notifications first
 
-        if jobs[0].poster_id.opt_in_site_applicant == True:
+        if jobs[0].poster_id.opt_in_site_applicant:
 
             if Application.objects.filter(job_id=jobs[0], status="AP").count() < 2:
                 Notification.objects.create(
