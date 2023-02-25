@@ -91,6 +91,7 @@ class SignupTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
@@ -192,7 +193,7 @@ class RegisterFormTestCase(TestCase):
         # behaviour if form is empty
         form = RegisterForm(data={})
 
-        self.assertEqual(8, len(form.errors))
+        self.assertEqual(9, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -210,7 +211,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name must be ok
-        self.assertEqual(5, len(form.errors))
+        self.assertEqual(6, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -228,7 +229,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name must be ok
-        self.assertEqual(5, len(form.errors))
+        self.assertEqual(6, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -254,7 +255,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name, username must be ok
-        self.assertEqual(4, len(form.errors))
+        self.assertEqual(5, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -275,7 +276,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name, username must be ok
-        self.assertEqual(4, len(form.errors))
+        self.assertEqual(5, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -302,7 +303,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name, email, username must be ok
-        self.assertEqual(3, len(form.errors))
+        self.assertEqual(4, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -318,6 +319,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword2",
         }
@@ -338,6 +340,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
@@ -352,6 +355,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": create_date_string(0),
@@ -365,6 +369,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": create_date_string(123),
@@ -378,6 +383,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
@@ -391,6 +397,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "kondums",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
@@ -404,6 +411,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "kondums",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
@@ -417,6 +425,7 @@ class RegisterFormTestCase(TestCase):
             "last_name": "MadeUp",
             "email": "madeupuser@madeupuser.com",
             "username": "madeupuser",
+            "biography": "hey",
             "password1": "madeuppassword",
             "password2": "madeuppassword",
             "date_of_birth": datetime.date(2000, 1, 1),
