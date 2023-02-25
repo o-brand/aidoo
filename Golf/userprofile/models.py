@@ -45,6 +45,9 @@ class Notification(models.Model):
     #Foreign Key to user who got the notification
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    #Short title summarizing the content of the notification
+    title = models.CharField(max_length=50, default="Alert")
+
     #Content of the notification
     content = models.CharField(max_length=100)
 
