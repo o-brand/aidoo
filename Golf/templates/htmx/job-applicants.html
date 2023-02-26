@@ -17,14 +17,15 @@
     {% else %}
       {% for applicant in applicants %}
         {% if applicant.status == "AC" %}
-          <p>{{ applicant.applicant_id.username }}: <a href="mailto:{{ applicant.applicant_id.email }}">{{ applicant.applicant_id.email }}</a></p>
+          <p>{{ applicant.applicant_id.username }} </p>
+            <p><a href="{% url 'chat-room' applicant.applicant_id.id%}" class="btn btn-primary">Chat</a>
           <button class="btn btn-primary"
               _="on click add @disabled to me"
               hx-post="{% url 'jobdone' %}"
               hx-target="closest span"
               hx-swap="innerHTML"
               hx-vals='{"job_id": {{ job.job_id }} }'
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Job Done</button>
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Job Done</button></p>
         {% endif %}
       {% endfor %}
     {% endif %}

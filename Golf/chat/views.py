@@ -54,7 +54,6 @@ def searching_modal(request):
     """Searching modal."""
     return render(request, "chat/searching.html")
 
-
 def searching_call(request):
     """Searching for users by username."""
     if request.method == "POST":
@@ -71,21 +70,13 @@ def searching_call(request):
         if len(username) == 0:
             return HttpResponse()
 
-        # Get users
         users = User.objects.filter(username__icontains=username).exclude(pk=me.id)
 
-        # Iterate over to display the adequate button
-        users_with_chat_started = []
-        for user in users:
-            chat_started = len(Room.objects.filter(Q(user_1=me, user_2=user.id) | Q(user_2=me, user_1=user.id))) == 1
-            users_with_chat_started.append([user, chat_started])
-
         # Render the page
-        return render(request, "htmx/searching.html", {"users": users_with_chat_started})
+        return render(request, "htmx/searching.html")
 
     # If it is not POST
     raise Http404()
-
 
 def room(request, user_id):
     """Displaying a room with the given user."""
