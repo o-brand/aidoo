@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.views import View
@@ -49,33 +49,6 @@ def refreshrooms_call(request):
     """Refresh rooms."""
     me = request.user
     return render(request, "htmx/rooms-list.html", {"rooms": _query_rooms(me)})
-
-
-def startchat_call(request):
-    """Start chat."""
-    if request.method == "POST":
-        # Get the user ID or -1 if it is not found
-        user_id = request.POST.get("user_id", -1)
-        me = request.user
-
-        # Check if the user ID is valid
-        users = User.objects.filter(pk=user_id)
-        user_id_exists = len(users) == 1
-        if not user_id_exists:
-            raise Http404()
-        invitee = users[0]
-
-        # Create room
-        room = dict()
-        room["user_1"] = me
-        room["user_2"] = invitee
-        Room.objects.create(**room)
-
-        return render(request, "htmx/chat_button.html", {"user": invitee})
-
-    # If it is not POST
-    raise Http404()
-
 
 def searching_modal(request):
     """Searching modal."""
@@ -129,15 +102,19 @@ def room(request, user_id):
     rooms = Room.objects.filter(Q(user_1=me, user_2=other_user) | Q(user_2=me, user_1=other_user))
     room_exists = len(rooms) == 1
     if not room_exists:
-        return redirect('userdetails', user_id=user_id)
-    room = rooms[0]
+        # Create room
+        rooms = dict()
+        rooms["user_1"] = me
+        rooms["user_2"] = other_user
+        room = Room.objects.create(**rooms)
+    else:
+        room = rooms[0]
 
     if room.user_2 == me:
         room.user_1 = me
         room.user_2 = other_user
-    
-    messages = Message.objects.filter(room_id=room.room_id)
 
+    messages = Message.objects.filter(room_id=room.room_id)
     return render(
         request,
         "chat/room.html",
