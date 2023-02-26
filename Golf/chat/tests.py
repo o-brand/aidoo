@@ -157,7 +157,7 @@ class RoomCase(LoginRequiredTestCase):
 
     def test_page_available_by_name(self):
         # test availability via name of page
-        response = self.client.get(reverse("chat-room", kwargs = {"user_id": 2}))
+        response = self.client.get(reverse("chat-room", kwargs={"user_id": 2}))
         self.assertEqual(response.status_code, 200)
 
     def test_page_user_id_not_valid(self):
@@ -178,7 +178,7 @@ class RoomCase(LoginRequiredTestCase):
 
     def test_page_post_chat_does_not_exist(self):
         # test for starting chat (start chat functionality)
-        response = self.client.post("/chat/room", {"user_id": 2})
+        response = self.client.get("/chat/room/2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(Room.objects.all()), 1)
 

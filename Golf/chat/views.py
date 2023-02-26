@@ -73,7 +73,7 @@ def searching_call(request):
         users = User.objects.filter(username__icontains=username).exclude(pk=me.id)
 
         # Render the page
-        return render(request, "htmx/searching.html")
+        return render(request, "htmx/searching.html", {"users": users})
 
     # If it is not POST
     raise Http404()
