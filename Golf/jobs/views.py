@@ -33,7 +33,9 @@ def details(request, job_id):
 
     # Obtains the status of the logged in user for the viewed job
     try:
-        status = Application.objects.filter(job_id=job.job_id)[0].status
+        status = Application.objects.filter(
+            applicant_id=request.user.id, 
+            job_id=job.job_id)[0].status
     except:
         status = ''
 
