@@ -55,16 +55,31 @@
       </ul>
     </div>
     <div class="card-footer">
-      {% if job.job_id in jobs_applied %}
+      {% if status == "AP" %}
         {% include 'htmx/applied.html' %}
-        {% else %}
-          <button class="btn btn-primary"
-            id="btnApply{{ job.job_id }}"
-            _="on click add @disabled to me"
-            hx-post="{% url 'apply' %}"
-            hx-vals='{"job_id": {{ job.job_id }} }'
-            hx-swap="outerHTML"
-            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
+      {% elif status == "NA" %}
+        <button class="btn btn-primary"
+          id="btnApply{{ job.job_id }}"
+          _="on click add @disabled to me"
+          hx-post="{% url 'apply' %}"
+          hx-vals='{"job_id": {{ job.job_id }} }'
+          hx-swap="outerHTML"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Apply</button>
+      {% elif status == "AC" %}
+        <button
+        disabled
+        class="btn btn-success"
+        id = "btnApply{{ job_id }}">Accepted ✓</button>
+      {% elif status == "WD" %}
+        <button
+        disabled
+        class="btn btn-danger"
+        id = "btnApply{{ job_id }}">Withdrawn ✖</button>
+      {% elif status == "RE" %}
+        <button
+        disabled
+        class="btn btn-danger"
+        id = "btnApply{{ job_id }}">Rejected ✖</button>
       {% endif %}
     </div>
   </div>
