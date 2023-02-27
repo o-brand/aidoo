@@ -2,6 +2,8 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from .models import Item, Sale
+from django.utils.six import BytesIO
+import qrcode
 
 
 # Get actual user model.
@@ -80,3 +82,11 @@ def buyitem_call(request):
 
     # If it is not POST
     raise Http404()
+
+def generate_QRcode(request,data):
+    img = qrcode.make()           # pass in the URL to calculate the QR code image bytes
+    buf = BytesIO()                      # Create a BytesIO to temporarily store the generated image data
+    img.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
+    image_stream = buf.getvalue()        # Temporarily save the data in BytesIO
+    response = HttpResponse(image_stream, content_type="image/jpg")       # Return the QR code data to the page
+    return response
