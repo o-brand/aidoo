@@ -6,8 +6,6 @@ from . import views
 urlpatterns = [
     # Homepage
     path("", views.RoomsView.as_view(), name="chat"),
-    # Starting a chat, used by HTMX
-    path("startchat", views.startchat_call, name="chat-startchat"),
     # Searching by username, displayed in a modal
     path("searching-modal", views.searching_modal, name="chat-searching-modal"),
     # Searching, used by HTMX

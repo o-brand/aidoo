@@ -5,10 +5,15 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ms-auto">
-      
-      <a class="nav-link" href="{% url 'notifications' %}" role="button" aria-expanded="false">
+      <a class="nav-link" 
+        hx-get="{% url 'notifications' %}" 
+        hx-target="#offcanvas" 
+        data-bs-toggle="offcanvas" 
+        role="button" 
+        aria-expanded="false">
         <i class="bi bi-bell-fill" style='font-size:21px;'></i>
       </a>
+      
 
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

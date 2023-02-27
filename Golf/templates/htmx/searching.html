@@ -6,15 +6,11 @@
     </tr>
   </thead>
 
-  {% for user, chat_started in users %}
+  {% for user in users %}
     <tr>
       <td>{{ user.username }}</td>
       <td>
-        {% if chat_started %}
-          {% include 'htmx/chat_button.html' %}
-        {% else %}
-          {% include 'htmx/chat_button_new.html' %}
-        {% endif %}
+        {% include 'htmx/chat_button.html' %}
       </td>
     </tr>
   {% endfor %}

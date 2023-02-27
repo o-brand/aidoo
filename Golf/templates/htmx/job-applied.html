@@ -18,7 +18,8 @@
     {{ job.points }}
   </p>
 {% if status == "AC" %}
-    <p>Poster: {{ job.poster_id.username }} <a href="mailto:{{ job.poster_id.email }}">{{ job.poster_id.email }}</a></p>
+    <p>Poster: {{ job.poster_id.username }}</p>
+    <p><a href="{% url 'chat-room' job.poster_id.id%}" class="btn btn-primary">Chat</a></p>
 {% elif status == "AP" %}
     <button class="btn btn-outline-danger"
         _="on click add @disabled to me"

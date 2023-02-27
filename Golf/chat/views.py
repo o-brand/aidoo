@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.views import View
@@ -50,37 +50,9 @@ def refreshrooms_call(request):
     me = request.user
     return render(request, "htmx/rooms-list.html", {"rooms": _query_rooms(me)})
 
-
-def startchat_call(request):
-    """Start chat."""
-    if request.method == "POST":
-        # Get the user ID or -1 if it is not found
-        user_id = request.POST.get("user_id", -1)
-        me = request.user
-
-        # Check if the user ID is valid
-        users = User.objects.filter(pk=user_id)
-        user_id_exists = len(users) == 1
-        if not user_id_exists:
-            raise Http404()
-        invitee = users[0]
-
-        # Create room
-        room = dict()
-        room["user_1"] = me
-        room["user_2"] = invitee
-        Room.objects.create(**room)
-
-        return render(request, "htmx/chat_button.html", {"user": invitee})
-
-    # If it is not POST
-    raise Http404()
-
-
 def searching_modal(request):
     """Searching modal."""
     return render(request, "chat/searching.html")
-
 
 def searching_call(request):
     """Searching for users by username."""
@@ -98,21 +70,13 @@ def searching_call(request):
         if len(username) == 0:
             return HttpResponse()
 
-        # Get users
         users = User.objects.filter(username__icontains=username).exclude(pk=me.id)
 
-        # Iterate over to display the adequate button
-        users_with_chat_started = []
-        for user in users:
-            chat_started = len(Room.objects.filter(Q(user_1=me, user_2=user.id) | Q(user_2=me, user_1=user.id))) == 1
-            users_with_chat_started.append([user, chat_started])
-
         # Render the page
-        return render(request, "htmx/searching.html", {"users": users_with_chat_started})
+        return render(request, "htmx/searching.html", {"users": users})
 
     # If it is not POST
     raise Http404()
-
 
 def room(request, user_id):
     """Displaying a room with the given user."""
@@ -129,15 +93,19 @@ def room(request, user_id):
     rooms = Room.objects.filter(Q(user_1=me, user_2=other_user) | Q(user_2=me, user_1=other_user))
     room_exists = len(rooms) == 1
     if not room_exists:
-        return redirect('userdetails', user_id=user_id)
-    room = rooms[0]
+        # Create room
+        rooms = dict()
+        rooms["user_1"] = me
+        rooms["user_2"] = other_user
+        room = Room.objects.create(**rooms)
+    else:
+        room = rooms[0]
 
     if room.user_2 == me:
         room.user_1 = me
         room.user_2 = other_user
-    
-    messages = Message.objects.filter(room_id=room.room_id)
 
+    messages = Message.objects.filter(room_id=room.room_id)
     return render(
         request,
         "chat/room.html",

@@ -1,7 +1,4 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block title %}My profile{% endblock %}
 
 {% block head_extra %}
 <script src="{% static 'js/htmx-1.8.5.min.js' %}" defer></script>
@@ -9,36 +6,40 @@
 {% endblock %}
 
 {% block content %}
-{% include 'navigation.html' %}
-
-<div class="container-sm text-center mt-1 mb-1 p-1">
-  <h1>Notifications</h1>
+<div class="offcanvas-header">
+  <h5 class="offcanvas-title" id="offcanvasLabel">Notifications</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
-<div class="container w-75">
-  <div class="card mb-1">
-    {% if not notifs %}
-      <div class="container-sm my-1 p-5 w-50">
-        <h6 class="card-subtitle mb-2 text-muted">No new notifications</h6>
-      </div>
-    {% else %}
+<div class="offcanvas-body">
+  {% if not notifs %}
+    <h6 class="text-muted text-center">No new notifications</h6>
+
+  {% else %}
+    <div class="list-group">
       {% for notifications in notifs %}
-          <div class="card container-fluid position-relative my-1 w-50">
-            {% if not notifications.seen %}
-              <div class="d-flex justify-content-start mt-1">
-                <h6 class="notifcation-title mb-0"><strong>{{ notifications.title }}</strong></h6>
-                <span class="badge rounded-pill text-bg-success new-notification mx-1 mb-0">New</span>
-              </div>
-              <p class="mt-0">{{ notifications.content }}</p>
-              {% include 'htmx/notifications-seen.html' %}
-            {% else %}
-              <h6 class="text-muted mt-1 mb-0">{{ notifications.title }}</h6>
-              <p class="text-muted">{{ notifications.content }}</p>
-              <a href="{{notifications.link}}" class="stretched-link"></a>
-            {% endif %}
-          </div>      
+        <a href="{{notifications.link}}" 
+          class="list-group-item list-group-item-action"
+          hx-post="{% url 'notification_seen' %}"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-vals='{"id":"{{notifications.notification_id}}"}'>
+          <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">
+                {% if not notifications.seen %}
+                  <span class="position-absolute top-50 start-0 
+                  translate-middle p-2 bg-primary border border-light rounded-circle"></span>
+                {% endif %}
+                {{ notifications.title }}
+              </h5>
+            <small class="text-muted">3 days ago</small>
+          </div>
+          <p class="mb-1">{{ notifications.content }}</p>
+        </a>
       {% endfor %}
-    {% endif %}
-  </div>
+    </div>
+    <div class="d-flex justify-content-center my-5">
+      <button class="btn btn-outline-danger">Clear All</button>
+    </div>
+  {% endif %}
 </div>
     
 {% endblock %}
