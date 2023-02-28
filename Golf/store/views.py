@@ -99,15 +99,16 @@ def send_QRcode(request, data):
     body = MIMEText('<p>Hello <img src="cid:myimage" /></p>', _subtype='html')
     html_part.attach(body)
 
-    img = MIMEImage(buf, 'jpeg')
+    img = MIMEImage(qr, 'jpeg')
     img.add_header('Content-Id', '<myimage>')  # angle brackets are important
     img.add_header("Content-Disposition", "inline", filename="myimage")  # David Hess recommended this edit
-    html_part.attach(img)
+    html_part.attach(img) # add the image to the html
 
     subject = "Aidoo Shop Purchase"
     msg = "here is the QR code for the purchase"
 
-    send_mail(subject, msg, None, [User.email], html_message = html_part)
+    # send the html with the message and the header
+    send_mail(subject, msg, None, [User.email], html_message=html_part)
 
     response = HttpResponse(image_stream, content_type="image/jpg")       # Return the QR code data to the page
     return response
