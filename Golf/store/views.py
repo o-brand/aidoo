@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from .models import Item, Sale
 from django.utils.six import BytesIO
 import qrcode
-
+import mimetypes
 
 # Get actual user model.
 User = get_user_model()
@@ -78,15 +78,36 @@ def buyitem_call(request):
         buyer.save()
         sale.save()
 
+        # get the sale_id
+
         return render(request, "htmx/buy-item-bought.html")
 
     # If it is not POST
     raise Http404()
 
-def generate_QRcode(request,data):
-    img = qrcode.make()           # pass in the URL to calculate the QR code image bytes
+
+def send_QRcode(request, data):
+    """ create a qr code from the data and return an image stream """
+    qr = qrcode.make(data)           # pass in the URL to calculate the QR code image bytes
     buf = BytesIO()                      # Create a BytesIO to temporarily store the generated image data
-    img.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
+    qr.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
     image_stream = buf.getvalue()        # Temporarily save the data in BytesIO
+
+    # convert the image into html
+    html_part = MIMEMultipart(_subtype='related')
+
+    body = MIMEText('<p>Hello <img src="cid:myimage" /></p>', _subtype='html')
+    html_part.attach(body)
+
+    img = MIMEImage(buf, 'jpeg')
+    img.add_header('Content-Id', '<myimage>')  # angle brackets are important
+    img.add_header("Content-Disposition", "inline", filename="myimage")  # David Hess recommended this edit
+    html_part.attach(img)
+
+    subject = "Aidoo Shop Purchase"
+    msg = "here is the QR code for the purchase"
+
+    send_mail(subject, msg, None, [User.email], html_message = html_part)
+
     response = HttpResponse(image_stream, content_type="image/jpg")       # Return the QR code data to the page
     return response
