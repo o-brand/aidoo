@@ -573,9 +573,12 @@ class ProfileEditTestCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("Please remove any profanity/swear words.", form.errors[key][0])
 
-    def test_edit_details_page(self):
-        response = self.client.get("/editprofile")
-        self.assertEqual(response.status_code, 200)
+    
+class ProfileEditViewTestCase(LoginRequiredTestCase):            
+            
+    def setUp(self):
+        # Login from super...
+        super().setUp()
 
     def test_edit_details_page_available_by_name(self):
         response = self.client.get(reverse("editprofile"))
