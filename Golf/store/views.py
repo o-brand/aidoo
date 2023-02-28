@@ -1,10 +1,11 @@
+from io import BytesIO
+import qrcode
+import mimetypes
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from .models import Item, Sale
-from django.utils.six import BytesIO
-import qrcode
-import mimetypes
+
 
 # Get actual user model.
 User = get_user_model()

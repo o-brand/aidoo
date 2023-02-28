@@ -24,10 +24,10 @@ def database(test, online):
         else:
             return {
                 "ENGINE": "django.db.backends.postgresql",
-                "NAME": "d89nu78d2tgrs4",
-                "USER": "cbggvrqqdxzvdy",
-                "PASSWORD": "abdc2f9264e7d3c32b0e02c60469210cacceab4bcb7f018a12c7edaf493f411b",
-                "HOST": "ec2-54-78-233-132.eu-west-1.compute.amazonaws.com",
+                "NAME": "d6upqgtvti60tc",
+                "USER": "kennyauhjykjam",
+                "PASSWORD": "f5c5a1f625f2b231f1aece080d5fdb164c8a893e9df4d106f9aa575874e466a8",
+                "HOST": "ec2-52-211-216-62.eu-west-1.compute.amazonaws.com",
                 "PORT": "5432",
                 "OPTIONS": {"sslmode": "require"},
             }

@@ -19,3 +19,5 @@ tzdata==2022.7
 uvicorn==0.20.0
 uvicorn[standard]==0.20.0
 whitenoise==6.3.0
+
+qrcode==7.4.2
