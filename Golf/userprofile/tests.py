@@ -7,9 +7,10 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase, fake_time
-from jobs.models import Job, Application 
+from jobs.models import Job, Application
 from userprofile.models import Notification
 from .forms import ProfileEditForm
+
 
 # Get actual user model.
 User = get_user_model()
@@ -94,7 +95,7 @@ class UserTableTestCase(TestCase):
         # for notification to user when accepted or rejected from a job
         u = User.objects.get(pk=1)
         self.assertIn(u.opt_in_site_application, {True:False})
-    
+
     def test_site_preferences_applicant(self):
         # checks if the site preference exists and is either True or False
         # for notification to job poster when user applies for their job
@@ -265,7 +266,7 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/job-applicants.html")
         self.assertTrue(Application.objects.get(applicant_id=2,job_id=2).status in {"AC", "RE"})
-        
+
         # At least one application is successful
         self.assertTrue("AC" in [a.status for a in Application.objects.filter(job_id=2)])
 
@@ -409,7 +410,7 @@ class NotificationModelTestCase(TestCase):
             notifications["content"] = lambda: fake.text()
             notifications["link"] = lambda: fake.url()
             notifications["seen"] = False
-            
+
             Notification.objects.create(**notifications)
 
     def test_retrieve_notification(self):
@@ -431,11 +432,11 @@ class NotificationModelTestCase(TestCase):
 
         len2 = len(Notification.objects.all())
         self.assertEqual(len1+1, len2)
-    
+
     def test_delete_notification(self):
         n = Notification.objects.get(pk=1)
         len1 = len(Notification.objects.all())
-        
+
         n.delete()
 
         len2=len(Notification.objects.all())
@@ -453,7 +454,7 @@ class NotificationModelTestCase(TestCase):
             created_notification.full_clean()
         except ValidationError:
             raised=True
-        
+
         self.assertFalse(raised)
 
     def test_too_long_content(self):
@@ -502,7 +503,7 @@ class ProfileEditTestCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required.", form.errors[key][0])
-    
+
     def test_email_entered(self):
         # behaviour if email is entered and valid
         # there should be less errors thrown
@@ -519,7 +520,7 @@ class ProfileEditTestCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required.", form.errors[key][0])
-    
+
     def test_biography_entered(self):
         # behaviour if biography is entered and valid
         # there should be less errors thrown
@@ -536,7 +537,7 @@ class ProfileEditTestCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required.", form.errors[key][0])
-    
+
     def test_all_valid_entered(self):
         # behaviour if all data is entered and valid
         # there should be no errors thrown
@@ -573,12 +574,13 @@ class ProfileEditTestCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("Please remove any profanity/swear words.", form.errors[key][0])
 
-    
-class ProfileEditViewTestCase(LoginRequiredTestCase):            
-            
-    def setUp(self):
-        # Login from super...
-        super().setUp()
+
+class ProfileEditViewTestCase(LoginRequiredTestCase):
+    """Tests for editing a profile, view"""
+
+    def test_edit_details_page(self):
+        response = self.client.get("/profile/editprofile")
+        self.assertEqual(response.status_code, 200)
 
     def test_edit_details_page_available_by_name(self):
         response = self.client.get(reverse("editprofile"))

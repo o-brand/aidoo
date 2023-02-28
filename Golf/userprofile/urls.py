@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 # Be aware that the url already includes "profile/"
 urlpatterns = [
     # Details of a user
@@ -33,5 +34,5 @@ urlpatterns = [
     # Private profile card
     path("privatecard", views.my_details, name="privatecard"),
     # Profile editing form
-    path(route="editprofile", view=views.ProfileEditView.as_view(), name="editprofile"),
+    path("editprofile", views.ProfileEditView.as_view(), name="editprofile"),
 ]
