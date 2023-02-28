@@ -37,7 +37,7 @@ def details(request, job_id):
             applicant_id=request.user.id, 
             job_id=job.job_id)[0].status
     except:
-        status = ''
+        status = 'NA'
 
     # Give the found job to the template
     context = {
