@@ -5,7 +5,14 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from .models import Item, Sale
+<<<<<<< HEAD
 
+=======
+from django.utils.six import BytesIO
+import qrcode
+from email.mime.image import MIMEImage
+from django.core.mail import EmailMultiAlternatives
+>>>>>>> 633485d (refactor, more readable maybe)
 
 # Get actual user model.
 User = get_user_model()
@@ -94,22 +101,28 @@ def send_QRcode(request, data):
     qr.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
     image_stream = buf.getvalue()        # Temporarily save the data in BytesIO
 
-    # convert the image into html
-    html_part = MIMEMultipart(_subtype='related')
-
-    body = MIMEText('<p>Hello <img src="cid:myimage" /></p>', _subtype='html')
-    html_part.attach(body)
-
-    img = MIMEImage(qr, 'jpeg')
-    img.add_header('Content-Id', '<myimage>')  # angle brackets are important
-    img.add_header("Content-Disposition", "inline", filename="myimage")  # David Hess recommended this edit
-    html_part.attach(img) # add the image to the html
-
     subject = "Aidoo Shop Purchase"
-    msg = "here is the QR code for the purchase"
+    body = "here is the QR code for the purchase"
 
-    # send the html with the message and the header
-    send_mail(subject, msg, None, [User.email], html_message=html_part)
+    # create a msg that can have an image attached
+    msg = EmailMultiAlternatives(
+        subject,
+        body,
+        from_email=None,
+        to=[User.email]
+    )
+
+    msg.mixed_subtype = 'related'
+    # convert img to html
+    img = MIMEImage(qr, 'jpg')
+    img.add_header('Content-Id', '<qr>')
+    img.add_header("Content-Disposition", "inline", filename="qr.jpg")
+
+    # attach image in html form to message
+    msg.attach(img)
+
+    # send the message
+    msg.send()
 
     response = HttpResponse(image_stream, content_type="image/jpg")       # Return the QR code data to the page
     return response
