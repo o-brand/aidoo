@@ -11,5 +11,5 @@ urlpatterns = [
     # Buy an item from the store, uses HTMX
     path("buyitem", views.buyitem_call, name="buyitem"),
     # ???
-    re_path(r'^qrcode/(?P<id>.+)$', send_QRcode, name='qrcode'),
+    re_path(r'^qrcode/(?P<data>.+)$', send_QRcode, name='qrcode'),
 ]

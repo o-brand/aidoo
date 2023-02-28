@@ -5,14 +5,9 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from .models import Item, Sale
-<<<<<<< HEAD
-
-=======
-from django.utils.six import BytesIO
-import qrcode
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
->>>>>>> 633485d (refactor, more readable maybe)
+
 
 # Get actual user model.
 User = get_user_model()
@@ -109,12 +104,12 @@ def send_QRcode(request, data):
         subject,
         body,
         from_email=None,
-        to=[User.email]
+        to=[request.user.email]
     )
 
     msg.mixed_subtype = 'related'
     # convert img to html
-    img = MIMEImage(qr, 'jpg')
+    img = MIMEImage(image_stream, 'jpg')
     img.add_header('Content-Id', '<qr>')
     img.add_header("Content-Disposition", "inline", filename="qr.jpg")
 
