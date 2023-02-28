@@ -10,10 +10,24 @@
       <p>
         {{ form.email.label_tag }}
         {{ form.email }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+              {% if key == "email" %}
+                  <strong class="error">{{ value.as_text }}</strong>
+              {% endif %}
+          {% endfor %}
+        {% endif %}
       </p>
       <p>
         {{ form.biography.label_tag }}
         {{ form.biography }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+              {% if key == "biography" %}
+                  <strong class="error">{{ value.as_text }}</strong>
+              {% endif %}
+          {% endfor %}
+        {% endif %}
       </p>
       
     </div>

@@ -9,6 +9,7 @@ from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase, fake_time
 from jobs.models import Job, Application 
 from userprofile.models import Notification
+from .forms import ProfileEditForm
 
 # Get actual user model.
 User = get_user_model()
@@ -485,3 +486,100 @@ def notif_data():
     notifications["seen"] = False
 
     return Notification.objects.create(**notifications)
+
+
+class ProfileEditTestCase(TestCase):
+    """Tests for editing a profile"""
+
+    def test_nothing_entered(self):
+        # behaviour if form is empty
+        form = ProfileEditForm(data={})
+
+        self.assertEqual(2, len(form.errors))
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required.", form.errors[key][0])
+    
+    def test_email_entered(self):
+        # behaviour if email is entered and valid
+        # there should be less errors thrown
+        new_data = {
+            "email": "madeup@madeup.com",
+        }
+        form = ProfileEditForm(new_data)
+
+        # Name must be ok
+        self.assertEqual(1, len(form.errors))
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required.", form.errors[key][0])
+    
+    def test_biography_entered(self):
+        # behaviour if biography is entered and valid
+        # there should be less errors thrown
+        new_data = {
+            "biography": "made up bio",
+        }
+        form = ProfileEditForm(new_data)
+
+        # Name must be ok
+        self.assertEqual(1, len(form.errors))
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required.", form.errors[key][0])
+    
+    def test_all_valid_entered(self):
+        # behaviour if all data is entered and valid
+        # there should be no errors thrown
+        new_data = {
+            "email": "madeup@madeup.com",
+            "biography": "made up bio",
+        }
+        form = ProfileEditForm(new_data)
+
+        # Name must be ok
+        self.assertEqual(0, len(form.errors))
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required.", form.errors[key][0])
+
+    def test_profane_bio_entered(self):
+        # behaviour if bio contains profanity
+        # there should be less errors thrown
+        new_data = {
+            "email": "madeup@madeup.com",
+            "biography": "kondums",
+        }
+        form = ProfileEditForm(new_data)
+
+        # Name must be ok
+        self.assertEqual(1, len(form.errors))
+
+        # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("Please remove any profanity/swear words.", form.errors[key][0])
+
+    def test_edit_details_page(self):
+        response = self.client.get("/editprofile")
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_details_page_available_by_name(self):
+        response = self.client.get(reverse("editprofile"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response, template_name="editdetails.html"
+        )
