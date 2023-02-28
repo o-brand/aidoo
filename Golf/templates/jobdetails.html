@@ -49,6 +49,10 @@
           &nbsp;&nbsp;
           <i class="bi bi-activity"></i>
           <h9><b>Rejected</b></h9>
+          {% elif status == "DN" %}
+          &nbsp;&nbsp;
+          <i class="bi bi-activity"></i>
+          <h9><b>Complete</b></h9>
           {% endif %}
         </li>
         <li class="list-group-item">{{ job.job_description }}</li>
@@ -73,13 +77,18 @@
       {% elif status == "WD" %}
         <button
         disabled
-        class="btn btn-danger"
+        class="btn btn-dark"
         id = "btnApply{{ job_id }}">Withdrawn ✖</button>
       {% elif status == "RE" %}
         <button
         disabled
         class="btn btn-danger"
         id = "btnApply{{ job_id }}">Rejected ✖</button>
+      {% elif status == "DN" %}
+        <button
+        disabled
+        class="btn btn-success"
+        id = "btnApply{{ job_id }}">Complete ✓</button>
       {% endif %}
     </div>
   </div>
