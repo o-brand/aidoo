@@ -19,9 +19,9 @@
 | chat/migrations/\_\_init\_\_.py                                                                        |        0 |        0 |    100% |           |
 | chat/models.py                                                                                         |       19 |        0 |    100% |           |
 | chat/routing.py                                                                                        |        3 |        3 |      0% |       1-5 |
-| chat/tests.py                                                                                          |      142 |        0 |    100% |           |
+| chat/tests.py                                                                                          |      116 |        0 |    100% |           |
 | chat/urls.py                                                                                           |        3 |        0 |    100% |           |
-| chat/views.py                                                                                          |       80 |       12 |     85% |22-30, 50-51, 95, 136-137 |
+| chat/views.py                                                                                          |       64 |       16 |     75% |22-30, 50-51, 67, 97-100, 105-106 |
 | heroku\_db.py                                                                                          |       10 |        6 |     40% |      9-25 |
 | jobs/\_\_init\_\_.py                                                                                   |        0 |        0 |    100% |           |
 | jobs/admin.py                                                                                          |        6 |        0 |    100% |           |
@@ -41,25 +41,28 @@
 | jobs/tests.py                                                                                          |      416 |        2 |     99% |  462, 488 |
 | jobs/urls.py                                                                                           |        3 |        0 |    100% |           |
 | jobs/validators.py                                                                                     |       11 |        0 |    100% |           |
-| jobs/views.py                                                                                          |       99 |       11 |     89% |22-23, 76, 203-220 |
+| jobs/views.py                                                                                          |      103 |       11 |     89% |22-23, 85, 212-229 |
 | login/\_\_init\_\_.py                                                                                  |        0 |        0 |    100% |           |
 | login/apps.py                                                                                          |        4 |        0 |    100% |           |
-| login/forms.py                                                                                         |       19 |        0 |    100% |           |
-| login/tests.py                                                                                         |      197 |        0 |    100% |           |
+| login/forms.py                                                                                         |       20 |        0 |    100% |           |
+| login/tests.py                                                                                         |      201 |        0 |    100% |           |
 | login/urls.py                                                                                          |        5 |        0 |    100% |           |
 | login/validators.py                                                                                    |       14 |        1 |     93% |        32 |
 | login/views.py                                                                                         |       45 |       11 |     76% |77, 83-101 |
 | manage.py                                                                                              |       12 |        2 |     83% |     12-13 |
 | store/\_\_init\_\_.py                                                                                  |        0 |        0 |    100% |           |
-| store/admin.py                                                                                         |        4 |        0 |    100% |           |
+| store/admin.py                                                                                         |        5 |        0 |    100% |           |
 | store/apps.py                                                                                          |        4 |        0 |    100% |           |
+| store/forms.py                                                                                         |       12 |        0 |    100% |           |
 | store/migrations/0001\_initial.py                                                                      |        8 |        0 |    100% |           |
 | store/migrations/0002\_item\_limit\_per\_user.py                                                       |        4 |        0 |    100% |           |
+| store/migrations/0003\_transfer.py                                                                     |        7 |        0 |    100% |           |
 | store/migrations/\_\_init\_\_.py                                                                       |        0 |        0 |    100% |           |
-| store/models.py                                                                                        |       18 |        0 |    100% |           |
+| store/models.py                                                                                        |       25 |        0 |    100% |           |
 | store/tests.py                                                                                         |       60 |        0 |    100% |           |
-| store/urls.py                                                                                          |        3 |        0 |    100% |           |
-| store/views.py                                                                                         |       42 |       26 |     38% | 19, 34-82 |
+| store/urls.py                                                                                          |        5 |        0 |    100% |           |
+| store/validators.py                                                                                    |        9 |        3 |     67% | 13-14, 21 |
+| store/views.py                                                                                         |       97 |       66 |     32% |28, 43-91, 95-124, 134-136, 141-178 |
 | superadmin/\_\_init\_\_.py                                                                             |        0 |        0 |    100% |           |
 | superadmin/admin.py                                                                                    |        3 |        0 |    100% |           |
 | superadmin/apps.py                                                                                     |        4 |        0 |    100% |           |
@@ -74,6 +77,7 @@
 | userprofile/\_\_init\_\_.py                                                                            |        0 |        0 |    100% |           |
 | userprofile/admin.py                                                                                   |        9 |        0 |    100% |           |
 | userprofile/apps.py                                                                                    |        4 |        0 |    100% |           |
+| userprofile/forms.py                                                                                   |       13 |        0 |    100% |           |
 | userprofile/migrations/0001\_initial.py                                                                |        8 |        0 |    100% |           |
 | userprofile/migrations/0002\_user\_opt\_in\_emails.py                                                  |        4 |        0 |    100% |           |
 | userprofile/migrations/0003\_user\_biography\_user\_frozen\_balance.py                                 |        4 |        0 |    100% |           |
@@ -85,9 +89,11 @@
 | userprofile/migrations/0009\_user\_profile\_id\_user\_profile\_picture.py                              |        4 |        0 |    100% |           |
 | userprofile/migrations/0010\_alter\_user\_profile\_id\_alter\_user\_profile\_picture.py                |        5 |        0 |    100% |           |
 | userprofile/migrations/0011\_alter\_user\_profile\_id\_alter\_user\_profile\_picture.py                |        5 |        0 |    100% |           |
+| userprofile/migrations/0012\_notification\_title.py                                                    |        4 |        0 |    100% |           |
+| userprofile/migrations/0013\_notification\_time\_of\_notification.py                                   |        5 |        0 |    100% |           |
 | userprofile/migrations/\_\_init\_\_.py                                                                 |        0 |        0 |    100% |           |
-| userprofile/models.py                                                                                  |       28 |        1 |     96% |        12 |
-| userprofile/tests.py                                                                                   |      314 |        2 |     99% |   453-454 |
+| userprofile/models.py                                                                                  |       31 |        1 |     97% |        13 |
+| userprofile/tests.py                                                                                   |      363 |        5 |     99% |455-456, 555-557 |
 | userprofile/urls.py                                                                                    |        3 |        0 |    100% |           |
-| userprofile/views.py                                                                                   |      190 |       48 |     75% |62, 72, 84, 97-98, 163, 176-204, 304-334, 345-346, 351, 356-357, 363-369, 373-387 |
-|                                                                                              **TOTAL** | **2355** |  **234** | **90%** |           |
+| userprofile/views.py                                                                                   |      213 |       64 |     70% |53-65, 76, 86, 98, 111-112, 140-153, 207, 220-248, 348-378, 389-390, 395, 400-401, 407-413, 417-431 |
+|                                                                                              **TOTAL** | **2512** |  **300** | **88%** |           |
