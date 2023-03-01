@@ -61,12 +61,7 @@
             </div>
             <p class="">{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
             <p>{{ job.job_description }}</p>
-            <!-- TODO: show more show less, not working properly
-            <p class="short-desc" id="short-desc-{{ job.job_id }}">{{ job.job_short_description }}</p>
-            <span class="long-desc" id="long-desc-{{ job.job_id }}">{{ job.job_description }}</span>
-            <a onclick="showMore('{{ job.job_id }}')">read more</a>
-            <br/>
-            -->
+            <p class="add-read-more show-less-content">{{ job.job_description }}</p>
             {% if job.job_id in jobs_applied %}
               {% include 'htmx/applied.html' %}
             {% else %}
@@ -97,19 +92,4 @@
 {{ block.super }}
 <script src="{% static 'js/home.js' %}"></script>
 
-<!-- TODO: show more show less, not working properly
-<script>
-  // When you click on the read more button
-  function showMore(id) {
-    if ($("#long-desc-"+id).is(":hidden")) {
-      $("#short-desc-"+id).hide()
-      $("#long-desc-"+id).show()
-    }
-    else {
-      $("#long-desc-"+id).hide()
-      $("#short-desc-"+id).show()
-    }
-    //$("#textcontain"+id).height("auto");//Removing the height limit on text containers
-  }
-</script>-->
 {% endblock %}

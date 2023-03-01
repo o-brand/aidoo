@@ -33,6 +33,8 @@ class Item(models.Model):
         default=None, 
         null=True)
 
+    #image field
+    item_picture = models.ImageField(upload_to="storeitem/", blank=True)
 
 class Sale(models.Model):
     """This model is used to represent the sale of an item in the shop,
