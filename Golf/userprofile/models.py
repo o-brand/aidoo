@@ -33,6 +33,7 @@ class User(AbstractUser):
     profile_picture = models.ImageField(upload_to=profile_picture_rename, default='profilepics/default')
     # Used to store the identity verification
     profile_id = models.ImageField(upload_to=profile_id_rename)
+    super_user = models.BooleanField(default=False)
     # Only used to create a superuser.
     REQUIRED_FIELDS = ["first_name", "last_name", "email", "date_of_birth"]
 
