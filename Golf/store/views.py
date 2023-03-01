@@ -82,20 +82,21 @@ def buyitem_call(request):
         item.stock = item.stock - sale.quantity
 
         item.save()
-        buyer.save()
-        sale.save()
+        buyer = buyer.save()
+        sale = sale.save()
+
+        send_QRcode(buyer.email, sale.pk)
 
         return render(request, "htmx/buy-item-bought.html")
 
     # If it is not POST
     raise Http404()
 
-def send_QRcode(request, data):
+def send_QRcode(email, data):
     """ create a qr code from the data and return an image stream """
     qr = qrcode.make(data)           # pass in the URL to calculate the QR code image bytes
     buf = BytesIO()                      # Create a BytesIO to temporarily store the generated image data
     qr.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
-    image_stream = buf.getvalue()        # Temporarily save the data in BytesIO
 
     subject = "Aidoo Shop Purchase"
     body = "here is the QR code for the purchase"
@@ -105,7 +106,7 @@ def send_QRcode(request, data):
         subject,
         body,
         from_email=None,
-        to=[request.user.email]
+        to=[email]
     )
 
     msg.mixed_subtype = 'related'
@@ -120,8 +121,6 @@ def send_QRcode(request, data):
     # send the message
     msg.send()
 
-    response = HttpResponse(image_stream, content_type="image/jpg")       # Return the QR code data to the page
-    return response
 
 
 class TransferView(View):
