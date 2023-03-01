@@ -60,7 +60,6 @@
               <h5><a href="{% url 'userdetails' job.poster_id.id %}">{{ job.poster_id.username }}</a></h5>
             </div>
             <p class="">{{ job.points }} Points · {{ job.posting_time | date:'d M Y' }} · {{ job.location }}</p>
-            <p>{{ job.job_description }}</p>
             <p class="add-read-more show-less-content">{{ job.job_description }}</p>
             {% if job.job_id in jobs_applied %}
               {% include 'htmx/applied.html' %}
