@@ -20,16 +20,17 @@
 <div class="album py-1 bg-light">
   <div class="btn-group justify-content-end">
     <button type="button" class="btn btn-secondary shop-button"><i class="bi bi-basket2-fill"></i></button>
-    <button type="button" class="btn btn-secondary shop-button"><i class="bi bi-sort-up"></i></button>
-    <button type="button" class="btn btn-secondary shop-button"><i class="bi bi-sort-down"></i></button>
-
+    </button>
   </div>
+  <p class="">Current balance: {{me.balance}}</p>
 </div>
 
-
-<div class="container-fluid">  
+<div class="container-fluid">
+<!--<div class="container-fluid" style="margin:34px;">-->  
   <div class="d-flex flex-row">
-    <div class="card rounded-4 shadow-sm" style="width: 18rem; margin:10px">
+    <div class="col">
+    <div class="row g-3">
+      <div class="card rounded-4 shadow-sm" style="height: 22rem; width: 18rem; margin:10px; display:grid;">
       <div class="card-body">
 
         <div class="card-title">
@@ -52,18 +53,19 @@
     
     {% for item in items %}
     
-      <div class="card rounded-4 shadow-sm" style="width: 18rem; margin:10px">
+    <div class="card rounded-4 shadow-sm" style="height: 22rem; width: 18rem; margin:10px; display:grid;">
         <div class="card-body">
 
           <div class="card-title">
             <h4>{{item.item_name}}</h4>
-            <!--picture-->
-            <svg class="bd-placeholder-img card-img-top" role="img" aria-label="Placeholder: Thumbnail" ><rect fill="#ffffff"/><text fill="#eceeef">Picture</text></svg>
+            <img src="{{ item.item_picture.url }}" style="width: 200px;height: 150px; object-fit: contain;">
 
           </div>
-          <div class="card-text">
+          <div class="card-text" style="height:70px;overflow: scroll;">
             <p>{{item.description}}</p>
-            <span>{% include "htmx/buy-item.html" %}</span>
+          </div>
+          <div>
+            <span style="width:120px;">{% include "htmx/buy-item.html" %}</span>
             <small class="text-muted">{{item.limit}}</small>
           </div>
 
@@ -71,6 +73,8 @@
       </div>
     
     {% endfor %}
+  </div>
+  </div>  
   </div>
 
 </div>
