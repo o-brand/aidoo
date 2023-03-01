@@ -39,12 +39,16 @@ def details(request, job_id):
     except:
         status = 'NA'
 
+    # Obtains the user data, used to stop job poster applying from own job
+    me = request.user
+
     # Give the found job to the template
     context = {
         "job": job,
         "jobs_applied": jobs_applied,
         "comments": comments,
-        "status" : status
+        "status" : status,
+        "me" : me,
     }
 
     # Render the page
