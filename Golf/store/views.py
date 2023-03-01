@@ -8,6 +8,7 @@ from django.views import View
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
 from .models import Item, Sale
+from .models import Item, Sale, Transfer
 from userprofile.models import Notification
 from .forms import TransferForm
 
@@ -121,6 +122,7 @@ def send_QRcode(request, data):
 
     response = HttpResponse(image_stream, content_type="image/jpg")       # Return the QR code data to the page
     return response
+
 
 class TransferView(View):
     """Displays a form for transferring coins."""
