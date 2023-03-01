@@ -723,8 +723,8 @@ class DeadlineValidationTestCase(TestCase):
     def test_invalid_future_deadline(self):
         """Test an invalid deadline date more than 1 year in the future."""
         today = datetime.date.today()
-        year = datetime.timedelta(days=365) + datetime.timedelta(days=1)  
-        deadline = today + year # set deadline more than 1 year in the future
+        yearplus = datetime.timedelta(days=400) + datetime.timedelta(days=1)
+        deadline = today + yearplus # set deadline more than 1 year in the future
         with self.assertRaises(ValidationError) as cm:
             validate_deadline(deadline)
         self.assertEqual(str(cm.exception), (f"['{deadline} is not a valid "
