@@ -10,6 +10,8 @@ urlpatterns = [
     path("", views.home, name="store"),
     # Buy an item from the store, uses HTMX
     path("buyitem", views.buyitem_call, name="buyitem"),
+    # Transfer form displayed in modal, uses HTMX
+    path("transfer", views.TransferView.as_view(), name="transfer"),
     # ???
     re_path(r'^qrcode/(?P<data>.+)$', send_QRcode, name='qrcode'),
 ]

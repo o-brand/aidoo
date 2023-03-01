@@ -1,12 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 {% load static %}
 
 {% block title %}Store{% endblock %}
-
-{% block head_extra %}
-<script src="{% static 'js/htmx-1.8.5.min.js' %}"></script>
-<script src="{% static 'js/hyperscript-0.9.7.min.js' %}"></script>
-{% endblock %}
 
 {% block content %}
 {% include 'navigation.html' %}
@@ -34,29 +29,50 @@
 
 <div class="container-fluid">  
   <div class="d-flex flex-row">
-    
-  {% for item in items %}
-  
     <div class="card rounded-4 shadow-sm" style="width: 18rem; margin:10px">
       <div class="card-body">
 
         <div class="card-title">
-          <h4>{{item.item_name}}</h4>
+          <h4>Gift doos</h4>
           <!--picture-->
           <svg class="bd-placeholder-img card-img-top" role="img" aria-label="Placeholder: Thumbnail" ><rect fill="#ffffff"/><text fill="#eceeef">Picture</text></svg>
 
         </div>
         <div class="card-text">
-          <p>{{item.description}}</p>
-          <span>{% include "htmx/buy-item.html" %}</span>
+          <p>
+            You can also gift some of your coins to a user of your choosing. 
+            Giving back is always in vogue.
+          </p>
+          <button class="btn btn-success" hx-get="{% url 'transfer' %}" hx-target="#dialog">Let's doo it!</button>
           <small class="text-muted">{{item.limit}}</small>
         </div>
 
       </div>
     </div>
-  
+    
+    {% for item in items %}
+    
+      <div class="card rounded-4 shadow-sm" style="width: 18rem; margin:10px">
+        <div class="card-body">
+
+          <div class="card-title">
+            <h4>{{item.item_name}}</h4>
+            <!--picture-->
+            <svg class="bd-placeholder-img card-img-top" role="img" aria-label="Placeholder: Thumbnail" ><rect fill="#ffffff"/><text fill="#eceeef">Picture</text></svg>
+
+          </div>
+          <div class="card-text">
+            <p>{{item.description}}</p>
+            <span>{% include "htmx/buy-item.html" %}</span>
+            <small class="text-muted">{{item.limit}}</small>
+          </div>
+
+        </div>
+      </div>
+    
     {% endfor %}
   </div>
 
 </div>
+{{ block.super }}
 {% endblock %}

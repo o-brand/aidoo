@@ -52,3 +52,29 @@ class Sale(models.Model):
 
     # The time at which the sale was recorded
     time_of_sale = models.DateTimeField(default=timezone.now)
+
+
+class Transfer(models.Model):
+    """This model is used to represent the transfer of coins
+    from one user to another"""
+    # Primary key
+    transfer_id = models.BigAutoField(primary_key=True)
+
+    # Foreign key to User giving the money
+    sender = models.ForeignKey(User, 
+        related_name="sender", 
+        on_delete=models.CASCADE)
+
+    # Foreign key to User receiving the money
+    recipient = models.ForeignKey(User, 
+        related_name="recipient", 
+        on_delete=models.CASCADE)
+
+    # Amount of money being transferred
+    amount = models.IntegerField()
+
+    # Message to send to the beneficiary
+    note = models.CharField(max_length=250, default="")
+
+    # The time at which the trasfer was recorded
+    time_of_transfer = models.DateTimeField(default=timezone.now)

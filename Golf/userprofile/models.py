@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.db.models import constraints
 from cloudinary.models import CloudinaryField
+from django.utils import timezone
 
 
 def profile_id_rename(instance, filename):
@@ -56,3 +57,6 @@ class Notification(models.Model):
 
     #Notification reviewed
     seen = models.BooleanField(default=False)
+
+    # Time notificiation recorded
+    time_of_notification = models.DateTimeField(default=timezone.now)

@@ -7,7 +7,7 @@
     hx-post="{% url 'buyitem' %}"
     hx-swap="innerHTML"
     hx-target="closest span"
-    hx-vals='{"item_id": {{ item.item_id }}, "quantity": document.querySelector("#quantity-selector-{{ item.item_id }}").value}'
+    hx-vals='{"item_id": {{ item.item_id }}, "quantity": 1'
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Get each for {{ item.price }}$</button>
   <select class="form-select" id="quantity-selector-{{ item.item_id }}">
     <option value="1">1</option>

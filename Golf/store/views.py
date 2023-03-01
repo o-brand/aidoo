@@ -4,9 +4,12 @@ import mimetypes
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from .models import Item, Sale
+from django.views import View
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
+from .models import Item, Sale
+from userprofile.models import Notification
+from .forms import TransferForm
 
 
 # Get actual user model.
@@ -81,13 +84,10 @@ def buyitem_call(request):
         buyer.save()
         sale.save()
 
-        # get the sale_id
-
         return render(request, "htmx/buy-item-bought.html")
 
     # If it is not POST
     raise Http404()
-
 
 def send_QRcode(request, data):
     """ create a qr code from the data and return an image stream """
@@ -121,3 +121,58 @@ def send_QRcode(request, data):
 
     response = HttpResponse(image_stream, content_type="image/jpg")       # Return the QR code data to the page
     return response
+
+class TransferView(View):
+    """Displays a form for transferring coins."""
+
+    form_class = TransferForm
+    template_name = "store/transfer.html"
+
+    def get(self, request, *args, **kwargs):
+        me = request.user
+        form = self.form_class(initial={"email": me.email, "biography": me.biography})
+        return render(
+            request, self.template_name, {"form": form, "poster_id": request.user.id}
+        )
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        me = request.user
+
+        if form.is_valid():
+            transfer = form.save(commit=False)
+            transfer.sender = me
+            try:
+                recipient = User.objects.get(username=form.cleaned_data["recipient"])
+            except User.DoesNotExist:
+                raise Http404("This user does not exist.")
+            transfer.recipient = recipient
+            transfer.save()
+
+            amount = form.cleaned_data["amount"]
+            if me.balance < amount:
+                raise Http404("You do not have sufficient funds.")
+
+            me.balance -= amount
+            recipient.balance += amount
+            me.save()
+            recipient.save()
+            
+            notification = Notification.objects.create(
+                user_id=recipient,
+                title=f"Gift from {me.username}",
+                content=(
+                    f"The user {me.username} gave you a gift of " + \
+                    f"{amount} doos."
+                ),
+                link="profile/me",
+            )
+            notification.save()
+            
+            return HttpResponse(
+                status=204,
+            ) # No content
+
+        return render(
+            request, self.template_name, {"form": form}
+        )
