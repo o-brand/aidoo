@@ -25,15 +25,11 @@ def home(request):
     purchased_items = [x.purchase for x in purchases]
 
     # limited item the user can buy 
-    try:
-        if items[0].limit_per_user == None:
-            limit = [i for i in range(1, items[0].stock)]
-        else:
-            limit = [i for i in range(1, items[0].limit_per_user + 1)]
+    if items[0].limit_per_user == None:
+        limit = [i for i in range(1, items[0].stock)]
+    else:    
+        limit = [i for i in range(1, items[0].limit_per_user + 1)]
 
-    except:
-        limit = ' '
-    
 
     context = {
         "items": items,
