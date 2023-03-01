@@ -1,20 +1,20 @@
 {% if item in purchases %}
   <button class="btn btn-primary disabled" disabled>Bought ✓</button>
 {% else %}
-<div class="input-group">
+  <div class="form-group">
+    <label for="quantity">Please select the quantity</label>
+    <select class="form-control" id="quantity" name="quantity">
+      {% for i in limit %}
+        <option value="{{ i }}">{{ i }}</option>
+      {% endfor %}
+    </select>
+  </div>
   <button class="btn btn-primary"
     _="on click add @disabled to me"
     hx-post="{% url 'buyitem' %}"
     hx-swap="innerHTML"
     hx-target="closest span"
-    hx-vals='{"item_id": {{ item.item_id }}, "quantity": document.querySelector("#quantity-selector-{{ item.item_id }}").value}'
-    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Get each for {{ item.price }}$</button>
-  <select class="form-select" id="quantity-selector-{{ item.item_id }}">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-  </select>
-</div>
+    hx-vals='{"item_id": {{ item.item_id }}, "quantity": document.getElementById('quantity').value}'
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Get  each one for {{ item.price }}$</button>
 {% endif %}
+

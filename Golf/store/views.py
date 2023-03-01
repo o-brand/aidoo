@@ -24,9 +24,21 @@ def home(request):
     purchases = Sale.objects.filter(buyer=request.user)
     purchased_items = [x.purchase for x in purchases]
 
+    # limited item the user can buy 
+    try:
+        if items[0].limit_per_user == None:
+            limit = [i for i in range(1, items[0].stock)]
+        else:
+            limit = [i for i in range(1, items[0].limit_per_user + 1)]
+
+    except:
+        limit = ' '
+    
+
     context = {
         "items": items,
-        "purchases": purchased_items
+        "purchases": purchased_items,
+        "limit" : limit
     }
     return render(request, "store/storefront.html", context)
 
