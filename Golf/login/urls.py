@@ -12,13 +12,6 @@ urlpatterns = [
         name="welcome"
     ),
 
-    # Privacy Policy page
-    path(
-        route="privacy",
-        view=TemplateView.as_view(template_name="login/privacy.html"),
-        name="privacy",
-    ),
-
     # Login page
     path(
         route="login",

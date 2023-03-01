@@ -24,5 +24,6 @@ urlpatterns = [
     path("profile/", include("userprofile.urls")),  # Profile pages
     path("chat/", include("chat.urls")), # Chats pages
     path("store/", include("store.urls")), # Store pages
-    path("superadmin/", include("superadmin.urls")) # Superadmin pages
+    path("superadmin/", include("superadmin.urls")), # Superadmin pages
+    path("help/", include("help.urls")), # Help pages
 ]

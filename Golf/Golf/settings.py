@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "chat.apps.ChatConfig",
     "store.apps.StoreConfig",
     "superadmin.apps.SuperadminConfig",
+    "help.apps.HelpConfig",
     "profanity",
     "cloudinary_storage",
     "cloudinary",

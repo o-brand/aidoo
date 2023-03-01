@@ -27,19 +27,6 @@ class WelcomeTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class PrivacyTestCase(TestCase):
-    """Tests for the Privacy Policy page."""
-
-    def test_privacy(self):
-        response = self.client.get("/privacy")
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="login/privacy.html")
-
-    def test_privacy_available_by_name(self):
-        response = self.client.get(reverse("privacy"))
-        self.assertEqual(response.status_code, 200)
-
-
 class LoginTestCase(TestCase):
     """Tests for the login and the logout page"""
 

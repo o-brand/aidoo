@@ -1,16 +1,11 @@
-from django.http import (
-    HttpResponseRedirect,
-    HttpResponseBadRequest,
-    HttpResponseNotFound,
-    HttpResponseForbidden,
-    HttpResponseServerError,
-)
+from django.http import HttpResponseRedirect
 
 
 # These are the urls which are available (even) if the user is NOT
 # authenticated.
-ENABLED_URLS = ("", "login", "signup", "logout", "privacy",
-    "account_activation_email")
+ENABLED_URLS = ("", "login", "signup", "logout",
+    "account_activation_email",
+    "help", "help/privacy", "help/community-guidelines", "help/manual")
 
 
 class LoginRequiredMiddleware:
