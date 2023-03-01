@@ -29,6 +29,8 @@ class User(AbstractUser):
     frozen_balance = models.IntegerField(default=0)
     # Used to keep track if the email is verified
     verified = models.BooleanField(default=False)
+    # Used to give privilige to the user to be able to deal with reporting
+    super_user = models.BooleanField(default=False)
     # Used to store the profile picture
     profile_picture = models.ImageField(upload_to=profile_picture_rename, default='profilepics/default')
     # Used to store the identity verification
