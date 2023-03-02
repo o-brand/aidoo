@@ -45,11 +45,6 @@ class RoomsView(ListView):
         return _query_rooms(me)
 
 
-def refreshrooms_call(request):
-    """Refresh rooms."""
-    me = request.user
-    return render(request, "htmx/rooms-list.html", {"rooms": _query_rooms(me)})
-
 def searching_modal(request):
     """Searching modal."""
     return render(request, "chat/searching.html")
