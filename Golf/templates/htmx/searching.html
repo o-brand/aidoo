@@ -10,7 +10,7 @@
     <tr>
       <td>{{ user.username }}</td>
       <td>
-        {% include 'htmx/chat_button.html' %}
+        <a href="{% url 'chat-room' user.id%}" class="btn btn-primary" onclick="$('#modal').modal('hide')">Chat</a>
       </td>
     </tr>
   {% endfor %}
