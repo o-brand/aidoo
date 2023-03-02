@@ -7,6 +7,11 @@ from django.utils import timezone
 User = get_user_model()
 
 
+def item_picture_rename(instance, filename):
+    """Renames the image before uploading."""
+    return '/'.join(['storeitem', instance.item_name.replace(' ','-').lower()])
+
+
 class Item(models.Model):
     """This model is used to represent an item for sale in the shop."""
     
@@ -34,7 +39,8 @@ class Item(models.Model):
         null=True)
 
     #image field
-    item_picture = models.ImageField(upload_to="storeitem/", blank=True)
+    item_picture = models.ImageField(upload_to=item_picture_rename)
+
 
 class Sale(models.Model):
     """This model is used to represent the sale of an item in the shop,
