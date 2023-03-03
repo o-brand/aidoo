@@ -155,13 +155,19 @@ class TransferView(View):
             try:
                 recipient = User.objects.get(username=form.cleaned_data["recipient"])
             except User.DoesNotExist:
-                raise Http404("This user does not exist.")
+                form.add_error('recipient', 'This user does not exist' )
+                return render(
+                    request, self.template_name, {"form": form}
+                )
             transfer.recipient = recipient
             transfer.save()
 
             amount = form.cleaned_data["amount"]
             if me.balance < amount:
-                raise Http404("You do not have sufficient funds.")
+                form.add_error('amount', 'You do not have sufficient funds' )
+                return render(
+                    request, self.template_name, {"form": form}
+                )
 
             me.balance -= amount
             recipient.balance += amount
