@@ -74,6 +74,14 @@
           class="btn btn-success"
           id = "btnApply{{ job_id }}">Complete ✓</button>
         {% endif %}
+      {% elif not job.assigned and not job.completed %}
+        <button class="btn btn-primary"
+        id="btnCancel{{ job.job_id }}"
+        _="on click add @disabled to me"
+        hx-post="{% url 'cancel' %}"
+        hx-vals='{"job_id": {{ job.job_id }} }'
+        hx-swap="outerHTML"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Cancel Job</button>
       {% endif %}
     </div>
   </div>

@@ -104,7 +104,7 @@ def me(request):
     # Posted jobs
     posted_jobs = []
 
-    posted = Job.objects.filter(poster_id=actual_user_id)
+    posted = Job.objects.filter(poster_id=actual_user_id, hidden=False)
 
     for job in posted:
          # Need to run the query, that is the reason for list.

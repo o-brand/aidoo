@@ -14,6 +14,13 @@
             type="submit">Accept
           </button>
       </form>
+      <button class="btn btn-primary"
+        id="btnCancel{{ job.job_id }}"
+        _="on click add @disabled to me"
+        hx-post="{% url 'cancel' %}"
+        hx-vals='{"job_id": {{ job.job_id }} }'
+        hx-swap="outerHTML"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Cancel Job</button>
     {% else %}
       {% for applicant in applicants %}
         {% if applicant.status == "AC" %}
@@ -31,6 +38,13 @@
     {% endif %}
   {% else %}
     <p>No one has applied for this job yet.</p>
+    <button class="btn btn-primary"
+        id="btnCancel{{ job.job_id }}"
+        _="on click add @disabled to me"
+        hx-post="{% url 'cancel' %}"
+        hx-vals='{"job_id": {{ job.job_id }} }'
+        hx-swap="outerHTML"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Cancel Job</button>
   {% endif %}
 {% else %}
   <p>This job is complete.</p>

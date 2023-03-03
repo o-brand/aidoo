@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
+from django.urls import reverse
 from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth import get_user_model
@@ -18,7 +19,7 @@ def details(request, job_id):
 
     # Read the job from the database
     try:
-        job = Job.objects.get(pk=job_id)
+        job = Job.objects.get(pk=job_id, hidden=False)
     except Job.DoesNotExist:
         raise Http404("This job does not exist.")
 
@@ -232,3 +233,52 @@ def report_call(request):
     # If it is not POST
     raise Http404()
 
+
+def cancel_call(request):
+    """Create a new application record in database."""
+    if request.method == "POST":
+        # Get the job ID or -1 if it is not found
+        job_id = request.POST.get("job_id", -1)
+        user = request.user
+
+        # Check if the job ID is valid
+        jobs = Job.objects.filter(pk=job_id, assigned=False, completed=False)
+        job_id_exists = len(jobs) == 1
+        if not job_id_exists:
+            raise Http404()
+
+        # Hide the job
+        jobs[0].hidden = True
+        jobs[0].save()
+
+        # Check if application exists
+        applications = Application.objects.filter(
+            Q(job_id=job_id) &
+            ~Q(status="WD")
+            )
+
+        # Send on site notification to the applicants
+        # It lets them know that the has been cancelled
+
+        for application in applications:
+
+            if application.applicant_id.opt_in_site_application:
+                Notification.objects.create(
+                    user_id=application.applicant_id,
+                    content="The job poster has cancelled the job: " + str(jobs[0].job_title),
+                    link="/profile/me"
+                    )
+        
+
+        # Redirect the user based on site they are on
+        response = HttpResponse()
+
+        if 'profile/me' in request.META['HTTP_REFERER']:
+            response["HX-Redirect"] = request.META['HTTP_REFERER']
+        else:
+            response["HX-Redirect"] = reverse('home')
+            
+        return response
+
+    # If it is not POST
+    raise Http404()

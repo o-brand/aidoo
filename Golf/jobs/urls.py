@@ -14,4 +14,6 @@ urlpatterns = [
     path("apply", views.apply_call, name="apply"),
     # Bookmarking a job, used by HTMX
     path("bookmark", views.bookmark_call, name="bookmark"),
+    # cancelling for a job, used by HTMX
+    path("cancel", views.cancel_call, name="cancel"),
 ]
