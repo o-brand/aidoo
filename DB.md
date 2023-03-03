@@ -22,7 +22,7 @@ python manage.py flush
 python manage.py loaddata ../db.json
 ```
 
-***The date of the actual save is 02/03/2023.***
+***The date of the actual save is 03/03/2023.***
 
 
 ## If you ...

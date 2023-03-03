@@ -251,6 +251,11 @@ def cancel_call(request):
         jobs[0].hidden = True
         jobs[0].save()
 
+        # Give the poster back the points
+        user.frozen_balance -= jobs[0].points
+        user.balance += jobs[0].points
+        user.save()
+
         # Check if application exists
         applications = Application.objects.filter(
             Q(job_id=job_id) &
@@ -268,6 +273,9 @@ def cancel_call(request):
                     content="The job poster has cancelled the job: " + str(jobs[0].job_title),
                     link="/profile/me"
                     )
+            
+            application.status = "CA"
+            application.save()
         
 
         # Redirect the user based on site they are on

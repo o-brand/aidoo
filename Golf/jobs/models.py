@@ -109,6 +109,7 @@ class Application(models.Model):
         WITHDRAWN = 'WD', ('Withdrawn') # Applicant withdrew from the job
         DONE = 'DN', ('Done') # Job has been finished
         CONFLICT = 'CO', ('Conflict') # Conflict in releasing points
+        CANCELLED = 'CA', ('Cancelled') # Cancelled job
 
     # Primary key
     application_id = models.BigAutoField(primary_key=True)
