@@ -1,18 +1,10 @@
-# python inactivity.py
+# python inactivity.py - DO NOT RUN LOCALLY!!
 
 import django
-import sys
-import os
-
-import heroku_db
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Golf.settings')
-DATABASES = {
-    "default": heroku_db.database("test" in sys.argv, True)
-}
 
 django.setup()
 
+import os
 import datetime
 from django.utils import timezone
 from django.conf import settings
@@ -60,8 +52,8 @@ for job in jobs:
 
     # Give the poster back the points
     poster = job.poster_id
-    poster.frozen_balance -= jobs[0].points
-    poster.balance += jobs[0].points
+    poster.frozen_balance -= job.points
+    poster.balance += job.points
     poster.save()
 
     # Check if application exists
