@@ -77,10 +77,17 @@ class FormView(View):
             duration_half_hours = form.cleaned_data["duration_half_hours"]
             post = form.save(commit=False)
             post.points = (duration_hours * 12) + (duration_half_hours/60) * 12
+
+            me = request.user
+            if me.balance < post.points:
+                form.add_error(None, 'You do not have sufficient funds' )
+                return render(
+                    request, self.template_name, {"form": form, "poster_id": request.user.id}
+                )
+
             post.save()
 
             # Freeze points
-            me = request.user
             me.frozen_balance = me.frozen_balance + post.points
             me.balance = me.balance - post.points
             me.save()

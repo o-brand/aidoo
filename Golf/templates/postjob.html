@@ -56,6 +56,15 @@
         {{ form.duration_hours }} <span id="hourstxt">hour</span> and {{ form.duration_half_hours }} minutes. This means <span id="points">12</span> points.
       </p>
       <p>
+      {% if form.errors %}
+          {% for key, value in form.errors.items %}
+            {% if key == "__all__" %}
+              <p class="error">{{ value.as_text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </p>
+      <p>
         {{ form.deadline.label_tag }}<br/>
         {{ form.deadline }}<br/>
         {% if form.errors %}
@@ -65,7 +74,7 @@
             {% endif %}
           {% endfor %}
         {% endif %}
-      </p>
+      </p>  
     </div>
     <div class="modal-footer">
       <input type="hidden" name="poster_id" value="{{ poster_id }}" />
