@@ -52,7 +52,7 @@ def buyitem_call(request):
     if request.method == "POST":
         # Get the item ID or -1 if it is not found
         item_id = request.POST.get("item_id", -1)
-        user = request.user
+        buyer = request.user
 
         # Check if the item ID is valid
         items = Item.objects.filter(pk=item_id)
@@ -63,9 +63,6 @@ def buyitem_call(request):
 
         if not item.on_offer:
             raise Http404()
-
-        # Get buyer
-        buyer = User.objects.get(id=user.id)
 
         # Get quantity
         try:
@@ -91,8 +88,8 @@ def buyitem_call(request):
         item.stock = item.stock - sale.quantity
 
         item.save()
-        buyer = buyer.save()
-        sale = sale.save()
+        buyer.save()
+        sale.save()
 
         send_QRcode(buyer.email, sale.pk)
 
@@ -106,6 +103,7 @@ def send_QRcode(email, data):
     qr = qrcode.make(data)           # pass in the URL to calculate the QR code image bytes
     buf = BytesIO()                      # Create a BytesIO to temporarily store the generated image data
     qr.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
+    image_stream = buf.getvalue()
 
     subject = "Aidoo Shop Purchase"
     body = "here is the QR code for the purchase"
