@@ -1,4 +1,17 @@
-# python manage.py shell -c="exec(open('inactivity.py').read())"
+# python inactivity.py
+
+import django
+import sys
+import os
+
+import heroku_db
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Golf.settings')
+DATABASES = {
+    "default": heroku_db.database("test" in sys.argv, True)
+}
+
+django.setup()
 
 import datetime
 from django.utils import timezone
