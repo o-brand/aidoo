@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from django.urls import reverse
+from django.utils import timezone
 from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth import get_user_model
@@ -35,7 +36,7 @@ def details(request, job_id):
     # Obtains the status of the logged in user for the viewed job
     try:
         status = Application.objects.filter(
-            applicant_id=request.user.id, 
+            applicant_id=request.user.id,
             job_id=job.job_id)[0].status
     except:
         status = 'NA'
@@ -210,7 +211,7 @@ def apply_call(request):
                     content="You can now choose an applicant for the job: " + str(jobs[0].job_title),
                     link="/profile/me"
                     )
-        
+
         return render(
             request, "htmx/applied.html", {"job_id": job_id}
         )
@@ -267,7 +268,7 @@ def cancel_call(request):
         applications = Application.objects.filter(
             Q(job_id=job_id) &
             ~Q(status="WD")
-            )
+        )
 
         # Send on site notification to the applicants
         # It lets them know that the has been cancelled
@@ -279,11 +280,12 @@ def cancel_call(request):
                     user_id=application.applicant_id,
                     content="The job poster has cancelled the job: " + str(jobs[0].job_title),
                     link="/profile/me"
-                    )
-            
+                )
+
             application.status = "CA"
+            application.time_of_final_status = timezone.now()
             application.save()
-        
+
 
         # Redirect the user based on site they are on
         response = HttpResponse()
@@ -292,7 +294,7 @@ def cancel_call(request):
             response["HX-Redirect"] = request.META['HTTP_REFERER']
         else:
             response["HX-Redirect"] = reverse('home')
-            
+
         return response
 
     # If it is not POST
