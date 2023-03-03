@@ -7,6 +7,7 @@
 {% include 'navigation.html' %}
 
 <div class="container">
+<div class="row">
   <section class="text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
@@ -15,68 +16,54 @@
       </div>
     </div>
   </section>
-</div>
 
-<div class="album py-1 bg-light">
-  <div class="btn-group justify-content-end">
-    <button type="button" class="btn btn-secondary shop-button"><i class="bi bi-basket2-fill"></i></button>
-    </button>
+  <div class="album py-1 bg-light">
+    <p class="">Current balance: <i class="bi bi-triangle"></i> {{me.balance}}</p>
   </div>
-  <p class="">Current balance: {{me.balance}}</p>
 </div>
 
-<div class="container-fluid">
 <!--<div class="container-fluid" style="margin:34px;">-->  
-  <div class="d-flex flex-row">
-    <div class="col">
-    <div class="row g-3">
-      <div class="card rounded-4 shadow-sm" style="height: 22rem; width: 18rem; margin:10px; display:grid;">
-      <div class="card-body">
-
-        <div class="card-title">
-          <h4>Gift doos</h4>
-          <!--picture-->
-          <svg class="bd-placeholder-img card-img-top" role="img" aria-label="Placeholder: Thumbnail" ><rect fill="#ffffff"/><text fill="#eceeef">Picture</text></svg>
-
+  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1">
+      <div class="col p-1">
+        <div class="card w-100 rounded-4 shadow-sm store-card m-1">
+          <div class="card-body">
+            <div class="card-title">
+              <h6>Gift doos</h6>
+              <!--picture-->
+              <img src="{{ item.item_picture.url }}">
+            </div>
+            <div class="card-text" style="height:70px;overflow: scroll;">
+              <small>
+                You can also gift some of your coins to a user of your choosing. 
+                Giving back is always in vogue.
+              </small>
+            </div>
+          </div>
+          <div class="card-footer rounded-4">
+            <button class="btn btn-success" hx-get="{% url 'transfer' %}" hx-target="#dialog">Let's doo it!</button>
+          </div>
         </div>
-        <div class="card-text">
-          <p>
-            You can also gift some of your coins to a user of your choosing. 
-            Giving back is always in vogue.
-          </p>
-          <button class="btn btn-success" hx-get="{% url 'transfer' %}" hx-target="#dialog">Let's doo it!</button>
-          <small class="text-muted">{{item.limit}}</small>
-        </div>
-
-      </div>
     </div>
     
     {% for item in items %}
-    
-    <div class="card rounded-4 shadow-sm" style="height: 22rem; width: 18rem; margin:10px; display:grid;">
-        <div class="card-body">
-
-          <div class="card-title">
-            <h4>{{item.item_name}}</h4>
-            <img src="{{ item.item_picture.url }}" style="width: 200px;height: 150px; object-fit: contain;">
-
+      <div class="col p-1">
+        <div class="card w-100 rounded-4 shadow-sm store-card m-1">
+          <div class="card-body">
+            <div class="card-title">
+              <h6>{{item.item_name}}</h6>
+              <img src="{{ item.item_picture.url }}">
+            </div>
+            <div class="card-text" style="height:70px;overflow: scroll;">
+              <small>{{item.description}}</small>
+            </div>
           </div>
-          <div class="card-text" style="height:70px;overflow: scroll;">
-            <p>{{item.description}}</p>
+          <div class="card-footer rounded-4">
+            <span>{% include "htmx/buy-item.html" %}</span>
           </div>
-          <div>
-            <span style="width:120px;">{% include "htmx/buy-item.html" %}</span>
-            <small class="text-muted">{{item.limit}}</small>
-          </div>
-
         </div>
       </div>
-    
     {% endfor %}
-  </div>
-  </div>  
-  </div>
-
+    </div>
 </div>
 {{ block.super }}
 {% endblock %}

@@ -367,3 +367,24 @@ a:hover {
    color: blue;
    cursor: pointer;
 }
+
+.store-card {
+  height: 22rem;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display:grid;
+  flex-grow:1;
+}
+
+.store-card img {
+  width: 160px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.store-card .card-footer {
+  border: none;
+  background-color: white;
+}
+
+
