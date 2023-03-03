@@ -58,7 +58,15 @@
             </div>
           </div>
           <div class="card-footer rounded-4">
-            <span>{% include "htmx/buy-item.html" %}</span>
+            <div class="d-flex justify-content-start">
+              <span>{% include "htmx/buy-item.html" %}</span>
+              <select class="form-select w-25" aria-label="Default select example">
+                <option selected>Qty</option>
+                <option value="{{limits.item}}">{{limits.item}}</option>
+              </select>
+          </div>
+            
+            
           </div>
         </div>
       </div>

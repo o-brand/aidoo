@@ -30,10 +30,19 @@ def home(request):
     items = Item.objects.filter(on_offer=True)
     purchases = Sale.objects.filter(buyer=request.user)
     purchased_items = [x.purchase for x in purchases]
-
+    items_limited = {
+        k:
+        min(
+            k.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
+                purchase=k, buyer=request.user)]),
+            k.stock)+1
+        if k.limit_per_user is not None else k.stock for k in items
+    }
+    
     context = {
         "items": items,
-        "purchases": purchased_items
+        "purchases": purchased_items,
+        "limits": items_limited,
     }
     return render(request, "store/storefront.html", context)
 

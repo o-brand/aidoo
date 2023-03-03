@@ -8,6 +8,6 @@
     hx-swap="innerHTML"
     hx-target="closest span"
     hx-vals='{"item_id": {{ item.item_id }}, "quantity": 1}'
-    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Get for {{ item.price }}$</button>
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'><i class="bi bi-triangle"></i> {{ item.price }}</button>
 </div>
 {% endif %}
