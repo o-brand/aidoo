@@ -43,15 +43,6 @@ def home(request):
             print("hi")
             forms[k] = False
 
-    # forms = {
-    #     k:
-    #     BuyForm(range(1,min(
-    #         k.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
-    #             purchase=k, buyer=request.user)]),
-    #         k.stock)+1
-    #     if k.limit_per_user is not None else k.stock)) for k in items
-    # }
-
     context = {
         "items": items,
         "purchases": purchased_items,
@@ -100,58 +91,6 @@ def buyitem_call(request):
             sale = sale.save()
 
     return HttpResponse(status=204)
-
-
-def buyitem(request):
-    """User buys an item from the store"""
-    if request.method == "POST":
-        # Get the item ID or -1 if it is not found
-        item_id = request.POST.get("item_id", -1)
-        buyer = request.user
-
-        # Check if the item ID is valid
-        items = Item.objects.filter(pk=item_id)
-        item_id_exists = len(items) == 1
-        if not item_id_exists:
-            raise Http404()
-        item = items[0]
-
-        if not item.on_offer:
-            raise Http404()
-
-        # Get quantity
-        try:
-            quantity = int(request.POST.get("quantity", -1))
-        except ValueError:
-            raise Http404()
-        if quantity <= 0:
-            raise Http404()
-
-        # Create new sale instance
-        sale = Sale.objects.create(
-            purchase = item,
-            buyer = buyer,
-            quantity = quantity
-        )
-
-        # Work...
-        # We def need to do a validation of sufficient funds on the frontend,
-        # but should we also do it here? If so, also for job post/job done?
-        # Deduct points from buyer
-        buyer.balance = buyer.balance - item.price * sale.quantity
-        # Reduce the stock of the item by the sale qty
-        item.stock = item.stock - sale.quantity
-
-        item.save()
-        buyer.save()
-        sale.save()
-
-        send_QRcode(buyer.email, sale.pk)
-
-        return render(request, "htmx/buy-item-bought.html")
-
-    # If it is not POST
-    raise Http404()
 
 def send_QRcode(email, data):
     """ create a qr code from the data and return an image stream """
