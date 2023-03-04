@@ -45,12 +45,16 @@
         </div>
     </div>
     
-    {% for item in items %}
+    {% for item, form in forms.items %}
       <div class="col p-1">
         <div class="card w-100 rounded-4 shadow-sm store-card m-1">
           <div class="card-body">
             <div class="card-title">
-              <h6>{{item.item_name}}</h6>
+              <div class="d-flex justify-content-between">
+                <h6>{{item.item_name}}</h6>
+                <span class="badge bg-success"><i class="bi bi-triangle"></i> {{item.price}}</span>
+              </div>
+              
               <img src="{{ item.item_picture.url }}">
             </div>
             <div class="card-text" style="height:70px;overflow: scroll;">
@@ -59,14 +63,18 @@
           </div>
           <div class="card-footer rounded-4">
             <div class="d-flex justify-content-start">
-              <span>{% include "htmx/buy-item.html" %}</span>
-              <select class="form-select w-25" aria-label="Default select example">
-                <option selected>Qty</option>
-                <option value="{{limits.item}}">{{limits.item}}</option>
-              </select>
-          </div>
-            
-            
+            <!--<span>{% include "htmx/buy-item.html" %}</span>-->
+              {% if not form %}
+                {% include 'htmx/buy-item-bought.html' %}
+              {% else %}
+                <form action="" hx-post="{% url 'buyitem' %}" hx-trigger="submit">
+                  {% csrf_token %}
+                  <input type="hidden" value="{{item.item_id}}" name="purchase"/>
+                  {{form.quantity}}
+                  <input type="submit" value="Buy" class="btn btn-primary" name="form"/>
+                </form>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>

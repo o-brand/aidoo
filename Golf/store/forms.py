@@ -1,10 +1,27 @@
 from django import forms
-from django.forms import ModelForm
-from .models import Transfer
+from django.forms import ModelForm, Form
+from .models import Transfer, Sale
 from .validators import validate_recipient
 from Golf.validators import validate_profanity
 
+class BuyForm(Form):
+    """Form to buy an item"""
+    def __init__(self, choices, *args, **kwargs):
+      super(BuyForm, self).__init__(*args, **kwargs)
+      self.fields['quantity'].choices = [(f"{x}",f"{x}") for x in choices]
 
+    quantity = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+                "style": "width: auto; display: initial;",
+            }
+        ),
+        required=True,
+        label="Quantity",
+    )
+
+    
 class TransferForm(ModelForm):
     """Form to transfer coins"""
     recipient = forms.CharField(

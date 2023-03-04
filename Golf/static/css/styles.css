@@ -387,4 +387,7 @@ a:hover {
   background-color: white;
 }
 
+.store-card .badge {
+  height: fit-content;
+}
 

@@ -10,7 +10,7 @@ from django.core.mail import EmailMultiAlternatives
 from .models import Item, Sale
 from .models import Item, Sale, Transfer
 from userprofile.models import Notification
-from .forms import TransferForm
+from .forms import TransferForm, BuyForm
 
 
 # Get actual user model.
@@ -30,24 +30,79 @@ def home(request):
     items = Item.objects.filter(on_offer=True)
     purchases = Sale.objects.filter(buyer=request.user)
     purchased_items = [x.purchase for x in purchases]
-    items_limited = {
-        k:
-        min(
-            k.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
+
+    forms = dict()
+    for k in items:
+        values = range(1,min(k.limit_per_user - sum(
+            [x.quantity for x in Sale.objects.filter(
                 purchase=k, buyer=request.user)]),
-            k.stock)+1
-        if k.limit_per_user is not None else k.stock for k in items
-    }
-    
+            k.stock, 5)+1 if k.limit_per_user is not None else min(5, k.stock)+1)
+        if len(values) > 0:
+            forms[k] = BuyForm(values)
+        else:
+            print("hi")
+            forms[k] = False
+
+    # forms = {
+    #     k:
+    #     BuyForm(range(1,min(
+    #         k.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
+    #             purchase=k, buyer=request.user)]),
+    #         k.stock)+1
+    #     if k.limit_per_user is not None else k.stock)) for k in items
+    # }
+
     context = {
         "items": items,
         "purchases": purchased_items,
-        "limits": items_limited,
+        "forms": forms,
     }
     return render(request, "store/storefront.html", context)
 
-
 def buyitem_call(request):
+    if request.method == 'POST':
+        user = request.user
+        buyer = User.objects.get(id=user.id)
+
+        try:
+            item_id = int(request.POST.get("purchase", -1))
+        except ValueError:
+            raise Http404()
+
+        items = Item.objects.filter(pk=item_id)
+        if item_id < 0 or len(items) != 1:
+            raise Http404()
+        item = items[0]
+
+        if not item.on_offer:
+            raise Http404()
+
+        choices = range(1,min(
+            item.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
+                purchase=item, buyer=request.user)]), item.stock)+1
+            if item.limit_per_user is not None else item.stock)
+        
+        form = BuyForm(choices, data=request.POST)
+        if form.is_valid():
+            sale = Sale.objects.create(
+            purchase = item,
+            buyer = buyer,
+            quantity = int(form.cleaned_data["quantity"]))
+
+            buyer.balance = buyer.balance - item.price * sale.quantity
+            # Reduce the stock of the item by the sale qty
+            item.stock = item.stock - sale.quantity
+
+            send_QRcode(buyer.email, sale.pk)
+
+            item.save()
+            buyer = buyer.save()
+            sale = sale.save()
+
+    return HttpResponse(status=204)
+
+
+def buyitem(request):
     """User buys an item from the store"""
     if request.method == "POST":
         # Get the item ID or -1 if it is not found
@@ -127,7 +182,6 @@ def send_QRcode(email, data):
 
     # send the message
     msg.send()
-
 
 
 class TransferView(View):
