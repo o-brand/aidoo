@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 {% load static %}
 
 {% block title %}Admin{% endblock %}
 
 {% block content %}
 {% include 'navigation.html' %}
-
+{{ block.super }}
 {% endblock %}

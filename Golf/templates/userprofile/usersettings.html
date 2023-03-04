@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 {% load static %}
 
 {% block title %}My profile{% endblock %}
@@ -47,4 +47,5 @@
     </div>
   </div>
 </div>
+{{ block.super }}
 {% endblock %}

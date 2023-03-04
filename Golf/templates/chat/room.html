@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 {% load static %}
 
 {% block title %}Chat with {{ room.user_2 }}{% endblock %}
@@ -63,4 +63,6 @@
     const other_user_id = "{{ room.user_2.id }}";
   </script>
   <script src="{% static 'js/room.js' %}"></script>
+
+{{ block.super }}
 {% endblock %}

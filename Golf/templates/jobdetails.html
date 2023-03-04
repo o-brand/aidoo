@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 {% load static %}
 
 {% block title %}Details of {{ job.job_title }}{% endblock %}
@@ -125,4 +125,5 @@
   const poster_id = "{{ job.poster_id.id }}";
 </script>
 <script src="{% static 'js/jobdetails.js' %}"></script>
+{{ block.super }}
 {% endblock %}
