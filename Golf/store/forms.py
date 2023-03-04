@@ -56,6 +56,7 @@ class TransferForm(ModelForm):
     ),
     label="Message for recipient",
     validators=[validate_profanity],
+    required=False,
     )
 
     class Meta:

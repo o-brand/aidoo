@@ -1,13 +1,91 @@
+import datetime
+from faker import Faker
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from Golf.utils import LoginRequiredTestCase
-from .models import Item, Sale
+from .models import Item, Sale, Transfer
+from .forms import TransferForm
 
 
 # Get actual user model.
 User = get_user_model()
+
+
+class TransferTestCase(LoginRequiredTestCase):
+    """Tests for transferring coins"""
+    def setUp(self):
+        super().setUp()
+
+        fake = Faker()
+
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "0"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = datetime.datetime.now()
+        User.objects.create_user(**credentials)
+        credentials.clear()
+
+    def test_transfer_page(self):
+        # test availability via URL
+        response = self.client.get("/store/transfer")
+        self.assertEqual(response.status_code, 200)
+
+    def test_transfer_page_address(self):
+        # test availability via URL
+        response = self.client.get("/store/transfer")
+        self.assertTemplateUsed(response, template_name="store/transfer.html")
+
+    def test_transfer_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("transfer"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_redirect_since_everything_is_correct(self):
+        # test if the user is redirected if the fields are filled in with valid data
+        original_balance = User.objects.get(pk=1).balance
+        new_form = {
+            "recipient": User.objects.get(pk=1),
+            "amount": "10",
+            "note": "A little gift for you"
+        }
+        response = self.client.post(reverse("transfer"), data=new_form)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(User.objects.get(pk=1).balance, original_balance+10)
+    
+    def test_empty_form(self):
+        # behaviour if empty form is submitted
+        form = TransferForm(data={"something": "xyz"})
+
+        self.assertEqual(2, len(form.errors))
+        
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required", form.errors[key][0])
+
+    def test_missing_amount_form(self):
+        # behaviour if amount ism missing from form
+        form = TransferForm(
+            data={
+                "recipient": User.objects.get(pk=1).username,
+            })
+
+        self.assertEqual(1, len(form.errors))
+
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required", form.errors[key][0])
+    
+    #TODO
+    def test_incorrect_username_form(self):
+        # behaviour if recipient username doesn't exist
+        pass
 
 
 class StoreTestCase(LoginRequiredTestCase):
@@ -20,7 +98,6 @@ class StoreTestCase(LoginRequiredTestCase):
         response = self.client.get("/store/")
         self.assertEqual(response.status_code, 200)
 
-    
     def test_store_page_address(self):
         # test availability via URL
         response = self.client.get("/store/")
