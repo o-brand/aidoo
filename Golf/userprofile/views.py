@@ -30,8 +30,8 @@ def userdetails(request, user_id):
         raise Http404()
     user = users[0]
 
-    posted_active = Job.objects.filter(poster_id=user.id, completed=False)
-    posted_inactive = Job.objects.filter(Q(completed=True) | Q(hidden=True), poster_id=user.id)
+    posted_active = Job.objects.filter(poster_id=user.id, completed=False, hidden=False)
+    posted_inactive = Job.objects.filter(completed=True, poster_id=user.id)
     chat_started = (
         len(
             Room.objects.filter(
@@ -77,7 +77,7 @@ def commitments(request):
 
     accepted = Application.objects.filter(
         Q(status="AC") &
-        Q(applicant_id=actual_user_id)    
+        Q(applicant_id=actual_user_id)
     )
 
     accepted_jobs = [(job.job_id, "Accepted") for job in accepted]
@@ -101,7 +101,7 @@ def applications(request):
 
     applied = Application.objects.filter(
         ~Q(status="CA") &
-        Q(applicant_id=actual_user_id)    
+        Q(applicant_id=actual_user_id)
     )
 
     applied_jobs = [(job.job_id, job.status) for job in applied]
@@ -146,13 +146,19 @@ def bookmarks(request):
     bookmarks = Bookmark.objects.filter(user_id=actual_user_id
         ).order_by("saving_time")
 
+    bookmarks_filtered = []
+    for bookmark in bookmarks:
+        job = Job.objects.get(pk=bookmark.job_id.pk)
+        if not job.hidden:
+            bookmarks_filtered.append(bookmark)
+
     context = {
         "me": me,
-        "bookmarks": bookmarks,
+        "bookmarks": bookmarks_filtered,
     }
 
     return render(request, "userprofile/bookmarks.html", context)
-    
+
 
 def me(request):
     """Private pofile page with more data."""
@@ -169,6 +175,7 @@ def me(request):
         "me": me,
     }
     return render(request, "userprofile/private.html", context)
+
 
 class ProfileEditView(View):
     """Displays a form for editing profile details."""
@@ -286,8 +293,8 @@ def selectapplicant_call(request):
                 # If true, create a new notification in the database
                 if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
-                        user_id = user.applicant_id, 
-                        content = "You've been rejected from the job: " + str(job.job_title), 
+                        user_id = user.applicant_id,
+                        content = "You've been rejected from the job: " + str(job.job_title),
                         link = "/jobs/" + str(job.job_id)
                         )
 
@@ -317,8 +324,8 @@ def selectapplicant_call(request):
                 # If true, create a new notification in the database
                 if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
-                        user_id = user.applicant_id, 
-                        content = "You've been accepted for the job: " + str(job.job_title), 
+                        user_id = user.applicant_id,
+                        content = "You've been accepted for the job: " + str(job.job_title),
                         link = "/jobs/" + str(job.job_id)
                         )
 
@@ -327,7 +334,7 @@ def selectapplicant_call(request):
         return render(
             request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
         )
-        
+
     # If it is not POST
     raise Http404()
 
@@ -404,21 +411,21 @@ class AccountSettingsView(View):
             me.opt_in_emails_application = False
         elif not me.opt_in_emails_application and button_check_1 == ['on']:
             me.opt_in_emails_application = True
-        
+
         # If checkbox state doesn't match email preference on submit
         # then change the on site preference
         if me.opt_in_site_application and button_check_2 == []:
             me.opt_in_site_application = False
         elif not me.opt_in_site_application and button_check_2 == ['on']:
             me.opt_in_site_application = True
-        
+
         # If checkbox state doesn't match email preference on submit
         # then change the email preference
         if me.opt_in_site_applicant and button_check_3 == []:
             me.opt_in_site_applicant = False
         elif not me.opt_in_site_applicant and button_check_3 == ['on']:
             me.opt_in_site_applicant = True
-        
+
         me.save()
 
         # Render the form again
@@ -430,17 +437,17 @@ class NotificationsPageView(ListView):
     model = Notification
     context_object_name = "notifs"
     template_name = "userprofile/notifications.html"
-    
+
     # Returns a query of all notifications for the logged in user
     def get_queryset(self):
         me = self.request.user
         return Notification.objects.filter(user_id=me.id)
-    
+
     # Returns a count of all notifications for the logged in user
     def notif_count(self):
         """Returns the number of notifications."""
         return self.get_queryset().count()
-    
+
     # Returns a count of all unseen notifications
     def notif_seen_count(self):
         """Returns the number of unseen notifications."""
@@ -458,7 +465,7 @@ class NotificationsPageView(ListView):
         context["notif_seen_count"] = self.notif_seen_count()
 
         return context
-    
+
 def notification_seen(request):
     """Marks a notification as seen when clicked by the user."""
     if request.method == "POST":
