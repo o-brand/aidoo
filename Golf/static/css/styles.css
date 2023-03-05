@@ -323,7 +323,7 @@ a:hover {
 }
 
 .chat_foot {
-  width: 100px;
+  width: 110px;
   position: relative;
 }
 
@@ -335,16 +335,27 @@ a:hover {
   border: 2px solid #f4f5f7;
   margin-top: 1px;
   padding: 1px;
-  width: 100%;
+  width: 150%;
+  resize: none;
+  border-right: none;
 }
 
 #chat-message-submit {
   color: white;
-  background-color: #4F7cff;
+  width: 60px;
+  height: 50px;
   text-align: center;
+  background-color: #4F7cff;
   border-radius: 5px;
-  border-color: #4F7cff;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   position: absolute;
+  float: right;
+  border-right: none;
+  outline: none;
+  right: 0;
+  vertical-align:middle;
+  line-height: 50px;
 }
 
 .new-notification {
@@ -399,20 +410,35 @@ a:hover {
 
 #job-message-submit{
   color: white;
-  background-color: #4F7cff;
+  width: 60px;
+  height: 50px;
   text-align: center;
+  background-color: #4F7cff;
   border-radius: 5px;
-  border-color: #4F7cff;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 20px;
+  border-color: black;
   position: absolute;
+  float: right;
+  border-right: none;
+  outline: none;
+  right: 0;
+  vertical-align:middle;
+  line-height: 50px;
 }
 
 #job-message-input{
-  font-size: 17px;
+  font-size: 20px;
   box-sizing: border-box;
   outline: none;
   border-radius: 10px;
   border: 2px solid #f4f5f7;
   margin-top: 1px;
   padding: 1px;
-  width: 100%;
+  width: 150%;
+  resize: none;
+  border-right: none;
 }
+
+
