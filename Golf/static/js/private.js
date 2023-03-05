@@ -28,11 +28,6 @@ $(".tablinks").each(function() {
 
 // Open a tab
 function openTab(content) {
-  // Get all elements with class="tabcontent" and hide them
-  $(".tabcontent").each(function() {
-    $(this).hide();
-  });
-
   // Get all elements with class="tablinks" and remove the class "active"
   $(".tablinks").each(function() {
     $(this).removeClass("active");
