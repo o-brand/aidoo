@@ -44,9 +44,17 @@
     <button hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-plus-square"></i>
     </button>
+
+    <button
+      type="button"
+      class="btn btn-danger btn-floating btn-lg"
+      id="btn-back-to-top"
+      >
+      <i class="bi bi-arrow-up"></i>
+  </button>
 </div>
 
-{{ block.super }}
-
 <script src="{% static 'js/private.js' %}"></script>
+
+{{ block.super }}
 {% endblock %}
