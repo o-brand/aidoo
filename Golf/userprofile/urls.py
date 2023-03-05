@@ -35,4 +35,12 @@ urlpatterns = [
     path("privatecard", views.my_details, name="privatecard"),
     # Profile editing form
     path("editprofile", views.ProfileEditView.as_view(), name="editprofile"),
+    # Private profile commitments
+    path("commitments", views.commitments, name="commitments"),
+    # Private profile applications
+    path("applications", views.applications, name="applications"),
+    # Private profile posts
+    path("posts", views.posts, name="posts"),
+    # Private profile posts
+    path("bookmarks", views.bookmarks, name="bookmarks"),
 ]

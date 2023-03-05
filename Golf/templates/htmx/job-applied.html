@@ -1,7 +1,19 @@
 <p class="card-text">
     <i class="bi bi-activity"></i>
     <strong>
-      {{ status }}
+      {% if status == "AC" %}
+        Accepted
+      {% elif status == "AP" %}
+        Applied
+      {% elif status == "WD" %}
+        Withdrawn
+      {% elif status == "RE" %}
+        Rejected
+      {% elif status == "DN" %}
+        Done
+      {% elif status == "C" %}
+        In Review
+      {% endif %}
     </strong>
     &nbsp;
     <i class="bi bi-geo-alt"></i>
@@ -17,10 +29,10 @@
     <i class="bi bi-triangle"></i>
     {{ job.points }}
   </p>
-{% if status == "AC" %}
+  {% if status == "AC" %}
     <p>Poster: {{ job.poster_id.username }}</p>
     <p><a href="{% url 'chat-room' job.poster_id.id%}" class="btn btn-primary">Chat</a></p>
-{% elif status == "AP" %}
+  {% elif status == "AP" %}
     <button class="btn btn-outline-danger"
         _="on click add @disabled to me"
         hx-post="{% url 'withdraw' %}"
@@ -29,12 +41,12 @@
         hx-vals='{"job_id": {{ job.job_id }} }'
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Withdraw</button>
     <p>If you withdraw, you cannot apply again.</p>
-{% elif status == "WD" %}
+  {% elif status == "WD" %}
     <p>You withdrew from this job.</p>
-{% elif status == "RE" %}
+  {% elif status == "RE" %}
     <p>The poster rejected your application. Sorry.</p>
-{% elif status == "DN" %}
+  {% elif status == "DN" %}
     <p>You finished this job.</p>
-{% elif status == "C" %}
+  {% elif status == "C" %}
     <p>There is a conflict between you and the poster. We are working on it.</p>
-{% endif %}
+  {% endif %}

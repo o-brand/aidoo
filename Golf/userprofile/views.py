@@ -64,6 +64,93 @@ def my_details(request):
     }
     return render(request, "userprofile/private-card.html", context)
 
+def commitments(request):
+    """Private pofile page with more data."""
+    actual_user_id = request.user.id
+
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    me = users[0]
+
+    accepted = Application.objects.filter(
+        Q(status="AC") &
+        Q(applicant_id=actual_user_id)    
+    )
+
+    accepted_jobs = [(job.job_id, "Accepted") for job in accepted]
+
+    context = {
+        "me": me,
+        "applications": accepted_jobs,
+    }
+    return render(request, "userprofile/commitments.html", context)
+
+def applications(request):
+    """Private pofile page with more data."""
+    actual_user_id = request.user.id
+
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    me = users[0]
+
+    applied = Application.objects.filter(
+        ~Q(status="CA") &
+        Q(applicant_id=actual_user_id)    
+    )
+
+    applied_jobs = [(job.job_id, job.status) for job in applied]
+
+    context = {
+        "me": me,
+        "applications": applied_jobs,
+    }
+    return render(request, "userprofile/applications.html", context)
+
+def posts(request):
+    actual_user_id = request.user.id
+
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    me = users[0]
+
+    posted = Job.objects.filter(poster_id=actual_user_id, hidden=False)
+
+    context = {
+        "me": me,
+        "posts": posted,
+    }
+
+    return render(request, "userprofile/posts.html", context)
+
+def bookmarks(request):
+    actual_user_id = request.user.id
+
+    # Check if the user ID is valid
+    users = User.objects.filter(pk=actual_user_id)
+    user_id_exists = len(users) == 1
+    if not user_id_exists:
+        raise Http404()
+    me = users[0]
+
+    bookmarks = Bookmark.objects.filter(user_id=actual_user_id
+        ).order_by("saving_time")
+
+    context = {
+        "me": me,
+        "bookmarks": bookmarks,
+    }
+
+    return render(request, "userprofile/bookmarks.html", context)
+    
 
 def me(request):
     """Private pofile page with more data."""
@@ -76,53 +163,8 @@ def me(request):
         raise Http404()
     me = users[0]
 
-    # Saved jobs
-    saved_jobs = []
-
-    saved = Bookmark.objects.filter(user_id=actual_user_id
-        ).order_by("saving_time")
-
-    for job in saved:
-        saved_jobs.append([job.job_id, job.saving_time])
-
-    bookmark_paginator = Paginator(saved, 2)
-    bookmark_page = request.GET.get("bpage")
-    bookmarks = bookmark_paginator.get_page(bookmark_page)
-
-    # Applied jobs
-    applied_jobs = []
-
-    applied = Application.objects.filter(
-        ~Q(status="CA") &
-        Q(applicant_id=actual_user_id)    
-    )
-
-    for job in applied:
-        applied_jobs.append([job.job_id, job.status])
-
-    application_paginator = Paginator(applied_jobs, 2)
-    application_page = request.GET.get("apage")
-    applications = application_paginator.get_page(application_page)
-
-    # Posted jobs
-    posted_jobs = []
-
-    posted = Job.objects.filter(poster_id=actual_user_id, hidden=False)
-
-    for job in posted:
-         # Need to run the query, that is the reason for list.
-        applicants = list(Application.objects.filter(job_id=job.job_id))
-        posted_jobs.append([job, applicants])
-
-    posts_paginator = Paginator(posted_jobs, 2)
-    posts_page = request.GET.get("ppage")
-    posts = posts_paginator.get_page(posts_page)
-
     context = {
         "me": me,
-        "bookmarks": bookmarks,
-        "posts": posts,
-        "applications": applications,
     }
     return render(request, "userprofile/private.html", context)
 

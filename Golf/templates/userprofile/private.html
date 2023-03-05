@@ -12,240 +12,38 @@
 {% include 'navigation.html' %}
 
 <div class="container my-4">
-
-  {% if posts or applications or bookmarks %}
-  <div class="row mb-3">
-    <div class="col mb-3">
-      <div class="d-flex justify-content-between">
-        <h5>My details</h5>
-        <button hx-get="{% url 'editprofile' %}" hx-target="#dialog">
-          <i class="bi bi-pencil"></i>
-        </button>
-      </div>
-      {% include 'userprofile/private-card.html' %}
-    </div>
-    <div class="col">
-      <div class="d-flex justify-content-between">
-        <h5>My posts</h5>
-        <button hx-get="{% url 'post' %}" hx-target="#dialog">
-          <i class="bi bi-plus-square"></i>
-        </button>
-      </div>
-      {% if posts %}
-        <div>
-          {% for job, applicants in posts %}
-            <div class="card mb-2 job-card">
-              <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a></h5>
-                <span>
-                  {% include 'htmx/job-applicants.html' %}
-                </span>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-        <div class="d-flex justify-content-center">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              {% if posts.paginator.num_pages > 1 %}
-                <li class="page-item">
-                  {% if posts.has_previous %}
-                    <a class="page-link"
-                      href="?ppage=1{% if applications %}&apage={{applications.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
-                      First</a>
-                  {% else %}
-                    <p class="page-link disabled">First</p>
-                  {% endif %}
-                </li>
-              {% endif %}
-              <li class="page-item">
-                {% if posts.has_previous %}
-                  <a class="page-link"
-                    href="?ppage={{posts.previous_page_number}}{% if applications %}&apage={{applications.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
-                    Previous</a>
-                {% else %}
-                  <p class="page-link disabled">Previous</p>
-                {% endif %}
-              </li>
-              <li class="page-item active"><p class="page-link">{{posts.number}}</p></li>
-              <li class="page-item">
-                {% if posts.has_next %}
-                  <a class="page-link"
-                  href="?ppage={{posts.next_page_number}}{% if applications %}&apage={{applications.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
-                  Next</a>
-                {% else %}
-                  <p class="page-link disabled">Next</p>
-                {% endif %}
-              </li>
-              {% if posts.paginator.num_pages > 1 %}
-                <li class="page-item">
-                  {% if posts.has_next %}
-                    <a class="page-link"
-                    href="?ppage={{posts.paginator.num_pages}}{% if applications %}&apage={{applications.number}}{% endif %}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
-                    Last</a></li>
-                  {% else %}
-                    <p class="page-link disabled">Last</p>
-                  {% endif %}
-              {% endif %}
-            </ul>
-          </nav>
-        </div>
-      {% else %}
-        <p>No jobs posted yet!</p>
-      {% endif %}
-    </div>
-  </div>
   <div class="row">
-    <div class="col">
-      <h5>Ongoing applications</h5>
-      {% if applications %}
-        <div>
-          {% for job, status in applications %}
-            <div class="card mb-2 job-card">
-              <div class="card-body">
-                <div class="d-flex justify-content-between">
-                  <h5 class="card-title">
-                    <a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a>
-                  </h5>
-                </div>
-                <span>
-                  {% include 'htmx/job-applied.html' %}
-                </span>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-        <div class="d-flex justify-content-center">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              {% if applications.paginator.num_pages > 1 %}
-                <li class="page-item">
-                  {% if applications.has_previous %}
-                    <a class="page-link"
-                      href="?{% if posts %}ppage={{posts.number}}&{% endif %}apage=1{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
-                      First</a>
-                  {% else %}
-                    <p class="page-link disabled">First</p>
-                  {% endif %}
-                </li>
-              {% endif %}
-              <li class="page-item">
-                {% if applications.has_previous %}
-                  <a class="page-link"
-                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}apage={{applications.previous_page_number}}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
-                    Previous</a>
-                {% else %}
-                  <p class="page-link disabled">Previous</p>
-                {% endif %}
-              </li>
-              <li class="page-item active"><p class="page-link">{{applications.number}}</p></li>
-              <li class="page-item">
-                {% if applications.has_next %}
-                  <a class="page-link"
-                  href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if bookmarks %}apage={{applications.next_page_number}}&bpage={{bookmarks.number}}{% endif %}">
-                  Next</a>
-                {% else %}
-                  <p class="page-link disabled">Next</p>
-                {% endif %}
-              </li>
-              {% if applications.paginator.num_pages > 1 %}
-                <li class="page-item">
-                  {% if applications.has_next %}
-                    <a class="page-link"
-                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}apage={{applications.paginator.num_pages}}{% if bookmarks %}&bpage={{bookmarks.number}}{% endif %}">
-                    Last</a></li>
-                  {% else %}
-                    <p class="page-link disabled">Last</p>
-                  {% endif %}
-              {% endif %}
-            </ul>
-          </nav>
-        </div>
-      {% else %}
-        <p>No jobs posted yet!</p>
-      {% endif %}
+    <div class="col-2">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link" hx-get="{% url 'privatecard' %}" hx-target="#controls-div">My Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" hx-get="{% url 'commitments' %}" hx-target="#controls-div">Commitments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" hx-get="{% url 'posts' %}" hx-target="#controls-div">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" hx-get="{% url 'applications' %}" hx-target="#controls-div">Applications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"  hx-get="{% url 'bookmarks' %}" hx-target="#controls-div">Bookmarks</a>
+        </li>
+      </ul>
     </div>
-    <div class="col">
-      <h5>Bookmarked jobs</h5>
-      {% if bookmarks %}
-        <div>
-          {% for bookmark in bookmarks %}
-            <div class="card mb-2 job-card">
-              <div class="card-body">
-                <h5 class="card-title"><a href="{% url 'jobdetails' bookmark.job_id.job_id %}">{{bookmark.job_id.job_title }}</a></h5>
-                <p class="card-text">
-                  <i class="bi bi-geo-alt"></i>
-                  {{ bookmark.job_id.location }}
-                  &nbsp;
-                  <i class="bi bi-hourglass-split"></i>
-                  {% if bookmark.job_id.deadline is not None %}
-                    {{ bookmark.job_id.deadline | date:'d M Y' }}
-                  {% else %}
-                    None
-                  {% endif %}
-                  &nbsp;
-                  <i class="bi bi-triangle"></i>
-                  {{ bookmark.job_id.points }}
-                </p>
-                <p>
-                  Saved on {{bookmark.saving_time | date:'d M Y' }}
-                </p>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-        <div class="d-flex justify-content-center">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              {% if bookmarks.paginator.num_pages > 1 %}
-                <li class="page-item">
-                  {% if bookmarks.has_previous %}
-                    <a class="page-link"
-                      href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage=1">
-                      First</a>
-                  {% else %}
-                    <p class="page-link disabled">First</p>
-                  {% endif %}
-                </li>
-              {% endif %}
-              <li class="page-item">
-                {% if bookmarks.has_previous %}
-                  <a class="page-link"
-                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage={{bookmarks.previous_page_number}}">
-                    Previous</a>
-                {% else %}
-                  <p class="page-link disabled">Previous</p>
-                {% endif %}
-              </li>
-              <li class="page-item active"><p class="page-link">{{bookmarks.number}}</p></li>
-              <li class="page-item">
-                {% if bookmarks.has_next %}
-                  <a class="page-link"
-                  href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage={{bookmarks.next_page_number}}">
-                  Next</a>
-                {% else %}
-                  <p class="page-link disabled">Next</p>
-                {% endif %}
-              </li>
-              {% if bookmarks.paginator.num_pages > 1 %}
-                <li class="page-item">
-                  {% if bookmarks.has_next %}
-                    <a class="page-link"
-                    href="?{% if posts %}ppage={{posts.number}}&{% endif %}{% if applications %}apage={{applications.number}}&{% endif %}bpage={{bookmarks.paginator.num_pages}}">
-                    Last</a></li>
-                  {% else %}
-                    <p class="page-link disabled">Last</p>
-                  {% endif %}
-              {% endif %}
-            </ul>
-          </nav>
-        </div>
-      {% else %}
-        <p>No jobs posted yet!</p>
-      {% endif %}
+    <div class="col-10" id="controls-div">
+      <div>{% include 'userprofile/private-card.html' %}</div>
     </div>
   </div>
-  {% endif %}
+
+    <button hx-get="{% url 'editprofile' %}" hx-target="#dialog">
+      <i class="bi bi-pencil"></i>
+    </button>
+
+    <button hx-get="{% url 'post' %}" hx-target="#dialog">
+      <i class="bi bi-plus-square"></i>
+    </button>
 </div>
 
 {{ block.super }}
