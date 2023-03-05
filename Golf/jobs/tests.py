@@ -304,7 +304,7 @@ class PostPageCase(LoginRequiredTestCase):
             "job_description": ("This is a cry for help, I actually have no "
                 "skills of writing tests, but wanted to do it on my own cause "
                 "i wanna learn."),
-            "location": "AB251GN",
+            "location": "****",
             "duration_hours": "0",
             "duration_half_hours": "0",
             "deadline": datetime.date.today(),

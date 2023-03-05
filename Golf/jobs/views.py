@@ -197,7 +197,7 @@ def apply_call(request):
         # Checks if the job poster allows on site notifications first
         if jobs[0].poster_id.opt_in_site_applicant:
             applications = Application.objects.filter(job_id=jobs[0], status="AP")
-            if applications < 2:
+            if len(applications) < 2:
                 Notification.objects.create(
                     user_id=jobs[0].poster_id,
                     content="You can now choose an applicant for the job: "
