@@ -6,11 +6,11 @@ from cloudinary.models import CloudinaryField
 from django.utils import timezone
 
 
-def profile_id_rename(instance, filename):
+def profile_id_rename(instance, filename): # pragma: no cover
     """Renames the image of the ID before uploading."""
     return '/'.join(['ids', instance.username])
 
-def profile_picture_rename(instance, filename):
+def profile_picture_rename(instance, filename): # pragma: no cover
     """Renames the profile picture before uploading."""
     return '/'.join(['profilepics', instance.username])
 

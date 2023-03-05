@@ -7,7 +7,7 @@ from django.utils import timezone
 User = get_user_model()
 
 
-def item_picture_rename(instance, filename):
+def item_picture_rename(instance, filename): # pragma: no cover
     """Renames the image before uploading."""
     return '/'.join(['storeitem', instance.item_name.replace(' ','-').lower()])
 
