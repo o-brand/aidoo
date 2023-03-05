@@ -1,11 +1,7 @@
 | Name                                                                                                   |    Stmts |     Miss |   Cover |   Missing |
 |------------------------------------------------------------------------------------------------------- | -------: | -------: | ------: | --------: |
 | Golf/\_\_init\_\_.py                                                                                   |        0 |        0 |    100% |           |
-| Golf/asgi.py                                                                                           |        9 |        9 |      0% |     10-26 |
 | Golf/middlewares.py                                                                                    |       17 |        0 |    100% |           |
-| Golf/processors.py                                                                                     |        6 |        2 |     67% |      9-11 |
-| Golf/production.py                                                                                     |        6 |        6 |      0% |      1-12 |
-| Golf/settings.py                                                                                       |       43 |        4 |     91% |   191-196 |
 | Golf/tests.py                                                                                          |       49 |        0 |    100% |           |
 | Golf/urls.py                                                                                           |        3 |        0 |    100% |           |
 | Golf/utils.py                                                                                          |       18 |        0 |    100% |           |
@@ -18,7 +14,6 @@
 | chat/migrations/0002\_message.py                                                                       |        7 |        0 |    100% |           |
 | chat/migrations/\_\_init\_\_.py                                                                        |        0 |        0 |    100% |           |
 | chat/models.py                                                                                         |       19 |        0 |    100% |           |
-| chat/routing.py                                                                                        |        3 |        3 |      0% |       1-5 |
 | chat/tests.py                                                                                          |      116 |        0 |    100% |           |
 | chat/urls.py                                                                                           |        3 |        0 |    100% |           |
 | chat/views.py                                                                                          |       61 |       14 |     77% |22-30, 62, 92-95, 100-101 |
@@ -27,8 +22,6 @@
 | help/migrations/\_\_init\_\_.py                                                                        |        0 |        0 |    100% |           |
 | help/tests.py                                                                                          |       34 |        0 |    100% |           |
 | help/urls.py                                                                                           |        3 |        0 |    100% |           |
-| heroku\_db.py                                                                                          |       10 |        6 |     40% |      9-25 |
-| inactivity.py                                                                                          |       35 |       35 |      0% |      3-79 |
 | jobs/\_\_init\_\_.py                                                                                   |        0 |        0 |    100% |           |
 | jobs/admin.py                                                                                          |        6 |        0 |    100% |           |
 | jobs/apps.py                                                                                           |        4 |        0 |    100% |           |
@@ -44,7 +37,6 @@
 | jobs/migrations/0008\_alter\_application\_status.py                                                    |        4 |        0 |    100% |           |
 | jobs/migrations/\_\_init\_\_.py                                                                        |        0 |        0 |    100% |           |
 | jobs/models.py                                                                                         |       49 |        0 |    100% |           |
-| jobs/routing.py                                                                                        |        3 |        3 |      0% |       1-5 |
 | jobs/tests.py                                                                                          |      416 |        2 |     99% |  462, 488 |
 | jobs/urls.py                                                                                           |        3 |        0 |    100% |           |
 | jobs/validators.py                                                                                     |       11 |        0 |    100% |           |
@@ -56,7 +48,6 @@
 | login/urls.py                                                                                          |        5 |        0 |    100% |           |
 | login/validators.py                                                                                    |       14 |        1 |     93% |        32 |
 | login/views.py                                                                                         |       45 |       11 |     76% |77, 83-101 |
-| manage.py                                                                                              |       12 |        2 |     83% |     12-13 |
 | store/\_\_init\_\_.py                                                                                  |        0 |        0 |    100% |           |
 | store/admin.py                                                                                         |        5 |        0 |    100% |           |
 | store/apps.py                                                                                          |        4 |        0 |    100% |           |
@@ -105,5 +96,5 @@
 | userprofile/models.py                                                                                  |       32 |        1 |     97% |        15 |
 | userprofile/tests.py                                                                                   |      363 |        5 |     99% |455-456, 555-557 |
 | userprofile/urls.py                                                                                    |        3 |        0 |    100% |           |
-| userprofile/views.py                                                                                   |      213 |       64 |     70% |53-65, 76, 86, 101, 114-115, 143-156, 210, 223-251, 351-381, 392-393, 398, 403-404, 410-416, 420-434 |
-|                                                                                              **TOTAL** | **2703** |  **341** | **87%** |           |
+| userprofile/views.py                                                                                   |      238 |      103 |     57% |53-65, 69-89, 93-113, 117-133, 137-160, 171, 194-207, 261, 274-302, 402-432, 443-444, 449, 454-455, 461-467, 471-485 |
+|                                                                                              **TOTAL** | **2601** |  **310** | **88%** |           |
