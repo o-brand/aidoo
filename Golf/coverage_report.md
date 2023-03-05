@@ -39,7 +39,7 @@
 | store/admin.py              |        5 |        0 |    100% |           |
 | store/apps.py               |        4 |        0 |    100% |           |
 | store/forms.py              |       17 |        2 |     88% |     10-11 |
-| store/models.py             |       28 |        1 |     96% |        12 |
+| store/models.py             |       26 |        0 |    100% |           |
 | store/tests.py              |      107 |        0 |    100% |           |
 | store/urls.py               |        5 |        0 |    100% |           |
 | store/validators.py         |        9 |        2 |     78% |    14, 21 |
@@ -56,8 +56,8 @@
 | userprofile/admin.py        |        9 |        0 |    100% |           |
 | userprofile/apps.py         |        4 |        0 |    100% |           |
 | userprofile/forms.py        |       13 |        0 |    100% |           |
-| userprofile/models.py       |       32 |        1 |     97% |        15 |
+| userprofile/models.py       |       28 |        0 |    100% |           |
 | userprofile/tests.py        |      363 |        5 |     99% |455-456, 555-557 |
 | userprofile/urls.py         |        3 |        0 |    100% |           |
 | userprofile/views.py        |      238 |      103 |     57% |53-65, 69-89, 93-113, 117-133, 137-160, 171, 194-207, 261, 274-302, 402-432, 443-444, 449, 454-455, 461-467, 471-485 |
-|                   **TOTAL** | **2440** |  **310** | **87%** |           |
+|                   **TOTAL** | **2434** |  **308** | **87%** |           |
