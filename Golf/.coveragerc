@@ -1,0 +1,12 @@
+[run]
+omit =
+    Golf/asgi.py
+    Golf/processors.py
+    Golf/production.py
+    Golf/settings.py
+    heroku_db.py
+    inactivity.py
+    manage.py
+    */.migrations/*
+    chat/routing.py
+    jobs/routing.py
