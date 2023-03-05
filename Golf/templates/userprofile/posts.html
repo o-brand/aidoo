@@ -1,3 +1,9 @@
+<div class="d-flex justify-content-end my-2">
+  <button hx-get="{% url 'post' %}" hx-target="#dialog">
+    New Post&nbsp;&nbsp;<i class="bi bi-plus-square"></i>
+  </button>
+</div>
+
 {% if posts %}
   {% for job in posts %}
     <div class="card mb-2 job-card">

@@ -1,3 +1,8 @@
+<div class="d-flex justify-content-end my-2">
+  <button hx-get="{% url 'editprofile' %}" hx-target="#dialog">
+    Edit Details&nbsp;&nbsp;<i class="bi bi-pencil"></i>
+  </button>
+</div>
 <div 
   class="card" 
   hx-trigger="profile_edit from:body" 

@@ -57,22 +57,22 @@
           <button
           disabled
           class="btn btn-success"
-          id = "btnApply{{ job_id }}">Accepted ✓</button>
+          id = "btnApply{{ job_id }}">Accepted <i class="bi bi-check-lg"></i></button>
         {% elif status == "WD" %}
           <button
           disabled
           class="btn btn-dark"
-          id = "btnApply{{ job_id }}">Withdrawn ✖</button>
+          id = "btnApply{{ job_id }}">Withdrawn <i class="bi bi-x-lg"></i></button>
         {% elif status == "RE" %}
           <button
           disabled
           class="btn btn-danger"
-          id = "btnApply{{ job_id }}">Rejected ✖</button>
+          id = "btnApply{{ job_id }}">Rejected <i class="bi bi-x-lg"></i></button>
         {% elif status == "DN" %}
           <button
           disabled
           class="btn btn-success"
-          id = "btnApply{{ job_id }}">Complete ✓</button>
+          id = "btnApply{{ job_id }}">Complete <i class="bi bi-check-lg"></i></button>
         {% endif %}
       {% elif not job.assigned and not job.completed %}
         <button class="btn btn-primary"
