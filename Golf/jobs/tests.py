@@ -280,6 +280,38 @@ class PostPageCase(LoginRequiredTestCase):
         response = self.client.get(reverse("post"))
         self.assertEqual(response.status_code, 200)
 
+    def test_no_fund(self):
+        # test if the user has no sufficient fund
+        new_form = {
+            "poster_id": "1",
+            "job_title": "Job",
+            "job_description": ("This is a cry for help, I actually have no "
+                "skills of writing tests, but wanted to do it on my own cause "
+                "i wanna learn."),
+            "location": "AB25 1GN",
+            "duration_hours": "8",
+            "duration_half_hours": "0",
+            "deadline": datetime.date.today(),
+        }
+        response = self.client.post(reverse("post"), data=new_form)
+        self.assertEqual(response.status_code, 200) # No fund error...
+
+    def test_form_not_valid(self):
+        # test if the form stays if it has not valid value
+        new_form = {
+            "poster_id": "1",
+            "job_title": "Job",
+            "job_description": ("This is a cry for help, I actually have no "
+                "skills of writing tests, but wanted to do it on my own cause "
+                "i wanna learn."),
+            "location": "AB251GN",
+            "duration_hours": "0",
+            "duration_half_hours": "0",
+            "deadline": datetime.date.today(),
+        }
+        response = self.client.post(reverse("post"), data=new_form)
+        self.assertEqual(response.status_code, 200)
+
     def test_redirect_since_everything_is_correct(self):
         # test if the user is redirected if the fields are filled in with valid data
         new_form = {
@@ -290,7 +322,7 @@ class PostPageCase(LoginRequiredTestCase):
                 "i wanna learn."),
             "location": "AB25 1GN",
             "duration_hours": "0",
-            "duration_half_hours": "1",
+            "duration_half_hours": "0",
             "deadline": datetime.date.today(),
         }
         response = self.client.post(reverse("post"), data=new_form)

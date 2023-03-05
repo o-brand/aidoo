@@ -16,19 +16,13 @@ User = get_user_model()
 
 
 def details(request, job_id):
-    """Shows the details of a job. It is a static page."""
+    """Shows the details of a job."""
 
     # Read the job from the database
     try:
         job = Job.objects.get(pk=job_id, hidden=False)
     except Job.DoesNotExist:
-        raise Http404("This job does not exist.")
-
-    # Temporary measure until I figure out how to connect the jobs view to the jobsdetail
-    jobs_applied = [
-        i.job_id.job_id
-        for i in Application.objects.filter(applicant_id=request.user.id)
-    ]
+        raise Http404()
 
     # Comments for the job
     comments = Comment.objects.filter(job_id=job.job_id)
@@ -36,21 +30,16 @@ def details(request, job_id):
     # Obtains the status of the logged in user for the viewed job
     try:
         status = Application.objects.filter(
-            applicant_id=request.user.id,
-            job_id=job.job_id)[0].status
+            applicant_id=request.user.id, job_id=job.job_id
+        )[0].status
     except:
-        status = 'NA'
-
-    # Obtains the user data, used to stop job poster applying from own job
-    me = request.user
+        status = "NA"
 
     # Give the found job to the template
     context = {
         "job": job,
-        "jobs_applied": jobs_applied,
         "comments": comments,
-        "status" : status,
-        "me" : me,
+        "status": status,
     }
 
     # Render the page
@@ -66,7 +55,9 @@ class FormView(View):
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(
-            request, self.template_name, {"form": form, "poster_id": request.user.id}
+            request,
+            self.template_name,
+            {"form": form, "poster_id": request.user.id},
         )
 
     def post(self, request, *args, **kwargs):
@@ -77,15 +68,19 @@ class FormView(View):
             duration_hours = form.cleaned_data["duration_hours"]
             duration_half_hours = form.cleaned_data["duration_half_hours"]
             post = form.save(commit=False)
-            post.points = (duration_hours * 12) + (duration_half_hours/60) * 12
+            post.points = (duration_hours * 12) + int(duration_half_hours / 30) * 6
 
+            # Check if the user has enough points
             me = request.user
             if me.balance < post.points:
-                form.add_error(None, 'You do not have sufficient funds' )
+                form.add_error(None, "You do not have sufficient funds")
                 return render(
-                    request, self.template_name, {"form": form, "poster_id": request.user.id}
+                    request,
+                    self.template_name,
+                    {"form": form, "poster_id": request.user.id},
                 )
 
+            # Save the job
             post.save()
 
             # Freeze points
@@ -96,7 +91,9 @@ class FormView(View):
             return HttpResponse(status=204) # No content
 
         return render(
-            request, self.template_name, {"form": form, "poster_id": request.user.id}
+            request,
+            self.template_name,
+            {"form": form, "poster_id": request.user.id},
         )
 
 
@@ -111,11 +108,11 @@ class JobsView(ListView):
         """Reads jobs from the database."""
         filter_val = self.request.GET.get("search", "")
         return Job.objects.filter(
-            Q(job_title__icontains=filter_val) |
-            Q(job_description__icontains=filter_val) |
-            Q(location__icontains=filter_val),
+            Q(job_title__icontains=filter_val)
+            | Q(job_description__icontains=filter_val)
+            | Q(location__icontains=filter_val),
             hidden=False,
-            assigned=False
+            assigned=False,
         ).exclude(poster_id_id=self.request.user.id)
 
     def job_count(self):
@@ -151,25 +148,21 @@ def bookmark_call(request):
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
             raise Http404()
+        job = jobs[0]
 
         # Check if there is a bookmark already
-        bookmarks = Bookmark.objects.filter(user_id=user.id,job_id=job_id)
+        bookmarks = Bookmark.objects.filter(user_id=user.id, job_id=job_id)
         bookmark_exists = len(bookmarks) == 0
-
         if not bookmark_exists:
             bookmarks.delete()
 
-            return render(
-                request, "htmx/bookmark.html", {"job": jobs[0]}
-            )
+            return render(request, "htmx/bookmark.html", {"job": job})
 
         # Creates the bookmark
-        new_bookmark = Bookmark(user_id=user, job_id=jobs[0])
+        new_bookmark = Bookmark(user_id=user, job_id=job)
         new_bookmark.save()
 
-        return render(
-            request, "htmx/bookmark-unmark.html", {"job": jobs[0]}
-        )
+        return render(request, "htmx/bookmark-unmark.html", {"job": job})
 
     # If it is not POST
     raise Http404()
@@ -202,41 +195,17 @@ def apply_call(request):
         # It lets them know that the job is ready to select an applicant
         # only sends once per job
         # Checks if the job poster allows on site notifications first
-
         if jobs[0].poster_id.opt_in_site_applicant:
-
-            if Application.objects.filter(job_id=jobs[0], status="AP").count() < 2:
+            applications = Application.objects.filter(job_id=jobs[0], status="AP")
+            if applications < 2:
                 Notification.objects.create(
                     user_id=jobs[0].poster_id,
-                    content="You can now choose an applicant for the job: " + str(jobs[0].job_title),
-                    link="/profile/me"
-                    )
+                    content="You can now choose an applicant for the job: "
+                    + str(jobs[0].job_title),
+                    link="/profile/me",
+                )
 
-        return render(
-            request, "htmx/applied.html", {"job_id": job_id}
-        )
-
-    # If it is not POST
-    raise Http404()
-
-
-def report_call(request):
-    """Do something related to reporting a job post TBD."""
-    if request.method == "POST":
-        # Get the job ID or -1 if it is not found
-        job_id = request.POST.get("job_id", -1)
-
-        # Check if the job ID is valid
-        jobs = Job.objects.filter(pk=job_id)
-        job_id_exists = len(jobs) == 1
-        if not job_id_exists:
-            raise Http404()
-
-        # Since this functionality is not yet implemented, we have to send back
-        # the job to be able to click again, as it was possible with JS.
-        return render(
-            request, "htmx/report-alert.html", {"job": jobs[0]}
-        )
+        return render(request, "htmx/applied.html", {"job_id": job_id})
 
     # If it is not POST
     raise Http404()
@@ -254,46 +223,45 @@ def cancel_call(request):
         job_id_exists = len(jobs) == 1
         if not job_id_exists:
             raise Http404()
+        job = jobs[0]
 
         # Hide the job
-        jobs[0].hidden = True
-        jobs[0].save()
+        job.hidden = True
+        job.save()
 
         # Give the poster back the points
-        user.frozen_balance -= jobs[0].points
-        user.balance += jobs[0].points
+        user.frozen_balance -= job.points
+        user.balance += job.points
         user.save()
 
         # Check if application exists
         applications = Application.objects.filter(
-            Q(job_id=job_id) &
-            ~Q(status="WD")
+            Q(job_id=job_id) & ~Q(status="WD")
         )
 
         # Send on site notification to the applicants
         # It lets them know that the has been cancelled
 
         for application in applications:
-
             if application.applicant_id.opt_in_site_application:
                 Notification.objects.create(
                     user_id=application.applicant_id,
-                    content="The job poster has cancelled the job: " + str(jobs[0].job_title),
-                    link="/profile/me"
+                    content="The job poster has cancelled the job: "
+                    + str(job.job_title),
+                    link="/profile/me",
                 )
 
             application.status = "CA"
             application.time_of_final_status = timezone.now()
             application.save()
 
-
         # Redirect the user based on site they are on
         response = HttpResponse()
 
-        if 'profile/me' in request.META['HTTP_REFERER']:
-            response["HX-Redirect"] = request.META['HTTP_REFERER']
+        if "profile/me" in request.META["HTTP_REFERER"]:
+            response["HX-Redirect"] = request.META["HTTP_REFERER"]
         else:
-            response["HX-Redirect"] = reverse('home')
+            response["HX-Redirect"] = reverse("home")
 
         return response
 
