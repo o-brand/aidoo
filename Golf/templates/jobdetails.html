@@ -104,8 +104,7 @@
             </h5>
           </div>
         <div>
-            <div id="comment-content">{{ comment.content }}</div>
-            <br>
+            <div id="comment-content">{{ comment.content|linebreaks }}</div>
             <div>{{ comment.post_time }}</div>
         </div>
         </div>

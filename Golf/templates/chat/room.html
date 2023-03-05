@@ -26,8 +26,7 @@
                       class="chat-profile-pic-right" alt="profile picture">
                   </div>
                   <div class="message-me">
-                    <div class='message-text-right'>{{ message.content }}</div>
-                    <br>
+                    <div class='message-text-right'>{{ message.content|linebreaks }}</div>
                     <div class='message-date-right'>{{ message.date_time }}</div>
                   </div>
                 </div>
@@ -38,8 +37,7 @@
                       class="chat-profile-pic-left" alt="profile picture">
                   </div>
                   <div class="message-other">
-                    <div class='message-text-left'>{{ message.content }}</div>
-                    <br>
+                    <div class='message-text-left'>{{ message.content|linebreaks }}</div>
                     <div class='message-date-left'>{{ message.date_time }}</div>
                   </div>
                 </div>

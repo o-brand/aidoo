@@ -18,14 +18,13 @@ jobSocket.onmessage = function(e) {
     if (data.commenter_id == poster_id) {
       tag += ' (Poster)';
     }
-    tag += '</a></h5></div><p>' + data.content + '</p><p>' + data.date_time +
+    tag += '</a></h5></div><p>' + data.content.replace(/\n/g, "<br />") + '</p><p>' + data.date_time +
       '</p></div></div>';
     document.querySelector("#comments").innerHTML += tag;
   }
 };
 
 
-document.querySelector("#job-message-input").focus();
 $("#job-message-input").keydown(function (event) {
   event = (event) ? event : ((window.event) ? window.event : "");
   var keyCode = event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode);
