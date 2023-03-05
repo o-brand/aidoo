@@ -105,9 +105,8 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 import heroku_db
-DATABASES = {
-    "default": heroku_db.database("test" in sys.argv, False)
-}
+
+DATABASES = {"default": heroku_db.database("test" in sys.argv, False)}
 
 
 # Password validation
@@ -190,6 +189,7 @@ CHAT_MESSAGE_TTL = 31
 # HEROKU
 if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
     import django_heroku
+
     django_heroku.settings(locals())
 
     DEBUG = False

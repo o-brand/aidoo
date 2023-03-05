@@ -1,9 +1,8 @@
 from datetime import datetime
-from django.test import TestCase
-from django.contrib.auth import get_user_model
-from userprofile.models import User
-from django.utils import timezone
 from faker import Faker
+from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.utils import timezone
 
 
 # Get actual user model.
@@ -31,8 +30,9 @@ def create_date_string(difference):
 
     return f"{now.year - difference}-{now.month:02d}-{now.day:02d}"
 
+
 def fake_time(self):
-        """Returns a timezone aware time to prevent warnings."""
-        fake = Faker()
-        tz = timezone.get_current_timezone()
-        return timezone.make_aware(fake.date_time(), tz, True)
+    """Returns a timezone aware time to prevent warnings."""
+    fake = Faker()
+    tz = timezone.get_current_timezone()
+    return timezone.make_aware(fake.date_time(), tz, True)

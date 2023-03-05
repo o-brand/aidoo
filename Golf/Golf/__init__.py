@@ -1,9 +1,9 @@
 """
 Users:
-- Alex Aarons: alex2022
-- Beatrice Bailey: beatrice2022
-- Claire Collins: claire2022
-- Duncan Delgado: duncan2022
-- Erica Earl: erica2022
-- Flora Forbes: flora2022
+- Alex Aarons: aaarons - alex2022
+- Beatrice Bailey: bbailey - beatrice2022
+- Claire Collins: ccollins - claire2022
+- Duncan Delgado: ddelgado - duncan2022
+- Erica Earl: eearl - erica2022
+- Flora Forbes: fforbes flora2022
 """

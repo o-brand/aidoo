@@ -1,6 +1,3 @@
-from django.contrib.auth.context_processors import PermWrapper
-
-
 def auth(request):
     """
     Return context variables required by apps that use Django's authentication

@@ -3,9 +3,17 @@ from django.http import HttpResponseRedirect
 
 # These are the urls which are available (even) if the user is NOT
 # authenticated.
-ENABLED_URLS = ("", "login", "signup", "logout",
+ENABLED_URLS = (
+    "",
+    "login",
+    "signup",
+    "logout",
     "account_activation_email",
-    "help", "help/privacy", "help/community-guidelines", "help/manual")
+    "help",
+    "help/privacy",
+    "help/community-guidelines",
+    "help/manual",
+)
 
 
 class LoginRequiredMiddleware:
@@ -26,7 +34,6 @@ class LoginRequiredMiddleware:
             or response.status_code == 500 # HttpResponseServerError
         ):
             return response
-
 
         # Check if the user is authenticated
         if not request.user.is_authenticated:

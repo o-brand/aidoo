@@ -1,8 +1,9 @@
-from django.test import RequestFactory, TestCase
-from django.http import HttpResponse
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
-from .middlewares import LoginRequiredMiddleware, ENABLED_URLS
+from django.http import HttpResponse
+from django.test import RequestFactory, TestCase
+from .middlewares import ENABLED_URLS, LoginRequiredMiddleware
+from .validators import validate_profanity
 
 
 # Get actual user model.
@@ -62,3 +63,45 @@ class LoginRequiredMiddlewareTestCase(TestCase):
 
             # Assert no redirection
             self.assertEqual(response.status_code, 200)
+
+    def test_admin_url(self):
+        """Tests an admin url against the Middleware."""
+        request = RequestFactory()
+        request.user = AnonymousUser()
+
+        # Change the URL of the request
+        request.path_info = "admin"
+
+        # Get the response using the Middleware
+        response = self.middleware(request)
+
+        # Assert no redirection
+        self.assertEqual(response.status_code, 200)
+
+
+class ProfanityValidatorTestCase(TestCase):
+    """Tests for validate_profanity validator."""
+
+    def test_empty_string(self):
+        """Tests if the string is empty."""
+
+        # Just call the validator
+        validate_profanity("")
+
+    def test_a_string(self):
+        """Tests if the string is "a"."""
+
+        # Just call the validator
+        validate_profanity("a")
+
+    def test_string_ends_with_a(self):
+        """Tests if the string ends with "a"."""
+
+        # Just call the validator
+        validate_profanity("Walk a")
+
+    def test_normal(self):
+        """Tests a normal string."""
+
+        # Just call the validator
+        validate_profanity("Walk my dog")

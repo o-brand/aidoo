@@ -1,5 +1,5 @@
-from .settings import *
 import heroku_db
+from .settings import *
 
 
 # Database
