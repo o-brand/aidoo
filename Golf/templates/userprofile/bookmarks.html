@@ -1,0 +1,30 @@
+{% if bookmarks %}
+  {% for bookmark in bookmarks %}
+    <div class="card mb-2 job-card">
+      <div class="card-body">
+        <h5 class="card-title"><a href="{% url 'jobdetails' bookmark.job_id.job_id %}">{{bookmark.job_id.job_title }}</a></h5>
+        <p class="card-text">
+          <i class="bi bi-geo-alt"></i>
+          {{ bookmark.job_id.location }}
+          &nbsp;
+          <i class="bi bi-hourglass-split"></i>
+          {% if bookmark.job_id.deadline is not None %}
+            {{ bookmark.job_id.deadline | date:'d M Y' }}
+          {% else %}
+            None
+          {% endif %}
+          &nbsp;
+          <i class="bi bi-triangle"></i>
+          {{ bookmark.job_id.points }}
+        </p>
+        <p>
+          Saved on {{bookmark.saving_time | date:'d M Y' }}
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <div class="text-center">
+    <p>You don't have any bookmarks yet.</p>
+  </div>
+{% endif %}
