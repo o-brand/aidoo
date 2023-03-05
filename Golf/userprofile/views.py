@@ -65,7 +65,7 @@ def my_details(request):
     return render(request, "userprofile/private-card.html", context)
 
 def commitments(request):
-    """Private pofile page with more data."""
+    """Private ongoing job commitments."""
     actual_user_id = request.user.id
 
     # Check if the user ID is valid
@@ -89,7 +89,7 @@ def commitments(request):
     return render(request, "userprofile/commitments.html", context)
 
 def applications(request):
-    """Private pofile page with more data."""
+    """Private applications."""
     actual_user_id = request.user.id
 
     # Check if the user ID is valid
@@ -113,6 +113,7 @@ def applications(request):
     return render(request, "userprofile/applications.html", context)
 
 def posts(request):
+    """Private user posts."""
     actual_user_id = request.user.id
 
     # Check if the user ID is valid
@@ -132,6 +133,7 @@ def posts(request):
     return render(request, "userprofile/posts.html", context)
 
 def bookmarks(request):
+    """Private user bookmarks."""
     actual_user_id = request.user.id
 
     # Check if the user ID is valid
