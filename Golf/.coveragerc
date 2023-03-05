@@ -1,4 +1,4 @@
-[run]
+[report]
 omit =
     Golf/asgi.py
     Golf/processors.py
@@ -7,6 +7,6 @@ omit =
     heroku_db.py
     inactivity.py
     manage.py
-    */.migrations/*
+    */migrations/*
     chat/routing.py
     jobs/routing.py
