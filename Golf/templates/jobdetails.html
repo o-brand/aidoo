@@ -103,8 +103,11 @@
               </a>
             </h5>
           </div>
-          <p>{{ comment.content }}</p>
-          <p>{{ comment.post_time }}</p>
+        <div>
+            <div id="comment-content">{{ comment.content }}</div>
+            <br>
+            <div>{{ comment.post_time }}</div>
+        </div>
         </div>
       </div>
     {% endfor %}
@@ -112,8 +115,10 @@
 
   <div class="job-foot">
     <div>
-      <input id="job-message-input" type="text" style="width: 100%;" placeholder="Ask a question..." required>
-      <button id="job-message-submit" type="button">Send</button>
+        <textarea id="job-message-input" type="text" style="width: 100%; white-space: pre-wrap"
+                  placeholder="Ask a question..." required></textarea>
+        <br>
+        <button id="job-message-submit" type="button">Send</button>
     </div>
   </div>
 </div>

@@ -36,17 +36,23 @@ chatSocket.onmessage = function(e) {
   scrollToBottom();
 };
 
-
 document.querySelector("#chat-message-input").focus();
-document.querySelector("#chat-message-input").onkeyup = function(e) {
-  if (e.keyCode === 13) { // "Enter"
+$("#chat-message-input").keydown(function (event) {
+
+  event = (event) ? event : ((window.event) ? window.event : "");
+  var keyCode = event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode);
+  var altKey = event.ctrlKey || event.metaKey;
+  if (keyCode === 13 && altKey) { //ctrl+enter
+    var newDope = $(this).val() + "\n";// Get textarea data for newline
+    $(this).val(newDope);
+  } else if (keyCode === 13) { // "Enter"
+    event.preventDefault();
     document.querySelector("#chat-message-submit").click();
   }
-};
+});
 
 document.querySelector("#chat-message-submit").onclick = function(e) {
   e.preventDefault();
-
   const messageInputDom = document.querySelector("#chat-message-input");
   const message = messageInputDom.value;
 

@@ -300,6 +300,7 @@ a:hover {
   background-color: #f4f5f7;
   border-radius: 10px;
   border-top-left-radius: 0px;
+  white-space: pre-wrap;
 }
 
 .message-text-right {
@@ -310,6 +311,7 @@ a:hover {
   border-top-right-radius: 0px;
   background-color: #4F7cff;
   color: white;
+  white-space: pre-wrap;
 }
 
 /* Scrolling to the bottom */
@@ -391,3 +393,26 @@ a:hover {
   height: fit-content;
 }
 
+#comment-content{
+  white-space: pre-wrap;
+}
+
+#job-message-submit{
+  color: white;
+  background-color: #4F7cff;
+  text-align: center;
+  border-radius: 5px;
+  border-color: #4F7cff;
+  position: absolute;
+}
+
+#job-message-input{
+  font-size: 17px;
+  box-sizing: border-box;
+  outline: none;
+  border-radius: 10px;
+  border: 2px solid #f4f5f7;
+  margin-top: 1px;
+  padding: 1px;
+  width: 100%;
+}
