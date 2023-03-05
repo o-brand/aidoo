@@ -56,13 +56,23 @@ class TransferTestCase(LoginRequiredTestCase):
         response = self.client.post(reverse("transfer"), data=new_form)
         self.assertEqual(response.status_code, 204)
         self.assertEqual(User.objects.get(pk=1).balance, original_balance+10)
-    
+
+    def test_no_fund(self):
+        # test if the user has no sufficient fund
+        new_form = {
+            "recipient": User.objects.get(pk=1),
+            "amount": "999",
+            "note": "A little gift for you"
+        }
+        response = self.client.post(reverse("transfer"), data=new_form)
+        self.assertEqual(response.status_code, 200) # No fund error...
+
     def test_empty_form(self):
         # behaviour if empty form is submitted
         form = TransferForm(data={"something": "xyz"})
 
         self.assertEqual(2, len(form.errors))
-        
+
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
@@ -81,7 +91,7 @@ class TransferTestCase(LoginRequiredTestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required", form.errors[key][0])
-    
+
     #TODO
     def test_incorrect_username_form(self):
         # behaviour if recipient username doesn't exist
@@ -140,22 +150,22 @@ class ItemModelTest(TestCase):
 
     def test_item_attributes_price(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')       
+        item = Item.objects.get(item_name='Test Item')
         self.assertEqual(item.price, 10)
 
     def test_item_attributes_stock(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')  
+        item = Item.objects.get(item_name='Test Item')
         self.assertEqual(item.stock, 5)
-        
+
     def test_item_attributes_on_offer(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')       
+        item = Item.objects.get(item_name='Test Item')
         self.assertEqual(item.on_offer, True)
 
     def test_item_attributes_limit(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')       
+        item = Item.objects.get(item_name='Test Item')
         self.assertEqual(item.limit_per_user, 2)
 
 
@@ -189,7 +199,7 @@ class SaleModelTest(LoginRequiredTestCase):
     def test_sale_attributes_purchase(self):
         """Test that the sale item is correct."""
         self.assertEqual(self.sale.purchase, self.item)
-        
+
     def test_sale_attributes_buyers(self):
         """Test that the buyer is correct."""
         self.assertEqual(self.sale.buyer, self.user)
