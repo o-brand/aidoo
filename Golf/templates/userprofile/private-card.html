@@ -20,7 +20,6 @@
         Date of birth: {{ me.date_of_birth }}<br/>
         Joined: {{ me.date_joined | date:'d M Y'}}<br/>
         Bio: {{ me.biography }}</br>
-        Rating: {{ me.rating }}<br/>
         Balance: <i class="bi bi-triangle"></i> {{ me.balance }}<br/>
         <br/>
         <a href="{% url 'userdetails' me.id %}">
