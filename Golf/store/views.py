@@ -40,7 +40,6 @@ def home(request):
         if len(values) > 0:
             forms[k] = BuyForm(values)
         else:
-            print("hi")
             forms[k] = False
 
     context = {

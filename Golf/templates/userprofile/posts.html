@@ -3,7 +3,8 @@
   hx-swap="innerHTML" 
   hx-get="{% url 'posts' %}" 
   hx-target="this">
-  <div class="d-flex justify-content-end my-2">
+  <div class="d-flex justify-content-between my-2">
+    <h4>My posts</h4>
     <button class="btn btn-secondary" hx-get="{% url 'post' %}" hx-target="#dialog">
       New Post&nbsp;&nbsp;<i class="bi bi-plus-square"></i>
     </button>

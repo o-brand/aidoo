@@ -4,7 +4,6 @@
     <h5 class="card-title mb-0">{{ user.first_name }} {{ user.last_name }}</h5>
     <h6 class="card-subtitle mb-2 text-muted">{{ user.username }}</h6>
     <p class="card-text">Joined: {{ user.date_joined | date:'d M Y'}}<br/>
-      Rating: {{ user.rating }}</br>
       Bio: {{ user.biography }}</br>
     </p>
       {% if not in_room %}

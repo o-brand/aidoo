@@ -15,11 +15,23 @@ python manage.py loaddata ../db.json
 python manage.py runserver
 ```
 
+```
+python3 manage.py migrate
+python3 manage.py flush
+python3 manage.py loaddata ../db.json
+python3 manage.py runserver
+```
+
 Then you are ready and can continue coding as usual. If you want to revert your database to the online database, you can still do that with these commands:
 
 ```
 python manage.py flush
 python manage.py loaddata ../db.json
+```
+
+```
+python3 manage.py flush
+python3 manage.py loaddata ../db.json
 ```
 
 ***The date of the actual save is 03/03/2023.***
@@ -35,6 +47,10 @@ Then you have to update the db.json by this command:
 python manage.py dumpdata --exclude auth.permission --exclude contenttypes > ../db.json
 ```
 
+```
+python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > ../db.json
+```
+
 *You have to change the encoding of the JSON file to UTF-8 if an error occurred.*
 
 But before you do that, please be sure that you do not have any irrelevant changes in your database.
@@ -44,6 +60,11 @@ If you are ready, then commit the modified file, and run these commands to updat
 ```
 python manage.py flush --settings Golf.production
 python manage.py loaddata ../db.json --settings Golf.production
+```
+
+```
+python3 manage.py flush --settings Golf.production
+python3 manage.py loaddata ../db.json --settings Golf.production
 ```
 
 Plus, please update the date of the save in this file.
