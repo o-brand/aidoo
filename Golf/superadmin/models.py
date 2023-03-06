@@ -74,23 +74,20 @@ class Report(models.Model):
 #Model for assigining reports to reviewers
 class ReportTicket(models.Model):
 
-    #primary key
-    ticket_id = models.BigAutoField(primary_key=True), 
-
     #id of the reported object
-    report_id  = models.ForeignKey(Report, on_delete=models.CASCADE, default=None), 
+    report_id  = models.ForeignKey(Report, on_delete=models.CASCADE, default=None)
 
     #id of a user assigned to resolve the issue
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE),
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     #the result of the resolutiom
-    answer=models.BooleanField(default=False),
+    answer=models.BooleanField(default=False)
 
     #time stamp for assigning the job
-    time_assigned = models.DateTimeField(default=timezone.now),
+    time_assigned = models.DateTimeField(default=timezone.now)
 
     #time stamp for resolving the report
-    time_resolved = models.DateTimeField(default=None, blank=True, null=True), 
+    time_resolved = models.DateTimeField(default=None, blank=True, null=True)
 
     
 class ConflictResolution(models.Model):
@@ -106,9 +103,6 @@ class ConflictResolution(models.Model):
         OPEN = 'Open', ('Open')
         FLAGGED = 'Flagged', ('Flagged')
         RESOLVED = 'Resolved', ('Reesolved')
-
-    #Primary key
-    conflict_id = models.BigAutoField(primary_key=True)
 
     #conflicted_action
     job_id = models.ForeignKey(Job, 
