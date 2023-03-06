@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth import get_user_model
 from jobs.models import Job
-from superadmin.models import Report
+from superadmin.models import Report, ReportTicket, ConflictResolution
 from superadmin.forms import ReportForm
 
 User = get_user_model()
@@ -56,8 +56,6 @@ class ReportingTestCase(LoginRequiredTestCase):
             "type": 'JOB'
         }
         Report.objects.create(**r)
-
-
 
 
     def test_insertion(self):
@@ -196,3 +194,173 @@ class PostReportCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn("Ensure this value has at most 1000 characters", form.errors[key][0])
+
+class ReportTicketTestCase(TestCase):
+    """Ticket model test"""
+
+    def setUp(self):
+
+        super().setUp()
+
+        fake = Faker()
+
+        # create 1 user in the database
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "a"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = datetime.datetime.now()
+        User.objects.create_user(**credentials)
+        credentials.clear()
+
+
+        #create job
+        job = {
+            "poster_id": self.user,
+            "location": "AB21 3EW",
+            "job_title": "Walking a dog",
+            "job_description": "Nothing",
+            "points": 10,
+        }
+        Job.objects.create(**job)
+        j = Job.objects.get(pk=1)
+
+        #create report
+        report = {
+            "reported_job": j,
+            "reported_user": self.user,
+            "reporting_user": self.user,
+            "complaint": "a"*500,
+            "status": 'OPEN',
+            "type": 'JOB'
+        }
+        Report.objects.create(**report)
+        r = Job.objects.get(pk=1)
+
+        #create ticket
+        ticket = {
+            "report_id": r, 
+            "user_id": self.user, 
+        }
+        ReportTicket.objects.create(**ticket)
+
+    def test_insertion(self):
+        #insert ticket
+        j = Job.objects.get(pk=1)
+        r = Report.objects.get(pk=1)
+        t = ReportTicket.objects.get(pk=1)
+
+        len1 = len(ReportTicket.objects.all())
+        ticket = {
+            "ticket_id": t,
+            "report_id": r, 
+            "user_id": self.user, 
+        }
+
+        ReportTicket.objects.create(**ticket)
+
+        len2 = len(ReportTicket.objects.all())
+
+        self.assertEqual(len1+1, len2)
+
+    def test_deletion(self):
+        #delete ticket
+        len1 = len(ReportTicket.objects.all())
+
+        t = ReportTicket.objects.get(pk=1)
+        t.delete()
+
+        len2 = len(ReportTicket.objects.all())
+
+        self.assertEqual(len1-1, len2)
+        #pass
+        ### WAS THERE BEFOFRE, BUT NAH
+
+    def test_resolution(self):
+        #change status of the ticket
+        pass
+
+class ConflictRersolutionTestCase(TestCase):
+
+    def setUp(self):
+
+        super().setUp()
+
+        #create job
+        job = {
+            "poster_id": self.user,
+            "location": "AB21 3EW",
+            "job_title": "Walking a dog",
+            "job_description": "Nothing",
+            "points": 10,
+        }
+        Job.objects.create(**job)
+        j = Job.objects.get(pk=1)
+
+        conflict = {
+            "job_id": j, 
+            "user1_id": self.user, 
+            #"user2_id":self.user, 
+            "content": "a"*50,
+            "status": 'OPEN', 
+            "type": 'CONFLICT1'
+        }
+        ConflictResolution.objects.create(**conflict)
+        
+    def test_insertion(self):
+        #insert conflict
+        j = Job.objects.get(pk=1)
+
+        len1 = len(ConflictResolution.objects.all())
+
+        conflict = { 
+            "job_id": j, 
+            "user1_id": self.user, 
+            #"user2_id":self.user, 
+            "content": "a"*50,
+            "status": 'OPEN', 
+            "type": 'CONFLICT1'
+        }
+        ConflictResolution.objects.create(**conflict)
+
+        len2 = len(ConflictResolution.objects.all())
+        self.assertEqual(len1+1, len2)
+    
+    def test_deletion(self):
+        #delete a conflict
+        len1 = len(ConflictResolution.objects.all())
+
+        conflict = ConflictResolution.objects.get(pk=1)
+        conflict.delete()
+
+        len2 = len(ConflictResolution.objects.all())
+
+        self.assertEqual(len1-1, len2)
+
+    def test_resolution(self):
+        #change status of the conflict
+        pass
+
+    # def test_content_max_length(self):
+    #     j = Job.objects.get(pk=1)
+        
+    #     conflict = {
+    #         "job_id": j, 
+    #         "user1_id": self.user, 
+    #         #"user2_id":self.user, 
+    #         "content": "a"*500,
+    #         "status": 'OPEN', 
+    #         "type": 'CONFLICT1'
+    #     }
+
+    #     created_conflict = ConflictResolution.create(**conflict)
+
+    #     with self.assertRaises(ValidationError):
+    #         created_conflict.full_clean()
+        
+
+
+
+
+

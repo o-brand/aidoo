@@ -96,4 +96,56 @@ class ReportTicket(models.Model):
     time_resolved = models.DateTimeField(default=None, blank=True, null=True), 
 
     
-#class ConflictResolution(models.Model):
+class ConflictResolution(models.Model):
+    class ConflictType(models.TextChoices):
+         """available values for the conflict type"""
+         #FINISH
+         CONFLICT1 = 'Conflict1', ('Conflict1')
+         CONFLICT2 = 'Conflict2', ('Conflict2')
+    
+    class ConflictStatus(models.TextChoices):
+        "available values for the conflict status"
+
+        OPEN = 'Open', ('Open')
+        FLAGGED = 'Flagged', ('Flagged')
+        RESOLVED = 'Resolved', ('Reesolved')
+
+    #Primary key
+    conflict_id = models.BigAutoField(primary_key=True)
+
+    #conflicted_action
+    job_id = models.ForeignKey(Job, 
+        on_delete = models.CASCADE, 
+        default=None)
+    user1_id = models.ForeignKey(User,
+        related_name = "user1",
+        on_delete=models.CASCADE)
+    
+    #IF 2 USERS ARE INVOLVED
+    #user2_id = models.ForeignKey(User,
+        #related_name = "user2",
+        #on_delete=models.CASCADE)
+
+    #reason for the conflict
+    content = models.CharField(max_length=100)
+
+    #time the conflict was issues
+    conflict_time = models.DateTimeField(default=timezone.now)
+
+    #the last update time
+    conflict_update_time = models.DateTimeField(blank=True, 
+        default=None, 
+        null=True)
+    
+    #status of dealing with the conflict
+    status = models.CharField(
+        choices=ConflictStatus.choices, 
+        max_length=10,
+        default=ConflictStatus.OPEN
+    )
+
+    #type of conflict
+    type = models.CharField(
+        choices=ConflictType.choices,
+        max_length=10
+    )
