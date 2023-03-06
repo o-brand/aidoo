@@ -3,7 +3,8 @@
   hx-swap="innerHTML" 
   hx-get="{% url 'privatecard' %}" 
   hx-target="this">
-  <div class="d-flex justify-content-end my-2">
+  <div class="d-flex justify-content-between my-2">
+    <h4>My profile</h4>
     <button class="btn btn-secondary" hx-get="{% url 'editprofile' %}" hx-target="#dialog">
         Edit Details&nbsp;&nbsp;<i class="bi bi-pencil"></i>
     </button>
