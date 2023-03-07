@@ -115,7 +115,9 @@ def buyitem_call(request):
             )
             notification.save()
             
-            return HttpResponse(status=204)
+            return HttpResponse(
+                status=204,
+                headers={"HX-Trigger": "balance_update"})
 
     raise Http404()
 

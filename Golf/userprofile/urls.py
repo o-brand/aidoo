@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 from . import views
 
 
@@ -43,4 +44,9 @@ urlpatterns = [
     path("posts", views.posts, name="posts"),
     # Private profile posts
     path("bookmarks", views.bookmarks, name="bookmarks"),
+    # Balance badge
+    path(
+        "balance",
+        TemplateView.as_view(template_name="userprofile/balance.html"),
+        name="balance"),
 ]

@@ -11,7 +11,7 @@
   </div>
 
   {% if posts %}
-    {% for job in posts %}
+    {% for job, applicants in posts.items %}
       <div class="card mb-2 job-card">
         <div class="card-body">
         <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a></h5>
