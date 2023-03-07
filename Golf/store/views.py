@@ -36,17 +36,19 @@ def home(request):
     purchased_items = [x.purchase for x in purchases]
 
     forms = dict()
-    for k in items:
+    for item in items:
+        # Takes the minimum of the (limit per user - already bought), 
+        # the stock, the display limit of 5, and the maximal quantity 
+        # that can be bought using the balance
         values = range(1, min(
-            min(k.limit_per_user - sum(
-            [x.quantity for x in Sale.objects.filter(
-                purchase=k, buyer=me)]),
-            k.stock, 5)+1 if k.limit_per_user is not None else min(5, k.stock)+1,
-            me.balance//k.price))
+            item.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
+                purchase=item, buyer=me)])
+            if item.limit_per_user is not None else item.stock,
+            me.balance//item.price, item.stock, 5)+1)
         if len(values) > 0:
-            forms[k] = BuyForm(values)
+            forms[item] = BuyForm(values)
         else:
-            forms[k] = False
+            forms[item] = False
 
     context = {
         "items": items,
@@ -74,11 +76,10 @@ def buyitem_call(request):
             raise Http404()
 
         choices = range(1, min(
-            min(item.limit_per_user - sum(
-            [x.quantity for x in Sale.objects.filter(
-                purchase=item, buyer=me)]),
-            item.stock, 5)+1 if item.limit_per_user is not None else min(5, item.stock)+1,
-            me.balance//item.price))
+            item.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
+                purchase=item, buyer=me)])
+            if item.limit_per_user is not None else item.stock,
+            me.balance//item.price, item.stock, 5)+1)
         
         form = BuyForm(choices, data=request.POST)
         try:
