@@ -23,24 +23,27 @@
     {% if job.deadline is not None %}
       {{ job.deadline | date:'d M Y' }}
     {% else %}
-      None
+      No Deadline
     {% endif %}
     &nbsp;
     <i class="bi bi-triangle"></i>
     {{ job.points }}
   </p>
   {% if status == "AC" %}
-    <p>Poster: {{ job.poster_id.username }}</p>
+    <p>You were accepted to this job. You can chat with {{ job.poster_id.first_name }} {{ job.poster_id.last_name }} 
+      <a href="{% url 'userdetails' job.poster_id.id %}">({{ job.poster_id.username }})</a>
+      to make further arrangements for this job.
+    </p>
     <p><a href="{% url 'chat-room' job.poster_id.id%}" class="btn btn-primary">Chat</a></p>
   {% elif status == "AP" %}
-    <button class="btn btn-outline-danger"
+    <p>If you withdraw, you cannot apply again.</p>
+    <button class="btn btn-danger"
         _="on click add @disabled to me"
         hx-post="{% url 'withdraw' %}"
         hx-target="closest span"
         hx-swap="innerHTML"
         hx-vals='{"job_id": {{ job.job_id }} }'
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Withdraw</button>
-    <p>If you withdraw, you cannot apply again.</p>
   {% elif status == "WD" %}
     <p>You withdrew from this job.</p>
   {% elif status == "RE" %}

@@ -79,7 +79,7 @@ def commitments(request):
         Q(applicant_id=actual_user_id)
     )
 
-    accepted_jobs = [(job.job_id, "Accepted") for job in accepted]
+    accepted_jobs = [(job.job_id, job.status) for job in accepted]
 
     context = {
         "me": me,
