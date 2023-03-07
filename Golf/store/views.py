@@ -117,7 +117,7 @@ def buyitem_call(request):
             
             return HttpResponse(
                 status=204,
-                headers={"HX-Trigger": "balance_update"})
+                headers={"HX-Trigger": "rebalance"})
 
     raise Http404()
 
@@ -207,6 +207,7 @@ class TransferView(View):
             
             return HttpResponse(
                 status=204,
+                headers={"HX-Trigger": "rebalance"}
             ) # No content
 
         return render(
