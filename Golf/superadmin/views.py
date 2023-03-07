@@ -7,9 +7,7 @@ from django.views.generic import ListView
 from .models import ReportTicket
 
 
-def home(request):
-    # Render the page
-    return render(request, "superadmin/index.html")
+
 
 class ReportFormView(View):
     """Displays form to report a job post"""
@@ -53,3 +51,4 @@ class ReportsView(ListView):
         tickets = ReportTicket.objects.filter(user_id=me)
 
         return tickets
+
