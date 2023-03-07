@@ -51,4 +51,3 @@ class ReportsView(ListView):
         tickets = ReportTicket.objects.filter(user_id=me)
 
         return tickets
-
