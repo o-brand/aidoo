@@ -2,6 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views import View
 from .forms import ReportForm
+from django.views.generic import ListView
+
+from .models import ReportTicket
+
 
 def home(request):
     # Render the page
@@ -35,3 +39,17 @@ class ReportFormView(View):
                 "reported_job": request.POST.get("job_id"),
                 "reported_user":request.POST.get("user_id")},
         )
+
+class ReportsView(ListView):
+    """Displays a list to show the reports."""
+
+    model = ReportTicket
+    template_name = "superadmin/index.html"
+    context_object_name = "tickets"
+
+    def get_queryset(self):
+        """Reads reports from the database."""
+        me = self.request.user
+        tickets = ReportTicket.objects.filter(user_id=me)
+
+        return tickets
