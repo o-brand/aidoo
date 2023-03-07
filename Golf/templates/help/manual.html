@@ -3,8 +3,16 @@
 {% block title %}User manual{% endblock %}
 
 {% block content %}
-<h1>User manual</h1>
-<p>TODO</p>
+{% if user.is_authenticated %}
+  {% include 'navigation.html' %}
+{% else %}
+  {% include 'public-navigation.html' %}
+{% endif %}
 
-<p><a href="{% url 'help' %}">Go back to help page</a></p>
+<div class="container">
+  <h1>User manual</h1>
+  <p>TODO</p>
+</div>
+
+{{ block.super }}
 {% endblock %}

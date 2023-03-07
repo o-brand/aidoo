@@ -550,12 +550,6 @@ class ProfileEditTestCase(TestCase):
         # Name must be ok
         self.assertEqual(0, len(form.errors))
 
-        # Checks fields for errors
-        for key in form.errors:
-            error_now = form.errors[key]
-            self.assertEqual(1, len(error_now))
-            self.assertIn("This field is required.", form.errors[key][0])
-
     def test_profane_bio_entered(self):
         # behaviour if bio contains profanity
         # there should be less errors thrown
