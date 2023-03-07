@@ -80,3 +80,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
         saved_message = Message.objects.create(**message)
 
         return saved_message.date_time.strftime("%#d %b %Y, %#I:%M %p").replace('PM', 'p.m.').replace('AM', 'a.m.')
+
