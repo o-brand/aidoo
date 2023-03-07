@@ -255,6 +255,7 @@ a:hover {
   margin-top: 10px;
   margin-left: 10px;
   margin-right: 10px;
+  border-radius: 50%;
 }
 
 .chat-profile-pic-right {
@@ -264,6 +265,7 @@ a:hover {
   margin-top: 10px;
   margin-left: 10px;
   margin-right: 10px;
+  border-radius: 50%;
 }
 
 .message-me {
