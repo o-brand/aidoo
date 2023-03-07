@@ -195,7 +195,7 @@ class PostReportCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("Ensure this value has at most 1000 characters", form.errors[key][0])
 
-class ReportTicketTestCase(TestCase):
+class ReportTicketTestCase(LoginRequiredTestCase):
     """Ticket model test"""
 
     def setUp(self):
@@ -236,7 +236,7 @@ class ReportTicketTestCase(TestCase):
             "type": 'JOB'
         }
         Report.objects.create(**report)
-        r = Job.objects.get(pk=1)
+        r = Report.objects.get(pk=1)
 
         #create ticket
         ticket = {
@@ -253,7 +253,6 @@ class ReportTicketTestCase(TestCase):
 
         len1 = len(ReportTicket.objects.all())
         ticket = {
-            "ticket_id": t,
             "report_id": r, 
             "user_id": self.user, 
         }
@@ -281,7 +280,7 @@ class ReportTicketTestCase(TestCase):
         #change status of the ticket
         pass
 
-class ConflictRersolutionTestCase(TestCase):
+class ConflictRersolutionTestCase(LoginRequiredTestCase):
 
     def setUp(self):
 
