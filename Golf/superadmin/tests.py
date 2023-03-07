@@ -111,6 +111,7 @@ class ReportingTestCase(LoginRequiredTestCase):
         with self.assertRaises(ValidationError):
             created_report.full_clean()
 
+
 class PostReportCase(TestCase):
     """Tests for reporting a job."""
 
@@ -134,7 +135,7 @@ class PostReportCase(TestCase):
         job["completed"] = False
         job["poster_id_id"] = 1
         Job.objects.create(**job)
-    
+
     def test_empty_form(self):
 
         job = Job.objects.get(pk=1)
@@ -153,7 +154,7 @@ class PostReportCase(TestCase):
             "reporting_user": "1",
             "reported_user": "1",
             "reported_job": Job.objects.get(pk=1),
-            "complaint": "!"*11, 
+            "complaint": "!"*11,
             "type":"Job"
         }
         form = ReportForm(data=new_report)
@@ -195,13 +196,11 @@ class PostReportCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("Ensure this value has at most 1000 characters", form.errors[key][0])
 
-class ReportTicketTestCase(LoginRequiredTestCase):
+
+class ReportTicketTestCase(TestCase):
     """Ticket model test"""
 
     def setUp(self):
-
-        super().setUp()
-
         fake = Faker()
 
         # create 1 user in the database
@@ -210,10 +209,8 @@ class ReportTicketTestCase(LoginRequiredTestCase):
         credentials["password"] = "a"
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
-        credentials["date_of_birth"] = datetime.datetime.now()
-        User.objects.create_user(**credentials)
-        credentials.clear()
-
+        credentials["date_of_birth"] = fake_time(self)
+        self.user = User.objects.create_user(**credentials)
 
         #create job
         job = {
@@ -240,8 +237,8 @@ class ReportTicketTestCase(LoginRequiredTestCase):
 
         #create ticket
         ticket = {
-            "report_id": r, 
-            "user_id": self.user, 
+            "report_id": r,
+            "user_id": self.user,
         }
         ReportTicket.objects.create(**ticket)
 
@@ -253,8 +250,8 @@ class ReportTicketTestCase(LoginRequiredTestCase):
 
         len1 = len(ReportTicket.objects.all())
         ticket = {
-            "report_id": r, 
-            "user_id": self.user, 
+            "report_id": r,
+            "user_id": self.user,
         }
 
         ReportTicket.objects.create(**ticket)
@@ -273,18 +270,25 @@ class ReportTicketTestCase(LoginRequiredTestCase):
         len2 = len(ReportTicket.objects.all())
 
         self.assertEqual(len1-1, len2)
-        #pass
-        ### WAS THERE BEFOFRE, BUT NAH
 
     def test_resolution(self):
         #change status of the ticket
         pass
 
-class ConflictRersolutionTestCase(LoginRequiredTestCase):
+
+class ConflictRersolutionTestCase(TestCase):
 
     def setUp(self):
+        fake = Faker()
 
-        super().setUp()
+        # create 1 user in the database
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "a"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = fake_time(self)
+        self.user = User.objects.create_user(**credentials)
 
         #create job
         job = {
@@ -298,34 +302,34 @@ class ConflictRersolutionTestCase(LoginRequiredTestCase):
         j = Job.objects.get(pk=1)
 
         conflict = {
-            "job_id": j, 
-            "user1_id": self.user, 
-            #"user2_id":self.user, 
+            "job_id": j,
+            "user1_id": self.user,
+            #"user2_id":self.user,
             "content": "a"*50,
-            "status": 'OPEN', 
+            "status": 'OPEN',
             "type": 'CONFLICT1'
         }
         ConflictResolution.objects.create(**conflict)
-        
+
     def test_insertion(self):
         #insert conflict
         j = Job.objects.get(pk=1)
 
         len1 = len(ConflictResolution.objects.all())
 
-        conflict = { 
-            "job_id": j, 
-            "user1_id": self.user, 
-            #"user2_id":self.user, 
+        conflict = {
+            "job_id": j,
+            "user1_id": self.user,
+            #"user2_id":self.user,
             "content": "a"*50,
-            "status": 'OPEN', 
+            "status": 'OPEN',
             "type": 'CONFLICT1'
         }
         ConflictResolution.objects.create(**conflict)
 
         len2 = len(ConflictResolution.objects.all())
         self.assertEqual(len1+1, len2)
-    
+
     def test_deletion(self):
         #delete a conflict
         len1 = len(ConflictResolution.objects.all())
@@ -341,25 +345,19 @@ class ConflictRersolutionTestCase(LoginRequiredTestCase):
         #change status of the conflict
         pass
 
-    # def test_content_max_length(self):
-    #     j = Job.objects.get(pk=1)
-        
-    #     conflict = {
-    #         "job_id": j, 
-    #         "user1_id": self.user, 
-    #         #"user2_id":self.user, 
-    #         "content": "a"*500,
-    #         "status": 'OPEN', 
-    #         "type": 'CONFLICT1'
-    #     }
+    def test_content_max_length(self):
+        j = Job.objects.get(pk=1)
 
-    #     created_conflict = ConflictResolution.create(**conflict)
+        conflict = {
+            "job_id": j,
+            "user1_id": self.user,
+            #"user2_id":self.user,
+            "content": "a"*500,
+            "status": 'OPEN',
+            "type": 'CONFLICT1'
+        }
 
-    #     with self.assertRaises(ValidationError):
-    #         created_conflict.full_clean()
-        
+        created_conflict = ConflictResolution.objects.create(**conflict)
 
-
-
-
-
+        with self.assertRaises(ValidationError):
+            created_conflict.full_clean()
