@@ -74,8 +74,6 @@ body {
 
 .jobs-scroll {
   overflow: auto;
-  margin-left: 14%;
-  margin-right: 14%;
 }
 
 .job-card {
@@ -443,4 +441,7 @@ a:hover {
   border-right: none;
 }
 
-
+.navbar .badge {
+  margin-top: 7%;
+  height: fit-content;
+}

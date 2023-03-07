@@ -54,7 +54,7 @@ class TransferForm(ModelForm):
             "rows": 3,
         }
     ),
-    label="Message for recipient",
+    label="Message for recipient (optional)",
     validators=[validate_profanity],
     required=False,
     )

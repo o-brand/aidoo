@@ -1,28 +1,30 @@
-<div class="d-flex justify-content-end my-2">
-  <button hx-get="{% url 'editprofile' %}" hx-target="#dialog">
-    Edit Details&nbsp;&nbsp;<i class="bi bi-pencil"></i>
-  </button>
-</div>
-<div 
-  class="card" 
+<div
   hx-trigger="profile_edit from:body" 
-  hx-swap="outerHTML" 
+  hx-swap="innerHTML" 
   hx-get="{% url 'privatecard' %}" 
   hx-target="this">
-  <img src="/static/assets/pfp/{{me.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
-  <div class="card-body">
-    <h5 class="card-title mb-0">{{ me.first_name }} {{ me.last_name }}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{ me.username }}</h6>
-    <p class="card-text">
-      Email address: {{ me.email }}<br/>
-      Date of birth: {{ me.date_of_birth }}<br/>
-      Joined: {{ me.date_joined | date:'d M Y'}}<br/>
-      Bio: {{ me.biography }}</br>
-      Rating: {{ me.rating }}<br/>
-      Balance: <i class="bi bi-triangle"></i> {{ me.balance }}<br/>
-      <br/>
-      <a href="{% url 'userdetails' me.id %}">
-        View your public profile page
-      </a>
+  <div class="d-flex justify-content-between my-2">
+    <h4>My profile</h4>
+    <button class="btn btn-secondary" hx-get="{% url 'editprofile' %}" hx-target="#dialog">
+        Edit Details&nbsp;&nbsp;<i class="bi bi-pencil"></i>
+    </button>
+  </div>
+  <div 
+    class="card">
+    <img src="/static/assets/pfp/{{me.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
+    <div class="card-body">
+      <h5 class="card-title mb-0">{{ me.first_name }} {{ me.last_name }}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">{{ me.username }}</h6>
+      <p class="card-text">
+        Email address: {{ me.email }}<br/>
+        Date of birth: {{ me.date_of_birth }}<br/>
+        Joined: {{ me.date_joined | date:'d M Y'}}<br/>
+        Bio: {{ me.biography }}</br>
+        Balance: <i class="bi bi-triangle"></i> {{ me.balance }}<br/>
+        <br/>
+        <a href="{% url 'userdetails' me.id %}">
+          View your public profile page
+        </a>
+    </div>
   </div>
 </div>

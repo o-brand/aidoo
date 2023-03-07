@@ -5,7 +5,6 @@ from django.http import Http404, HttpResponse
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
-from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.views import View
 from django.views.generic import ListView

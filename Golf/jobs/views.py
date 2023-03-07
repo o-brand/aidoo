@@ -88,7 +88,9 @@ class FormView(View):
             me.balance = me.balance - post.points
             me.save()
 
-            return HttpResponse(status=204) # No content
+            return HttpResponse(
+                status=204,
+                headers={"HX-Trigger": "new_post"}) # No content
 
         return render(
             request,
