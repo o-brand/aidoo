@@ -1,10 +1,13 @@
 from io import BytesIO
+import math
 import qrcode
 import mimetypes
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.views import View
+from django.core.exceptions import ValidationError
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
 from .models import Item, Sale
@@ -26,17 +29,20 @@ def home(request):
     user_id_exists = len(users) == 1
     if not user_id_exists:
         raise Http404()
+    me = request.user
 
     items = Item.objects.filter(on_offer=True)
-    purchases = Sale.objects.filter(buyer=request.user)
+    purchases = Sale.objects.filter(buyer=me)
     purchased_items = [x.purchase for x in purchases]
 
     forms = dict()
     for k in items:
-        values = range(1,min(k.limit_per_user - sum(
+        values = range(1, min(
+            min(k.limit_per_user - sum(
             [x.quantity for x in Sale.objects.filter(
-                purchase=k, buyer=request.user)]),
-            k.stock, 5)+1 if k.limit_per_user is not None else min(5, k.stock)+1)
+                purchase=k, buyer=me)]),
+            k.stock, 5)+1 if k.limit_per_user is not None else min(5, k.stock)+1,
+            me.balance//k.price))
         if len(values) > 0:
             forms[k] = BuyForm(values)
         else:
@@ -51,8 +57,8 @@ def home(request):
 
 def buyitem_call(request):
     if request.method == 'POST':
-        user = request.user
-        buyer = User.objects.get(id=user.id)
+        me = request.user
+        buyer = me
 
         try:
             item_id = int(request.POST.get("purchase", -1))
@@ -67,17 +73,25 @@ def buyitem_call(request):
         if not item.on_offer:
             raise Http404()
 
-        choices = range(1,min(
-            item.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
-                purchase=item, buyer=request.user)]), item.stock)+1
-            if item.limit_per_user is not None else item.stock)
+        choices = range(1, min(
+            min(item.limit_per_user - sum(
+            [x.quantity for x in Sale.objects.filter(
+                purchase=item, buyer=me)]),
+            item.stock, 5)+1 if item.limit_per_user is not None else min(5, item.stock)+1,
+            me.balance//item.price))
         
         form = BuyForm(choices, data=request.POST)
+        try:
+            quantity = int(form.data["quantity"])
+            if buyer.balance < quantity * item.price:
+                raise Http404()
+        except ValidationError:
+            raise Http404()
         if form.is_valid():
             sale = Sale.objects.create(
             purchase = item,
             buyer = buyer,
-            quantity = int(form.cleaned_data["quantity"]))
+            quantity = quantity)
 
             buyer.balance = buyer.balance - item.price * sale.quantity
             # Reduce the stock of the item by the sale qty
@@ -89,7 +103,20 @@ def buyitem_call(request):
             buyer = buyer.save()
             sale = sale.save()
 
-    return HttpResponse(status=204)
+            notification = Notification.objects.create(
+                user_id=me,
+                title=f"New purchase",
+                content=(
+                    (f"Thank you for buying {item.item_name}."
+                    f" Check your email for the redeemable QR code.")
+                ),
+                link="",
+            )
+            notification.save()
+            
+            return HttpResponse(status=204)
+
+    raise Http404()
 
 def send_QRcode(email, data):
     """ create a qr code from the data and return an image stream """

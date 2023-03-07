@@ -439,4 +439,7 @@ a:hover {
   border-right: none;
 }
 
-
+.navbar .badge {
+  margin-top: 7%;
+  height: fit-content;
+}
