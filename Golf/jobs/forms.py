@@ -6,6 +6,7 @@ from Golf.validators import validate_profanity
 from .validators import validate_deadline
 from .models import Job
 
+
 class JobForm(ModelForm):
     """It is used to post a job."""
 
@@ -100,4 +101,3 @@ class JobForm(ModelForm):
             "deadline",
             "poster_id",
         ]
-        

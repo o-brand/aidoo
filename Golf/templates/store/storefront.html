@@ -6,79 +6,27 @@
 {% block content %}
 {% include 'navigation.html' %}
 
-<div class="container">
+<div class="container my-4">
 <div class="row">
   <section class="text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Get your reward</h1>
-        <p class="lead text-muted">A place to pick a reward for your earned aidoo coins.</p>
+        <p class="lead text-muted">A place to pick a reward with your hard earned doos.</p>
       </div>
     </div>
   </section>
+</div>
 
-  <div class="album py-1 bg-light">
-    <p class="">Current balance: <i class="bi bi-triangle"></i> {{me.balance}}</p>
+  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1"
+    hx-trigger="item_bought from:body"
+    hx-swap="innerHTML"
+    hx-get="{% url 'items' %}"
+    hx-target="this">
+      {% include 'store/items.html' %}
   </div>
 </div>
 
-<!--<div class="container-fluid" style="margin:34px;">-->  
-  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1">
-      <div class="col p-1">
-        <div class="card w-100 rounded-4 shadow-sm store-card m-1">
-          <div class="card-body">
-            <div class="card-title">
-              <h6>Gift doos</h6>
-              <!--picture-->
-              <img src="{{ item.item_picture.url }}">
-            </div>
-            <div class="card-text" style="height:70px;overflow: scroll;">
-              <small>
-                You can also gift some of your coins to a user of your choosing. 
-                Giving back is always in vogue.
-              </small>
-            </div>
-          </div>
-          <div class="card-footer rounded-4">
-            <button class="btn btn-success" hx-get="{% url 'transfer' %}" hx-target="#dialog">Let's doo it!</button>
-          </div>
-        </div>
-    </div>
-    
-    {% for item, form in forms.items %}
-      <div class="col p-1">
-        <div class="card w-100 rounded-4 shadow-sm store-card m-1">
-          <div class="card-body">
-            <div class="card-title">
-              <div class="d-flex justify-content-between">
-                <h6>{{item.item_name}}</h6>
-                <span class="badge bg-success"><i class="bi bi-triangle"></i> {{item.price}}</span>
-              </div>
-              
-              <img src="{{ item.item_picture.url }}">
-            </div>
-            <div class="card-text" style="height:70px;overflow: scroll;">
-              <small>{{item.description}}</small>
-            </div>
-          </div>
-          <div class="card-footer rounded-4">
-            <div class="d-flex justify-content-start">
-              {% if not form %}
-                {% include 'htmx/buy-item-bought.html' %}
-              {% else %}
-                <form action="" hx-post="{% url 'buyitem' %}" hx-trigger="submit">
-                  {% csrf_token %}
-                  <input type="hidden" value="{{item.item_id}}" name="purchase"/>
-                  {{form.quantity}}
-                  <input type="submit" value="Buy" class="btn btn-primary" name="form"/>
-                </form>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-    </div>
-</div>
+<script src="{% static 'js/store.js' %}"></script>
 {{ block.super }}
 {% endblock %}

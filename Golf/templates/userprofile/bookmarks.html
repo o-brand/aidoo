@@ -14,14 +14,11 @@
           {% if bookmark.job_id.deadline is not None %}
             {{ bookmark.job_id.deadline | date:'d M Y' }}
           {% else %}
-            None
+            No Deadline
           {% endif %}
           &nbsp;
           <i class="bi bi-triangle"></i>
           {{ bookmark.job_id.points }}
-        </p>
-        <p>
-          Saved on {{bookmark.saving_time | date:'d M Y' }}
         </p>
       </div>
     </div>

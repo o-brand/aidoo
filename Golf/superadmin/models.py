@@ -30,79 +30,87 @@ class Report(models.Model):
 
     # ID of reported job, if the report concerns a job post
     reported_job = models.ForeignKey(Job,
-        on_delete=models.CASCADE,
-        default=None)
-    
+                                     on_delete=models.CASCADE)
+
     # ID of reported job, if the report concerns a chat
-    # Fix and uncomment when 
-    # reported_room = models.ForeignKey(Room, 
+    # Fix and uncomment when
+    # reported_room = models.ForeignKey(Room,
     #     on_delete=models.CASCADE,
     #     default=None)
 
     # ID of reported comment, if the report concerns a comment
     # To be implemented alongside user comments
-    
+
     # User being reported
     reported_user = models.ForeignKey(User,
-        related_name="reported",
-        on_delete=models.CASCADE)
-    
+                                      related_name="reported",
+                                      on_delete=models.CASCADE)
+
     # User filing the report
     reporting_user = models.ForeignKey(User,
-        related_name="reporting", 
-        on_delete=models.CASCADE)
-    
+                                       related_name="reporting",
+                                       on_delete=models.CASCADE)
+
     # Content of the complaint, should take an adequate min length
     complaint = models.CharField(max_length=1000)
-    
+
     # The time at which the report was first filed
     reporting_time = models.DateTimeField(default=timezone.now)
-   
-   # The time at which the report last changed status
-    last_update_time = models.DateTimeField(blank=True, 
-        default=None, 
-        null=True)
-    
+
+    # The time at which the report last changed status
+    last_update_time = models.DateTimeField(blank=True,
+                                            default=timezone.now)
+
     # The status of dealing with the report
-    status = models.CharField(
-        choices=ReportStatus.choices, 
-        max_length=10, 
-        default=ReportStatus.OPEN
-    )
-    
+    status = models.CharField(choices=ReportStatus.choices,
+                              max_length=10,
+                              default=ReportStatus.OPEN)
+
     # The type of report
     type = models.CharField(choices=ReportType.choices, max_length=10)
 
 
-#Model for assigining reports to reviewers
+# Model for assigining reports to reviewers
 class ReportTicket(models.Model):
 
-    #primary key
+    class TicketStatus(models.TextChoices):
+        """This class stores the available values for the status."""
+        OPEN = 'Open', ('Open')
+        RESOLVED = 'Resolved', ('Resolved')
+
+    class TicketResult(models.TextChoices):
+        """This class stores the possible outcomes of a result"""
+        BAN = 'Ban', ('Ban')
+        NOT_BAN = 'Not_Ban', ('Not_Ban')
+    # primary key
     ticket_id = models.BigAutoField(primary_key=True)
 
-    #id of the reported object
-    report_id  = models.ForeignKey(Report, on_delete=models.CASCADE, default=None)
+    # id of the reported object
+    report_id = models.ForeignKey(Report, on_delete=models.CASCADE,
+                                  blank=False, null=False)
 
-    #id of a user assigned to resolve the issue
+    # id of a user assigned to resolve the issue
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    #the result of the resolutiom
-    answer=models.BooleanField(default=False)
+    # the result of the resolutiom
+    answer = models.CharField(choices=TicketResult.choices, blank=True,
+                              null=True, default=None)
 
-    #time stamp for assigning the job
+    # time stamp for assigning the job
     time_assigned = models.DateTimeField(default=timezone.now)
 
-    #time stamp for resolving the report
-    time_resolved = models.DateTimeField(default=None, blank=True, null=True)
+    # status of the ticket
+    status = models.CharField(choices=TicketStatus.choices,
+                              default=TicketStatus.OPEN)
 
-    
+
 class ConflictResolution(models.Model):
     class ConflictType(models.TextChoices):
-         """available values for the conflict type"""
-         #FINISH
-         CONFLICT1 = 'Conflict1', ('Conflict1')
-         CONFLICT2 = 'Conflict2', ('Conflict2')
-    
+        """available values for the conflict type"""
+        # FINISH
+        CONFLICT1 = 'Conflict1', ('Conflict1')
+        CONFLICT2 = 'Conflict2', ('Conflict2')
+
     class ConflictStatus(models.TextChoices):
         "available values for the conflict status"
 
@@ -110,41 +118,41 @@ class ConflictResolution(models.Model):
         FLAGGED = 'Flagged', ('Flagged')
         RESOLVED = 'Resolved', ('Reesolved')
 
-    #Primary key
+    # Primary key
     conflict_id = models.BigAutoField(primary_key=True)
 
-    #conflicted_action
-    job_id = models.ForeignKey(Job, 
-        on_delete = models.CASCADE, 
-        default=None)
+    # conflicted_action
+    job_id = models.ForeignKey(Job,
+                               on_delete=models.CASCADE,
+                               default=None)
     user1_id = models.ForeignKey(User,
-        related_name = "user1",
-        on_delete=models.CASCADE)
-    
-    #IF 2 USERS ARE INVOLVED
-    #user2_id = models.ForeignKey(User,
-        #related_name = "user2",
-        #on_delete=models.CASCADE)
+                                 related_name="user1",
+                                 on_delete=models.CASCADE)
 
-    #reason for the conflict
+    # IF 2 USERS ARE INVOLVED
+    # user2_id = models.ForeignKey(User,
+        # related_name = "user2",
+        # on_delete=models.CASCADE)
+
+    # reason for the conflict
     content = models.CharField(max_length=100)
 
-    #time the conflict was issues
+    # time the conflict was issues
     conflict_time = models.DateTimeField(default=timezone.now)
 
-    #the last update time
-    conflict_update_time = models.DateTimeField(blank=True, 
-        default=None, 
-        null=True)
-    
-    #status of dealing with the conflict
+    # the last update time
+    conflict_update_time = models.DateTimeField(blank=True,
+                                                default=None,
+                                                null=True)
+
+    # status of dealing with the conflict
     status = models.CharField(
-        choices=ConflictStatus.choices, 
+        choices=ConflictStatus.choices,
         max_length=10,
         default=ConflictStatus.OPEN
     )
 
-    #type of conflict
+    # type of conflict
     type = models.CharField(
         choices=ConflictType.choices,
         max_length=10

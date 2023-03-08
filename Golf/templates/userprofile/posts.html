@@ -1,7 +1,7 @@
 <div
-  hx-trigger="new_post from:body" 
-  hx-swap="innerHTML" 
-  hx-get="{% url 'posts' %}" 
+  hx-trigger="new_post from:body"
+  hx-swap="innerHTML"
+  hx-get="{% url 'posts' %}"
   hx-target="this">
   <div class="d-flex justify-content-between my-2">
     <h4>My posts</h4>
@@ -11,7 +11,7 @@
   </div>
 
   {% if posts %}
-    {% for job in posts %}
+    {% for job, applicants in posts.items %}
       <div class="card mb-2 job-card">
         <div class="card-body">
         <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{job.job_title }}</a></h5>

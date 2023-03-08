@@ -83,4 +83,4 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         comment["content"] = content
         saved_comment = Comment.objects.create(**comment)
 
-        return saved_comment.post_time.strftime("%b %d %Y %H:%M:%S")
+        return saved_comment.post_time.strftime("%#d %b %Y, %#I:%M %p").replace('PM', 'p.m.').replace('AM', 'a.m.')

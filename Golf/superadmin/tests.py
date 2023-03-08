@@ -11,7 +11,10 @@ from jobs.models import Job
 from superadmin.models import Report, ReportTicket, ConflictResolution
 from superadmin.forms import ReportForm
 
+
+# Get actual user model.
 User = get_user_model()
+
 
 class ReportingTestCase(LoginRequiredTestCase):
     """ tests for the reports model """
@@ -129,7 +132,7 @@ class PostReportCase(TestCase):
 
         #job
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False

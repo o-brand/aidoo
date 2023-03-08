@@ -55,7 +55,7 @@ body {
 }
 
 .navbar-nav img:hover {
-  border: 1.5px rgb(153, 153, 153) solid 
+  border: 1.5px rgb(153, 153, 153) solid;
 }
 
 /* Home Page */
@@ -253,6 +253,7 @@ a:hover {
   margin-top: 10px;
   margin-left: 10px;
   margin-right: 10px;
+  border-radius: 50%;
 }
 
 .chat-profile-pic-right {
@@ -262,6 +263,7 @@ a:hover {
   margin-top: 10px;
   margin-left: 10px;
   margin-right: 10px;
+  border-radius: 50%;
 }
 
 .message-me {
@@ -439,4 +441,8 @@ a:hover {
   border-right: none;
 }
 
+.navbar .badge {
+  margin-top: 7%;
+  height: fit-content;
+}
 

@@ -1,0 +1,32 @@
+<div class="col p-1">
+  <div class="card w-100 rounded-4 shadow-sm store-card m-1">
+    <div class="card-body">
+      <div class="card-title">
+        <h6>Gift doos</h6>
+        <!--picture-->
+        <img src="{{ item.item_picture.url }}">
+      </div>
+      <div class="card-text" style="height:70px;overflow: scroll;">
+        <small>
+          You can also gift some of your coins to a user of your choosing.
+          Giving back is always in vogue.
+        </small>
+      </div>
+    </div>
+    <div class="card-footer rounded-4">
+      <div class="d-flex justify-content-start">
+        <p><button class="btn btn-success" hx-get="{% url 'transfer' %}" hx-target="#dialog">Let's doo it!</button></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if forms %}
+  {% for item, form in forms.items %}
+  <div class="col p-1">
+    {% include 'store/item-card.html' %}
+  </div>
+  {% endfor %}
+{% else %}
+<p>Nope</p>
+{% endif %}
