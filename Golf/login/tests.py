@@ -25,6 +25,18 @@ class WelcomeTestCase(TestCase):
     def test_welcome_available_by_name(self):
         response = self.client.get(reverse("welcome"))
         self.assertEqual(response.status_code, 200)
+    
+    def test_redirect(self):
+        credentials = {
+            "username": "asd",
+            "password": "asd123",
+            "date_of_birth": datetime.datetime.now(),
+        }
+        user = User.objects.create_user(**credentials)
+        self.client.post("/login", credentials, follow=True)
+
+        response = self.client.get(reverse("welcome"))
+        self.assertEqual(response.status_code, 302)
 
 
 class LoginTestCase(TestCase):
