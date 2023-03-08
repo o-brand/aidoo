@@ -183,7 +183,7 @@ EMAIL_USE_TLS = True
 # CHAT
 
 # The maximum number of days of storing a message
-CHAT_MESSAGE_TTL = 31
+CHAT_MESSAGE_TTL = 91
 
 
 # HEROKU
