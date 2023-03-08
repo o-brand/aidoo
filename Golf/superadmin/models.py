@@ -25,6 +25,9 @@ class Report(models.Model):
         TICKETED = 'Ticketed', ('Ticketed')
         RESOLVED = 'Resolved', ('Resolved')
 
+    # Primary key
+    report_id = models.BigAutoField(primary_key=True)
+
     # ID of reported job, if the report concerns a job post
     reported_job = models.ForeignKey(Job,
         on_delete=models.CASCADE,
