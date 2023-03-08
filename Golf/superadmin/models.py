@@ -25,6 +25,9 @@ class Report(models.Model):
         TICKETED = 'Ticketed', ('Ticketed')
         RESOLVED = 'Resolved', ('Resolved')
 
+    # Primary key
+    report_id = models.BigAutoField(primary_key=True)
+
     # ID of reported job, if the report concerns a job post
     reported_job = models.ForeignKey(Job,
         on_delete=models.CASCADE,
@@ -74,6 +77,9 @@ class Report(models.Model):
 #Model for assigining reports to reviewers
 class ReportTicket(models.Model):
 
+    #primary key
+    ticket_id = models.BigAutoField(primary_key=True)
+
     #id of the reported object
     report_id  = models.ForeignKey(Report, on_delete=models.CASCADE, default=None)
 
@@ -103,6 +109,9 @@ class ConflictResolution(models.Model):
         OPEN = 'Open', ('Open')
         FLAGGED = 'Flagged', ('Flagged')
         RESOLVED = 'Resolved', ('Reesolved')
+
+    #Primary key
+    conflict_id = models.BigAutoField(primary_key=True)
 
     #conflicted_action
     job_id = models.ForeignKey(Job, 
