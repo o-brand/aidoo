@@ -18,10 +18,10 @@
   </section>
 </div>
 
-  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1" 
-    hx-trigger="item_bought from:body" 
-    hx-swap="innerHTML" 
-    hx-get="{% url 'items' %}" 
+  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1"
+    hx-trigger="item_bought from:body"
+    hx-swap="innerHTML"
+    hx-get="{% url 'items' %}"
     hx-target="this">
       {% include 'store/items.html' %}
   </div>

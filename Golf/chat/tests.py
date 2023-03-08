@@ -144,7 +144,7 @@ class RoomCase(LoginRequiredTestCase):
             credentials["date_of_birth"] = datetime.datetime.now()
             User.objects.create_user(**credentials)
             credentials.clear()
-        
+
         room = dict()
         room["user_1"] = User(pk=1)
         room["user_2"] = User(pk=2)
@@ -181,4 +181,3 @@ class RoomCase(LoginRequiredTestCase):
         response = self.client.get("/chat/room/2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(Room.objects.all()), 1)
-

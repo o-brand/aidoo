@@ -14,7 +14,7 @@ def item_picture_rename(instance, filename): # pragma: no cover
 
 class Item(models.Model):
     """This model is used to represent an item for sale in the shop."""
-    
+
     # Primary key
     item_id = models.BigAutoField(primary_key=True)
 
@@ -34,8 +34,8 @@ class Item(models.Model):
     on_offer = models.BooleanField()
 
     # The maximum amount of this item that a user can buy
-    limit_per_user = models.IntegerField(blank=True, 
-        default=None, 
+    limit_per_user = models.IntegerField(blank=True,
+        default=None,
         null=True)
 
     #image field
@@ -69,13 +69,13 @@ class Transfer(models.Model):
     transfer_id = models.BigAutoField(primary_key=True)
 
     # Foreign key to User giving the money
-    sender = models.ForeignKey(User, 
-        related_name="sender", 
+    sender = models.ForeignKey(User,
+        related_name="sender",
         on_delete=models.CASCADE)
 
     # Foreign key to User receiving the money
-    recipient = models.ForeignKey(User, 
-        related_name="recipient", 
+    recipient = models.ForeignKey(User,
+        related_name="recipient",
         on_delete=models.CASCADE)
 
     # Amount of money being transferred

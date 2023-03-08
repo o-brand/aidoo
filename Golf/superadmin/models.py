@@ -29,44 +29,44 @@ class Report(models.Model):
     reported_job = models.ForeignKey(Job,
         on_delete=models.CASCADE,
         default=None)
-    
+
     # ID of reported job, if the report concerns a chat
-    # Fix and uncomment when 
-    # reported_room = models.ForeignKey(Room, 
+    # Fix and uncomment when
+    # reported_room = models.ForeignKey(Room,
     #     on_delete=models.CASCADE,
     #     default=None)
 
     # ID of reported comment, if the report concerns a comment
     # To be implemented alongside user comments
-    
+
     # User being reported
     reported_user = models.ForeignKey(User,
         related_name="reported",
         on_delete=models.CASCADE)
-    
+
     # User filing the report
     reporting_user = models.ForeignKey(User,
-        related_name="reporting", 
+        related_name="reporting",
         on_delete=models.CASCADE)
-    
+
     # Content of the complaint, should take an adequate min length
     complaint = models.CharField(max_length=1000)
-    
+
     # The time at which the report was first filed
     reporting_time = models.DateTimeField(default=timezone.now)
-   
+
    # The time at which the report last changed status
-    last_update_time = models.DateTimeField(blank=True, 
-        default=None, 
+    last_update_time = models.DateTimeField(blank=True,
+        default=None,
         null=True)
-    
+
     # The status of dealing with the report
     status = models.CharField(
-        choices=ReportStatus.choices, 
-        max_length=10, 
+        choices=ReportStatus.choices,
+        max_length=10,
         default=ReportStatus.OPEN
     )
-    
+
     # The type of report
     type = models.CharField(choices=ReportType.choices, max_length=10)
 

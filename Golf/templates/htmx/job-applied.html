@@ -30,7 +30,7 @@
     {{ job.points }}
   </p>
   {% if status == "AC" %}
-    <p>You were accepted to this job. You can chat with {{ job.poster_id.first_name }} {{ job.poster_id.last_name }} 
+    <p>You were accepted to this job. You can chat with {{ job.poster_id.first_name }} {{ job.poster_id.last_name }}
       <a href="{% url 'userdetails' job.poster_id.id %}">({{ job.poster_id.username }})</a>
       to make further arrangements for this job.
     </p>

@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from Golf.utils import create_date_string
 from .models import Report
-"""Report form"""
+
 
 class ReportForm(ModelForm):
     """Form to report a job post"""
@@ -19,7 +19,7 @@ class ReportForm(ModelForm):
     ),
     label="Describe your issue."
     )
-    
+
     class Meta:
         model = Report
         fields = [

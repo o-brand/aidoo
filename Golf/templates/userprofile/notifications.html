@@ -17,7 +17,7 @@
   {% else %}
     <div class="list-group">
       {% for notifications in notifs %}
-        <a href="{{notifications.link}}" 
+        <a href="{{notifications.link}}"
           class="list-group-item list-group-item-action"
           hx-post="{% url 'notification_seen' %}"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
@@ -25,7 +25,7 @@
           <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">
                 {% if not notifications.seen %}
-                  <span class="position-absolute top-50 start-0 
+                  <span class="position-absolute top-50 start-0
                   translate-middle p-2 bg-primary border border-light rounded-circle"></span>
                 {% endif %}
                 {{ notifications.title }}
@@ -41,5 +41,5 @@
     </div>
   {% endif %}
 </div>
-    
+
 {% endblock %}

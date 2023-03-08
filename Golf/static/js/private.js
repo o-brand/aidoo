@@ -6,7 +6,7 @@
     if (document.body.scrollTop > 20 ||
       document.documentElement.scrollTop > 20) {
       scrollButton.style.display = "block";
-    } 
+    }
     else {
       scrollButton.style.display = "none";
     }
@@ -37,7 +37,7 @@ function openTab(content) {
   $("#" + content).show();
   $("#" + content + "_tab").addClass("active");
 }
-  
+
 // Get the active tab from URL and open it (if there is anything)
 var anchorHash = location.href;
 if (anchorHash.lastIndexOf('#') != -1) {
@@ -60,7 +60,7 @@ $(".select").each(function() {
   });
 });
 
-document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener("DOMContentLoaded", function(event) {
   var scrollpos = localStorage.getItem('scrollpos');
   if (scrollpos) {
     window.scrollTo(0, scrollpos);

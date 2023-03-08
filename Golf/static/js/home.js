@@ -5,7 +5,7 @@
     if (document.body.scrollTop > 20 ||
       document.documentElement.scrollTop > 20) {
       scrollButton.style.display = "block";
-    } 
+    }
     else {
       scrollButton.style.display = "none";
     }
@@ -17,7 +17,6 @@
     document.documentElement.scrollTop = 0;
   });
 })()
-
 
 
 jQuery(function ($) {

@@ -143,7 +143,7 @@ class WithdrawButtonCase(LoginRequiredTestCase):
         # Write 1 job into the job model
         for i in range(2):
             job = dict()
-            job["posting_time"] = fake_time(self)
+            job["posting_time"] = fake_time()
             job["points"] = random.randint(0, 100)
             job["assigned"] = False
             job["completed"] = False
@@ -199,7 +199,7 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
 
         # Write 2 job into the job model
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -242,7 +242,7 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
 
         # Create a new job
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -280,7 +280,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
 
         # Write 2 job into the job model
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -318,7 +318,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
 
         # Create a new job
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -346,7 +346,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
 
         # Create a new job
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False

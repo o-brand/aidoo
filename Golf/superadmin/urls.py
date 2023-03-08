@@ -9,4 +9,3 @@ urlpatterns = [
     # Reporting a job, used by HTMX
     path("report", views.ReportFormView.as_view(), name="report"),
 ]
-

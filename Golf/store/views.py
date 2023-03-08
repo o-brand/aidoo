@@ -37,8 +37,8 @@ def home(request):
 
     forms = dict()
     for item in items:
-        # Takes the minimum of the (limit per user - already bought), 
-        # the stock, the display limit of 5, and the maximal quantity 
+        # Takes the minimum of the (limit per user - already bought),
+        # the stock, the display limit of 5, and the maximal quantity
         # that can be bought using the balance
         values = range(1, min(
             item.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
@@ -80,7 +80,7 @@ def buyitem_call(request):
                 purchase=item, buyer=me)])
             if item.limit_per_user is not None else item.stock,
             me.balance//item.price, item.stock, 5)+1)
-        
+
         form = BuyForm(choices, data=request.POST)
         try:
             quantity = int(form.data["quantity"])
@@ -114,7 +114,7 @@ def buyitem_call(request):
                 link="",
             )
             notification.save()
-            
+
             return HttpResponse(
                 status=204,
                 headers={"HX-Trigger": "rebalance"})
@@ -193,7 +193,7 @@ class TransferView(View):
             recipient.balance += amount
             me.save()
             recipient.save()
-            
+
             notification = Notification.objects.create(
                 user_id=recipient,
                 title=f"Gift from {me.username}",
@@ -204,7 +204,7 @@ class TransferView(View):
                 link="profile/me",
             )
             notification.save()
-            
+
             return HttpResponse(
                 status=204,
                 headers={"HX-Trigger": "rebalance"}
