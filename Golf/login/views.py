@@ -1,5 +1,6 @@
 from django.views import View
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
@@ -18,6 +19,17 @@ User = get_user_model()
 
 # Get the PasswordResetTokenGenerator for account activation.
 account_activation_token = PasswordResetTokenGenerator()
+
+
+def welcome(request):
+    """Display the welcome page or redirect."""
+
+    # If the user did no sign out last time...
+    if request.user.is_authenticated:
+        return redirect(reverse("home"))
+
+    # Render the page
+    return render(request, "welcome.html")
 
 
 class SignUpView(View):
