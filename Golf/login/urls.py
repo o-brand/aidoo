@@ -1,16 +1,12 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
-from .views import SignUpView, activateAccount
+from .views import SignUpView, activateAccount, welcome
 
 
 urlpatterns = [
     # Welcome page for the whole project
-    path(
-        route="",
-        view=TemplateView.as_view(template_name="welcome.html"),
-        name="welcome"
-    ),
+    path(route="",view=welcome,name="welcome"),
 
     # Login page
     path(
