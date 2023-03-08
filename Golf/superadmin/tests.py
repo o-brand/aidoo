@@ -11,7 +11,10 @@ from jobs.models import Job
 from superadmin.models import Report
 from superadmin.forms import ReportForm
 
+
+# Get actual user model.
 User = get_user_model()
+
 
 class ReportingTestCase(LoginRequiredTestCase):
     """ tests for the reports model """
@@ -130,13 +133,13 @@ class PostReportCase(TestCase):
 
         #job
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
         job["poster_id_id"] = 1
         Job.objects.create(**job)
-    
+
     def test_empty_form(self):
 
         job = Job.objects.get(pk=1)
@@ -155,7 +158,7 @@ class PostReportCase(TestCase):
             "reporting_user": "1",
             "reported_user": "1",
             "reported_job": Job.objects.get(pk=1),
-            "complaint": "!"*11, 
+            "complaint": "!"*11,
             "type":"Job"
         }
         form = ReportForm(data=new_report)

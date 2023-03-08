@@ -79,7 +79,7 @@ def commitments(request):
         Q(applicant_id=actual_user_id)
     )
 
-    accepted_jobs = [(job.job_id, "Accepted") for job in accepted]
+    accepted_jobs = [(job.job_id, job.status) for job in accepted]
 
     context = {
         "me": me,
@@ -124,9 +124,12 @@ def posts(request):
 
     posted = Job.objects.filter(poster_id=actual_user_id, hidden=False)
 
+    posted_apps = {job: list(Application.objects.filter(job_id=job.job_id))
+                    for job in posted}
+
     context = {
         "me": me,
-        "posts": posted,
+        "posts": posted_apps,
     }
 
     return render(request, "userprofile/posts.html", context)
@@ -378,7 +381,7 @@ def jobdone_call(request):
         applicants = list(Application.objects.filter(job_id=job.job_id))
 
         return render(
-            request, "htmx/job-applicants.html", {"job": job, "applicants": applicants}
+            request, "htmx/job-applicants.html", {"job": job, "applicants": applicants},
         )
 
     # If it is not POST

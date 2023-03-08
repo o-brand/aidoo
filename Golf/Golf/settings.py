@@ -175,15 +175,15 @@ LOGOUT_REDIRECT_URL = "/"  # After log out, the user is redirected to here.
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "smtpmailer.send@gmail.com"
-EMAIL_HOST_PASSWORD = "cjuvqbntoobtxwlc"
+EMAIL_HOST_USER = "aidoo.scot@gmail.com"
+EMAIL_HOST_PASSWORD = "phybzebqpwogrbid"
 EMAIL_USE_TLS = True
 
 
 # CHAT
 
 # The maximum number of days of storing a message
-CHAT_MESSAGE_TTL = 31
+CHAT_MESSAGE_TTL = 91
 
 
 # HEROKU

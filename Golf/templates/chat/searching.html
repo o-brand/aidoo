@@ -4,11 +4,11 @@
     <button class="btn-close" data-bs-dismiss="modal"></button>
   </div>
   <div class="modal-body">
-    <input class="form-control" type="search" 
+    <input class="form-control" type="search"
         name="username" placeholder="Begin typing..."
         hx-post="{% url 'chat-searching' %}"
-        hx-trigger="keyup changed delay:500ms, search" 
-        hx-target="#search-results" 
+        hx-trigger="keyup changed delay:500ms, search"
+        hx-target="#search-results"
         hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <table class="table" id="search-results">
     </table>

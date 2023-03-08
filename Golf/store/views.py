@@ -37,8 +37,8 @@ def home(request):
 
     forms = dict()
     for item in items:
-        # Takes the minimum of the (limit per user - already bought), 
-        # the stock, the display limit of 5, and the maximal quantity 
+        # Takes the minimum of the (limit per user - already bought),
+        # the stock, the display limit of 5, and the maximal quantity
         # that can be bought using the balance
         values = range(1, min(
             item.limit_per_user - sum([x.quantity for x in Sale.objects.filter(
@@ -80,7 +80,7 @@ def buyitem_call(request):
                 purchase=item, buyer=me)])
             if item.limit_per_user is not None else item.stock,
             me.balance//item.price, item.stock, 5)+1)
-        
+
         form = BuyForm(choices, data=request.POST)
         try:
             quantity = int(form.data["quantity"])
@@ -89,20 +89,25 @@ def buyitem_call(request):
         except ValidationError:
             raise Http404()
         if form.is_valid():
-            sale = Sale.objects.create(
-            purchase = item,
-            buyer = buyer,
-            quantity = quantity)
+            data = []
+            for _ in range(quantity):
+                sale = Sale.objects.create(
+                purchase = item,
+                buyer = buyer,
+                quantity = 1)
+
+                sale.save()
+
+                data.append(sale.pk)
 
             buyer.balance = buyer.balance - item.price * sale.quantity
             # Reduce the stock of the item by the sale qty
-            item.stock = item.stock - sale.quantity
+            item.stock = item.stock - quantity
 
-            send_QRcode(buyer.email, sale.pk)
+            send_QRcode(buyer.email, data)
 
             item.save()
-            buyer = buyer.save()
-            sale = sale.save()
+            buyer.save()
 
             notification = Notification.objects.create(
                 user_id=me,
@@ -114,18 +119,15 @@ def buyitem_call(request):
                 link="",
             )
             notification.save()
-            
-            return HttpResponse(status=204)
+
+            return HttpResponse(
+                status=204,
+                headers={"HX-Trigger": "rebalance"})
 
     raise Http404()
 
 def send_QRcode(email, data):
     """ create a qr code from the data and return an image stream """
-    qr = qrcode.make(data)           # pass in the URL to calculate the QR code image bytes
-    buf = BytesIO()                      # Create a BytesIO to temporarily store the generated image data
-    qr.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
-    image_stream = buf.getvalue()
-
     subject = "Aidoo Shop Purchase"
     body = "here is the QR code for the purchase"
 
@@ -139,12 +141,18 @@ def send_QRcode(email, data):
 
     msg.mixed_subtype = 'related'
     # convert img to html
-    img = MIMEImage(image_stream, 'jpg')
-    img.add_header('Content-Id', '<qr>')
-    img.add_header("Content-Disposition", "inline", filename="qr.jpg")
 
-    # attach image in html form to message
-    msg.attach(img)
+    for fact in data:
+        qr = qrcode.make(fact)           # pass in the URL to calculate the QR code image bytes
+        buf = BytesIO()                      # Create a BytesIO to temporarily store the generated image data
+        qr.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
+        image_stream = buf.getvalue()
+
+        img = MIMEImage(image_stream, 'jpg')
+        img.add_header('Content-Id', '<qr>')
+        img.add_header("Content-Disposition", "inline", filename=f"qr-{fact}.jpg")
+        # attach image in html form to message
+        msg.attach(img)
 
     # send the message
     msg.send()
@@ -191,7 +199,7 @@ class TransferView(View):
             recipient.balance += amount
             me.save()
             recipient.save()
-            
+
             notification = Notification.objects.create(
                 user_id=recipient,
                 title=f"Gift from {me.username}",
@@ -202,9 +210,10 @@ class TransferView(View):
                 link="profile/me",
             )
             notification.save()
-            
+
             return HttpResponse(
                 status=204,
+                headers={"HX-Trigger": "rebalance"}
             ) # No content
 
         return render(

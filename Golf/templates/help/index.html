@@ -1,21 +1,31 @@
-{% extends 'base.html' %}
+{% extends 'base-modal.html' %}
 
 {% block title %}Help{% endblock %}
 
 {% block content %}
-<h1>Help</h1>
-<p>You may find an answer for your question on one of these pages:
-  <ul>
-    <li>
-      <a href="{% url 'privacy' %}">Privacy Policy</a>
-    </li>
-    <li>
-      <a href="{% url 'community-guidelines' %}">Community guidelines</a>
-    </li>
-    <li>
-      <a href="{% url 'manual' %}">User manual</a>
-    </li>
-  </ul>
-</p>
-<p>You can still contact us via <a href="mailto:info@aidoo.com">email</a>.</p>
+{% if user.is_authenticated %}
+  {% include 'navigation.html' %}
+{% else %}
+  {% include 'public-navigation.html' %}
+{% endif %}
+
+<div class="container">
+  <h1>Help</h1>
+  <p>You may find an answer for your question on one of these pages:
+    <ul>
+      <li>
+        <a href="{% url 'privacy' %}">Privacy Policy</a>
+      </li>
+      <li>
+        <a href="{% url 'community-guidelines' %}">Community guidelines</a>
+      </li>
+      <li>
+        <a href="{% url 'manual' %}">User manual</a>
+      </li>
+    </ul>
+  </p>
+  <p>You can still contact us via <a href="mailto:aidoo.scot@gmail.com">email</a>.</p>
+</div>
+
+{{ block.super }}
 {% endblock %}

@@ -25,7 +25,7 @@
               <div class="card-body">
                 <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
                 <h6 class="card-subtitle mb-2 text-muted">
-                  {{ job.posting_time | date:'d M Y' }} 
+                  {{ job.posting_time | date:'d M Y' }}
                   -
                   {% if job.deadline is not None %}
                     {{ job.deadline | date:'d M Y' }}
@@ -49,7 +49,7 @@
             <div class="card-body">
               <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
               <h6 class="card-subtitle mb-2 text-muted">
-                {{ job.posting_time | date:'d M Y' }} 
+                {{ job.posting_time | date:'d M Y' }}
                 -
                 {% if job.deadline is not None %}
                   {{ job.deadline | date:'d M Y' }}

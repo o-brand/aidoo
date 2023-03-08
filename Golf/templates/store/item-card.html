@@ -6,7 +6,7 @@
         <h6>{{item.item_name}}</h6>
         <span class="badge bg-success"><i class="bi bi-triangle"></i> {{item.price}}</span>
       </div>
-        
+
       <img src="{{ item.item_picture.url }}">
     </div>
     <div class="card-text" style="height:70px;overflow: scroll;">
@@ -16,7 +16,7 @@
   <div class="card-footer rounded-4">
     <div class="d-flex justify-content-start">
       {% if not form %}
-        <button class="btn btn-primary disabled" disabled>Unavailable</button>
+        <p><button class="btn btn-primary disabled" disabled>Unavailable</button></p>
       {% else %}
         <form action="" hx-post="{% url 'buyitem' %}" hx-trigger="submit">
           {% csrf_token %}

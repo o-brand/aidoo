@@ -4,6 +4,7 @@ from .models import Transfer, Sale
 from .validators import validate_recipient
 from Golf.validators import validate_profanity
 
+
 class BuyForm(Form):
     """Form to buy an item"""
     def __init__(self, choices, *args, **kwargs):
@@ -21,7 +22,7 @@ class BuyForm(Form):
         label="Quantity",
     )
 
-    
+
 class TransferForm(ModelForm):
     """Form to transfer coins"""
     recipient = forms.CharField(

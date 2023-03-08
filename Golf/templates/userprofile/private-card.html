@@ -1,7 +1,7 @@
 <div
-  hx-trigger="profile_edit from:body" 
-  hx-swap="innerHTML" 
-  hx-get="{% url 'privatecard' %}" 
+  hx-trigger="profile_edit from:body"
+  hx-swap="innerHTML"
+  hx-get="{% url 'privatecard' %}"
   hx-target="this">
   <div class="d-flex justify-content-between my-2">
     <h4>My profile</h4>
@@ -9,7 +9,7 @@
         Edit Details&nbsp;&nbsp;<i class="bi bi-pencil"></i>
     </button>
   </div>
-  <div 
+  <div
     class="card">
     <img src="/static/assets/pfp/{{me.id}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
     <div class="card-body">

@@ -72,7 +72,7 @@ class JobModelTestCase(TestCase):
         # Write 10 jobs into the job model
         for i in range(10):
             job = dict()
-            job["posting_time"] = fake_time(self)
+            job["posting_time"] = fake_time()
             job["points"] = random.randint(0, 100)
             job["assigned"] = False
             job["completed"] = False
@@ -91,7 +91,7 @@ class JobModelTestCase(TestCase):
         len1 = len(Job.objects.all())
 
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -114,7 +114,7 @@ class JobModelTestCase(TestCase):
     def test_too_long_location(self):
         job = dict()
         job["location"] = "x" * 9
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -127,7 +127,7 @@ class JobModelTestCase(TestCase):
     def test_too_long_title(self):
         job = dict()
         job["job_title"] = "x" * 51
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -140,7 +140,7 @@ class JobModelTestCase(TestCase):
     def test_too_long_job_description(self):
         job = dict()
         job["job_description"] = "x" * 1001
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -153,7 +153,7 @@ class JobModelTestCase(TestCase):
     def test_too_small_points(self):
         job = dict()
         job["points"] = 0
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -166,7 +166,7 @@ class JobModelTestCase(TestCase):
     def test_profane_job_title(self):
         job = dict()
         job["job_title"] = "kondums"
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -175,11 +175,11 @@ class JobModelTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             created_job.full_clean()
-    
+
     def test_profane_job_long_description(self):
         job = dict()
         job["job_description"] = " kondums" * 20
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -208,7 +208,7 @@ class BookmarkModelTestCase(TestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -220,7 +220,7 @@ class BookmarkModelTestCase(TestCase):
         bookmark = dict()
         bookmark["user_id"] = User(pk=1)
         bookmark["job_id"] = Job(pk=1)
-        bookmark["saving_time"] = fake_time(self)
+        bookmark["saving_time"] = fake_time()
         Bookmark.objects.create(**bookmark)
         with self.assertRaises(IntegrityError):
             Bookmark.objects.create(**bookmark)
@@ -244,7 +244,7 @@ class ApplicationModelTestCasae(TestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -256,8 +256,8 @@ class ApplicationModelTestCasae(TestCase):
         application["applicant_id"] = User(pk=1)
         application["job_id"] = Job(pk=1)
         application["status"] = "AP"  #imo should be AP as it's default
-        application["time_of_application"] = fake_time(self)
-        application["time_of_final_status"] = fake_time(self)
+        application["time_of_application"] = fake_time()
+        application["time_of_final_status"] = fake_time()
 
         #creates an object
         Application.objects.create(**application)
@@ -410,7 +410,7 @@ class PostJobCase(TestCase):
 
             if key == "job_description":
                 self.assertIn(
-                    "Ensure this value has at least 50 characters", 
+                    "Ensure this value has at least 50 characters",
                     form.errors[key][0]
                 )
             else:
@@ -492,7 +492,7 @@ class PostJobCase(TestCase):
 
             if key == "duration_hours":
                 self.assertIn(
-                    ("Select a valid choice. That choice is not one of the " 
+                    ("Select a valid choice. That choice is not one of the "
                     "available choices."),
                     form.errors[key][0],
                 )
@@ -518,7 +518,7 @@ class PostJobCase(TestCase):
 
             if key == "duration_half_hours":
                 self.assertIn(
-                    ("Select a valid choice. That choice is not one of the " 
+                    ("Select a valid choice. That choice is not one of the "
                     "available choices."),
                     form.errors[key][0],
                 )
@@ -590,7 +590,7 @@ class PostJobCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn(
-                ("is not a valid date. The deadline cannot be more than 1 " 
+                ("is not a valid date. The deadline cannot be more than 1 "
                 "year from now."),
                 form.errors[key][0],
             )
@@ -607,7 +607,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -663,7 +663,7 @@ class ReportButtonCase(LoginRequiredTestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -690,7 +690,7 @@ class BookmarkButtonCase(LoginRequiredTestCase):
 
         # Write 1 job into the job model
         job = dict()
-        job["posting_time"] = fake_time(self)
+        job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
         job["assigned"] = False
         job["completed"] = False
@@ -732,7 +732,7 @@ class BookmarkButtonCase(LoginRequiredTestCase):
         # test for a unmarked job (bookmarking functionality)
         response = self.client.post("/jobs/bookmark", {"job_id": 1})
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 
+        self.assertTemplateUsed(response,
             template_name="htmx/bookmark-unmark.html")
 
 

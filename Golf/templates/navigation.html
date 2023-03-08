@@ -5,7 +5,13 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ms-auto">
-      <span class="badge bg-success mx-3"><i class="bi bi-triangle"></i> {{me.balance}}</span>
+      <span class="badge bg-success mx-3"
+        hx-trigger="rebalance from:body, new_post from:body"
+        hx-swap="innerHTML"
+        hx-get="{% url 'balance' %}"
+        hx-target="this">
+        {% include 'userprofile/balance.html' %}
+      </span>
       <a class="nav-link"
         hx-get="{% url 'notifications' %}"
         hx-target="#offcanvas"

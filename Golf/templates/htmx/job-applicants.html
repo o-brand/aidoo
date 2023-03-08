@@ -1,32 +1,37 @@
 {% if not job.completed %}
-  <h6>Applicants:</h6>
   {% if applicants %}
     {% if not job.assigned %}
-      <form
-        _="on htmx:beforeSend add @disabled to <button/> in me"
-        hx-post="{% url 'selectapplicant' %}"
-        hx-target="closest span"
-        hx-swap="innerHTML"
-        hx-vals='{"job_id": {{ job.job_id }} }'
-        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-          <button class="btn btn-primary"
-            id="accept-{{job.job_id}}"
-            type="submit">Accept
-          </button>
-      </form>
-      <button class="btn btn-primary"
-        id="btnCancel{{ job.job_id }}"
-        _="on click add @disabled to me"
-        hx-post="{% url 'cancel' %}"
-        hx-vals='{"job_id": {{ job.job_id }} }'
-        hx-swap="outerHTML"
-        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Cancel Job</button>
+      <p>You can now select an applicant for this job.</p>
+      <div class="d-flex justify-content-start">
+        <form
+          _="on htmx:beforeSend add @disabled to <button/> in me"
+          hx-post="{% url 'selectapplicant' %}"
+          hx-target="closest span"
+          hx-swap="innerHTML"
+          hx-vals='{"job_id": {{ job.job_id }} }'
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+            <button class="btn btn-primary mx-1"
+              id="accept-{{job.job_id}}"
+              type="submit">Select Applicant
+            </button>
+        </form>
+        <button class="btn btn-danger"
+          id="btnCancel{{ job.job_id }}"
+          _="on click add @disabled to me"
+          hx-post="{% url 'cancel' %}"
+          hx-vals='{"job_id": {{ job.job_id }} }'
+          hx-swap="outerHTML"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Cancel Job</button>
+      </div>
     {% else %}
       {% for applicant in applicants %}
         {% if applicant.status == "AC" %}
-          <p>{{ applicant.applicant_id.username }} </p>
-            <p><a href="{% url 'chat-room' applicant.applicant_id.id%}" class="btn btn-primary">Chat</a>
-          <button class="btn btn-primary"
+          <p>{{applicant.applicant_id.first_name}} {{applicant.applicant_id.last_name}}
+            (<a href="{% url 'userdetails' applicant.applicant_id.id %}">{{ applicant.applicant_id.username }}</a>)
+            was selected for this job. You can chat with {{applicant.applicant_id.first_name}} to make further arrangements for this job.
+          </p>
+          <p><a href="{% url 'chat-room' applicant.applicant_id.id %}" class="btn btn-primary">Chat</a>
+          <button class="btn btn-success"
               _="on click add @disabled to me"
               hx-post="{% url 'jobdone' %}"
               hx-target="closest span"
@@ -38,7 +43,7 @@
     {% endif %}
   {% else %}
     <p>No one has applied for this job yet.</p>
-    <button class="btn btn-primary"
+    <button class="btn btn-danger"
         id="btnCancel{{ job.job_id }}"
         _="on click add @disabled to me"
         hx-post="{% url 'cancel' %}"

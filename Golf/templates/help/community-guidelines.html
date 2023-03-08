@@ -3,8 +3,32 @@
 {% block title %}Community guidelines{% endblock %}
 
 {% block content %}
-<h1>Community guidelines</h1>
-<p>TODO</p>
+{% if user.is_authenticated %}
+  {% include 'navigation.html' %}
+{% else %}
+  {% include 'public-navigation.html' %}
+{% endif %}
 
-<p><a href="{% url 'help' %}">Go back to help page</a></p>
+<div class="container">
+  <h1>Community guidelines</h1>
+  <h2>Rule 1</h2>
+  <p>Be respectful to others in the language you use. This is a platform that enables and incentivizes helping each other.
+  Nurturing a welcoming environment is part of that.</p>
+  <h2>Rule 2</h2>
+  <p>Please be respectful and aware of others. We are all humans and make mistakes.
+  Sometimes things happen that are out of our control.
+  Everyone, regardless of their background, deserves not to be harassed.</p>
+  <h2>Rule 3</h2>
+  <p>Respect other people&#39;s privacy. Doxxing and/or revealing others&#39; personal details strictly violates the terms of use.</p>
+  <h2>Rule 4</h2>
+  <p>Do not post or encourage the posting of sexual content.</p>
+  <h2>Rule 5</h2>
+  <p>If you know you cannot do a job you accepted, let the poster know and withdraw from the job.</p>
+  <h2>Rule 6</h2>
+  <p>Do not try to exploit the reward system. This website was built to encourage and incentivize helping each other, not to gain free stuff.</p>
+  <h2>Rule 7</h2>
+  <p>Keep it legal. The posting or discussion of content discussing or depicting illegal actions or items is prohibited.</p>
+</div>
+
+{{ block.super }}
 {% endblock %}
