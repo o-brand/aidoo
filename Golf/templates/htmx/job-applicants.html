@@ -28,7 +28,7 @@
         {% if applicant.status == "AC" %}
           <p>{{applicant.applicant_id.first_name}} {{applicant.applicant_id.last_name}}
             (<a href="{% url 'userdetails' applicant.applicant_id.id %}">{{ applicant.applicant_id.username }}</a>)
-            was selected for this job.
+            was selected for this job. You can chat with {{applicant.applicant_id.first_name}} to make further arrangements for this job.
           </p>
           <p><a href="{% url 'chat-room' applicant.applicant_id.id %}" class="btn btn-primary">Chat</a>
           <button class="btn btn-success"

@@ -16,19 +16,19 @@
     <div class="col-md-2 col-sm-12 mb-4">
       <ul class="nav nav-pills flex-column tab">
         <li class="nav-item">
-          <a class="nav-link tablinks" hx-get="{% url 'privatecard' %}" hx-target="#controls-div" id="details_tab">My Profile</a>
+          <a class="nav-link tablinks" href="details" hx-get="{% url 'privatecard' %}" hx-target="#controls-div" id="details_tab">My Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tablinks" hx-get="{% url 'commitments' %}" hx-target="#controls-div" id="commit_tab">Commitments</a>
+          <a class="nav-link tablinks" href="commit" hx-get="{% url 'commitments' %}" hx-target="#controls-div" id="commit_tab">Commitments</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tablinks" hx-get="{% url 'posts' %}" hx-target="#controls-div" id="posts_tab">Posts</a>
+          <a class="nav-link tablinks" href="posts" hx-get="{% url 'posts' %}" hx-target="#controls-div" id="posts_tab">Posts</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tablinks" hx-get="{% url 'applications' %}" hx-target="#controls-div" id="apps_tab">Applications</a>
+          <a class="nav-link tablinks" href="apps" hx-get="{% url 'applications' %}" hx-target="#controls-div" id="apps_tab">Applications</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tablinks"  hx-get="{% url 'bookmarks' %}" hx-target="#controls-div" id="saved_tab">Bookmarks</a>
+          <a class="nav-link tablinks"  href="saved" hx-get="{% url 'bookmarks' %}" hx-target="#controls-div" id="saved_tab">Bookmarks</a>
         </li>
       </ul>
     </div>
