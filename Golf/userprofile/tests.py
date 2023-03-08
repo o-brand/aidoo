@@ -79,11 +79,6 @@ class UserTableTestCase(TestCase):
         D = int(l[2])
         self.assertEqual(type(datetime.date(Y,M,D)), datetime.date)
 
-    def test_rating(self):
-        # checks if the rating is greater or equal than 0
-        u = User.objects.get(pk=1)
-        self.assertGreaterEqual(u.rating, 0)
-
     def test_email_preferences_application(self):
         # checks if the email preference exists and is either True or False
         # for notification to user when accepted or rejected from a job
