@@ -55,7 +55,7 @@ def home(request):
         "purchases": purchased_items,
         "forms": forms,
     }
-    return render(request, "store/storefront.html", context)
+    return render(request, "store/index.html", context)
 
 def buyitem_call(request):
     if request.method == 'POST':

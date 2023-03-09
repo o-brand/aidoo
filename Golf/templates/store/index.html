@@ -6,5 +6,27 @@
 {% block content %}
 {% include 'navigation.html' %}
 
+<div class="container my-4">
+<div class="row">
+  <section class="text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Get your reward</h1>
+        <p class="lead text-muted">A place to pick a reward with your hard earned doos.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+  <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-1"
+    hx-trigger="item_bought from:body"
+    hx-swap="innerHTML"
+    hx-get="{% url 'items' %}"
+    hx-target="this">
+      {% include 'store/items.html' %}
+  </div>
+</div>
+
+<script src="{% static 'js/store.js' %}"></script>
 {{ block.super }}
 {% endblock %}
