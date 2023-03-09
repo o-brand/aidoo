@@ -212,7 +212,7 @@ class ReportTicketTestCase(TestCase):
         credentials["password"] = "a"
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
-        credentials["date_of_birth"] = fake_time(self)
+        credentials["date_of_birth"] = fake_time()
         self.user = User.objects.create_user(**credentials)
 
         #create job
@@ -290,7 +290,7 @@ class ConflictRersolutionTestCase(TestCase):
         credentials["password"] = "a"
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
-        credentials["date_of_birth"] = fake_time(self)
+        credentials["date_of_birth"] = fake_time()
         self.user = User.objects.create_user(**credentials)
 
         #create job
