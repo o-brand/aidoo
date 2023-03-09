@@ -75,13 +75,14 @@ class ReportTicket(models.Model):
 
     class TicketStatus(models.TextChoices):
         """This class stores the available values for the status."""
-        OPEN = 'Open', ('Open')
-        RESOLVED = 'Resolved', ('Resolved')
+        OPEN = 'OP', ('Open')
+        RESOLVED = 'RE', ('Resolved')
 
     class TicketResult(models.TextChoices):
         """This class stores the possible outcomes of a result"""
-        BAN = 'Ban', ('Ban')
-        NOT_BAN = 'Not_Ban', ('Not_Ban')
+        BAN = 'BA', ('Ban')
+        NOT_BAN = 'NB', ('Not_Ban')
+
     # primary key
     ticket_id = models.BigAutoField(primary_key=True)
 
@@ -94,14 +95,14 @@ class ReportTicket(models.Model):
 
     # the result of the resolutiom
     answer = models.CharField(choices=TicketResult.choices, blank=True,
-                              null=True, default=None)
+                              null=True, default=None, max_length=2)
 
     # time stamp for assigning the job
     time_assigned = models.DateTimeField(default=timezone.now)
 
     # status of the ticket
     status = models.CharField(choices=TicketStatus.choices,
-                              default=TicketStatus.OPEN)
+                              default=TicketStatus.OPEN, max_length=2)
 
 
 class ConflictResolution(models.Model):

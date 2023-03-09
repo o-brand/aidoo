@@ -10,16 +10,6 @@ import random
 from userprofile.models import User
 
 
-
-<<<<<<< HEAD
-=======
-
-def home(request):
-    # Render the page
-    return render(request, "superadmin/index.html")
->>>>>>> main
-
-
 class ReportFormView(View):
     """Displays form to report a job post"""
 
