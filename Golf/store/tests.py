@@ -111,7 +111,7 @@ class StoreTestCase(LoginRequiredTestCase):
     def test_store_page_address(self):
         # test availability via URL
         response = self.client.get("/store/")
-        self.assertTemplateUsed(response, template_name="store/storefront.html")
+        self.assertTemplateUsed(response, template_name="store/index.html")
 
     def test_store_page_available_by_name(self):
         # test availability via name of page
