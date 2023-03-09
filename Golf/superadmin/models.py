@@ -87,8 +87,7 @@ class ReportTicket(models.Model):
     ticket_id = models.BigAutoField(primary_key=True)
 
     # id of the reported object
-    report_id = models.ForeignKey(Report, on_delete=models.CASCADE,
-                                  blank=False, null=False)
+    report_id = models.ForeignKey(Report, on_delete=models.CASCADE)
 
     # id of a user assigned to resolve the issue
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
