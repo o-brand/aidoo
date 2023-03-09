@@ -1,17 +1,16 @@
 import datetime
 import random
 from faker import Faker
-from django.test import TestCase
-from django.utils import timezone
-from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
-from Golf.utils import create_date_string, fake_time
-from Golf.utils import LoginRequiredTestCase
-from jobs.models import Job, Bookmark, Application
+from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
+from Golf.utils import create_date_string, fake_time, LoginRequiredTestCase
 from .forms import JobForm
-from jobs.validators import validate_deadline
+from .models import Application, Bookmark, Job
+from .validators import validate_deadline, validate_hours, validate_half_hours
 
 
 # Get actual user model.
@@ -49,6 +48,20 @@ class DetailsTestCase(LoginRequiredTestCase):
     def test_details_404(self):
         # The id starts with 1, so there is no job with this id.
         response = self.client.get("/jobs/0/")
+        self.assertEqual(response.status_code, 404)
+
+    def test_details_hidden(self):
+        job = {
+            "poster_id": self.user,
+            "location": "AB21 3EW",
+            "job_title": "Walking a dog",
+            "job_description": "Nothing",
+            "points": 10,
+            "hidden": True,
+        }
+        j = Job.objects.create(**job)
+
+        response = self.client.get("/jobs/" + str(j.job_id) + "/")
         self.assertEqual(response.status_code, 404)
 
 
@@ -481,6 +494,7 @@ class PostJobCase(TestCase):
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_hours": "20",
+            "duration_half_hours": "0",
         }
 
         form = JobForm(data=new_application)
@@ -492,8 +506,7 @@ class PostJobCase(TestCase):
 
             if key == "duration_hours":
                 self.assertIn(
-                    ("Select a valid choice. That choice is not one of the "
-                    "available choices."),
+                    ("The number of hours is not valid."),
                     form.errors[key][0],
                 )
             else:
@@ -506,6 +519,7 @@ class PostJobCase(TestCase):
             "job_title": "Job",
             "job_description": "l" * 50,
             "location": "AB25 3SR",
+            "duration_hours": "5",
             "duration_half_hours": "1",
         }
 
@@ -518,8 +532,8 @@ class PostJobCase(TestCase):
 
             if key == "duration_half_hours":
                 self.assertIn(
-                    ("Select a valid choice. That choice is not one of the "
-                    "available choices."),
+                    ("The number of minutes is not valid. Only 0 and 30 "
+                    "minutes are allowed."),
                     form.errors[key][0],
                 )
             else:
@@ -532,7 +546,7 @@ class PostJobCase(TestCase):
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_hours": "0",
-            "duration_half_hours": "1",
+            "duration_half_hours": "0",
         }
         form = JobForm(data=new_application)
         self.assertEqual(0, len(form.errors))
@@ -544,7 +558,7 @@ class PostJobCase(TestCase):
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_hours": "0",
-            "duration_half_hours": "1",
+            "duration_half_hours": "0",
             "deadline": create_date_string(0),
         }
         form = JobForm(data=new_application)
@@ -559,7 +573,7 @@ class PostJobCase(TestCase):
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_hours": "0",
-            "duration_half_hours": "1",
+            "duration_half_hours": "0",
             "deadline": create_date_string(5),
         }
         form = JobForm(data=new_application)
@@ -580,7 +594,7 @@ class PostJobCase(TestCase):
             "job_description": "l" * 50,
             "location": "AB25 3SR",
             "duration_hours": "0",
-            "duration_half_hours": "1",
+            "duration_half_hours": "0",
             "deadline": create_date_string(-100),
         }
         form = JobForm(data=new_application)
@@ -761,3 +775,41 @@ class DeadlineValidationTestCase(TestCase):
             validate_deadline(deadline)
         self.assertEqual(str(cm.exception), (f"['{deadline} is not a valid "
             "date. The deadline cannot be more than 1 year from now.']"))
+
+
+class HoursValidationTestCase(TestCase):
+
+    def test_valid_hours(self):
+        """Test a valid hour."""
+        validate_hours(4)  # should not raise ValidationError
+
+    def test_invalid_hours_too_big(self):
+        """Test an invalid hour too big."""
+        with self.assertRaises(ValidationError) as cm:
+            validate_hours(88)
+        self.assertEqual(str(cm.exception), "['The number of hours is not valid.']")
+
+    def test_invalid_hours_too_small(self):
+        """Test an invalid hour too small."""
+        with self.assertRaises(ValidationError) as cm:
+            validate_hours(-2)
+        self.assertEqual(str(cm.exception), "['The number of hours is not valid.']")
+
+    def test_invalid_hours_not_integer(self):
+        """Test an invalid hour not integer."""
+        with self.assertRaises(ValidationError) as cm:
+            validate_hours(2.5)
+        self.assertEqual(str(cm.exception), "['The number of hours is not valid.']")
+
+
+class HalfHoursValidationTestCase(TestCase):
+
+    def test_valid_half_hours(self):
+        """Test a valid half hour."""
+        validate_half_hours(30)  # should not raise ValidationError
+
+    def test_invalid_half_hours(self):
+        """Test an invalid half hour."""
+        with self.assertRaises(ValidationError) as cm:
+            validate_half_hours(23)
+        self.assertEqual(str(cm.exception), "['The number of minutes is not valid. Only 0 and 30 minutes are allowed.']")
