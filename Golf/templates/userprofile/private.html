@@ -33,7 +33,19 @@
       </ul>
     </div>
     <div class="col-md-10 col-sm-12" id="controls-div">
-      <div>{% include 'userprofile/private-card.html' %}</div>
+      <div>
+        {% if opened == "commit" %}
+          {% include 'userprofile/commitments.html' %}
+        {%elif opened == "apps" %}
+          {% include 'userprofile/applications.html' %}
+        {%elif opened == "posts" %}
+          {% include 'userprofile/posts.html' %}
+        {%elif opened == "saved" %}
+          {% include 'userprofile/bookmarks.html' %}
+        {% else %}
+          {% include 'userprofile/private-card.html' %}
+        {% endif %}
+      </div>
     </div>
   </div>
 
@@ -46,6 +58,7 @@
   </button>
 </div>
 
+<script>var activeTab = "{{opened}}";</script>
 <script src="{% static 'js/private.js' %}"></script>
 
 {{ block.super }}

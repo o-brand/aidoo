@@ -38,15 +38,9 @@ function openTab(content) {
   $("#" + content + "_tab").addClass("active");
 }
 
-// Get the active tab from URL and open it (if there is anything)
-var anchorHash = location.href;
-if (anchorHash.lastIndexOf('#') != -1) {
-  // Get the id from the end of the URL
-  anchorHash = anchorHash.slice(anchorHash.lastIndexOf('#') + 1);
-  $("#" + anchorHash + "_tab").click();
-} else {
-  // Default tab
-  $("#details_tab").click();
+// Get the active tab from the backend and open it.
+if (activeTab) {
+  openTab(activeTab);
 }
 
 //Add the listener to every select.

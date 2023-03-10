@@ -47,23 +47,24 @@ def userdetails(request, user_id):
     }
     return render(request, "userprofile/public.html", context)
 
+
 def my_details(request):
     """Private details card"""
     actual_user_id = request.user.id
+
+    # Store opened tab
+    request.session["private_tab"] = "details"
 
     # Check if the user ID is valid
     users = User.objects.filter(pk=actual_user_id)
     user_id_exists = len(users) == 1
     if not user_id_exists:
         raise Http404()
-    me = users[0]
 
-    context = {
-        "me": me,
-    }
-    return render(request, "userprofile/private-card.html", context)
+    return render(request, "userprofile/private-card.html")
 
-def commitments(request):
+
+def commitments_context(request):
     """Private ongoing job commitments."""
     actual_user_id = request.user.id
 
@@ -82,12 +83,17 @@ def commitments(request):
     accepted_jobs = [(job.job_id, job.status) for job in accepted]
 
     context = {
-        "me": me,
         "applications": accepted_jobs,
     }
-    return render(request, "userprofile/commitments.html", context)
+    return context
 
-def applications(request):
+def commitments(request):
+    """Private ongoing job commitments."""
+    request.session["private_tab"] = "commit"
+    return render(request, "userprofile/commitments.html", commitments_context(request))
+
+
+def applications_context(request):
     """Private applications."""
     actual_user_id = request.user.id
 
@@ -106,12 +112,17 @@ def applications(request):
     applied_jobs = [(job.job_id, job.status) for job in applied]
 
     context = {
-        "me": me,
         "applications": applied_jobs,
     }
-    return render(request, "userprofile/applications.html", context)
+    return context
 
-def posts(request):
+def applications(request):
+    """Private applications."""
+    request.session["private_tab"] = "apps"
+    return render(request, "userprofile/applications.html", applications_context(request))
+
+
+def posts_context(request):
     """Private user posts."""
     actual_user_id = request.user.id
 
@@ -128,13 +139,17 @@ def posts(request):
                     for job in posted}
 
     context = {
-        "me": me,
         "posts": posted_apps,
     }
+    return context
 
-    return render(request, "userprofile/posts.html", context)
+def posts(request):
+    """Private user posts."""
+    request.session["private_tab"] = "posts"
+    return render(request, "userprofile/posts.html", posts_context(request))
 
-def bookmarks(request):
+
+def bookmarks_context(request):
     """Private user bookmarks."""
     actual_user_id = request.user.id
 
@@ -155,11 +170,14 @@ def bookmarks(request):
             bookmarks_filtered.append(bookmark)
 
     context = {
-        "me": me,
         "bookmarks": bookmarks_filtered,
     }
+    return context
 
-    return render(request, "userprofile/bookmarks.html", context)
+def bookmarks(request):
+    """Private user bookmarks."""
+    request.session["private_tab"] = "saved"
+    return render(request, "userprofile/bookmarks.html", bookmarks_context(request))
 
 
 def me(request):
@@ -173,9 +191,20 @@ def me(request):
         raise Http404()
     me = users[0]
 
-    context = {
-        "me": me,
-    }
+    # Get the opened tab's context
+    opened = request.session.get("private_tab", "details")
+    if opened == "commit":
+        context = commitments_context(request)
+    elif opened == "apps":
+        context = applications_context(request)
+    elif opened == "posts":
+        context = posts_context(request)
+    elif opened == "saved":
+        context = bookmarks_context(request)
+    else:
+        context = { "me": me }
+
+    context["opened"] = opened
     return render(request, "userprofile/private.html", context)
 
 
@@ -209,6 +238,7 @@ class ProfileEditView(View):
         return render(
             request, self.template_name, {"form": form}
         )
+
 
 def withdraw_call(request):
     """Withdraw from a job."""
@@ -434,6 +464,7 @@ class AccountSettingsView(View):
 
         # Render the form again
         return render(request, self.template_name, {"me":me})
+
 
 class NotificationsPageView(ListView):
     """It is used to render the notifications page."""
