@@ -26,4 +26,5 @@ urlpatterns = [
     path("store/", include("store.urls")), # Store pages
     path("superadmin/", include("superadmin.urls")), # Superadmin pages
     path("help/", include("help.urls")), # Help pages
+    path("vendor/", include("vendor.urls")), # Redeem page
 ]
