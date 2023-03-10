@@ -20,7 +20,6 @@ class User(AbstractUser):
 
     balance = models.IntegerField(default=24)
     date_of_birth = models.DateField()
-    rating = models.FloatField(default=0)
     # Recieve email notification when accepted or rejected from job
     opt_in_emails_application = models.BooleanField(default=True)
     # Recieve on site notification when accepted or rejected from job
@@ -37,6 +36,8 @@ class User(AbstractUser):
     profile_picture = models.ImageField(upload_to=profile_picture_rename, default='profilepics/default')
     # Used to store the identity verification
     profile_id = models.ImageField(upload_to=profile_id_rename)
+    # Whether user is a charity or not
+    charity = models.BooleanField(default=False)
     # Only used to create a superuser.
     REQUIRED_FIELDS = ["first_name", "last_name", "email", "date_of_birth"]
 

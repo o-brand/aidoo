@@ -85,6 +85,16 @@
       {% endif %}
     </div>
   </div>
+  
+
+  <div class="job-foot mt-5">
+    <p>Comments</p>
+    <div class="input-group flex-nowrap">
+          <textarea id="job-message-input" type="text" style="width: 100%; height: 50px; white-space: pre-wrap"
+                    placeholder="Ask a question" required></textarea>
+        <span id="job-message-submit" type="button">Send</span>
+    </div>
+  </div>
 
   <div class="col" id="comments">
     {% for comment in comments %}
@@ -112,13 +122,6 @@
     {% endfor %}
   </div>
 
-    <div class="job-foot">
-        <div class="input-group flex-nowrap">
-              <textarea id="job-message-input" type="text" style="width: 100%; height: 50px; white-space: pre-wrap"
-                        placeholder="Ask a question" required></textarea>
-            <span id="job-message-submit" type="button">Send</span>
-        </div>
-    </div>
 
 <script>
   const job_id = "{{ job.job_id }}";

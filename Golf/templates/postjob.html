@@ -54,6 +54,13 @@
       <p>
         The expected duration for the job. (It is used to calculate the rewards for the job.)<br/>
         {{ form.duration_hours }} <span id="hourstxt">hour</span> and {{ form.duration_half_hours }} minutes. This means <span id="points">12</span> doos.
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+            {% if key == "duration_hours" or key == "duration_half_hours" %}
+              <p class="error">{{ value.as_text }}</p>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </p>
       <p>
       {% if form.errors %}

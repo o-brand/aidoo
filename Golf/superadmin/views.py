@@ -1,13 +1,25 @@
+import random
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.views import View
-from .forms import ReportForm
-from django.views.generic import ListView
-from .models import ReportTicket,Report
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+
 from django.db import models
-import random
+from django.db.models import Q
+from .models import ReportTicket,Report
+
+from django.views import View
+from django.views.generic import ListView
 from userprofile.models import User
+
+from .forms import ReportForm
+
+# Get actual user model.
+User = get_user_model()
+
+def home(request):
+    # Render the page
+    return render(request, "superadmin/index.html")
 
 
 class ReportFormView(View):
@@ -27,6 +39,7 @@ class ReportFormView(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
+
             post = form.save(commit=False)
             post.save()
             superadmin_user = User.objects.filter(super_user=True)
@@ -36,6 +49,41 @@ class ReportFormView(View):
                 user_id = random_superadmin_user,
                 report_id = post,
             )
+            
+            me = request.user
+            actual_user_id = me.id
+
+            report = form.save(commit=False)
+            report.save()
+
+            # please explain the logic of this in a comment
+            # why bitwise not?
+            # what is Q?
+            # why does this result in eligable users
+            eligible = User.objects.filter(
+                 Q(charity=False) &
+                 Q(super_user=True) &
+                 ~Q(id=actual_user_id) &
+                 ~Q(id=report.reported_user.id)
+            )
+            
+             # TODO not sure what to do when there aren't enough eligible reviewers
+             # Should we have a script to ticket it when there are? Or should it be
+             # directly dealt with by admins?
+            if len(eligible) >= 3:
+                reviewers = random.sample(list(eligible), k=3)
+
+                # TODO Uncomment when ticket model is added to main branch
+
+                # for reviewer in reviewers:
+                #     ticket = ReportTicket.objects.create(
+                #         report_id = report,
+                #         user_id = reviewer,
+                #     )
+                #     ticket.save()
+
+                report.status = Report.ReportStatus.TICKETED
+                report.save()
 
             return HttpResponse(status=204)
 

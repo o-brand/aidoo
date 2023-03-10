@@ -18,7 +18,18 @@ def _query_rooms(me):
 
     # Change room object for the template
     rooms_changed = []
+
     for room in rooms:
+        message = Message.objects.filter(room_id=room.room_id)
+        if len(message) > 0:
+            last = message.latest('date_time')
+            if last.user_id == me:
+                message = 'me:  ' + last.content
+            else:
+                message = last.user_id.username + ':  ' + last.content
+        else:
+            message = ''
+
         if room.user_2 == me:
             other = room.user_1
             room.user_1 = me
@@ -26,7 +37,7 @@ def _query_rooms(me):
             room.me_started = False
         else:
             room.me_started = True
-
+        room.last_message = message
         rooms_changed.append(room)
 
     return rooms_changed

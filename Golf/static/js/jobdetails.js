@@ -28,8 +28,8 @@ jobSocket.onmessage = function(e) {
 $("#job-message-input").keydown(function (event) {
   event = (event) ? event : ((window.event) ? window.event : "");
   var keyCode = event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode);
-  var altKey = event.ctrlKey || event.metaKey;
-  if (keyCode === 13 && altKey) { //ctrl+enter
+  var shiftKey = event.shiftKey || event.metaKey;
+  if (keyCode === 13 && shiftKey) { //ctrl+enter
     var newDope = $(this).val() + "\n";// Get textarea data for newline
     $(this).val(newDope);
   } else if (keyCode === 13) { // "Enter"

@@ -1,10 +1,10 @@
 from django import forms
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.forms import ModelForm
-from django.core.validators import RegexValidator
 from Golf.utils import create_date_string
 from Golf.validators import validate_profanity
-from .validators import validate_deadline
 from .models import Job
+from .validators import validate_deadline, validate_hours, validate_half_hours
 
 
 class JobForm(ModelForm):
@@ -54,7 +54,7 @@ class JobForm(ModelForm):
     )
 
     # Fields to display a dropdown for the duration of the job
-    half_hours = [(hhour, hhour) for hhour in range(0, 31, 30)]
+    half_hours = [(hhour, hhour) for hhour in [0, 30]]
     hours = [(hour, hour) for hour in range(1, 9)]
     duration_hours = forms.DecimalField(
         widget=forms.Select(
@@ -64,6 +64,7 @@ class JobForm(ModelForm):
             },
             choices=hours,
         ),
+        validators=[validate_hours],
     )
     duration_half_hours = forms.DecimalField(
         widget=forms.Select(
@@ -73,6 +74,7 @@ class JobForm(ModelForm):
             },
             choices=half_hours,
         ),
+        validators=[validate_half_hours],
     )
 
     deadline = forms.DateField(
