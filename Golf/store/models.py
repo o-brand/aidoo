@@ -58,6 +58,9 @@ class Sale(models.Model):
     # Amount of the item purchased
     quantity = models.IntegerField(default=1) #Take out default later
 
+    # Whether item is redeemed
+    redeemed = models.BooleanField(default=False)
+
     # The time at which the sale was recorded
     time_of_sale = models.DateTimeField(default=timezone.now)
 
