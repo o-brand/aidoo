@@ -50,6 +50,7 @@ class LoginRequiredMiddleware:
                 or path.startswith("password_reset")
                 or path.startswith("activate")
                 or path.startswith("activation")
+                or path.startswith("vendor")
             ):
                 return response
 
