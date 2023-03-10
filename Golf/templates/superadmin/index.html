@@ -5,5 +5,16 @@
 
 {% block content %}
 {% include 'navigation.html' %}
+    {% if tickets %}
+        {% for ticket in tickets %}
+            <div>
+                <h5>
+
+                </h5>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No report</p>
+    {% endif %}
 {{ block.super }}
 {% endblock %}
