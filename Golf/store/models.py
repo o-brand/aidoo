@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.utils import timezone
 
 
@@ -89,3 +90,16 @@ class Transfer(models.Model):
 
     # The time at which the trasfer was recorded
     time_of_transfer = models.DateTimeField(default=timezone.now)
+
+
+class Moderation(models.Model):
+    """Overarching model for the site"""
+
+    # Tied up to a django site
+    site = models.OneToOneField(Site, on_delete=models.CASCADE, primary_key=True)
+
+    # Holds all points spent in the store
+    bank = models.IntegerField(default=0)
+
+    # Decides if chat deletion is active or not for reporting
+    chat_deletion = models.BooleanField(default=True)

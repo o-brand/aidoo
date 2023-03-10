@@ -9,8 +9,10 @@ import datetime
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.db.models import Q
 from chat.models import Message
+from store.models import Moderation
 from jobs.models import Job, Application
 
 
@@ -31,8 +33,8 @@ User.objects.filter(is_active=False, date_joined__lt=time).delete()
 
 
 # Delete messages if it is enabled on Heroku
-os.environ.setdefault('CHAT_MESSAGE_DELETE', '1')
-if os.environ.get("DATABASE_URL") == '1':
+site = Site.objects.get_current().moderation
+if site.chat_deletion:
     # Calculate time for messages to delete
     old_time = datetime.datetime.now() - datetime.timedelta(days = settings.CHAT_MESSAGE_TTL)
 
