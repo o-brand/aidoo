@@ -4,7 +4,9 @@
     <div class="card-title">
       <div class="d-flex justify-content-between">
         <h6>{{item.item_name}}</h6>
-        <span class="badge bg-success"><i class="bi bi-triangle"></i> {{item.price}}</span>
+        {% if not disabled %}
+          <span class="badge bg-success"><i class="bi bi-triangle"></i> {{item.price}}</span>
+        {% endif %}
       </div>
 
       <img src="{{ item.item_picture.url }}">
@@ -14,19 +16,21 @@
     </div>
   </div>
   <div class="card-footer rounded-4">
-    <div class="d-flex justify-content-start">
-      {% if not form %}
-        <p><button class="btn btn-primary disabled" disabled>Unavailable</button></p>
-      {% else %}
-        <form action="" hx-post="{% url 'buyitem' %}" hx-trigger="submit">
-          {% csrf_token %}
-          <input type="hidden" value="{{item.item_id}}" name="purchase"/>
-          <div class="d-flex justify-content-start">
-            <p class="mx-1">{{form.quantity}}</p>
-            <p><input type="submit" value="Buy" class="btn btn-primary form-buy" name="form"/></p>
-          </div>
-        </form>
-      {% endif %}
-    </div>
+    {% if not disabled %}
+      <div class="d-flex justify-content-start">
+        {% if not form %}
+          <p><button class="btn btn-primary disabled" disabled>Unavailable</button></p>
+        {% else %}
+          <form action="" hx-post="{% url 'buyitem' %}" hx-trigger="submit">
+            {% csrf_token %}
+            <input type="hidden" value="{{item.item_id}}" name="purchase"/>
+            <div class="d-flex justify-content-start">
+              <p class="mx-1">{{form.quantity}}</p>
+              <p><input type="submit" value="Buy" class="btn btn-primary form-buy" name="form"/></p>
+            </div>
+          </form>
+        {% endif %}
+      </div>
+    {% endif %}
   </div>
 </div>

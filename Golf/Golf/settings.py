@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "login.apps.LoginConfig",
     "jobs.apps.JobsConfig",
     "userprofile.apps.UserprofileConfig",
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     "store.apps.StoreConfig",
     "superadmin.apps.SuperadminConfig",
     "help.apps.HelpConfig",
+    "vendor.apps.VendorConfig",
     "profanity",
     "cloudinary_storage",
     "cloudinary",
@@ -180,6 +182,13 @@ EMAIL_HOST_PASSWORD = "phybzebqpwogrbid"
 EMAIL_USE_TLS = True
 
 
+# VENDOR KEYS
+KEY = b'K7gzDFlFHb3Y7uANnSQORZIQnX8c6WqWMH9jtD4oqr8='
+
+# SITE ID
+SITE_ID = 2
+
+
 # CHAT
 
 # The maximum number of days of storing a message
@@ -194,3 +203,5 @@ if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
 
     DEBUG = False
     DEBUG_PROPAGATE_EXCEPTIONS = True # We can see the errors in the logs.
+    KEY = os.environ.get("KEY")
+    SITE_ID = 1

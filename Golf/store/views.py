@@ -10,6 +10,10 @@ from django.views import View
 from django.core.exceptions import ValidationError
 from email.mime.image import MIMEImage
 from django.core.mail import EmailMultiAlternatives
+from django.contrib.sites.shortcuts import get_current_site
+from cryptography.fernet import Fernet
+import base64
+from django.conf import settings
 from .models import Item, Sale
 from .models import Item, Sale, Transfer
 from userprofile.models import Notification
@@ -90,6 +94,7 @@ def buyitem_call(request):
             raise Http404()
         if form.is_valid():
             data = []
+            domain = get_current_site(request).domain
             for _ in range(quantity):
                 sale = Sale.objects.create(
                 purchase = item,
@@ -97,8 +102,16 @@ def buyitem_call(request):
                 quantity = 1)
 
                 sale.save()
-
-                data.append(sale.pk)
+                try:
+                    fact = f"{sale.pk}#{buyer.pk}"
+                    cipher_suite = Fernet(settings.KEY)
+                    encrypted_fact = cipher_suite.encrypt(fact.encode("ascii"))
+                    encrypted_fact = base64.urlsafe_b64encode(encrypted_fact).decode("ascii")
+                    data.append(f"{domain}vendor/{encrypted_fact}")
+                except Exception as e:
+                    print(e)
+                    raise Http404()
+                
 
             buyer.balance = buyer.balance - item.price * sale.quantity
             # Reduce the stock of the item by the sale qty
@@ -142,7 +155,7 @@ def send_QRcode(email, data):
     msg.mixed_subtype = 'related'
     # convert img to html
 
-    for fact in data:
+    for count, fact in enumerate(data):
         qr = qrcode.make(fact)           # pass in the URL to calculate the QR code image bytes
         buf = BytesIO()                      # Create a BytesIO to temporarily store the generated image data
         qr.save(buf)                        # Put the image bytes into a BytesIO for temporary storage
@@ -150,7 +163,7 @@ def send_QRcode(email, data):
 
         img = MIMEImage(image_stream, 'jpg')
         img.add_header('Content-Id', '<qr>')
-        img.add_header("Content-Disposition", "inline", filename=f"qr-{fact}.jpg")
+        img.add_header("Content-Disposition", "inline", filename=f"qr-{count+1}.jpg")
         # attach image in html form to message
         msg.attach(img)
 

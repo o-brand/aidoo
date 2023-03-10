@@ -5,5 +5,5 @@ from . import views
 # Be aware that the url already includes "vendor/".
 urlpatterns = [
     # 
-    path("", views.redeem, name="redeem"),
+    path("<token>", views.redeem, name="redeem"),
 ]
