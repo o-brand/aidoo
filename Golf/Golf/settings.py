@@ -203,5 +203,5 @@ if os.environ.get("HOME") is not None and "/app" in os.environ["HOME"]:
 
     DEBUG = False
     DEBUG_PROPAGATE_EXCEPTIONS = True # We can see the errors in the logs.
-    KEY = os.environ.get("KEY")
+    KEY = str.encode(os.environ.get("KEY"))
     SITE_ID = 1
