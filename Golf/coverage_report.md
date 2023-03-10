@@ -13,7 +13,8 @@
 | chat/models.py              |       19 |        0 |    100% |           |
 | chat/tests.py               |      116 |        0 |    100% |           |
 | chat/urls.py                |        3 |        0 |    100% |           |
-| chat/views.py               |       61 |       14 |     77% |22-30, 62, 92-95, 100-101 |
+| chat/views.py               |       69 |       22 |     68% |23-41, 73, 103-106, 111-112 |
+| daily.py                    |       35 |       35 |      0% |      3-80 |
 | help/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | help/apps.py                |        4 |        0 |    100% |           |
 | help/tests.py               |       34 |        0 |    100% |           |
@@ -24,40 +25,46 @@
 | jobs/consumers.py           |       38 |       38 |      0% |      1-86 |
 | jobs/forms.py               |       19 |        0 |    100% |           |
 | jobs/models.py              |       49 |        0 |    100% |           |
-| jobs/tests.py               |      424 |        2 |     99% |  494, 520 |
+| jobs/tests.py               |      450 |        2 |     99% |  513, 540 |
 | jobs/urls.py                |        3 |        0 |    100% |           |
-| jobs/validators.py          |       11 |        0 |    100% |           |
-| jobs/views.py               |      127 |       28 |     78% |24-25, 218-271 |
+| jobs/validators.py          |       17 |        0 |    100% |           |
+| jobs/views.py               |      127 |       28 |     78% |24-25, 219-273 |
 | login/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | login/apps.py               |        4 |        0 |    100% |           |
 | login/forms.py              |       20 |        0 |    100% |           |
-| login/tests.py              |      193 |        0 |    100% |           |
+| login/tests.py              |      199 |        0 |    100% |           |
 | login/urls.py               |        5 |        0 |    100% |           |
 | login/validators.py         |       14 |        1 |     93% |        32 |
-| login/views.py              |       45 |       11 |     76% |77, 83-101 |
+| login/views.py              |       50 |       11 |     78% |89, 95-113 |
+| monthly.py                  |       17 |       17 |      0% |      3-38 |
 | store/\_\_init\_\_.py       |        0 |        0 |    100% |           |
-| store/admin.py              |        5 |        0 |    100% |           |
+| store/admin.py              |        6 |        0 |    100% |           |
 | store/apps.py               |        4 |        0 |    100% |           |
-| store/forms.py              |       17 |        2 |     88% |     10-11 |
-| store/models.py             |       26 |        0 |    100% |           |
+| store/forms.py              |       17 |        2 |     88% |     11-12 |
+| store/models.py             |       32 |        0 |    100% |           |
 | store/tests.py              |      111 |        0 |    100% |           |
 | store/urls.py               |        6 |        0 |    100% |           |
 | store/validators.py         |        9 |        2 |     78% |    14, 21 |
-| store/views.py              |      115 |       55 |     52% |31, 43-51, 61-122, 126-152, 177-179, 213 |
+| store/views.py              |      133 |       69 |     48% |35, 47-55, 65-141, 145-172, 197-199, 233 |
 | superadmin/\_\_init\_\_.py  |        0 |        0 |    100% |           |
-| superadmin/admin.py         |        3 |        0 |    100% |           |
+| superadmin/admin.py         |        5 |        0 |    100% |           |
 | superadmin/apps.py          |        4 |        0 |    100% |           |
-| superadmin/forms.py         |       10 |        0 |    100% |           |
-| superadmin/models.py        |       24 |        0 |    100% |           |
-| superadmin/tests.py         |       93 |        0 |    100% |           |
+| superadmin/forms.py         |        9 |        0 |    100% |           |
+| superadmin/models.py        |       54 |        0 |    100% |           |
+| superadmin/tests.py         |      164 |        0 |    100% |           |
 | superadmin/urls.py          |        3 |        0 |    100% |           |
-| superadmin/views.py         |       19 |        7 |     63% |  8, 25-32 |
+| superadmin/views.py         |       52 |       26 |     50% |22, 40-84, 100-103 |
 | userprofile/\_\_init\_\_.py |        0 |        0 |    100% |           |
 | userprofile/admin.py        |        9 |        0 |    100% |           |
 | userprofile/apps.py         |        4 |        0 |    100% |           |
 | userprofile/forms.py        |       13 |        0 |    100% |           |
 | userprofile/models.py       |       28 |        0 |    100% |           |
-| userprofile/tests.py        |      359 |        2 |     99% |   455-456 |
+| userprofile/tests.py        |      356 |        2 |     99% |   450-451 |
 | userprofile/urls.py         |        4 |        0 |    100% |           |
-| userprofile/views.py        |      238 |      104 |     56% |52-64, 68-88, 92-112, 116-135, 139-162, 173, 196-209, 263, 276-304, 404-434, 445-446, 451, 456-457, 463-469, 473-487 |
-|                   **TOTAL** | **2447** |  **302** | **88%** |           |
+| userprofile/views.py        |      259 |      115 |     56% |53-64, 69-88, 92-93, 98-117, 121-122, 127-144, 148-149, 154-175, 179-180, 191, 197, 199, 201, 203, 225-238, 293, 306-335, 436-466, 478-479, 484, 489-490, 496-502, 506-520 |
+| vendor/\_\_init\_\_.py      |        0 |        0 |    100% |           |
+| vendor/apps.py              |        4 |        0 |    100% |           |
+| vendor/tests.py             |        1 |        0 |    100% |           |
+| vendor/urls.py              |        3 |        0 |    100% |           |
+| vendor/views.py             |       25 |       15 |     40% | 17-38, 41 |
+|                   **TOTAL** | **2761** |  **421** | **85%** |           |
