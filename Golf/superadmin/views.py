@@ -56,10 +56,6 @@ class ReportFormView(View):
             report = form.save(commit=False)
             report.save()
 
-            # please explain the logic of this in a comment
-            # why bitwise not?
-            # what is Q?
-            # why does this result in eligable users
             eligible = User.objects.filter(
                  Q(charity=False) &
                  Q(super_user=True) &
@@ -73,14 +69,12 @@ class ReportFormView(View):
             if len(eligible) >= 3:
                 reviewers = random.sample(list(eligible), k=3)
 
-                # TODO Uncomment when ticket model is added to main branch
-
-                # for reviewer in reviewers:
-                #     ticket = ReportTicket.objects.create(
-                #         report_id = report,
-                #         user_id = reviewer,
-                #     )
-                #     ticket.save()
+                for reviewer in reviewers:
+                    ticket = ReportTicket.objects.create(
+                        report_id = report,
+                        user_id = reviewer,
+                    )
+                    ticket.save()
 
                 report.status = Report.ReportStatus.TICKETED
                 report.save()
