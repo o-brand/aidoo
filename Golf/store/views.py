@@ -94,7 +94,7 @@ def buyitem_call(request):
             raise Http404()
         if form.is_valid():
             data = []
-            domain = get_current_site(request).domain
+            site = get_current_site(request)
             for _ in range(quantity):
                 sale = Sale.objects.create(
                 purchase = item,
@@ -107,13 +107,13 @@ def buyitem_call(request):
                     cipher_suite = Fernet(settings.KEY)
                     encrypted_fact = cipher_suite.encrypt(fact.encode("ascii"))
                     encrypted_fact = base64.urlsafe_b64encode(encrypted_fact).decode("ascii")
-                    data.append(f"{domain}/vendor/{encrypted_fact}")
-                except Exception as e:
-                    print(e)
+                    data.append(f"{site.domain}/vendor/{encrypted_fact}")
+                except Exception:
                     raise Http404()
                 
 
-            buyer.balance = buyer.balance - item.price * sale.quantity
+            buyer.balance = buyer.balance - item.price * quantity
+            site.moderation.bank += item.price * quantity
             # Reduce the stock of the item by the sale qty
             item.stock = item.stock - quantity
 
@@ -121,6 +121,7 @@ def buyitem_call(request):
 
             item.save()
             buyer.save()
+            site.moderation.save()
 
             notification = Notification.objects.create(
                 user_id=me,
