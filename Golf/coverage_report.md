@@ -14,7 +14,6 @@
 | chat/tests.py               |      116 |        0 |    100% |           |
 | chat/urls.py                |        3 |        0 |    100% |           |
 | chat/views.py               |       69 |       22 |     68% |23-41, 73, 103-106, 111-112 |
-| daily.py                    |       35 |       35 |      0% |      3-80 |
 | help/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | help/apps.py                |        4 |        0 |    100% |           |
 | help/tests.py               |       34 |        0 |    100% |           |
@@ -36,7 +35,6 @@
 | login/urls.py               |        5 |        0 |    100% |           |
 | login/validators.py         |       14 |        1 |     93% |        32 |
 | login/views.py              |       50 |       11 |     78% |89, 95-113 |
-| monthly.py                  |       17 |       17 |      0% |      3-38 |
 | store/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | store/admin.py              |        6 |        0 |    100% |           |
 | store/apps.py               |        4 |        0 |    100% |           |
@@ -67,4 +65,4 @@
 | vendor/tests.py             |        1 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       25 |       15 |     40% | 17-38, 41 |
-|                   **TOTAL** | **2761** |  **421** | **85%** |           |
+|                   **TOTAL** | **2709** |  **369** | **86%** |           |
