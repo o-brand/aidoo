@@ -95,6 +95,7 @@ def buyitem_call(request):
         if form.is_valid():
             data = []
             domain = get_current_site(request).domain
+            print(domain)
             for _ in range(quantity):
                 sale = Sale.objects.create(
                 purchase = item,

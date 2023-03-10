@@ -20,7 +20,7 @@ def redeem(request, token):
         raise Http404()
         
     context = {
-        "disabled" :"true",
+        "vendor" :"true",
         "item": item,
         
     }
