@@ -1,13 +1,11 @@
-# python inactivity.py - DO NOT RUN LOCALLY!!
+# python daily.py - DO NOT RUN LOCALLY!!
 
 import django
 
 django.setup()
 
-import os
 import datetime
 from django.utils import timezone
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.db.models import Q
