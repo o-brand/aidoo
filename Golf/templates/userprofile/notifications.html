@@ -22,7 +22,7 @@
                 {% endif %}
                 {{ notifications.title }}
               </h5>
-            <small class="text-muted">3 days ago</small>
+            <small class="text-muted">{{ notifications.time_of_notification |date:"jS M G:i" }}</small>
           </div>
           <p class="mb-1">{{ notifications.content }}</p>
         </a>

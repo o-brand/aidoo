@@ -70,6 +70,7 @@ for job in jobs:
         if application.applicant_id.opt_in_site_application:
             Notification.objects.create(
                 user_id=application.applicant_id,
+                title="Job Cancelled",
                 content="The job poster has cancelled the job: " + str(job.job_title),
                 link="/profile/me"
             )

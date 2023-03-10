@@ -202,6 +202,7 @@ def apply_call(request):
             if len(applications) < 2:
                 Notification.objects.create(
                     user_id=jobs[0].poster_id,
+                    title="Job is ready",
                     content="You can now choose an applicant for the job: "
                     + str(jobs[0].job_title),
                     link="/profile/me",
@@ -248,6 +249,7 @@ def cancel_call(request):
             if application.applicant_id.opt_in_site_application:
                 Notification.objects.create(
                     user_id=application.applicant_id,
+                    title="Job Cancelled",
                     content="The job poster has cancelled the job: "
                     + str(job.job_title),
                     link="/profile/me",
