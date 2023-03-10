@@ -39,6 +39,10 @@ python3 manage.py flush
 python3 manage.py loaddata ../db.json
 ```
 
+```
+python3 manage.py flush && python3 manage.py loaddata ../db.json
+```
+
 ***The date of the actual save is 10/03/2023.***
 
 
