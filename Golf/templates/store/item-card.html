@@ -12,7 +12,16 @@
       <img src="{{ item.item_picture.url }}">
     </div>
     <div class="card-text" style="height:70px;overflow: scroll;">
-      <small>{{item.description}}</small>
+      <p><small>{{item.description}}</small></p>
+      {% if vendor %}
+        <p>
+          <small><strong>
+            This item may only be redeemed once. Don't click the button unless 
+            you are the vendor redeeming the item on behalf of a user. Don't try
+            this at home.
+          </strong></small>
+        </p>
+      {% endif %}
     </div>
   </div>
   <div class="card-footer rounded-4">
@@ -32,15 +41,8 @@
         {% endif %}
       </div>
     {% else %}
-      
       <p><button class="btn btn-primary">Redeem</button></p>
-      <p>
-        <small>
-          This item may only be redeemed once. Don't click the button unless 
-          you are the item vendor redeeming the item on behalf of a user. Don't try
-          this at home.
-        </small>
-      </p>
+      
     {% endif %}
   </div>
 </div>
