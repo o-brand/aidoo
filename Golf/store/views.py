@@ -95,7 +95,6 @@ def buyitem_call(request):
         if form.is_valid():
             data = []
             domain = get_current_site(request).domain
-            print(domain)
             for _ in range(quantity):
                 sale = Sale.objects.create(
                 purchase = item,
@@ -108,7 +107,7 @@ def buyitem_call(request):
                     cipher_suite = Fernet(settings.KEY)
                     encrypted_fact = cipher_suite.encrypt(fact.encode("ascii"))
                     encrypted_fact = base64.urlsafe_b64encode(encrypted_fact).decode("ascii")
-                    data.append(f"{domain}vendor/{encrypted_fact}")
+                    data.append(f"{domain}/vendor/{encrypted_fact}")
                 except Exception as e:
                     print(e)
                     raise Http404()

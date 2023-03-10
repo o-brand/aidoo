@@ -25,3 +25,6 @@ def redeem(request, token):
         
     }
     return render(request, "vendor/index.html", context)
+
+def redeem_call(request):
+    pass
