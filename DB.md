@@ -22,6 +22,11 @@ python3 manage.py loaddata ../db.json
 python3 manage.py runserver
 ```
 
+more one line fun
+```
+python3 manage.py migrate && python3 manage.py flush && python3 manage.py loaddata ../db.json
+```
+
 Then you are ready and can continue coding as usual. If you want to revert your database to the online database, you can still do that with these commands:
 
 ```
