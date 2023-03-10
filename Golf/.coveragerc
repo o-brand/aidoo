@@ -5,7 +5,8 @@ omit =
     Golf/production.py
     Golf/settings.py
     heroku_db.py
-    inactivity.py
+    daily.py
+    monthly.py
     manage.py
     */migrations/*
     chat/routing.py
