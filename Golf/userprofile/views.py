@@ -296,6 +296,7 @@ def selectapplicant_call(request):
                 if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
                         user_id = user.applicant_id,
+                        title="Application Update",
                         content = "You've been rejected from the job: " + str(job.job_title),
                         link = "/jobs/" + str(job.job_id)
                         )
@@ -327,6 +328,7 @@ def selectapplicant_call(request):
                 if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
                         user_id = user.applicant_id,
+                        title="Application Update",
                         content = "You've been accepted for the job: " + str(job.job_title),
                         link = "/jobs/" + str(job.job_id)
                         )
