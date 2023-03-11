@@ -440,17 +440,8 @@ class NotificationModelTestCase(TestCase):
     # Tests the notif_data function for valid data
     # Will fail if there's a validation error
     def test_correct_data(self):
-
         created_notification=notif_data()
-
-        raised=False
-
-        try:
-            created_notification.full_clean()
-        except ValidationError:
-            raised=True
-
-        self.assertFalse(raised)
+        created_notification.full_clean()
 
     def test_too_long_content(self):
 

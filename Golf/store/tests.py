@@ -92,10 +92,20 @@ class TransferTestCase(LoginRequiredTestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required", form.errors[key][0])
 
-    #TODO
     def test_incorrect_username_form(self):
         # behaviour if recipient username doesn't exist
-        pass
+        form = TransferForm(data={
+            "recipient": "nobody",
+            "amount": "10",
+            "note": "A little gift for you"
+        })
+
+        self.assertEqual(1, len(form.errors))
+
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("There is no user with the username nobody.", form.errors[key][0])
 
 
 class StoreTestCase(LoginRequiredTestCase):

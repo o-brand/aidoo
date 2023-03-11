@@ -82,6 +82,26 @@ class SignupTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="login/signup.html")
 
+    # test if signing up works if not correct data given
+    def test_signup_flow_not_correct(self):
+        upload_file = open('../fortest.jpeg', 'rb')
+        new_user = {
+            "first_name": "User",
+            "last_name": "MadeUp",
+            "email": "",
+            "username": "madeupuser",
+            "biography": "hey",
+            "password1": "madeuppassword",
+            "password2": "madeuppassword",
+            "date_of_birth": datetime.date(2000, 1, 1),
+            "profile_id": SimpleUploadedFile(upload_file.name, upload_file.read())
+        }
+        response = self.client.post(reverse("signup"), data=new_user)
+        self.assertEqual(response.status_code, 200)
+
+        # Test that no message has been sent.
+        self.assertEqual(len(mail.outbox), 0)
+
     # test if signing up works if correct data given and user is redirected after
     def test_signup_flow(self):
         upload_file = open('../fortest.jpeg', 'rb')
@@ -447,6 +467,7 @@ class RegisterFormTestCase(TestCase):
 
 
 class ValidatorsTestCase(TestCase):
+
     def test_validate_dob(self):
         """Test the validate_dob function."""
         # Test invalid dates.
@@ -462,3 +483,12 @@ class ValidatorsTestCase(TestCase):
             "%Y-%m-%d").date()))
         self.assertIsNone(validate_dob(datetime.datetime.strptime("2005-02-19",
             "%Y-%m-%d").date()))
+    
+    def validate_username(self):
+        """Test the validate_username function."""
+        # Test the invalid username.
+        with self.assertRaises(ValidationError):
+            validate_username("default")
+
+        # Test a valid username.
+        self.assertIsNone("asdasd")

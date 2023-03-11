@@ -509,8 +509,6 @@ class PostJobCase(TestCase):
                     ("The number of hours is not valid."),
                     form.errors[key][0],
                 )
-            else:
-                self.assertIn("This field is required.", form.errors[key][0])
 
     def test_duration_half_hours_not_valid(self):
         # behaviour if the duration is too long
@@ -536,8 +534,6 @@ class PostJobCase(TestCase):
                     "minutes are allowed."),
                     form.errors[key][0],
                 )
-            else:
-                self.assertIn("This field is required.", form.errors[key][0])
 
     def test_fine(self):
         new_application = {

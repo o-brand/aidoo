@@ -16,6 +16,3 @@ def validate_recipient(username):
             _("There is no user with the username %(value)s."),
             params={"value": username},
         )
-
-def validate_transfer_budget(amount):
-    pass
