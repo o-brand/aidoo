@@ -31,9 +31,9 @@
 | login/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | login/apps.py               |        4 |        0 |    100% |           |
 | login/forms.py              |       20 |        0 |    100% |           |
-| login/tests.py              |      209 |        3 |     99% |   490-494 |
+| login/tests.py              |      209 |        0 |    100% |           |
 | login/urls.py               |        5 |        0 |    100% |           |
-| login/validators.py         |       14 |        1 |     93% |        32 |
+| login/validators.py         |       14 |        0 |    100% |           |
 | login/views.py              |       50 |       10 |     80% |    95-113 |
 | store/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | store/admin.py              |        6 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       50 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |       14 |     67% |     17-41 |
-|                   **TOTAL** | **2782** |  **364** | **87%** |           |
+|                   **TOTAL** | **2782** |  **360** | **87%** |           |
