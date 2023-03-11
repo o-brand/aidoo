@@ -6,6 +6,10 @@
 {% include 'public-navigation.html' %}
 
 <div class="container">
+  {% if not redeemed %}
     {% include 'store/item-card.html' %}
+  {% else %}
+    <p>This item was already redeemed.</p>
+  {% endif %}
 </div>
 {% endblock %}

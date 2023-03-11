@@ -41,8 +41,14 @@
         {% endif %}
       </div>
     {% else %}
-      <p><button class="btn btn-primary">Redeem</button></p>
-      
+      <p>
+        <button class="btn btn-primary"
+          _="on click add @disabled to me"
+          hx-post="{% url 'redeem-item' %}"
+          hx-vals='{"sale": {{ sale }}, "buyer": {{ buyer }} }'
+          hx-swap="outerHTML"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Redeem</button>
+      </p>
     {% endif %}
   </div>
 </div>
