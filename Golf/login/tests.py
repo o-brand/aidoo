@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.urls import reverse
 from Golf.utils import create_date_string
 from .forms import RegisterForm
-from .validators import validate_dob
+from .validators import validate_dob, validate_username
 
 
 # Get actual user model.
@@ -484,11 +484,11 @@ class ValidatorsTestCase(TestCase):
         self.assertIsNone(validate_dob(datetime.datetime.strptime("2005-02-19",
             "%Y-%m-%d").date()))
     
-    def validate_username(self):
+    def test_validate_username(self):
         """Test the validate_username function."""
         # Test the invalid username.
         with self.assertRaises(ValidationError):
             validate_username("default")
 
         # Test a valid username.
-        self.assertIsNone("asdasd")
+        self.assertIsNone(validate_username("asdasd"))
