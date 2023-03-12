@@ -446,3 +446,9 @@ a:hover {
   height: fit-content;
 }
 
+#job-message-input {
+  width: 100%;
+  height: 50px;
+  white-space: pre-wrap;
+  font-size: medium;
+}

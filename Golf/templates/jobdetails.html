@@ -88,15 +88,14 @@
   
 
   <div class="job-foot mt-5">
-    <p>Comments</p>
-    <div class="input-group flex-nowrap">
-          <textarea id="job-message-input" type="text" style="width: 100%; height: 50px; white-space: pre-wrap"
-                    placeholder="Ask a question" required></textarea>
+    <h5>Comments</h5>
+    <div class="input-group flex-nowrap w-50">
+        <textarea id="job-message-input" type="text" placeholder="Ask a question" class="p-2 mb-4" required></textarea>
         <span id="job-message-submit" type="button">Send</span>
     </div>
   </div>
 
-  <div class="col" id="comments">
+  <div class="col w-50" id="comments">
     {% for comment in comments %}
       <div class="card details-card mb-2">
         <div class="card-body">
@@ -115,7 +114,7 @@
           </div>
         <div>
             <div id="comment-content">{{ comment.content|linebreaks }}</div>
-            <div>{{ comment.post_time }}</div>
+            <div>{{ comment.post_time | date:'H:i d M Y' }}</div>
         </div>
         </div>
       </div>
