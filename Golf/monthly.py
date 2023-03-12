@@ -22,17 +22,19 @@ if datetime.datetime.today().day == 1:
     charities = User.objects.filter(charity=True)
     number_of_charities = len(charities)
 
-    # Get site with the bank's balance
-    site = Site.objects.get_current().moderation
+    # Is there at least one charity?
+    if number_of_charities > 0:
+        # Get site with the bank's balance
+        site = Site.objects.get_current().moderation
 
-    # Calculate the donation
-    donation = int(site.bank / number_of_charities)
+        # Calculate the donation
+        donation = int(site.bank / number_of_charities)
 
-    # Give the doos to the charities
-    for charity in charities:
-        charity.balance += donation
-        charity.save()
-        site.bank -= donation
+        # Give the doos to the charities
+        for charity in charities:
+            charity.balance += donation
+            charity.save()
+            site.bank -= donation
 
-    # Save new bank balance
-    site.save()
+        # Save new bank balance
+        site.save()
