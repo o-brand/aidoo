@@ -78,6 +78,35 @@ class LoginRequiredMiddlewareTestCase(TestCase):
         # Assert no redirection
         self.assertEqual(response.status_code, 200)
 
+    def test_url_ending_with_slash(self):
+        """Tests an url ending with a slash against the Middleware."""
+        request = RequestFactory()
+        request.user = AnonymousUser()
+
+        # Change the URL of the request
+        request.path_info = "chat/"
+
+        # Get the response using the Middleware
+        response = self.middleware(request)
+
+        # Assert no redirection
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/login?next=/chat/")
+
+    def test_wrong_url(self):
+        """Tests a wrong url against the Middleware."""
+        request = RequestFactory()
+        request.user = AnonymousUser()
+
+        # Change the URL of the request
+        request.path_info = "sad/"
+
+        # Get the response using the Middleware
+        response = self.middleware(request)
+
+        # Assert no redirection
+        self.assertEqual(response.status_code, 200)
+
 
 class ProfanityValidatorTestCase(TestCase):
     """Tests for validate_profanity validator."""
