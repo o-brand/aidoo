@@ -197,7 +197,10 @@ class TransferView(View):
             # Add the sender and recipient to the form
             transfer = form.save(commit=False)
             transfer.sender = me
-            transfer.recipient = User.objects.get(username=form["recipient"])
+
+            # We can use this since there is a validator
+            recipient = User.objects.get(username=form.cleaned_data["recipient"])
+            transfer.recipient = recipient
 
             # Check the balance
             amount = form.cleaned_data["amount"]
