@@ -147,7 +147,7 @@ class PasswordResetTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_password_reset_sent_page_available_by_name(self):
-        response = self.client.get(reverse("password_reset_sent"))
+        response = self.client.get(reverse("password_reset_done"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
             response, template_name="login/password_reset_sent.html"
