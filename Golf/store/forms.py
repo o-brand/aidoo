@@ -7,9 +7,10 @@ from Golf.validators import validate_profanity
 
 class BuyForm(Form):
     """Form to buy an item"""
+
     def __init__(self, choices, *args, **kwargs):
-      super(BuyForm, self).__init__(*args, **kwargs)
-      self.fields['quantity'].choices = [(f"{x}",f"{x}") for x in choices]
+        super(BuyForm, self).__init__(*args, **kwargs)
+        self.fields["quantity"].choices = [(f"{x}", f"{x}") for x in choices]
 
     quantity = forms.ChoiceField(
         widget=forms.Select(
@@ -25,6 +26,7 @@ class BuyForm(Form):
 
 class TransferForm(ModelForm):
     """Form to transfer coins"""
+
     recipient = forms.CharField(
         widget=forms.TextInput(
             attrs={
@@ -40,24 +42,24 @@ class TransferForm(ModelForm):
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
-                "style":"width: auto; display: initial;",
+                "style": "width: auto; display: initial;",
             },
         ),
-        label = "Amount",
+        label="Amount",
         min_value=1,
     )
 
     note = forms.CharField(
-    max_length=250,
-    widget=forms.Textarea(
-        attrs={
-            "class": "form-control",
-            "rows": 3,
-        }
-    ),
-    label="Message for recipient (optional)",
-    validators=[validate_profanity],
-    required=False,
+        max_length=250,
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "rows": 3,
+            }
+        ),
+        label="Message for recipient (optional)",
+        validators=[validate_profanity],
+        required=False,
     )
 
     class Meta:

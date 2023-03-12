@@ -46,6 +46,7 @@ class RedeemTestCase(TestCase):
         sale = dict()
         sale["purchase"] = self.item
         sale["buyer"] = self.user
+        sale["quantity"] = 1
         self.sale = Sale.objects.create(**sale)
 
         # Create a valid token
@@ -121,6 +122,7 @@ class RedeemCallTestCase(LoginRequiredTestCase):
         sale = dict()
         sale["purchase"] = self.item
         sale["buyer"] = self.user
+        sale["quantity"] = 1
         self.sale = Sale.objects.create(**sale)
 
     def test_page(self):

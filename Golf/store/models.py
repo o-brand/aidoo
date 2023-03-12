@@ -1,6 +1,6 @@
-from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.db import models
 from django.utils import timezone
 
 
@@ -10,7 +10,9 @@ User = get_user_model()
 
 def item_picture_rename(instance, filename): # pragma: no cover
     """Renames the image before uploading."""
-    return '/'.join(['storeitem', instance.item_name.replace(' ','-').lower()])
+    return "/".join(
+        ["storeitem", instance.item_name.replace(" ", "-").lower()]
+    )
 
 
 class Item(models.Model):
@@ -35,17 +37,15 @@ class Item(models.Model):
     on_offer = models.BooleanField()
 
     # The maximum amount of this item that a user can buy
-    limit_per_user = models.IntegerField(blank=True,
-        default=None,
-        null=True)
+    limit_per_user = models.IntegerField(blank=True, default=None, null=True)
 
-    #image field
+    # image field
     item_picture = models.ImageField(upload_to=item_picture_rename)
 
 
 class Sale(models.Model):
-    """This model is used to represent the sale of an item in the shop,
-    where each item sold is recorded separately"""
+    """This model is used to represent the sale of an item in the shop, where
+    each item sold is recorded separately"""
 
     # Primary key
     sale_id = models.BigAutoField(primary_key=True)
@@ -57,7 +57,7 @@ class Sale(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # Amount of the item purchased
-    quantity = models.IntegerField(default=1) #Take out default later
+    quantity = models.IntegerField()
 
     # Whether item is redeemed
     redeemed = models.BooleanField(default=False)
@@ -67,20 +67,21 @@ class Sale(models.Model):
 
 
 class Transfer(models.Model):
-    """This model is used to represent the transfer of coins
-    from one user to another"""
+    """This model is used to represent the transfer of coins from one user to
+    another"""
+
     # Primary key
     transfer_id = models.BigAutoField(primary_key=True)
 
     # Foreign key to User giving the money
-    sender = models.ForeignKey(User,
-        related_name="sender",
-        on_delete=models.CASCADE)
+    sender = models.ForeignKey(
+        User, related_name="sender", on_delete=models.CASCADE
+    )
 
     # Foreign key to User receiving the money
-    recipient = models.ForeignKey(User,
-        related_name="recipient",
-        on_delete=models.CASCADE)
+    recipient = models.ForeignKey(
+        User, related_name="recipient", on_delete=models.CASCADE
+    )
 
     # Amount of money being transferred
     amount = models.IntegerField()

@@ -1,13 +1,13 @@
 import datetime
 from faker import Faker
-from django.test import TestCase
-from django.utils import timezone
-from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
 from Golf.utils import LoginRequiredTestCase
-from .models import Item, Sale, Transfer
 from .forms import TransferForm
+from .models import Item, Sale, Transfer
 
 
 # Get actual user model.
@@ -16,6 +16,7 @@ User = get_user_model()
 
 class TransferTestCase(LoginRequiredTestCase):
     """Tests for transferring coins"""
+
     def setUp(self):
         super().setUp()
 
@@ -28,7 +29,6 @@ class TransferTestCase(LoginRequiredTestCase):
         credentials["first_name"] = lambda: fake.first_name()
         credentials["date_of_birth"] = datetime.datetime.now()
         User.objects.create_user(**credentials)
-        credentials.clear()
 
     def test_transfer_page(self):
         # test availability via URL
@@ -51,21 +51,21 @@ class TransferTestCase(LoginRequiredTestCase):
         new_form = {
             "recipient": User.objects.get(pk=1),
             "amount": "10",
-            "note": "A little gift for you"
+            "note": "A little gift for you",
         }
         response = self.client.post(reverse("transfer"), data=new_form)
         self.assertEqual(response.status_code, 204)
-        self.assertEqual(User.objects.get(pk=1).balance, original_balance+10)
+        self.assertEqual(User.objects.get(pk=1).balance, original_balance + 10)
 
     def test_no_fund(self):
         # test if the user has no sufficient fund
         new_form = {
             "recipient": User.objects.get(pk=1),
             "amount": "999",
-            "note": "A little gift for you"
+            "note": "A little gift for you",
         }
         response = self.client.post(reverse("transfer"), data=new_form)
-        self.assertEqual(response.status_code, 200) # No fund error...
+        self.assertEqual(response.status_code, 200)  # No fund error...
 
     def test_empty_form(self):
         # behaviour if empty form is submitted
@@ -83,7 +83,8 @@ class TransferTestCase(LoginRequiredTestCase):
         form = TransferForm(
             data={
                 "recipient": User.objects.get(pk=1).username,
-            })
+            }
+        )
 
         self.assertEqual(1, len(form.errors))
 
@@ -94,24 +95,26 @@ class TransferTestCase(LoginRequiredTestCase):
 
     def test_incorrect_username_form(self):
         # behaviour if recipient username doesn't exist
-        form = TransferForm(data={
-            "recipient": "nobody",
-            "amount": "10",
-            "note": "A little gift for you"
-        })
+        form = TransferForm(
+            data={
+                "recipient": "nobody",
+                "amount": "10",
+                "note": "A little gift for you",
+            }
+        )
 
         self.assertEqual(1, len(form.errors))
 
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
-            self.assertIn("There is no user with the username nobody.", form.errors[key][0])
+            self.assertIn(
+                "There is no user with the username nobody.", form.errors[key][0]
+            )
 
 
 class StoreTestCase(LoginRequiredTestCase):
     """Tests for the store front page."""
-    def setUp(self):
-        super().setUp()
 
     def test_store_page(self):
         # test availability via URL
@@ -135,12 +138,12 @@ class ItemModelTest(TestCase):
     def setUp(self):
         """Create an Item object to be used for testing."""
         self.item = Item.objects.create(
-            item_name='Test Item',
-            description='A test item for the shop',
+            item_name="Test Item",
+            description="A test item for the shop",
             price=10,
             stock=5,
             on_offer=True,
-            limit_per_user=2
+            limit_per_user=2,
         )
 
     def test_item_creation(self):
@@ -150,32 +153,32 @@ class ItemModelTest(TestCase):
 
     def test_item_attributes_name(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')
-        self.assertEqual(item.item_name, 'Test Item')
+        item = Item.objects.get(item_name="Test Item")
+        self.assertEqual(item.item_name, "Test Item")
 
     def test_item_attributes_description(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')
-        self.assertEqual(item.description, 'A test item for the shop')
+        item = Item.objects.get(item_name="Test Item")
+        self.assertEqual(item.description, "A test item for the shop")
 
     def test_item_attributes_price(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')
+        item = Item.objects.get(item_name="Test Item")
         self.assertEqual(item.price, 10)
 
     def test_item_attributes_stock(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')
+        item = Item.objects.get(item_name="Test Item")
         self.assertEqual(item.stock, 5)
 
     def test_item_attributes_on_offer(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')
+        item = Item.objects.get(item_name="Test Item")
         self.assertEqual(item.on_offer, True)
 
     def test_item_attributes_limit(self):
         """Test that the Item attributes are correct."""
-        item = Item.objects.get(item_name='Test Item')
+        item = Item.objects.get(item_name="Test Item")
         self.assertEqual(item.limit_per_user, 2)
 
 
@@ -186,18 +189,16 @@ class SaleModelTest(LoginRequiredTestCase):
         super().setUp()
         """Create an Item object and a User object to be used for testing."""
         self.item = Item.objects.create(
-            item_name='Test Item',
-            description='A test item for the shop',
+            item_name="Test Item",
+            description="A test item for the shop",
             price=10,
             stock=5,
             on_offer=True,
-            limit_per_user=2
+            limit_per_user=2,
         )
 
         self.sale = Sale.objects.create(
-            purchase=self.item,
-            buyer=self.user,
-            quantity=2,
+            purchase=self.item, buyer=self.user, quantity=2,
             time_of_sale=timezone.now()
         )
 
