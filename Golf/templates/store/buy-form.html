@@ -1,0 +1,12 @@
+{% if not form %}
+  <p><button class="btn btn-primary disabled" disabled>Unavailable</button></p>
+{% else %}
+  <form action="" hx-post="{% url 'buyitem' %}" hx-trigger="submit">
+  	{% csrf_token %}
+    <input type="hidden" value="{{item.item_id}}" name="purchase"/>
+    <div class="d-flex justify-content-start">
+      <p class="mx-1">{{form.quantity}}</p>
+      <p><input type="submit" value="Buy" class="btn btn-primary form-buy" name="form"/></p><!-- TODO: Disable button -->
+    </div>
+  </form>
+{% endif %}
