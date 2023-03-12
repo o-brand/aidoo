@@ -1,7 +1,7 @@
 | Name                        |    Stmts |     Miss |   Cover |   Missing |
 |---------------------------- | -------: | -------: | ------: | --------: |
 | Golf/\_\_init\_\_.py        |        0 |        0 |    100% |           |
-| Golf/middlewares.py         |       17 |        0 |    100% |           |
+| Golf/middlewares.py         |       23 |        6 |     74% |     55-65 |
 | Golf/tests.py               |       49 |        0 |    100% |           |
 | Golf/urls.py                |        3 |        0 |    100% |           |
 | Golf/utils.py               |       18 |        0 |    100% |           |
@@ -38,12 +38,12 @@
 | store/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | store/admin.py              |        6 |        0 |    100% |           |
 | store/apps.py               |        4 |        0 |    100% |           |
-| store/forms.py              |       17 |        2 |     88% |     11-12 |
+| store/forms.py              |       17 |        2 |     88% |     12-13 |
 | store/models.py             |       32 |        0 |    100% |           |
-| store/tests.py              |      116 |        0 |    100% |           |
-| store/urls.py               |        6 |        0 |    100% |           |
+| store/tests.py              |      113 |        0 |    100% |           |
+| store/urls.py               |        5 |        0 |    100% |           |
 | store/validators.py         |        7 |        0 |    100% |           |
-| store/views.py              |      133 |       69 |     48% |35, 47-55, 65-141, 145-172, 197-199, 233 |
+| store/views.py              |      140 |       82 |     41% |28-40, 56-61, 73-192, 198-228, 283 |
 | superadmin/\_\_init\_\_.py  |        0 |        0 |    100% |           |
 | superadmin/admin.py         |        5 |        0 |    100% |           |
 | superadmin/apps.py          |        4 |        0 |    100% |           |
@@ -62,7 +62,7 @@
 | userprofile/views.py        |      259 |      115 |     56% |53-64, 69-88, 92-93, 98-117, 121-122, 127-144, 148-149, 154-175, 179-180, 191, 197, 199, 201, 203, 225-238, 293, 306-335, 436-466, 478-479, 484, 489-490, 496-502, 506-520 |
 | vendor/\_\_init\_\_.py      |        0 |        0 |    100% |           |
 | vendor/apps.py              |        4 |        0 |    100% |           |
-| vendor/tests.py             |       92 |        0 |    100% |           |
+| vendor/tests.py             |       96 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
-| vendor/views.py             |       43 |        1 |     98% |        30 |
-|                   **TOTAL** | **2824** |  **347** | **88%** |           |
+| vendor/views.py             |       43 |        0 |    100% |           |
+|                   **TOTAL** | **2837** |  **365** | **87%** |           |
