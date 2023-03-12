@@ -74,10 +74,18 @@ class RedeemTestCase(TestCase):
 
     def test_redeem_page_wrong_buyer(self):
         # Test if the given buyer is not the actual buyer
-        fact = "1#5"
+        fact = "1#2"
         cipher_suite = Fernet(settings.KEY)
         encrypted_fact = cipher_suite.encrypt(fact.encode("ascii"))
         token = base64.urlsafe_b64encode(encrypted_fact).decode("ascii")
+
+        # Create another user.
+        credentials = {
+            "username": "asdasd",
+            "password": "asd123",
+            "date_of_birth": datetime.datetime.now(),
+        }
+        User.objects.create_user(**credentials)
 
         response = self.client.get(
             reverse("redeem", kwargs={"token": token})
