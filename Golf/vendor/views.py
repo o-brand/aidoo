@@ -1,9 +1,9 @@
-from django.shortcuts import render
-from cryptography.fernet import Fernet
 import base64
+from cryptography.fernet import Fernet
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.http import Http404
+from django.shortcuts import render
 from store.models import Sale
 
 
@@ -15,24 +15,27 @@ def redeem(request, token):
     """Displays a bought item to be redeemed."""
 
     try:
+        # Decode the token
         fact = base64.urlsafe_b64decode(token)
         cipher_suite = Fernet(settings.KEY)
         fact = cipher_suite.decrypt(fact).decode("ascii")
 
+        # Get the sale and user id from the token
         sale, buyer = fact.split("#")
         sale = Sale.objects.get(pk=sale)
         buyer = User.objects.get(pk=buyer)
 
+        # Check if the buyer is the actual buyer
         if sale.buyer != buyer:
             raise Http404()
 
+        # Get the item to display it
         item = sale.purchase
-
     except Exception:
         raise Http404()
 
     context = {
-        "vendor" :"true",
+        "vendor": True,
         "redeemed": sale.redeemed,
         "item": item,
         "sale": sale.pk,

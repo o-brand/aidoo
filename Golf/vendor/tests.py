@@ -1,7 +1,11 @@
+import base64
 import datetime
+from cryptography.fernet import Fernet
 from faker import Faker
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 from django.urls import reverse
 from Golf.utils import LoginRequiredTestCase
 from store.models import Item, Sale
@@ -9,6 +13,76 @@ from store.models import Item, Sale
 
 # Get actual user model.
 User = get_user_model()
+
+
+class RedeemTestCase(TestCase):
+    """Tests for displaying the redeem page."""
+
+    def setUp(self):
+        # Create a user.
+        credentials = {
+            "username": "asd",
+            "password": "asd123",
+            "date_of_birth": datetime.datetime.now(),
+        }
+        self.user = User.objects.create_user(**credentials)
+
+        # Image...
+        upload_file = open("../fortest.jpeg", "rb")
+
+        # Write 1 item into the item model.
+        item = dict()
+        item["item_name"] = "language class"
+        item["description"] = "Lorem ipsum..."
+        item["price"] = 5
+        item["stock"] = 5
+        item["on_offer"] = True
+        item["item_picture"] = SimpleUploadedFile(
+            upload_file.name, upload_file.read()
+        )
+        self.item = Item.objects.create(**item)
+
+        # Write 1 sale into the sale model.
+        sale = dict()
+        sale["purchase"] = self.item
+        sale["buyer"] = self.user
+        self.sale = Sale.objects.create(**sale)
+
+        # Create a valid token
+        fact = "1#1"
+        cipher_suite = Fernet(settings.KEY)
+        encrypted_fact = cipher_suite.encrypt(fact.encode("ascii"))
+        self.token = base64.urlsafe_b64encode(encrypted_fact).decode("ascii")
+
+    def test_redeem_page_invalid_token(self):
+        # Test with an invalid token
+        response = self.client.get("/vendor/" + self.token[:-1])
+        self.assertEqual(response.status_code, 404)
+
+    def test_redeem_page(self):
+        # Test if the page is available with a valid token
+        response = self.client.get("/vendor/" + self.token)
+        self.assertEqual(response.status_code, 200)
+
+    def test_redeem_page_available_by_name(self):
+        # Test if the page is available by name with a valid token
+        response = self.client.get(
+            reverse("redeem", kwargs={"token": self.token})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="vendor/index.html")
+
+    def test_redeem_page_wrong_buyer(self):
+        # Test if the given buyer is not the actual buyer
+        fact = "1#5"
+        cipher_suite = Fernet(settings.KEY)
+        encrypted_fact = cipher_suite.encrypt(fact.encode("ascii"))
+        token = base64.urlsafe_b64encode(encrypted_fact).decode("ascii")
+
+        response = self.client.get(
+            reverse("redeem", kwargs={"token": token})
+        )
+        self.assertEqual(response.status_code, 404)
 
 
 class RedeemCallTestCase(LoginRequiredTestCase):
@@ -21,7 +95,7 @@ class RedeemCallTestCase(LoginRequiredTestCase):
         super().setUp()
 
         # Image...
-        upload_file = open('../fortest.jpeg', 'rb')
+        upload_file = open("../fortest.jpeg", "rb")
 
         # Write 1 item into the item model
         item = dict()
@@ -30,7 +104,9 @@ class RedeemCallTestCase(LoginRequiredTestCase):
         item["price"] = 5
         item["stock"] = 5
         item["on_offer"] = True
-        item["item_picture"] = SimpleUploadedFile(upload_file.name, upload_file.read())
+        item["item_picture"] = SimpleUploadedFile(
+            upload_file.name, upload_file.read()
+        )
         self.item = Item.objects.create(**item)
 
         # Write 1 sale into the sale model
@@ -73,12 +149,16 @@ class RedeemCallTestCase(LoginRequiredTestCase):
         }
         user = User.objects.create_user(**credentials)
 
-        response = self.client.post("/vendor/redeem", {"sale": 1, "buyer": user.pk})
+        response = self.client.post(
+            "/vendor/redeem", {"sale": 1, "buyer": user.pk}
+        )
         self.assertEqual(response.status_code, 404)
 
     def test_page_post_fine(self):
         # test works
         response = self.client.post("/vendor/redeem", {"sale": 1, "buyer": 1})
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, template_name="vendor/redeemed.html")
+        self.assertTemplateUsed(
+            response, template_name="vendor/redeemed.html"
+        )
         self.assertTrue(Sale.objects.get(pk=1).redeemed)
