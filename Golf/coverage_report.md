@@ -1,8 +1,8 @@
 | Name                        |    Stmts |     Miss |   Cover |   Missing |
 |---------------------------- | -------: | -------: | ------: | --------: |
 | Golf/\_\_init\_\_.py        |        0 |        0 |    100% |           |
-| Golf/middlewares.py         |       23 |        6 |     74% |     55-65 |
-| Golf/tests.py               |       49 |        0 |    100% |           |
+| Golf/middlewares.py         |       23 |        0 |    100% |           |
+| Golf/tests.py               |       62 |        0 |    100% |           |
 | Golf/urls.py                |        3 |        0 |    100% |           |
 | Golf/utils.py               |       18 |        0 |    100% |           |
 | Golf/validators.py          |       10 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       96 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **2837** |  **365** | **87%** |           |
+|                   **TOTAL** | **2850** |  **359** | **87%** |           |
