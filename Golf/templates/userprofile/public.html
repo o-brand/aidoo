@@ -24,16 +24,20 @@
             <div class="card mb-1 job-card">
               <div class="card-body">
                 <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                  {{ job.posting_time | date:'d M Y' }}
-                  -
+                <p class="card-text">
+                  <i class="bi bi-geo-alt"></i>
+                  {{ job.location }}
+                  &nbsp;&nbsp;
+                  <i class="bi bi-hourglass-split"></i>
                   {% if job.deadline is not None %}
                     {{ job.deadline | date:'d M Y' }}
                   {% else %}
-                    None
+                    No Deadline
                   {% endif %}
-                </h6>
-                <p class="card-text"><i class="bi bi-triangle"></i> {{ job.points }} · {{ job.location }}</p>
+                  &nbsp;&nbsp;
+                  <i class="bi bi-triangle"></i>
+                  {{ job.points }}
+                </p>
               </div>
             </div>
           {% endfor %}
@@ -48,15 +52,20 @@
           <div class="card mb-1 job-card-archived">
             <div class="card-body">
               <h5 class="card-title"><a href="{% url 'jobdetails' job.job_id %}">{{ job.job_title }}</a></h5>
-              <h6 class="card-subtitle mb-2 text-muted">
-                {{ job.posting_time | date:'d M Y' }}
-                -
+              <p class="card-text">
+                <i class="bi bi-geo-alt"></i>
+                {{ job.location }}
+                &nbsp;&nbsp;
+                <i class="bi bi-hourglass-split"></i>
                 {% if job.deadline is not None %}
                   {{ job.deadline | date:'d M Y' }}
                 {% else %}
-                  None
+                  No Deadline
                 {% endif %}
-              </h6>
+                &nbsp;&nbsp;
+                <i class="bi bi-triangle"></i>
+                {{ job.points }}
+              </p>
             </div>
           </div>
         {% endfor %}
