@@ -56,8 +56,8 @@
   <script>
     const room_id = "{{ room.room_id }}";
     const username = "{{ me.username }}";
-    const me_id = "{{ me.id }}";
-    const other_user_id = "{{ room.user_2.id }}";
+    const me_id = "{{ me.profile_picture.url }}";
+    const other_user_id = "{{ room.user_2.profile_picture.url }}";
   </script>
   <script src="{% static 'js/room.js' %}"></script>
 

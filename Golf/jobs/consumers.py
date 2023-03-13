@@ -38,6 +38,7 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         content = data['content']
         commenter = data['commenter']
         commenter_id = data['commenter_id']
+        commenter_url = data['commenter_url']
 
         # Save message
         date_time = await self.save_comment(commenter, self.room_id, content)
@@ -51,6 +52,7 @@ class CommentsConsumer(AsyncWebsocketConsumer):
                 'commenter': commenter,
                 'commenter_id': commenter_id,
                 'date_time': date_time,
+                'commenter_url': commenter_url,
             }
         )
 
@@ -60,6 +62,7 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         commenter = event['commenter']
         commenter_id = event['commenter_id']
         date_time = event['date_time']
+        commenter_url = event['commenter_url']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
@@ -68,6 +71,7 @@ class CommentsConsumer(AsyncWebsocketConsumer):
             'commenter_id': commenter_id,
             'me': self.me == commenter,
             'date_time': date_time,
+            'commenter_url': commenter_url,
         }))
 
     @sync_to_async

@@ -20,13 +20,11 @@ chatSocket.onmessage = function(e) {
   if (data.message) {
     var tag = '';
     if (data.me) {
-      tag += ('<div class="chat"><div><img src="/static/assets/pfp/' + me_id +
-        '.jpeg" class="chat-profile-pic-right" alt="profile picture"></div><div ' +
+      tag += ('<div class="chat"><div><img src="'+ me_id +'" class="chat-profile-pic-right" alt="profile picture"></div><div ' +
         '<div class="message-me"><div class="message-text-right">' + data.message.replace(/\n/g, "<br />") +
         '</div><br><div class="message-date-right">' + data.date_time + '</div></div></div>');
     } else {
-      tag += ('<div class="chat"><div><img src="/static/assets/pfp/' + other_user_id +
-        '.jpeg" class="chat-profile-pic-left" alt="profile picture"></div><div ' +
+      tag += ('<div class="chat"><div><img src="'+ other_user_id + '" class="chat-profile-pic-left" alt="profile picture"></div><div ' +
         '<div class="message-me"><div class="message-text-left">' + data.message.replace(/\n/g, "<br />") +
         '</div><br><div class="message-date-left">' + data.date_time + '</div></div></div>');
     }

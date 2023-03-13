@@ -12,8 +12,7 @@ jobSocket.onmessage = function(e) {
   if (data.content) {
     var tag = '<div class="card details-card mb-2"><div class="card-body">' +
       '<div class="d-flex justify-content-start card-subtitle mb-1 text-muted">' +
-      '<a href="/profile/' + data.commenter_id + '"><img src="/static/assets/pfp/' +
-      data.commenter_id + '.jpeg"></a><h5><a href="/profile/' + data.commenter_id +
+      '<a href="/profile/' + data.commenter_id + '"><img src="' + data.commenter_url + '"></a><h5><a href="/profile/' + data.commenter_id +
       '">' + data.commenter;
     if (data.commenter_id == poster_id) {
       tag += ' (Poster)';
@@ -49,6 +48,7 @@ document.querySelector("#job-message-submit").onclick = function(e) {
     "content": message,
     "commenter": username,
     "commenter_id": me_id,
+    "commenter_url": me_url,
   }));
   messageInputDom.value = "";
   return false;
