@@ -20,7 +20,7 @@
   </div>
 </div>
 
-{% if forms %}
+{% if forms and not me.charity %}
   {% for item, form in forms.items %}
   <div class="col p-1">
     {% include 'store/item-card.html' %}
