@@ -65,9 +65,3 @@ class Notification(models.Model):
 
     # Time notificiation recorded
     time_of_notification = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        """ class for ordering the comments """
-
-        # Ordering
-        ordering = ('time_of_notification',)
