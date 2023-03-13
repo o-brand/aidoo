@@ -13,7 +13,8 @@
   {% endif %}
 
   {% if form.errors %}
-    <strong class="error">Your username and password didn't match. Please try again.<br />Or check your inbox if you haven't activited your account (you have 3 days to do it after registration).<br />Or we are still checking your ID.</strong>
+    <strong class="error">Your username and password didn't match. Please try again.
+      <br/>You can check the <a href="{% url 'manual' %}">user manual</a> for more information.</strong>
   {% endif %}
 
   <div class="row">
@@ -40,6 +41,6 @@
   </div>
   <p><a href="{% url 'password_reset_form' %}">Forgotten password?</a></p>
   <p>No account? <a href="{% url 'signup' %}">Create one now.</a></p>
-  <p>You can read our Privacy Policy <a href="{% url 'privacy' %}">here</a>, our Community Guidelines <a href="{% url 'community-guidelines' %}">here</a> and our User Manual <a href="{% url 'manual' %}">here</a>.</p>
+  <p>You can read our <a href="{% url 'privacy' %}">Privacy Policy</a>, our <a href="{% url 'community-guidelines' %}">Community Guidelines</a>, and <a href="{% url 'help' %}">more</a>.</p>
 </div>
 {% endblock %}
