@@ -40,7 +40,7 @@ if datetime.datetime.today().day == 1:
             notification = Notification.objects.create(
                 user_id=charity,
                 title="Monthly donation",
-                content=(f"You have received a monthly donation of {donation}"
+                content=(f"You have received a monthly donation of {donation} "
                 "doos from Aidoo."),
                 link="/profile/me"
             )

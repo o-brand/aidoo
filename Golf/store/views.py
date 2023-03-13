@@ -280,7 +280,7 @@ class TransferView(View):
                 user_id=me,
                 title=f"Transfer confirmation",
                 content=(
-                    (f"The transfer of {amount} doos to {recipient.username}"
+                    (f"The transfer of {amount} doos to {recipient.username} "
                     "was successful.")
                 ),
                 link="profile/me",
