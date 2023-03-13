@@ -20,13 +20,17 @@ chatSocket.onmessage = function(e) {
   if (data.message) {
     var tag = '';
     if (data.me) {
-      tag += ('<div class="chat"><div><img src="'+ me_id +'" class="chat-profile-pic-right" alt="profile picture"></div><div ' +
-        '<div class="message-me"><div class="message-text-right">' + data.message.replace(/\n/g, "<br />") +
-        '</div><br><div class="message-date-right">' + data.date_time + '</div></div></div>');
+      tag += ('<div class="chat"><div><img src="' + me_url +
+        '" class="chat-profile-pic-right" alt="profile picture"></div><div ' +
+        '<div class="message-me"><div class="message-text-right">' +
+        data.message.replace(/\n/g, "<br />") + '</div><br><div class="message-date-right">' +
+        data.date_time + '</div></div></div>');
     } else {
-      tag += ('<div class="chat"><div><img src="'+ other_user_id + '" class="chat-profile-pic-left" alt="profile picture"></div><div ' +
-        '<div class="message-me"><div class="message-text-left">' + data.message.replace(/\n/g, "<br />") +
-        '</div><br><div class="message-date-left">' + data.date_time + '</div></div></div>');
+      tag += ('<div class="chat"><div><img src="' + other_user_url +
+        '" class="chat-profile-pic-left" alt="profile picture"></div><div ' +
+        '<div class="message-me"><div class="message-text-left">' +
+        data.message.replace(/\n/g, "<br />") + '</div><br><div class="message-date-left">' +
+        data.date_time + '</div></div></div>');
     }
     document.querySelector("#chat-messages").innerHTML += tag;
     scrollToBottom();
@@ -35,13 +39,13 @@ chatSocket.onmessage = function(e) {
 };
 
 document.querySelector("#chat-message-input").focus();
-$("#chat-message-input").keydown(function (event) {
+$("#chat-message-input").keydown(function(event) {
 
   event = (event) ? event : ((window.event) ? window.event : "");
   var keyCode = event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode);
   var shiftKey = event.shiftKey || event.metaKey;
   if (shiftKey && keyCode === 13) { //shift+enter
-    var newDope = $(this).val() + "\n";// Get textarea data for newline
+    var newDope = $(this).val() + "\n"; // Get textarea data for newline
     $(this).val(newDope);
   } else if (keyCode === 13) { // "Enter"
     event.preventDefault();

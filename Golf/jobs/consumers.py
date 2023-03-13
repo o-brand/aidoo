@@ -51,8 +51,8 @@ class CommentsConsumer(AsyncWebsocketConsumer):
                 'content': content,
                 'commenter': commenter,
                 'commenter_id': commenter_id,
-                'date_time': date_time,
                 'commenter_url': commenter_url,
+                'date_time': date_time,
             }
         )
 
@@ -61,17 +61,17 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         content = event['content']
         commenter = event['commenter']
         commenter_id = event['commenter_id']
-        date_time = event['date_time']
         commenter_url = event['commenter_url']
+        date_time = event['date_time']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'content': content,
             'commenter': commenter,
             'commenter_id': commenter_id,
+            'commenter_url': commenter_url,
             'me': self.me == commenter,
             'date_time': date_time,
-            'commenter_url': commenter_url,
         }))
 
     @sync_to_async
@@ -87,4 +87,8 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         comment["content"] = content
         saved_comment = Comment.objects.create(**comment)
 
-        return saved_comment.post_time.strftime("%#d %b %Y, %#I:%M %p").replace('PM', 'p.m.').replace('AM', 'a.m.')
+        return (
+            saved_comment.post_time.strftime("%#d %b %Y, %#I:%M %p")
+            .replace("PM", "p.m.")
+            .replace("AM", "a.m.")
+        )

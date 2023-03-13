@@ -12,8 +12,8 @@ jobSocket.onmessage = function(e) {
   if (data.content) {
     var tag = '<div class="card details-card mb-2"><div class="card-body">' +
       '<div class="d-flex justify-content-start card-subtitle mb-1 text-muted">' +
-      '<a href="/profile/' + data.commenter_id + '"><img src="' + data.commenter_url + '"></a><h5><a href="/profile/' + data.commenter_id +
-      '">' + data.commenter;
+      '<a href="/profile/' + data.commenter_id + '"><img src="' + data.commenter_url +
+      '"></a><h5><a href="/profile/' + data.commenter_id + '">' + data.commenter;
     if (data.commenter_id == poster_id) {
       tag += ' (Poster)';
     }
@@ -24,12 +24,12 @@ jobSocket.onmessage = function(e) {
 };
 
 
-$("#job-message-input").keydown(function (event) {
+$("#job-message-input").keydown(function(event) {
   event = (event) ? event : ((window.event) ? window.event : "");
   var keyCode = event.keyCode ? event.keyCode : (event.which ? event.which : event.charCode);
   var shiftKey = event.shiftKey || event.metaKey;
   if (keyCode === 13 && shiftKey) { //ctrl+enter
-    var newDope = $(this).val() + "\n";// Get textarea data for newline
+    var newDope = $(this).val() + "\n"; // Get textarea data for newline
     $(this).val(newDope);
   } else if (keyCode === 13) { // "Enter"
     event.preventDefault();
