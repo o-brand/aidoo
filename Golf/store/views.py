@@ -265,7 +265,7 @@ class TransferView(View):
             transfer.save()
 
             # Create a notification for the recipient
-            notification = Notification.objects.create(
+            notification1 = Notification.objects.create(
                 user_id=recipient,
                 title=f"Gift from {me.username}",
                 content=(
@@ -273,7 +273,19 @@ class TransferView(View):
                 ),
                 link="profile/me",
             )
-            notification.save()
+            notification1.save()
+
+            # Create a notification for the benefactor
+            notification2 = Notification.objects.create(
+                user_id=me,
+                title=f"Transfer confirmation",
+                content=(
+                    (f"The transfer of {amount} doos to {recipient.username}"
+                    "was successful.")
+                ),
+                link="profile/me",
+            )
+            notification2.save()
 
             # No content but trigger rebalance
             return HttpResponse(
