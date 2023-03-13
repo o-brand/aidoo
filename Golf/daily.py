@@ -8,10 +8,12 @@ import datetime
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from django.conf import settings
 from django.db.models import Q
 from chat.models import Message
 from store.models import Moderation
 from jobs.models import Job, Application
+from userprofile.models import Notification
 
 
 # Get actual user model.
