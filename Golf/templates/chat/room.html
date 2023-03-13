@@ -21,8 +21,7 @@
               {% if message.user_id == me %}
                 <div class="chat">
                   <div>
-                    <img src="/static/assets/pfp/{{ message.user_id.id }}.jpeg"
-                      class="chat-profile-pic-right" alt="profile picture">
+                    <img src="{{ me.profile_picture.url }}" class="chat-profile-pic-right" alt="profile picture">
                   </div>
                   <div class="message-me">
                     <div class='message-text-right'>{{ message.content }}</div>
@@ -32,7 +31,7 @@
               {% else %}
                 <div class="chat">
                   <div>
-                    <img src="/static/assets/pfp/{{ message.user_id.id }}.jpeg"
+                    <img src="{{ room.user_2.profile_picture.url }}"
                       class="chat-profile-pic-left" alt="profile picture">
                   </div>
                   <div class="message-other">

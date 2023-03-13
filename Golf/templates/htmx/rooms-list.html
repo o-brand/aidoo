@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
           <a href="{% url 'userdetails' room.user_2.id %}">
-            <img src="/static/assets/pfp/{{room.user_2.id}}.jpeg">
+            <img src="{{room.user_2.profile_picture.url}}">
           </a>
           <h5><a href="{% url 'userdetails' room.user_2.id %}">{{ room.user_2.username }}</a></h5>
         </div>
