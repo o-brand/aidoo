@@ -34,9 +34,14 @@ class ProfileEditForm(ModelForm):
         validators=[validate_profanity],
     )
 
+    profile_picture = forms.ImageField(
+        label = "Upload your new profile picture."
+        )
+
     class Meta:
         model = User
         fields = [
             "email",
             "biography",
+            "profile_picture",
         ]

@@ -30,6 +30,19 @@
         {% endif %}
       </p>
 
+      <p>
+        {{ form.profile_picture.label_tag }}
+        {{ form.profile_picture }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+              {% if key == "biography" %}
+                  <strong class="error">{{ value.as_text }}</strong>
+              {% endif %}
+          {% endfor %}
+        {% endif %}
+
+      </p>
+
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
