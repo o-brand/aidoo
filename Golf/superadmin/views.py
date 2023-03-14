@@ -1,6 +1,6 @@
 import random
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -56,7 +56,8 @@ class ReportFormView(View):
                  Q(charity=False) &
                  Q(super_user=True) &
                  ~Q(id=actual_user_id) &
-                 ~Q(id=report.reported_user.id)
+                 ~Q(id=report.reported_user.id) &
+                 ~Q(id=report.reporting_user.id)
             )
 
              # TODO not sure what to do when there aren't enough eligible reviewers
@@ -183,16 +184,27 @@ def conflict_call(request):
             # Saves the new bank state
             sitemodel.save()
 
-            # Sends out a notification to all superusers to let them know the status of the conflict
+            # Sends out a notification to all superusers to let them 
+            # know the status of the conflict
             for x in range(0, len(verdict)):
                 Notification.objects.create(
                     user_id=verdict[x].user_id,
                     title="Report resolved",
                     content="Thank you for responding to ticket: "
-                    + str(ticket[0].ticket_id) + ". The results are back and the"
+                    + str(verdict[x].ticket_id) + ". The results are back and the"
                     + " system has found the offending user " + verdictmessage +
                     ". You have been awarded two doos for your service.",
                     link="/superadmin/",
+                )
+            
+            # Sends out a notification to the user who filed the complaint
+            Notification.objects.create(
+                    user_id=ticket[0].report_id.reporting_user,
+                    title="Report resolved",
+                    content="Thank you for playing a role in keeping aidoo safe."
+                    + " The verdict is back and the"
+                    + " system has found the offending user " + verdictmessage,
+                    link="/jobs/",
                 )
             
         return render(request, "htmx/verdictclosed.html", {"ticket":ticket_id, "answer":answer})
