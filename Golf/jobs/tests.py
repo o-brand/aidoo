@@ -811,6 +811,7 @@ class HalfHoursValidationTestCase(TestCase):
             validate_half_hours(23)
         self.assertEqual(str(cm.exception), "['The number of minutes is not valid. Only 0 and 30 minutes are allowed.']")
 
+
 class CancelButtonCase(LoginRequiredTestCase):
     """Tests for cancel button."""
 
@@ -850,25 +851,42 @@ class CancelButtonCase(LoginRequiredTestCase):
         response = self.client.post("/jobs/cancel", {"job_id": 5})
         self.assertEqual(response.status_code, 404)
 
-    def test_page_post_job_cancel(self):
-        
-        client = Client(
-            HTTP_REFERER='/jobs/1',
-        )
-
-        response = client.post("/jobs/cancel", {"job_id": 1})
-        
-        self.assertEqual(response.status_code, 302)
-
-    def test_page_cancel_job(self):
-        # test works
-
+    def test_cancel_from_jobs_details(self):
+        # Create a new client to imitate a different backstack
         self.client = Client(
-            HTTP_REFERER='/jobs/1',
+            HTTP_REFERER="/jobs/",
         )
 
-        response = self.client.post("/jobs/cancel", {"job_id": 1})
+        # Login with this client (we already have this user in the db)
+        credentials = {
+            "username": "asd",
+            "password": "asd123",
+        }
+        self.client.post("/login", credentials, follow=True)
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, "/login?next=/jobs/cancel")
-        self.assertEqual(len(Job.objects.filter(hidden=True)), 1)
+        # Cancel the job
+        response = self.client.post("/jobs/cancel", {"job_id": 1})
+        
+        # The user should get back a response with an extra HTMX attribute
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Redirect"], "/jobs/")
+
+    def test_cancel_from_profile_page(self):
+        # Create a new client to imitate a different backstack
+        self.client = Client(
+            HTTP_REFERER="/profile/me",
+        )
+
+        # Login with this client (we already have this user in the db)
+        credentials = {
+            "username": "asd",
+            "password": "asd123",
+        }
+        self.client.post("/login", credentials, follow=True)
+
+        # Cancel the job
+        response = self.client.post("/jobs/cancel", {"job_id": 1})
+        
+        # The user should get back a response with an extra HTMX attribute
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Redirect"], "/profile/me")
