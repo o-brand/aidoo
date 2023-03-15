@@ -533,15 +533,13 @@ class ProfileEditTestCase(TestCase):
 
     def test_profile_pic_added(self):
         upload_file = open('../fortest.jpeg', 'rb')
-        new_data = {
-            "profile_pic": SimpleUploadedFile(upload_file.name, upload_file.read()),
-        }
-        form = ProfileEditForm(new_data, upload_file)
+
+        form = ProfileEditForm({},{"profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read())} )
 
         #profile_pic must be there
         self.assertEqual(1, len(form.errors))
 
-        #check fields for errors
+        #check fields for errors    
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
@@ -555,9 +553,8 @@ class ProfileEditTestCase(TestCase):
         new_data = {
             "email": "madeup@madeup.com",
             "biography": "made up bio",
-            "profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read()),
         }
-        form = ProfileEditForm(new_data, upload_file)
+        form = ProfileEditForm(new_data, {"profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read())})
 
         # Name must be ok
         self.assertEqual(0, len(form.errors))
@@ -569,9 +566,8 @@ class ProfileEditTestCase(TestCase):
         new_data = {
             "email": "madeup@madeup.com",
             "biography": "kondums",
-            "profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read()),
         }
-        form = ProfileEditForm(new_data, upload_file)
+        form = ProfileEditForm(new_data, {"profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read())})
 
         # Name must be ok
         self.assertEqual(1, len(form.errors))
