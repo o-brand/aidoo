@@ -22,14 +22,15 @@ class TransferTestCase(LoginRequiredTestCase):
 
         fake = Faker()
 
-        credentials = dict()
-        credentials["username"] = fake.unique.name()
-        credentials["password"] = "0"
-        credentials["last_name"] = lambda: fake.last_name()
-        credentials["first_name"] = lambda: fake.first_name()
-        credentials["date_of_birth"] = datetime.datetime.now()
-        credentials["profile_id"] = "media/profilepics/default"
-        User.objects.create_user(**credentials)
+        for _ in range(2):
+            credentials = dict()
+            credentials["username"] = fake.unique.name()
+            credentials["password"] = "0"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            credentials["profile_id"] = "media/profilepics/default"
+            User.objects.create_user(**credentials)
 
     def test_transfer_page(self):
         # test availability via URL
@@ -48,20 +49,20 @@ class TransferTestCase(LoginRequiredTestCase):
 
     def test_redirect_since_everything_is_correct(self):
         # test if the user is redirected if the fields are filled in with valid data
-        original_balance = User.objects.get(pk=1).balance
+        original_balance = User.objects.get(pk=2).balance
         new_form = {
-            "recipient": User.objects.get(pk=1),
+            "recipient": User.objects.get(pk=2),
             "amount": "10",
             "note": "A little gift for you",
         }
         response = self.client.post(reverse("transfer"), data=new_form)
         self.assertEqual(response.status_code, 204)
-        self.assertEqual(User.objects.get(pk=1).balance, original_balance + 10)
+        self.assertEqual(User.objects.get(pk=2).balance, original_balance + 10)
 
     def test_no_fund(self):
         # test if the user has no sufficient fund
         new_form = {
-            "recipient": User.objects.get(pk=1),
+            "recipient": User.objects.get(pk=2),
             "amount": "999",
             "note": "A little gift for you",
         }
@@ -83,7 +84,7 @@ class TransferTestCase(LoginRequiredTestCase):
         # behaviour if amount ism missing from form
         form = TransferForm(
             data={
-                "recipient": User.objects.get(pk=1).username,
+                "recipient": User.objects.get(pk=2).username,
             }
         )
 
