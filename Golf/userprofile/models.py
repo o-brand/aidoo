@@ -109,3 +109,9 @@ class Notification(models.Model):
 
     # Time notificiation recorded
     time_of_notification = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        """This class specifies the ordering of notifications"""
+
+        ordering = ('-time_of_notification',)
+
