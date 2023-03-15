@@ -35,11 +35,18 @@ def details(request, job_id):
     except:
         status = "NA"
 
+    # Filter the bookmark state for the current user
+    if len(Bookmark.objects.filter(user_id=request.user.id, job_id=job.job_id)) == 1:
+        bookmark = True
+    else:
+        bookmark = False
+
     # Give the found job to the template
     context = {
         "job": job,
         "comments": comments,
         "status": status,
+        "bookmark":bookmark,
     }
 
     # Render the page

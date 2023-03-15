@@ -25,7 +25,7 @@
                 <i class="bi bi-list"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {% if job.job_id in save_for_later %}
+                {% if bookmark %}
                   {% include 'htmx/bookmark-unmark.html' %}
                 {% else %}
                   {% include 'htmx/bookmark.html' %}
