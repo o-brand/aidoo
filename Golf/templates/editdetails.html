@@ -35,7 +35,7 @@
         {{ form.profile_picture }}
         {% if form.errors %}
           {% for key, value in form.errors.items %}
-              {% if key == "biography" %}
+              {% if key == "profile_picture" %}
                   <strong class="error">{{ value.as_text }}</strong>
               {% endif %}
           {% endfor %}
