@@ -25,6 +25,11 @@ class Report(models.Model):
         TICKETED = 'Ticketed', ('Ticketed')
         RESOLVED = 'Resolved', ('Resolved')
 
+    class ReportResult(models.TextChoices):
+        """This class stores the possible outcomes of a result"""
+        BAN = 'BA', ('Ban')
+        NOT_BAN = 'NB', ('Not_Ban')
+
     # Primary key
     report_id = models.BigAutoField(primary_key=True)
 
@@ -68,6 +73,10 @@ class Report(models.Model):
 
     # The type of report
     type = models.CharField(choices=ReportType.choices, max_length=10)
+
+    # Outcome of the report
+    answer = models.CharField(choices=ReportResult.choices, blank=True,
+                              null=True, default=None, max_length=2)
 
 
 # Model for assigining reports to reviewers

@@ -5,16 +5,77 @@
 
 {% block content %}
 {% include 'navigation.html' %}
-    {% if tickets %}
-        {% for ticket in tickets %}
-            <div>
-                <h5>
-
-                </h5>
+{% if tickets %}
+    {% for ticket in tickets %}
+      <div class="container my-4">
+        <div class="card mb-1 details-card">
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <h4 class="card-title">
+                  Ticket: {{ ticket.ticket_id }}
+                  {% if ticket.status == 'OP' %}
+                    • Status: Open
+                  {% elif ticket.status == 'RE' %}
+                    • Status: Resolved
+                  {% endif %}
+                </h4>
+                <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
+                </div>
+              </li>
+              <li class="list-group-item">
+                <strong>Reported User:</strong>
+                <a href="/profile/{{ticket.report_id.reported_user.id}}">{{ ticket.report_id.reported_user }}</a>
+                &nbsp;&nbsp;
+                <strong>Reported Job:</strong>
+                <a href="/jobs/{{ticket.report_id.reported_job.job_id}}">{{ ticket.report_id.reported_job.job_title }}</a>
+              </li>
+              <li class="list-group-item">
+                  <strong>Report reason:</strong>
+                  {{ ticket.report_id.complaint }}
+                  <br>
+                  <strong>User Decision:</strong>
+                  {% if ticket.answer == None %}
+                    <span id="ans{{ticket.ticket_id}}" hx-swap="outerHTML">Undecided</span>
+                  {% elif ticket.answer == 'BA' %}
+                    Guilty
+                  {% elif ticket.answer == 'NB' %}
+                    Not Guilty
+                  {% endif %}
+              </li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <div class="container text-left" >
+              {% if ticket.answer == None %}
+                <button class="btn btn-primary"
+                id="guilty{{ticket.ticket_id}}"
+                _="on click add @disabled to me"
+                hx-vals='{"ticket_id": {{ ticket.ticket_id }}, "answer": "Guilty"}'
+                hx-post="{% url 'conflict' %}"
+                hx-swap="outerHTML"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Guilty</button>
+                &nbsp;&nbsp;
+                <button class="btn btn-primary"
+                id="innocent{{ticket.ticket_id}}"
+                _="on click add @disabled to me"
+                hx-vals='{"ticket_id": {{ ticket.ticket_id }}, "answer": "Not Guilty"}'
+                hx-post="{% url 'conflict' %}"
+                hx-swap="outerHTML"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Not Guilty</button>
+              {% else %}
+                {% include 'htmx/verdictclosed.html' %}
+              {% endif %}
             </div>
-        {% endfor %}
-    {% else %}
-        <p>No report</p>
-    {% endif %}
+          </div>
+        </div>
+      </div>       
+    {% endfor %}
+{% else %}
+    <p>You have no conflicts to resolve currently.</p>
+{% endif %}
+
+<script src="https://unpkg.com/htmx.org/dist/ext/multi-swap.js"></script>
+
 {{ block.super }}
 {% endblock %}

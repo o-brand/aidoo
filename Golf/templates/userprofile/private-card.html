@@ -13,11 +13,20 @@
     class="card">
     <img src="{{me.profile_picture.url}}.jpeg" class="profile-pic mx-2 mt-2" alt="profile picture">
     <div class="card-body">
-      <h5 class="card-title mb-0">{{ me.first_name }} {{ me.last_name }}</h5>
+      <h5 class="card-title mb-0">
+
+        {% if not me.charity %}
+          {{ me.first_name }} 
+        {% endif %}
+        {{ me.last_name }}
+      </h5>
       <h6 class="card-subtitle mb-2 text-muted">{{ me.username }}</h6>
       <p class="card-text">
         Email address: {{ me.email }}<br/>
-        Date of birth: {{ me.date_of_birth }}<br/>
+
+        {% if not me.charity %}
+          Date of birth: {{ me.date_of_birth }}<br/>
+        {% endif %}
         Joined: {{ me.date_joined | date:'d M Y'}}<br/>
         Bio: {{ me.biography }}</br>
         Balance: <i class="bi bi-triangle"></i> {{ me.balance }}<br/>

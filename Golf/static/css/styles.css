@@ -102,18 +102,19 @@ body {
 }
 
 .hello i {
-  font-size: 28px;
+  font-size: 18px;
 }
 
 .hello button, .hello a {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 100%;
   margin-left: 0.5%;
   margin-right: 0.5%;
 }
 
 .post-button {
+  margin: 0px;
   background-color: #d9534f;
   border-color: #d9534f;
   transition: 0.1s;

@@ -44,6 +44,11 @@ class Job(models.Model):
     # If the poster marked this job as completed, then this is True
     completed = models.BooleanField(default=False)
 
+    class Meta:
+        """This class specifies the ordering of jobs"""
+
+        ordering = ('-posting_time',)
+
 
 class Bookmark(models.Model):
     """This model is used to represent a bookmark for the user."""

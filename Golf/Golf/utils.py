@@ -18,6 +18,7 @@ class LoginRequiredTestCase(TestCase):
             "username": "asd",
             "password": "asd123",
             "date_of_birth": datetime.now(),
+            "profile_id": "media/profilepics/default",
         }
         self.user = User.objects.create_user(**credentials)
         self.client.post("/login", credentials, follow=True)

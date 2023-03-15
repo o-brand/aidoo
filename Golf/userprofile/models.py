@@ -37,7 +37,7 @@ class User(AbstractUser):
     verified = models.BooleanField(default=False)
 
     # Used to give privilige to the user to be able to deal with reporting
-    super_user = models.BooleanField(default=False)
+    guardian = models.BooleanField(default=False)
 
     # Whether user is a charity or not
     charity = models.BooleanField(default=False)
@@ -59,7 +59,9 @@ class User(AbstractUser):
     )
 
     # Used to store the identity verification
-    profile_id = models.ImageField(upload_to=profile_id_rename)
+    profile_id = models.ImageField(
+        upload_to=profile_id_rename, default=None, blank=True, null=True
+    )
 
     # EXTRAS
     # Only used to create a superuser.
@@ -74,6 +76,11 @@ class User(AbstractUser):
                 check=(Q(date_of_birth=None) & Q(charity=True))
                 | (Q(charity=False) & ~Q(date_of_birth=None)),
                 name="date_of_birth_for_charities",
+            ),
+            models.CheckConstraint(
+                check=(Q(profile_id="") & Q(charity=True))
+                | (Q(charity=False) & ~Q(profile_id="")),
+                name="profile_id_for_charities",
             )
         ]
 
@@ -102,3 +109,9 @@ class Notification(models.Model):
 
     # Time notificiation recorded
     time_of_notification = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        """This class specifies the ordering of notifications"""
+
+        ordering = ('-time_of_notification',)
+

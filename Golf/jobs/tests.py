@@ -4,7 +4,8 @@ from faker import Faker
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
-from django.test import TestCase
+from django.http import HttpResponse
+from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 from Golf.utils import create_date_string, fake_time, LoginRequiredTestCase
@@ -79,6 +80,7 @@ class JobModelTestCase(TestCase):
             credentials["last_name"] = lambda: fake.last_name()
             credentials["first_name"] = lambda: fake.first_name()
             credentials["date_of_birth"] = datetime.datetime.now()
+            credentials["profile_id"] = "media/profilepics/default"
             User.objects.create_user(**credentials)
             credentials.clear()
 
@@ -216,6 +218,7 @@ class BookmarkModelTestCase(TestCase):
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
         credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
         User.objects.create_user(**credentials)
         credentials.clear()
 
@@ -252,6 +255,7 @@ class ApplicationModelTestCasae(TestCase):
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
         credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
         User.objects.create_user(**credentials)
         credentials.clear()
 
@@ -352,6 +356,7 @@ class PostJobCase(TestCase):
             "username": "asd",
             "password": "asd123",
             "date_of_birth": datetime.datetime.now(),
+            "profile_id": "media/profilepics/default",
         }
         User.objects.create_user(**credentials)
 
@@ -809,3 +814,85 @@ class HalfHoursValidationTestCase(TestCase):
         with self.assertRaises(ValidationError) as cm:
             validate_half_hours(23)
         self.assertEqual(str(cm.exception), "['The number of minutes is not valid. Only 0 and 30 minutes are allowed.']")
+
+
+class CancelButtonCase(LoginRequiredTestCase):
+    """Tests for cancel button."""
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # Write 1 job into the job model
+        job = dict()
+        job["posting_time"] = fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = 1
+        job["hidden"] = False
+        Job.objects.create(**job)
+
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/jobs/cancel")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("cancel"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_no_job(self):
+        # test without sending a job id
+        response = self.client.post("/jobs/cancel")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_job_not_valid(self):
+        # test with a wrong job id
+        response = self.client.post("/jobs/cancel", {"job_id": 5})
+        self.assertEqual(response.status_code, 404)
+
+    def test_cancel_from_jobs_details(self):
+        # Create a new client to imitate a different backstack
+        self.client = Client(
+            HTTP_REFERER="/jobs/",
+        )
+
+        # Login with this client (we already have this user in the db)
+        credentials = {
+            "username": "asd",
+            "password": "asd123",
+            "profile_id": "media/profilepics/default",
+        }
+        self.client.post("/login", credentials, follow=True)
+
+        # Cancel the job
+        response = self.client.post("/jobs/cancel", {"job_id": 1})
+        
+        # The user should get back a response with an extra HTMX attribute
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Redirect"], "/jobs/")
+
+    def test_cancel_from_profile_page(self):
+        # Create a new client to imitate a different backstack
+        self.client = Client(
+            HTTP_REFERER="/profile/me",
+        )
+
+        # Login with this client (we already have this user in the db)
+        credentials = {
+            "username": "asd",
+            "password": "asd123",
+            "profile_id": "media/profilepics/default",
+        }
+        self.client.post("/login", credentials, follow=True)
+
+        # Cancel the job
+        response = self.client.post("/jobs/cancel", {"job_id": 1})
+        
+        # The user should get back a response with an extra HTMX attribute
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Redirect"], "/profile/me")
