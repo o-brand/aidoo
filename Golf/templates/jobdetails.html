@@ -62,7 +62,7 @@
       {% if me.id != job.poster_id.id and not me.charity %}
         {% if status == "AP" %}
           {% include 'htmx/applied.html' %}
-        {% elif status == "NA" %}
+        {% elif status == "NA" and not job.completed %}
           <button class="btn btn-primary"
             id="btnApply{{ job.job_id }}"
             _="on click add @disabled to me"
@@ -91,7 +91,7 @@
           class="btn btn-success"
           id = "btnApply{{ job_id }}">Complete <i class="bi bi-check-lg"></i></button>
         {% endif %}
-      {% elif not job.assigned and not job.completed and not me.charity %}
+      {% elif not job.assigned and not job.completed and not me.charity and not job.completed %}
         <button class="btn btn-primary"
         id="btnCancel{{ job.job_id }}"
         _="on click add @disabled to me"
