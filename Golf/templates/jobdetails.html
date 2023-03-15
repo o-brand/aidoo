@@ -91,7 +91,7 @@
           class="btn btn-success"
           id = "btnApply{{ job_id }}">Complete <i class="bi bi-check-lg"></i></button>
         {% endif %}
-      {% elif not job.assigned and not job.completed %}
+      {% elif not job.assigned and not job.completed and not me.charity %}
         <button class="btn btn-primary"
         id="btnCancel{{ job.job_id }}"
         _="on click add @disabled to me"
