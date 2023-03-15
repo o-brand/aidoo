@@ -59,7 +59,7 @@
       </ul>
     </div>
     <div class="card-footer">
-      {% if me.id != job.poster_id.id %}
+      {% if me.id != job.poster_id.id and not me.charity %}
         {% if status == "AP" %}
           {% include 'htmx/applied.html' %}
         {% elif status == "NA" %}
