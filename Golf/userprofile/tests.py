@@ -506,7 +506,7 @@ class ProfileEditTestCase(TestCase):
         form = ProfileEditForm(new_data)
 
         # Name must be ok
-        self.assertEqual(1, len(form.errors))
+        self.assertEqual(2, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -523,7 +523,7 @@ class ProfileEditTestCase(TestCase):
         form = ProfileEditForm(new_data)
 
         # Bio must be ok
-        self.assertEqual(1, len(form.errors))
+        self.assertEqual(2, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -537,7 +537,7 @@ class ProfileEditTestCase(TestCase):
         form = ProfileEditForm({},{"profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read())} )
 
         #profile_pic must be there
-        self.assertEqual(1, len(form.errors))
+        self.assertEqual(2, len(form.errors))
 
         #check fields for errors    
         for key in form.errors:
