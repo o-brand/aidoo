@@ -192,6 +192,10 @@ def apply_call(request):
         # Check if the job has been completed already
         if jobs[0].completed:
             raise Http404()
+        
+        # Check if the job has been cancelled already
+        if jobs[0].hidden:
+            raise Http404()
 
         # Create the application
         new_apply = Application(applicant_id=user, job_id=jobs[0])
