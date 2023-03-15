@@ -54,7 +54,7 @@ class ReportFormView(View):
 
             eligible = User.objects.filter(
                  Q(charity=False) &
-                 Q(super_user=True) &
+                 Q(guardian=True) &
                  ~Q(id=actual_user_id) &
                  ~Q(id=report.reported_user.id) &
                  ~Q(id=report.reporting_user.id)

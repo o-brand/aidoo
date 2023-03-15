@@ -37,7 +37,7 @@ class User(AbstractUser):
     verified = models.BooleanField(default=False)
 
     # Used to give privilige to the user to be able to deal with reporting
-    super_user = models.BooleanField(default=False)
+    guardian = models.BooleanField(default=False)
 
     # Whether user is a charity or not
     charity = models.BooleanField(default=False)
