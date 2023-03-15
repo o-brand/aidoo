@@ -292,6 +292,10 @@ def selectapplicant_call(request):
         if no_application:
             raise Http404()
 
+        # Check if the job has been assigned already
+        if job.assigned:
+            raise Http404()
+
         # Assign the job
         job.assigned = True
         job.save()

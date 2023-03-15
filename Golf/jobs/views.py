@@ -217,6 +217,7 @@ def apply_call(request):
 def cancel_call(request):
     """Create a new application record in database."""
     if request.method == "POST":
+
         # Get the job ID or -1 if it is not found
         job_id = request.POST.get("job_id", -1)
         user = request.user
@@ -227,6 +228,10 @@ def cancel_call(request):
         if not job_id_exists:
             raise Http404()
         job = jobs[0]
+        
+        # Checks if the job has been cancelled already
+        if job.hidden:
+            raise Http404()
 
         # Hide the job
         job.hidden = True
