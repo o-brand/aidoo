@@ -35,6 +35,10 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="{% url 'me' %}">Dashboard</a></li>
+          {% if me.super_user %}
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'superadmin' %}">GuardiansHub</a></li>
+          {% endif %}
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
           <li><a class="dropdown-item" href="{% url 'help' %}">Help</a></li>
