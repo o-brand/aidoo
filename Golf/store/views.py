@@ -159,7 +159,7 @@ def buyitem_call(request):
             site.moderation.save()
 
             # Send the email with the QR codes
-            send_QRcode(buyer.email, data)
+            send_QRcode(buyer.email, buyer.username, data)
 
             # Create a notification
             notification = Notification.objects.create(
@@ -193,9 +193,8 @@ def buyitem_call(request):
     raise Http404()
 
 
-def send_QRcode(email, data):
+def send_QRcode(email, username, data):
     """Create qr code(s) from the data and send them"""
-    username = User.username
 
     subject = "Aidoo Shop Purchase"
     body = render_to_string("emails/send_qr_email.html", {"user": username,},)
