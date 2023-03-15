@@ -6,4 +6,6 @@ Users:
 - Duncan Delgado: ddelgado - duncan2022
 - Erica Earl: eearl - erica2022
 - Flora Forbes: fforbes flora2022
+- Save The Animals: stanimals SaveTheAnimals2022
+- Students 4 Students: students4students Students2022
 """
