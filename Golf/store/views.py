@@ -12,6 +12,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 from userprofile.models import Notification
@@ -194,9 +195,10 @@ def buyitem_call(request):
 
 def send_QRcode(email, data):
     """Create qr code(s) from the data and send them"""
+    username = User.username
 
     subject = "Aidoo Shop Purchase"
-    body = "here is the QR code for the purchase"
+    body = render_to_string("emails/send_qr_email.html", {"user": username,},)
 
     # Create a msg that can have an image attached
     msg = EmailMultiAlternatives(subject,body,from_email=None,to=[email])
