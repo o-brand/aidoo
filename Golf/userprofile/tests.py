@@ -29,6 +29,7 @@ class UserTableTestCase(TestCase):
             credentials["last_name"] = lambda: fake.last_name()
             credentials["first_name"] = lambda: fake.first_name()
             credentials["date_of_birth"] = datetime.datetime.now()
+            credentials["profile_id"] = "media/profilepics/default"
             User.objects.create_user(**credentials)
             credentials.clear()
 
@@ -48,6 +49,7 @@ class UserTableTestCase(TestCase):
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
         credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
         User.objects.create_user(**credentials)
 
         len2 = len(User.objects.all())
@@ -251,6 +253,7 @@ class SelectApplicantButtonCase(LoginRequiredTestCase):
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
         credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
         user2 = User.objects.create_user(**credentials)
 
         # Apply for that job
@@ -327,6 +330,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
         credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
         user2 = User.objects.create_user(**credentials)
 
         # Apply for that job
@@ -355,6 +359,7 @@ class JobDoneButtonCase(LoginRequiredTestCase):
         credentials["last_name"] = lambda: fake.last_name()
         credentials["first_name"] = lambda: fake.first_name()
         credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
         user2 = User.objects.create_user(**credentials)
 
         # Apply for that job
@@ -395,6 +400,7 @@ class NotificationModelTestCase(TestCase):
             credentials["last_name"] = lambda: fake.last_name()
             credentials["first_name"] = lambda: fake.first_name()
             credentials["date_of_birth"] = datetime.datetime.now()
+            credentials["profile_id"] = "media/profilepics/default"
             User.objects.create_user(**credentials)
             credentials.clear()
 

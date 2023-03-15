@@ -31,6 +31,7 @@ class WelcomeTestCase(TestCase):
             "username": "asd",
             "password": "asd123",
             "date_of_birth": datetime.datetime.now(),
+            "profile_id": "media/profilepics/default",
         }
         user = User.objects.create_user(**credentials)
         self.client.post("/login", credentials, follow=True)
@@ -47,6 +48,7 @@ class LoginTestCase(TestCase):
             "username": "asd",
             "password": "asd123",
             "date_of_birth": datetime.datetime.now(),
+            "profile_id": "media/profilepics/default",
         }
         User.objects.create_user(**credentials)
 

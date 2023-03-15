@@ -24,6 +24,7 @@ class RedeemTestCase(TestCase):
             "username": "asd",
             "password": "asd123",
             "date_of_birth": datetime.datetime.now(),
+            "profile_id": "media/profilepics/default",
         }
         self.user = User.objects.create_user(**credentials)
 
@@ -85,6 +86,7 @@ class RedeemTestCase(TestCase):
             "username": "asdasd",
             "password": "asd123",
             "date_of_birth": datetime.datetime.now(),
+            "profile_id": "media/profilepics/default",
         }
         User.objects.create_user(**credentials)
 
@@ -156,6 +158,7 @@ class RedeemCallTestCase(LoginRequiredTestCase):
             "username": "asd2",
             "password": "asd123",
             "date_of_birth": datetime.datetime.now(),
+            "profile_id": "media/profilepics/default",
         }
         user = User.objects.create_user(**credentials)
 
