@@ -271,7 +271,7 @@ class TransferView(View):
                 content=(
                     f"The user {me.username} gave you a gift of {amount} doos."
                 ),
-                link="profile/me",
+                link="/profile/me",
             )
             notification1.save()
 
@@ -283,7 +283,7 @@ class TransferView(View):
                     (f"The transfer of {amount} doos to {recipient.username} "
                     "was successful.")
                 ),
-                link="profile/me",
+                link="/profile/me",
             )
             notification2.save()
 
