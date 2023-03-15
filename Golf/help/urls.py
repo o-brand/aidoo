@@ -28,4 +28,10 @@ urlpatterns = [
         view=TemplateView.as_view(template_name="help/manual.html"),
         name="manual",
     ),
+    # Terms and conditions page
+    path(
+        route="tc",
+        view=TemplateView.as_view(template_name="help/tsandcs.html"),
+        name="tc",
+    ),
 ]
