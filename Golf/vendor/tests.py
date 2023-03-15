@@ -4,7 +4,6 @@ from cryptography.fernet import Fernet
 from faker import Faker
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from Golf.utils import LoginRequiredTestCase
@@ -28,9 +27,6 @@ class RedeemTestCase(TestCase):
         }
         self.user = User.objects.create_user(**credentials)
 
-        # Image...
-        upload_file = open("../fortest.jpeg", "rb")
-
         # Write 1 item into the item model.
         item = dict()
         item["item_name"] = "language class"
@@ -38,9 +34,7 @@ class RedeemTestCase(TestCase):
         item["price"] = 5
         item["stock"] = 5
         item["on_offer"] = True
-        item["item_picture"] = SimpleUploadedFile(
-            upload_file.name, upload_file.read()
-        )
+        item["item_picture"] = "media/profilepics/default"
         self.item = Item.objects.create(**item)
 
         # Write 1 sale into the sale model.
@@ -115,9 +109,7 @@ class RedeemCallTestCase(LoginRequiredTestCase):
         item["price"] = 5
         item["stock"] = 5
         item["on_offer"] = True
-        item["item_picture"] = SimpleUploadedFile(
-            upload_file.name, upload_file.read()
-        )
+        item["item_picture"] = "media/profilepics/default"
         self.item = Item.objects.create(**item)
 
         # Write 1 sale into the sale model
