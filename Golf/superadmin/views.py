@@ -113,6 +113,10 @@ def conflict_call(request):
         if not ticket_id_exists:
             raise Http404()
 
+        # Checks if the ticket has already been resolved
+        if ticket[0].status == 'RE':
+            raise Http404()
+
         # Obtains the superusers verdict from the button submit hx vals
         answer = request.POST.get('answer')
 
@@ -137,10 +141,6 @@ def conflict_call(request):
                 if verdict[x].answer == 'BA':
                     ban += 1
 
-                # Update the ticket status to resolved
-                verdict[x].status = 'RE'
-                verdict[x].save()
-
             # If two or more superusers voted for ban
             if ban >= 2:
 
@@ -149,14 +149,21 @@ def conflict_call(request):
 
                 # Bans the offending user by removing site privileges
                 # There are once again many implications to doing this
-                ticket[0].report_id.reported_user.is_active = 0
+                # We don't want this anymore, it will be deleted friday
+                # ticket[0].report_id.reported_user.is_active = 0
 
                 # Saves the User model
-                ticket[0].report_id.reported_user.save()
+                # ticket[0].report_id.reported_user.save()
+
+                # Saves the status of the report
+                ticket[0].report_id.answer = 'BA'
 
                 # Used to store the decision state for the notification
                 verdictmessage = "guilty"
             else:
+                # Saves the status of the report
+                ticket[0].report_id.answer = 'NB'
+
                 verdictmessage = "not guilty"
 
             # Sets the status of the report to resolved
@@ -206,6 +213,9 @@ def conflict_call(request):
                     + " system has found the offending user " + verdictmessage,
                     link="/jobs/",
                 )
+
+        # Mark the ticket as closed
+        ticket[0].status = 'RE'
             
         return render(request, "htmx/verdictclosed.html", {"ticket":ticket_id, "answer":answer})
 
