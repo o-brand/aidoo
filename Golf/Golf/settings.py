@@ -159,7 +159,12 @@ CLOUDINARY_STORAGE = {
     "API_KEY": "788656644488616",
     "API_SECRET": "qbkrT2mfRDOBbHAXNj0MfDTaeVc",
 }
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+# Tests will not reach cloudinary
+if "test" in sys.argv:
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+else:
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 MEDIA_URL = "/media/"
 
 
