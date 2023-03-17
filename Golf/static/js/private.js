@@ -41,7 +41,6 @@ function openTab(content) {
 // Get the active tab from the backend and open it.
 if (activeTab) {
   openTab(activeTab);
-  activeTab.addClass("active")
 }
 
 //Add the listener to every select.

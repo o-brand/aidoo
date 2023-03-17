@@ -25,7 +25,7 @@
                 <i class="bi bi-list"></i>
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {% if job.job_id in save_for_later %}
+                {% if bookmark %}
                   {% include 'htmx/bookmark-unmark.html' %}
                 {% else %}
                   {% include 'htmx/bookmark.html' %}
@@ -62,7 +62,7 @@
       {% if me.id != job.poster_id.id and not me.charity %}
         {% if status == "AP" %}
           {% include 'htmx/applied.html' %}
-        {% elif status == "NA" %}
+        {% elif status == "NA" and not job.completed %}
           <button class="btn btn-primary"
             id="btnApply{{ job.job_id }}"
             _="on click add @disabled to me"
@@ -91,7 +91,7 @@
           class="btn btn-success"
           id = "btnApply{{ job_id }}">Complete <i class="bi bi-check-lg"></i></button>
         {% endif %}
-      {% elif not job.assigned and not job.completed %}
+      {% elif not job.assigned and not job.completed and not me.charity and not job.completed %}
         <button class="btn btn-primary"
         id="btnCancel{{ job.job_id }}"
         _="on click add @disabled to me"
@@ -131,7 +131,7 @@
           </div>
         <div>
             <div id="comment-content">{{ comment.content|linebreaks }}</div>
-            <div>{{ comment.post_time | date:'H:i d M Y' }}</div>
+            <div>{{ comment.post_time|date:'d M Y, h:i A' }}</div>
         </div>
         </div>
       </div>

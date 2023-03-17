@@ -35,11 +35,18 @@ def details(request, job_id):
     except:
         status = "NA"
 
+    # Filter the bookmark state for the current user
+    if len(Bookmark.objects.filter(user_id=request.user.id, job_id=job.job_id)) == 1:
+        bookmark = True
+    else:
+        bookmark = False
+
     # Give the found job to the template
     context = {
         "job": job,
         "comments": comments,
         "status": status,
+        "bookmark":bookmark,
     }
 
     # Render the page
@@ -189,6 +196,14 @@ def apply_call(request):
         if not application_exists:
             raise Http404()
 
+        # Check if the job has been completed already
+        if jobs[0].completed:
+            raise Http404()
+        
+        # Check if the job has been cancelled already
+        if jobs[0].hidden:
+            raise Http404()
+
         # Create the application
         new_apply = Application(applicant_id=user, job_id=jobs[0])
         new_apply.save()
@@ -217,6 +232,7 @@ def apply_call(request):
 def cancel_call(request):
     """Create a new application record in database."""
     if request.method == "POST":
+
         # Get the job ID or -1 if it is not found
         job_id = request.POST.get("job_id", -1)
         user = request.user
@@ -227,6 +243,10 @@ def cancel_call(request):
         if not job_id_exists:
             raise Http404()
         job = jobs[0]
+        
+        # Checks if the job has been cancelled already
+        if job.hidden:
+            raise Http404()
 
         # Hide the job
         job.hidden = True

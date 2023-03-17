@@ -14,10 +14,12 @@
               <li class="list-group-item">
                 <h4 class="card-title">
                   Ticket: {{ ticket.ticket_id }}
-                  {% if ticket.status == 'OP' %}
-                    • Status: Open
-                  {% elif ticket.status == 'RE' %}
-                    • Status: Resolved
+                  {% if ticket.report_id.answer == 'BA' %}
+                    • Verdict: BANNED
+                  {% elif ticket.report_id.answer == 'NB' %}
+                    • Verdict: NOT BANNED
+                  {% elif ticket.report_id.answer == None %}
+                    • Verdict: Awaiting decision
                   {% endif %}
                 </h4>
                 <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
@@ -72,7 +74,7 @@
       </div>       
     {% endfor %}
 {% else %}
-    <p>You have no conflicts to resolve currently.</p>
+    <p>You have no tickets to resolve currently.</p>
 {% endif %}
 
 <script src="https://unpkg.com/htmx.org/dist/ext/multi-swap.js"></script>

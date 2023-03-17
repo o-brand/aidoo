@@ -25,7 +25,7 @@
                   </div>
                   <div class="message-me">
                     <div class='message-text-right'>{{ message.content }}</div>
-                    <div class='message-date-right'>{{ message.date_time }}</div>
+                    <div class='message-date-right'>{{ message.date_time|date:'d M Y, h:i A' }}</div>
                   </div>
                 </div>
               {% else %}
@@ -36,7 +36,7 @@
                   </div>
                   <div class="message-other">
                     <div class='message-text-left'>{{ message.content }}</div>
-                    <div class='message-date-left'>{{ message.date_time }}</div>
+                    <div class='message-date-left'>{{ message.date_time|date:'d M Y, h:i A' }}</div>
                   </div>
                 </div>
               {% endif %}

@@ -259,38 +259,42 @@ class TransferView(View):
                 return render(request, self.template_name, {"form": form})
 
             # Move the coins and save the models
-            me.balance -= amount
-            recipient.balance += amount
-            me.save()
-            recipient.save()
-            transfer.save()
+            if me.id is not recipient.id:
+                me.balance -= amount
+                recipient.balance += amount
+                me.save()
+                recipient.save()
+                transfer.save()
 
-            # Create a notification for the recipient
-            notification1 = Notification.objects.create(
-                user_id=recipient,
-                title=f"Gift from {me.username}",
-                content=(
-                    f"The user {me.username} gave you a gift of {amount} doos."
-                ),
-                link="/profile/me",
-            )
-            notification1.save()
+                # Create a notification for the recipient
+                notification1 = Notification.objects.create(
+                    user_id=recipient,
+                    title=f"Gift from {me.username}",
+                    content=(
+                        f"The user {me.username} gave you a gift of {amount} doos."
+                    ),
+                    link="/profile/me",
+                )
+                notification1.save()
 
-            # Create a notification for the benefactor
-            notification2 = Notification.objects.create(
-                user_id=me,
-                title=f"Transfer confirmation",
-                content=(
-                    (f"The transfer of {amount} doos to {recipient.username} "
-                    "was successful.")
-                ),
-                link="/profile/me",
-            )
-            notification2.save()
+                # Create a notification for the benefactor
+                notification2 = Notification.objects.create(
+                    user_id=me,
+                    title=f"Transfer confirmation",
+                    content=(
+                        (f"The transfer of {amount} doos to {recipient.username} "
+                        "was successful.")
+                    ),
+                    link="/profile/me",
+                )
+                notification2.save()
 
-            # No content but trigger rebalance
-            return HttpResponse(
-                status=204, headers={"HX-Trigger": "rebalance"}
-            )
+                # No content and trigger rebalance
+                return HttpResponse(
+                    status=204, headers={"HX-Trigger": "rebalance"}
+                )
+            
+            # No content but no rebalance
+            return HttpResponse(status=204)
 
         return render(request, self.template_name, {"form": form})
