@@ -5,7 +5,9 @@
 
 {% block content %}
 {% include 'navigation.html' %}
-{% if tickets %}
+
+<div class="container">
+  {% if tickets %}
     {% for ticket in tickets %}
       <div class="container my-4">
         <div class="card mb-1 details-card">
@@ -71,11 +73,12 @@
             </div>
           </div>
         </div>
-      </div>       
+      </div>
     {% endfor %}
-{% else %}
+  {% else %}
     <p>You have no tickets to resolve currently.</p>
-{% endif %}
+  {% endif %}
+</div>
 
 <script src="https://unpkg.com/htmx.org/dist/ext/multi-swap.js"></script>
 
