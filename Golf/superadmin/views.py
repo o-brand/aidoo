@@ -240,6 +240,7 @@ def conflict_call(request):
 
         # Mark the ticket as closed
         ticket[0].status = 'RE'
+        ticket[0].save()
             
         return render(request, "htmx/verdictclosed.html", {"ticket":ticket_id, "answer":answer})
 

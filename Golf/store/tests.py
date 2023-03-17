@@ -235,7 +235,7 @@ class BuyFormTestCase(TestCase):
 
         self.assertEqual(0, len(form.errors))
     
-    def test_quantity_in_range(self):
+    def test_quantity_out_of_range(self):
         buy = {
             "quantity":"3"
         }
