@@ -31,16 +31,16 @@
 | login/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | login/apps.py               |        4 |        0 |    100% |           |
 | login/forms.py              |       23 |        0 |    100% |           |
-| login/tests.py              |      209 |        0 |    100% |           |
+| login/tests.py              |      237 |        0 |    100% |           |
 | login/urls.py               |        5 |        0 |    100% |           |
 | login/validators.py         |       14 |        0 |    100% |           |
-| login/views.py              |       50 |       10 |     80% |    95-113 |
+| login/views.py              |       50 |        0 |    100% |           |
 | store/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | store/admin.py              |        6 |        0 |    100% |           |
 | store/apps.py               |        4 |        0 |    100% |           |
 | store/forms.py              |       17 |        0 |    100% |           |
 | store/models.py             |       32 |        0 |    100% |           |
-| store/tests.py              |      129 |        3 |     98% |   231-236 |
+| store/tests.py              |      129 |        0 |    100% |           |
 | store/urls.py               |        5 |        0 |    100% |           |
 | store/validators.py         |        7 |        0 |    100% |           |
 | store/views.py              |      145 |       83 |     43% |29-41, 57-62, 74-193, 199-229, 298-300 |
@@ -51,7 +51,7 @@
 | superadmin/models.py        |       58 |        0 |    100% |           |
 | superadmin/tests.py         |      167 |        0 |    100% |           |
 | superadmin/urls.py          |        3 |        0 |    100% |           |
-| superadmin/views.py         |      109 |       78 |     28% |26, 44-82, 98-101, 106-247 |
+| superadmin/views.py         |      110 |       79 |     28% |26, 44-82, 98-101, 106-248 |
 | userprofile/\_\_init\_\_.py |        0 |        0 |    100% |           |
 | userprofile/admin.py        |        9 |        0 |    100% |           |
 | userprofile/apps.py         |        4 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       94 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3019** |  **400** | **87%** |           |
+|                   **TOTAL** | **3048** |  **388** | **87%** |           |
