@@ -216,19 +216,20 @@ class ProfileEditView(View):
 
     def get(self, request, *args, **kwargs):
         me = request.user
-        form = self.form_class(initial={"email": me.email, "biography": me.biography})
+        form = self.form_class(initial={"email": me.email, "biography": me.biography, "profile_picture": me.profile_picture})
         return render(
             request, self.template_name, {"form": form, "poster_id": request.user.id}
         )
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         me = request.user
 
         if form.is_valid():
             # Recalculate points (because of security - the user could change the calculated value)
             me.email = form.cleaned_data["email"]
             me.biography = form.cleaned_data["biography"]
+            me.profile_picture = form.cleaned_data["profile_picture"]
             me.save()
             return HttpResponse(
                 status=204,

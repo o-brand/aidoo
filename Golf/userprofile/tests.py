@@ -4,6 +4,7 @@ import random
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from django.test import TestCase
 from Golf.utils import LoginRequiredTestCase, fake_time
@@ -488,7 +489,7 @@ class ProfileEditTestCase(TestCase):
         # behaviour if form is empty
         form = ProfileEditForm(data={})
 
-        self.assertEqual(2, len(form.errors))
+        self.assertEqual(3, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -505,7 +506,7 @@ class ProfileEditTestCase(TestCase):
         form = ProfileEditForm(new_data)
 
         # Name must be ok
-        self.assertEqual(1, len(form.errors))
+        self.assertEqual(2, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -521,10 +522,24 @@ class ProfileEditTestCase(TestCase):
         }
         form = ProfileEditForm(new_data)
 
-        # Name must be ok
-        self.assertEqual(1, len(form.errors))
+        # Bio must be ok
+        self.assertEqual(2, len(form.errors))
 
         # Checks fields for errors
+        for key in form.errors:
+            error_now = form.errors[key]
+            self.assertEqual(1, len(error_now))
+            self.assertIn("This field is required.", form.errors[key][0])
+
+    def test_profile_pic_added(self):
+        upload_file = open('../fortest.jpeg', 'rb')
+
+        form = ProfileEditForm({},{"profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read())} )
+
+        #profile_pic must be there
+        self.assertEqual(2, len(form.errors))
+
+        #check fields for errors    
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
@@ -533,11 +548,13 @@ class ProfileEditTestCase(TestCase):
     def test_all_valid_entered(self):
         # behaviour if all data is entered and valid
         # there should be no errors thrown
+
+        upload_file = open('../fortest.jpeg', 'rb')
         new_data = {
             "email": "madeup@madeup.com",
             "biography": "made up bio",
         }
-        form = ProfileEditForm(new_data)
+        form = ProfileEditForm(new_data, {"profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read())})
 
         # Name must be ok
         self.assertEqual(0, len(form.errors))
@@ -545,11 +562,12 @@ class ProfileEditTestCase(TestCase):
     def test_profane_bio_entered(self):
         # behaviour if bio contains profanity
         # there should be less errors thrown
+        upload_file = open('../fortest.jpeg', 'rb')
         new_data = {
             "email": "madeup@madeup.com",
             "biography": "kondums",
         }
-        form = ProfileEditForm(new_data)
+        form = ProfileEditForm(new_data, {"profile_picture": SimpleUploadedFile(upload_file.name, upload_file.read())})
 
         # Name must be ok
         self.assertEqual(1, len(form.errors))

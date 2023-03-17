@@ -4,7 +4,7 @@
     <h5 class="modal-title">Edit profile details</h5>
     <button class="btn-close" data-bs-dismiss="modal"></button>
   </div>
-  <form action="" hx-post="{% url 'editprofile' %}" hx-trigger="submit" id="form">
+  <form action="" hx-post="{% url 'editprofile' %}" hx-trigger="submit" id="form" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="modal-body">
       <p>
@@ -28,6 +28,19 @@
               {% endif %}
           {% endfor %}
         {% endif %}
+      </p>
+
+      <p>
+        {{ form.profile_picture.label_tag }}
+        {{ form.profile_picture }}
+        {% if form.errors %}
+          {% for key, value in form.errors.items %}
+              {% if key == "profile_picture" %}
+                  <strong class="error">{{ value.as_text }}</strong>
+              {% endif %}
+          {% endfor %}
+        {% endif %}
+
       </p>
 
     </div>
