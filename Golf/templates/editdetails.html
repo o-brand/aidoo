@@ -4,7 +4,7 @@
     <h5 class="modal-title">Edit profile details</h5>
     <button class="btn-close" data-bs-dismiss="modal"></button>
   </div>
-  <form action="" hx-post="{% url 'editprofile' %}" hx-trigger="submit" id="form">
+  <form action="" hx-post="{% url 'editprofile' %}" hx-trigger="submit" id="form" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="modal-body">
       <p>

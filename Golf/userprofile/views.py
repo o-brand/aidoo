@@ -222,7 +222,7 @@ class ProfileEditView(View):
         )
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         me = request.user
 
         if form.is_valid():
