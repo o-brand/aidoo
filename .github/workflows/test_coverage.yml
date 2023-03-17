@@ -30,6 +30,6 @@ jobs:
         git config user.email "<>"
     - name: Create commit
       run: |
-        git add .
-        git commit -m "generate test coverage report"
+        git add Golf/coverage_report.md
+        git commit -m "Generate test coverage report"
         git push origin main
