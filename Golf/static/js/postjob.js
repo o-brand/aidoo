@@ -8,6 +8,8 @@ var hourstxt = 'hour';
 $("select[name='duration_hours']").on("input", function(e) {
   value = Number.parseFloat(e.target.value);
 
+  console.log('a');
+
   //If the new value is a normal number
   if (!Number.isNaN(value)) {
     points += (value - hours) * 12;
@@ -41,3 +43,6 @@ $("select[name='duration_half_hours']").on("input", function(e) {
     $("#points").html(points);
   }
 });
+
+$("select[name='duration_hours']").trigger('input');
+$("select[name='duration_half_hours']").trigger('input');
