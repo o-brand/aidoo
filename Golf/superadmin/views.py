@@ -14,6 +14,7 @@ from django.views import View
 from django.views.generic import ListView
 from store.models import Moderation
 from userprofile.models import User, Notification
+from jobs.models import Application
 
 from .forms import ReportForm
 
@@ -113,6 +114,7 @@ def conflict_call(request):
         if not ticket_id_exists:
             raise Http404()
 
+        ticket[0].report_id
         # Checks if the ticket has already been resolved
         if ticket[0].status == 'RE':
             raise Http404()
@@ -144,16 +146,38 @@ def conflict_call(request):
             # If two or more superusers voted for ban
             if ban >= 2:
 
-                # NEEDS TO HIDE OR REMOVE THE OFFENDING JOB 
-                # BUT THERE ARE MANY IMPLICATIONS TO DOING THAT
+                # BAN CASE: Remove the job from the site, by running the cancel call
+                # In the case that the job has accepted an applicant already
+                # we hide the job and give the scrip to the applicant
+                
+                # Checks if the job has been cancelled already
+                if ticket[0].report_id.reported_job.hidden:
+                    raise Http404()
 
-                # Bans the offending user by removing site privileges
-                # There are once again many implications to doing this
-                # We don't want this anymore, it will be deleted friday
-                # ticket[0].report_id.reported_user.is_active = 0
+                
+                # Hide the job
+                ticket[0].report_id.reported_job.hidden = True
+                ticket[0].report_id.reported_job.save()
+                
+                if ticket[0].report_id.reported_job.completed == False:
+                    # Check if applicant accepted
+                    applications = Application.objects.filter(
+                        job_id=ticket[0].report_id.reported_job.job_id,
+                        status='AC'
+                        )
 
-                # Saves the User model
-                # ticket[0].report_id.reported_user.save()
+                    # points distribution
+                    if len(applications) > 0:
+                        # Give the applicant the points
+                        ticket[0].report_id.reported_job.poster_id.frozen_balance -= ticket[0].report_id.reported_job.points
+                        applications[0].applicant_id.balance += ticket[0].report_id.reported_job.points
+                        applications[0].applicant_id.save()
+                    else:  
+                        # Give the poster back the points
+                        ticket[0].report_id.reported_job.poster_id.frozen_balance -= ticket[0].report_id.reported_job.points
+                        ticket[0].report_id.reported_job.poster_id.balance += ticket[0].report_id.reported_job.points
+
+                    ticket[0].report_id.reported_job.poster_id.save()
 
                 # Saves the status of the report
                 ticket[0].report_id.answer = 'BA'
