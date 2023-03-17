@@ -1,13 +1,18 @@
 import datetime
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import mail
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import HttpRequest
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from Golf.utils import create_date_string
 from .forms import RegisterForm
 from .validators import validate_dob, validate_username
+from .views import activateAccount
 
 
 # Get actual user model.
@@ -176,8 +181,22 @@ class PasswordResetTestCase(TestCase):
 
 
 class ActivationTestCase(TestCase):
-    """Tests for account activation pages (cannot test activateAccount
-    function)."""
+    """Tests for account activation pages."""
+
+    def setUp(self):
+        # Create a user.
+        credentials = {
+            "username": "asd",
+            "password": "asd123",
+            "date_of_birth": datetime.datetime.now(),
+            "profile_id": "media/profilepics/default",
+        }
+        self.user = User.objects.create_user(**credentials)
+
+        tokengenerator = PasswordResetTokenGenerator()
+
+        # Create a valid token
+        self.token = tokengenerator.make_token(self.user)
 
     def test_activation_success_page(self):
         response = self.client.get("/activation/success")
@@ -198,6 +217,34 @@ class ActivationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             template_name="login/activation_failure.html")
+    
+    def test_activation_successful(self):
+        uid = urlsafe_base64_encode(force_bytes(self.user.pk))
+        request = HttpRequest()
+
+        response = activateAccount(request, uid, self.token)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/activation/success")
+
+    def test_activiation_failure(self):
+        uid = urlsafe_base64_encode(force_bytes(self.user.pk))
+        request = HttpRequest()
+
+        response = activateAccount(request, uid, "self.token")
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/activation/failure")
+    
+    def test_activiation_failure_uid(self):
+        uid = urlsafe_base64_encode(force_bytes('2'))
+
+        request = HttpRequest()
+
+        response = activateAccount(request, uid, self.token)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/activation/failure")
 
 
 class RegisterFormTestCase(TestCase):
