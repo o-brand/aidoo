@@ -116,6 +116,11 @@ class SearchingCallButtonCase(LoginRequiredTestCase):
         response = self.client.get(reverse("chat-searching"))
         self.assertEqual(response.status_code, 404)
 
+    def test_page_post_no_username(self):
+        # test with an empty username
+        response = self.client.post("/chat/searching", {})
+        self.assertEqual(response.status_code, 404)
+
     def test_page_post_username_empty(self):
         # test with an empty username
         response = self.client.post("/chat/searching", {"username": ""})
@@ -174,7 +179,6 @@ class RoomCase(LoginRequiredTestCase):
         response = self.client.post("/chat/room/0")
         self.assertEqual(response.status_code, 404)
 
-
     def test_page_fine(self):
         response = self.client.post("/chat/room/2")
         self.assertEqual(response.status_code, 200)
@@ -187,9 +191,19 @@ class RoomCase(LoginRequiredTestCase):
 
     def test_page_post_chat_does_not_exist(self):
         # test for starting chat (start chat functionality)
-        response = self.client.get("/chat/room/2")
+        response = self.client.get("/chat/room/8")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(Room.objects.all()), 1)
+        self.assertEqual(len(Room.objects.all()), 2)
+
+    def test_page_chat_not_me_created(self):
+        # test for a room which was created by another user
+        room = dict()
+        room["user_1"] = User.objects.get(pk=5)
+        room["user_2"] = self.user
+        room = Room.objects.create(**room)
+
+        response = self.client.get("/chat/room/5")
+        self.assertEqual(response.status_code, 200)
 
 
 @sync_to_async
