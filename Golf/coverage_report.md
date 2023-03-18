@@ -9,9 +9,9 @@
 | chat/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | chat/admin.py               |        4 |        0 |    100% |           |
 | chat/apps.py                |        4 |        0 |    100% |           |
-| chat/consumers.py           |       36 |       36 |      0% |      1-82 |
+| chat/consumers.py           |       36 |        0 |    100% |           |
 | chat/models.py              |       19 |        0 |    100% |           |
-| chat/tests.py               |      119 |        0 |    100% |           |
+| chat/tests.py               |      175 |        0 |    100% |           |
 | chat/urls.py                |        3 |        0 |    100% |           |
 | chat/views.py               |       69 |       22 |     68% |23-41, 73, 103-106, 111-112 |
 | help/\_\_init\_\_.py        |        0 |        0 |    100% |           |
@@ -21,10 +21,10 @@
 | jobs/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | jobs/admin.py               |        6 |        0 |    100% |           |
 | jobs/apps.py                |        4 |        0 |    100% |           |
-| jobs/consumers.py           |       40 |       40 |      0% |      1-90 |
+| jobs/consumers.py           |       40 |        0 |    100% |           |
 | jobs/forms.py               |       19 |        0 |    100% |           |
 | jobs/models.py              |       51 |        0 |    100% |           |
-| jobs/tests.py               |      490 |        0 |    100% |           |
+| jobs/tests.py               |      552 |        0 |    100% |           |
 | jobs/urls.py                |        3 |        0 |    100% |           |
 | jobs/validators.py          |       17 |        0 |    100% |           |
 | jobs/views.py               |      136 |       11 |     92% |24-25, 40, 201, 205, 249, 269-280 |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       94 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3048** |  **388** | **87%** |           |
+|                   **TOTAL** | **3166** |  **312** | **90%** |           |
