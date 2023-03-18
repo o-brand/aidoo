@@ -11,9 +11,9 @@
 | chat/apps.py                |        4 |        0 |    100% |           |
 | chat/consumers.py           |       36 |        0 |    100% |           |
 | chat/models.py              |       19 |        0 |    100% |           |
-| chat/tests.py               |      175 |        0 |    100% |           |
+| chat/tests.py               |      185 |        0 |    100% |           |
 | chat/urls.py                |        3 |        0 |    100% |           |
-| chat/views.py               |       69 |       22 |     68% |23-41, 73, 103-106, 111-112 |
+| chat/views.py               |       69 |       15 |     78% |     23-41 |
 | help/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | help/apps.py                |        4 |        0 |    100% |           |
 | help/tests.py               |       34 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       94 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3166** |  **312** | **90%** |           |
+|                   **TOTAL** | **3176** |  **305** | **90%** |           |
