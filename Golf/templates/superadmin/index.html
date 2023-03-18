@@ -17,11 +17,13 @@
                 <h4 class="card-title">
                   Ticket: {{ ticket.ticket_id }}
                   {% if ticket.report_id.answer == 'BA' %}
-                    • Verdict: BANNED
+                    • Verdict: Banned
                   {% elif ticket.report_id.answer == 'NB' %}
-                    • Verdict: NOT BANNED
-                  {% elif ticket.report_id.answer == None %}
-                    • Verdict: Awaiting decision
+                    • Verdict: Not Banned
+                  {% elif ticket.report_id.answer == None and ticket.status == 'OP' %}
+                  <span id="verd{{ticket.ticket_id}}" hx-swap="outerHTML">• Verdict: Awaiting decision...</span>
+                  {% elif ticket.report_id.answer == None and ticket.status == 'RE' %}
+                    • Verdict: Awaiting decision from other users...
                   {% endif %}
                 </h4>
                 <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">

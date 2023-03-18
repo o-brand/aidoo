@@ -106,8 +106,7 @@ def conflict_call(request):
     if request.method == "POST":
         # Get the ticket ID or -1 if it is not found
         ticket_id = request.POST.get("ticket_id", -1)
-        user = request.user
-
+        
         # Check if the ticket ID is valid
         ticket = ReportTicket.objects.filter(pk=ticket_id)
         ticket_id_exists = len(ticket) == 1
@@ -135,6 +134,9 @@ def conflict_call(request):
                 ~Q(answer=None)
         )
 
+        # Context for template, used by htmx
+        verd = "• Verdict: Awaiting decision from other users..."
+
         # if length of verdict is 3, we have all responses back from superusers
         if len(verdict) == 3:
             ban = 0
@@ -146,47 +148,57 @@ def conflict_call(request):
             # If two or more superusers voted for ban
             if ban >= 2:
 
-                # BAN CASE: Remove the job from the site, by running the cancel call
+                # BAN CASE: Remove the job from the site, by running the cancel 
+                # call
                 # In the case that the job has accepted an applicant already
                 # we hide the job and give the scrip to the applicant
                 
                 # Checks if the job has been cancelled already
-                if ticket[0].report_id.reported_job.hidden:
-                    raise Http404()
+                if ticket[0].report_id.reported_job.hidden == False:
+    
+                    # Hide the job
+                    ticket[0].report_id.reported_job.hidden = True
+                    ticket[0].report_id.reported_job.save()
+                    
+                    if ticket[0].report_id.reported_job.completed == False:
+                        # Check if an applicant was accepted
+                        applications = Application.objects.filter(
+                            job_id=ticket[0].report_id.reported_job.job_id,
+                            status='AC'
+                            )
 
-                
-                # Hide the job
-                ticket[0].report_id.reported_job.hidden = True
-                ticket[0].report_id.reported_job.save()
-                
-                if ticket[0].report_id.reported_job.completed == False:
-                    # Check if applicant accepted
-                    applications = Application.objects.filter(
-                        job_id=ticket[0].report_id.reported_job.job_id,
-                        status='AC'
-                        )
+                        # Variables for job poster object
+                        # and the reported job object
+                        poster = ticket[0].report_id.reported_job.poster_id
+                        reportedjob = ticket[0].report_id.reported_job
 
-                    # points distribution
-                    if len(applications) > 0:
-                        # Give the applicant the points
-                        ticket[0].report_id.reported_job.poster_id.frozen_balance -= ticket[0].report_id.reported_job.points
-                        applications[0].applicant_id.balance += ticket[0].report_id.reported_job.points
-                        applications[0].applicant_id.save()
-                    else:  
-                        # Give the poster back the points
-                        ticket[0].report_id.reported_job.poster_id.frozen_balance -= ticket[0].report_id.reported_job.points
-                        ticket[0].report_id.reported_job.poster_id.balance += ticket[0].report_id.reported_job.points
+                        # points distribution
+                        if len(applications) > 0:
+                            # Give the applicant the points
+                            poster.frozen_balance -= reportedjob.points
+                            applications[0].applicant_id.balance += reportedjob.points
+                            applications[0].applicant_id.save()
+                        else:  
+                            # Give the poster back the points
+                            poster.frozen_balance -= reportedjob.points
+                            poster.balance += reportedjob.points
 
-                    ticket[0].report_id.reported_job.poster_id.save()
+                        poster.save()
 
                 # Saves the status of the report
                 ticket[0].report_id.answer = 'BA'
 
                 # Used to store the decision state for the notification
                 verdictmessage = "guilty"
+
+                # Context for template, used by htmx
+                verd = "• Verdict: Banned"
             else:
                 # Saves the status of the report
                 ticket[0].report_id.answer = 'NB'
+
+                # Context for template, used by htmx
+                verd = "• Verdict: Not Banned"
 
                 verdictmessage = "not guilty"
 
@@ -208,6 +220,7 @@ def conflict_call(request):
                 verdict[x].user_id.balance += 2
                 verdict[x].user_id.save()
 
+            # TODO liquidity
             # Prints scrip if bank runs out
             if sitemodel.bank < 0:
                 sitemodel.bank = 0
@@ -236,13 +249,14 @@ def conflict_call(request):
                     + " The verdict is back and the"
                     + " system has found the offending user " + verdictmessage,
                     link="/jobs/",
-                )
+            )
 
         # Mark the ticket as closed
         ticket[0].status = 'RE'
         ticket[0].save()
             
-        return render(request, "htmx/verdictclosed.html", {"ticket":ticket_id, "answer":answer})
+        return render(request, "htmx/verdictclosed.html", 
+                      {"ticket":ticket_id, "answer":answer, "verd":verd})
 
     # In the case that request method is not POST
     raise Http404()
