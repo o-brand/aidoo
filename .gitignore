@@ -1,8 +1,8 @@
 *.cpython*
-Golf/db.sqlite3
 *.DS_Store
 .idea/*
+Golf/db.sqlite3
 Golf/.coverage
-ids/*
-profilepics/*
-storeitem/*
+Golf/ids/*
+Golf/profilepics/*
+Golf/storeitem/*
