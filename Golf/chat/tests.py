@@ -1,11 +1,17 @@
 import datetime
+import json
+from asgiref.sync import sync_to_async
+from channels.auth import AuthMiddlewareStack
+from channels.testing import WebsocketCommunicator
+from channels.routing import URLRouter
 from faker import Faker
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
 from Golf.utils import LoginRequiredTestCase
-from .models import Room
+from .models import Room, Message
+from .routing import websocket_urlpatterns as chat_url
 
 
 # Get actual user model.
@@ -184,3 +190,88 @@ class RoomCase(LoginRequiredTestCase):
         response = self.client.get("/chat/room/2")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(Room.objects.all()), 1)
+
+
+@sync_to_async
+def get_all_messages():
+    """Reads all the messages. Used to test the consumer."""
+    return list(Message.objects.all())
+
+class ChatConsumerTestCase(LoginRequiredTestCase):
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # create 10 users in the database
+        for i in range(2):
+            if i == 0:
+                username = "qwe"
+            elif i == 1:
+                username = "madeupuser"
+
+            credentials = dict()
+            credentials["username"] = username
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            credentials["profile_id"] = "media/profilepics/default"
+            User.objects.create_user(**credentials)
+            credentials.clear()
+
+        room = dict()
+        room["user_1"] = User(pk=1)
+        room["user_2"] = User(pk=2)
+        Room.objects.create(**room)
+
+    async def test_chat_message_function(self):
+        # Connect
+        application = AuthMiddlewareStack(URLRouter(chat_url))
+        communicator = WebsocketCommunicator(application, "/ws/chat/1")
+        await communicator.connect()
+
+        # Send message
+        await communicator.send_input({
+            "type": "chat_message",
+            "message": "Hi",
+            "username": "madeupuser",
+            "date_time": "2023-03-18",
+        })
+
+        # "Receive" message
+        event = await communicator.receive_output()
+        response = json.loads(event["text"])
+        self.assertEqual(response["message"], "Hi")
+        self.assertEqual(response["username"], "madeupuser")
+        self.assertEqual(response["me"], False)
+        self.assertEqual(response["date_time"], "2023-03-18")
+
+        # Close
+        await communicator.disconnect()
+
+    async def test_receive_functions(self):
+        # Connect
+        application = AuthMiddlewareStack(URLRouter(chat_url))
+        communicator = WebsocketCommunicator(application, "/ws/chat/1")
+        await communicator.connect()
+
+        # Send message
+        await communicator.send_json_to({
+            "message": "Hi",
+            "username": "madeupuser",
+        })
+        event = await communicator.receive_from()
+        response = json.loads(event)
+        self.assertEqual(response["message"], "Hi")
+        self.assertEqual(response["username"], "madeupuser")
+        self.assertEqual(response["me"], False)
+
+        # New message in the DB
+        messages = await get_all_messages()
+        self.assertEqual(len(messages), 1)
+
+        # Close
+        await communicator.disconnect()

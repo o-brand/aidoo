@@ -1,5 +1,10 @@
 import datetime
 import random
+import json
+from asgiref.sync import sync_to_async
+from channels.auth import AuthMiddlewareStack
+from channels.testing import WebsocketCommunicator
+from channels.routing import URLRouter
 from faker import Faker
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -10,8 +15,9 @@ from django.urls import reverse
 from django.utils import timezone
 from Golf.utils import create_date_string, fake_time, LoginRequiredTestCase
 from .forms import JobForm
-from .models import Application, Bookmark, Job
+from .models import Application, Bookmark, Job, Comment
 from .validators import validate_deadline, validate_hours, validate_half_hours
+from .routing import websocket_urlpatterns as jobs_url
 
 
 # Get actual user model.
@@ -272,7 +278,7 @@ class ApplicationModelTestCasae(TestCase):
         application = dict()
         application["applicant_id"] = User(pk=1)
         application["job_id"] = Job(pk=1)
-        application["status"] = "AP"  #imo should be AP as it's default
+        application["status"] = "AP"
         application["time_of_application"] = fake_time()
         application["time_of_final_status"] = fake_time()
 
@@ -871,7 +877,7 @@ class CancelButtonCase(LoginRequiredTestCase):
 
         # Cancel the job
         response = self.client.post("/jobs/cancel", {"job_id": 1})
-        
+
         # The user should get back a response with an extra HTMX attribute
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["HX-Redirect"], "/jobs/")
@@ -892,7 +898,103 @@ class CancelButtonCase(LoginRequiredTestCase):
 
         # Cancel the job
         response = self.client.post("/jobs/cancel", {"job_id": 1})
-        
+
         # The user should get back a response with an extra HTMX attribute
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["HX-Redirect"], "/profile/me")
+
+
+@sync_to_async
+def get_all_comments():
+    """Reads all the comments. Used to test the consumer."""
+    return list(Comment.objects.all())
+
+class CommentsConsumerTestCase(LoginRequiredTestCase):
+
+    def setUp(self):
+        fake = Faker()
+
+        # Login from super...
+        super().setUp()
+
+        # create 10 users in the database
+        for i in range(2):
+            if i == 0:
+                username = "qwe"
+            elif i == 1:
+                username = "madeupuser"
+
+            credentials = dict()
+            credentials["username"] = username
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            credentials["profile_id"] = "media/profilepics/default"
+            User.objects.create_user(**credentials)
+            credentials.clear()
+
+        # Write 1 job into the job model
+        job = dict()
+        job["posting_time"] = fake_time()
+        job["points"] = random.randint(0, 100)
+        job["assigned"] = False
+        job["completed"] = False
+        job["poster_id_id"] = 1
+        job["hidden"] = False
+        Job.objects.create(**job)
+
+    async def test_comment_function(self):
+        # Connect
+        application = AuthMiddlewareStack(URLRouter(jobs_url))
+        communicator = WebsocketCommunicator(application, "/ws/job/1")
+        await communicator.connect()
+
+        # Send message
+        await communicator.send_input({
+            "type": "comment",
+            "content": "Hi?",
+            "commenter": "madeupuser",
+            "commenter_id": "2",
+            "commenter_url": "/2",
+            "date_time": "2023-03-18",
+        })
+
+        # "Receive" message
+        event = await communicator.receive_output()
+        response = json.loads(event["text"])
+        self.assertEqual(response["content"], "Hi?")
+        self.assertEqual(response["commenter"], "madeupuser")
+        self.assertEqual(response["commenter_id"], "2")
+        self.assertEqual(response["me"], False)
+        self.assertEqual(response["date_time"], "2023-03-18")
+
+        # Close
+        await communicator.disconnect()
+
+    async def test_receive_functions(self):
+        # Connect
+        application = AuthMiddlewareStack(URLRouter(jobs_url))
+        communicator = WebsocketCommunicator(application, "/ws/job/1")
+        await communicator.connect()
+
+        # Send message
+        await communicator.send_json_to({
+            "content": "Hi?",
+            "commenter": "madeupuser",
+            "commenter_id": "2",
+            "commenter_url": "/2",
+        })
+        event = await communicator.receive_from()
+        response = json.loads(event)
+        self.assertEqual(response["content"], "Hi?")
+        self.assertEqual(response["commenter"], "madeupuser")
+        self.assertEqual(response["commenter_id"], "2")
+        self.assertEqual(response["me"], False)
+
+        # New comment in the DB
+        comments = await get_all_comments()
+        self.assertEqual(len(comments), 1)
+
+        # Close
+        await communicator.disconnect()
