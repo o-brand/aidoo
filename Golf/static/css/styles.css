@@ -453,3 +453,7 @@ a:hover {
   white-space: pre-wrap;
   font-size: medium;
 }
+
+input[name='email'] {
+  width: 75%;
+}
