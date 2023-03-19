@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.sites.shortcuts import get_current_site
+from django.utils import timezone
 
 from django.db import models
 from django.db.models import Q
@@ -170,6 +171,7 @@ def conflict_call(request):
                     ticket[0].report_id.reported_job.hidden = True
                     ticket[0].report_id.reported_job.save()
                     
+                    # Check if job has been completed already
                     if ticket[0].report_id.reported_job.completed == False:
                         # Check if an applicant was accepted
                         applications = Application.objects.filter(
@@ -193,7 +195,31 @@ def conflict_call(request):
                             poster.frozen_balance -= reportedjob.points
                             poster.balance += reportedjob.points
 
+                        # Saves the balance of the poster
                         poster.save()
+
+                        # Check if application exists
+                        applications = Application.objects.filter(
+                            Q(job_id=ticket[0].report_id.reported_job.job_id) & 
+                            ~Q(status="WD")
+                        )
+
+                        # Send on site notification to the applicants
+                        # It lets them know that the has been cancelled
+
+                        for application in applications:
+                            if application.applicant_id.opt_in_site_application:
+                                Notification.objects.create(
+                                    user_id=application.applicant_id,
+                                    title="Job Cancelled",
+                                    content=("The following job has been cancelled: "
+                                    f"{ticket[0].report_id.reported_job.job_title}"),
+                                    link="/profile/me",
+                                )
+
+                            application.status = "CA"
+                            application.time_of_final_status = timezone.now()
+                            application.save()
 
                 # Saves the status of the report
                 ticket[0].report_id.answer = 'BA'
