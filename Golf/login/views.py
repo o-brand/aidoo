@@ -64,7 +64,7 @@ class SignUpView(View):
 
             # Create activation email
             current_site = get_current_site(request)
-            subject = "Activate Your aidoo Account"
+            subject = "Activate Your Aidoo Account"
             message = render_to_string(
                 "emails/account_activation_email.html",
                 {

@@ -74,6 +74,16 @@ class ReportFormView(View):
                     )
                     ticket.save()
 
+                    notification = Notification.objects.create(
+                        user_id = reviewer,
+                        title = "New Guardian assignment",
+                        content = ("You have been assigned to a new Guardian "
+                        "task. Please review the evidence and provide your "
+                        "response promptly."),
+                        link = "/superadmin/",
+                    )
+                    notification.save()
+
                 report.status = Report.ReportStatus.TICKETED
                 report.save()
 
@@ -231,25 +241,27 @@ def conflict_call(request):
             # Sends out a notification to all superusers to let them 
             # know the status of the conflict
             for x in range(0, len(verdict)):
-                Notification.objects.create(
-                    user_id=verdict[x].user_id,
-                    title="Report resolved",
-                    content="Thank you for responding to ticket: "
-                    + str(verdict[x].ticket_id) + ". The results are back and the"
-                    + " system has found the offending user " + verdictmessage +
-                    ". You have been awarded two doos for your service.",
+                notification = Notification.objects.create(
+                    user_id = verdict[x].user_id,
+                    title = "Report resolved",
+                    content = ("Thank you for responding to ticket: "
+                    f"{verdict[x].ticket_id}. The results are back and the"
+                    f" system has found the offending user {verdictmessage}"
+                    ". You have been awarded 2 doos for your service."),
                     link="/superadmin/",
                 )
+                notification.save()
             
             # Sends out a notification to the user who filed the complaint
-            Notification.objects.create(
-                    user_id=ticket[0].report_id.reporting_user,
-                    title="Report resolved",
-                    content="Thank you for playing a role in keeping aidoo safe."
-                    + " The verdict is back and the"
-                    + " system has found the offending user " + verdictmessage,
-                    link="/jobs/",
+            notification = Notification.objects.create(
+                user_id = ticket[0].report_id.reporting_user,
+                title = "Report resolved",
+                content = ("Thank you for helping keep Aidoo safe."
+                " The verdict is back and the"
+                f" system has found the offending user {verdictmessage}"),
+                link="/jobs/",
             )
+            notification.save()
 
         # Mark the ticket as closed
         ticket[0].status = 'RE'
