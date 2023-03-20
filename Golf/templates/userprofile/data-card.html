@@ -1,7 +1,12 @@
 <div class="card">
   <img src="{{ user.profile_picture.url }}" class="profile-pic mx-2 mt-2" alt="profile picture">
   <div class="card-body">
-    <h5 class="card-title mb-0">{{ user.first_name }} {{ user.last_name }}</h5>
+    <h5 class="card-title mb-0">
+      {{ user.first_name }} 
+      {% if not user.charity %}
+        {{ user.last_name }}
+      {% endif %}
+    </h5>
     <h6 class="card-subtitle mb-2 text-muted">{{ user.username }}</h6>
     <p class="card-text">Joined: {{ user.date_joined | date:'d M Y'}}<br>
       Bio: {{ user.biography }}<br>
