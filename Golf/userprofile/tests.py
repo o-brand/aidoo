@@ -387,6 +387,7 @@ class AccountSettingsTestCase(LoginRequiredTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="userprofile/usersettings.html")
 
+
 class NotificationModelTestCase(TestCase):
     """Tests for Notification model"""
 
@@ -489,7 +490,7 @@ class ProfileEditTestCase(TestCase):
         # behaviour if form is empty
         form = ProfileEditForm(data={})
 
-        self.assertEqual(3, len(form.errors))
+        self.assertEqual(2, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -506,7 +507,7 @@ class ProfileEditTestCase(TestCase):
         form = ProfileEditForm(new_data)
 
         # Name must be ok
-        self.assertEqual(2, len(form.errors))
+        self.assertEqual(1, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -523,7 +524,7 @@ class ProfileEditTestCase(TestCase):
         form = ProfileEditForm(new_data)
 
         # Bio must be ok
-        self.assertEqual(2, len(form.errors))
+        self.assertEqual(1, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:

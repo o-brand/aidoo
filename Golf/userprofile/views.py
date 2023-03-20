@@ -229,7 +229,12 @@ class ProfileEditView(View):
             # Recalculate points (because of security - the user could change the calculated value)
             me.email = form.cleaned_data["email"]
             me.biography = form.cleaned_data["biography"]
-            me.profile_picture = form.cleaned_data["profile_picture"]
+
+            # Check if there is an image
+            image = form.cleaned_data["profile_picture"]
+            if image != None:
+                me.profile_picture = form.cleaned_data["profile_picture"]
+
             me.save()
             return HttpResponse(
                 status=204,

@@ -35,8 +35,10 @@ class ProfileEditForm(ModelForm):
     )
 
     profile_picture = forms.ImageField(
-        label = "Upload your new profile picture."
-        )
+        label = "Upload your new profile picture.",
+        widget = forms.FileInput,
+        required = False,
+    )
 
     class Meta:
         model = User
