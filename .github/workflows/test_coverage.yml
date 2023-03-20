@@ -20,8 +20,8 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests & Generate Coverage Report
       run: |
-        cd Golf/
-        coverage run --source=../Golf/ manage.py test 
+        cd Aidoo/
+        coverage run --source=../Aidoo/ manage.py test 
         coverage report --format=markdown -m > coverage_report.md
         
     - name: Setup git config
@@ -30,6 +30,6 @@ jobs:
         git config user.email "<>"
     - name: Create commit
       run: |
-        git add Golf/coverage_report.md
+        git add Aidoo/coverage_report.md
         git commit -m "Generate test coverage report"
         git push origin main

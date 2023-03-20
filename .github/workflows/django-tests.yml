@@ -24,5 +24,5 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        cd Golf/
+        cd Aidoo/
         python manage.py test

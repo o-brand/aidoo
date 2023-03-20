@@ -53,7 +53,7 @@ If you think we should add anything else, or change something, feel free to do i
 
 - If you've made any changes to the database via an action on the website, make sure to wipe the database and reload the data using the instructions found on the DB.md file.
 
-- If you are writing a test for an url not in the login app, then use ```LoginRequiredTestCase``` instead of the default ```TestCase```. (You can import like this: ```from Golf.utils import LoginRequiredTestCase```.)
+- If you are writing a test for an url not in the login app, then use ```LoginRequiredTestCase``` instead of the default ```TestCase```. (You can import like this: ```from Aidoo.utils import LoginRequiredTestCase```.)
 
 - Prioritize using [HTMX](https://htmx.org/) (and [Hyperscript](https://hyperscript.org/)) over JS. Validating submitted values on the backend is still necessary.
 

@@ -1,0 +1,13 @@
+[report]
+omit =
+    Aidoo/asgi.py
+    Aidoo/processors.py
+    Aidoo/production.py
+    Aidoo/settings.py
+    heroku_db.py
+    daily.py
+    monthly.py
+    manage.py
+    */migrations/*
+    chat/routing.py
+    jobs/routing.py
