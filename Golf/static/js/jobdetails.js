@@ -1,3 +1,8 @@
+// Reload...
+if(performance.getEntriesByType("navigation")[0].type == "back_forward"){
+  location.reload(true);
+}
+
 const jobSocket = (window.location.protocol != "https:") ?
   new WebSocket(
     "ws://" + window.location.host + "/ws/job/" + job_id
