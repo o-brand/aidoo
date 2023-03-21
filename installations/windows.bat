@@ -16,7 +16,7 @@ else (
 )
 
 echo "Installing the Requirements"
-cd ..\Golf\
+cd ..\Aidoo\
 python -r manage.py requirements.txt
 
 echo "Installation Complete"
