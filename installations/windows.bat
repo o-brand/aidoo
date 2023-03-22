@@ -10,14 +10,13 @@ if errorlevel 1 (
 	echo "Please Install Python3.6"
 	python
 	goto END
-)
-else (
+) else (
 	echo "Python is intalled"
 )
 
 echo "Installing the Requirements"
-cd ..\Golf\
-python -r manage.py requirements.txt
+cd ..\Aidoo\
+pip3 install -r requirements.txt
 
 echo "Installation Complete"
 

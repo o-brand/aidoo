@@ -14,6 +14,7 @@ ENABLED_URLS = (
     "help/privacy",
     "help/community-guidelines",
     "help/manual",
+    "help/tc",
 )
 
 

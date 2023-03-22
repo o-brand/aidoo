@@ -455,7 +455,7 @@ class NotificationModelTestCase(TestCase):
 
         created_notification=notif_data()
 
-        created_notification.content = "x"*101
+        created_notification.content = "x"*10100
 
         with self.assertRaises(ValidationError):
             created_notification.full_clean()
