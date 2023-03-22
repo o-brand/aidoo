@@ -96,10 +96,10 @@ class Notification(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
     #Short title summarizing the content of the notification
-    title = models.CharField(max_length=50, default="Alert")
+    title = models.CharField(max_length=100, default="Alert")
 
     #Content of the notification
-    content = models.CharField(max_length=100)
+    content = models.CharField(max_length=1000)
 
     #Link to resolve the notification
     link = models.URLField(max_length=200)
