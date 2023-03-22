@@ -16,7 +16,7 @@ if errorlevel 1 (
 
 echo "Installing the Requirements"
 cd ..\Aidoo\
-python manage.py install requirements.txt
+pip3 install -r requirements.txt
 
 echo "Installation Complete"
 
