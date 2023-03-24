@@ -71,7 +71,7 @@ def home(request):
 
 def buyitem_call(request):
     """Buy an item and return back the new form."""
-    if request.method == 'POST':
+    if request.method == "POST":
         buyer = request.user
 
         # Get the item ID or -1 if it is not found
@@ -105,12 +105,12 @@ def buyitem_call(request):
                     form = BuyForm(choices)
                 else:
                     form = False
-                
+
                 # Return
                 response = render(
                     request, "store/buy-form.html", {"form": form, "item": item}
                 )
-                response['HX-Trigger'] = "rebalance"
+                response["HX-Trigger"] = "rebalance"
                 return response
         except ValidationError:
             raise Http404()
@@ -146,7 +146,7 @@ def buyitem_call(request):
                 except Exception:
                     raise Http404()
 
-            # Decrease the balance of the buyer and increase the bank's balance
+            # Decrease the balance of the buyer and increase the bank"s balance
             buyer.balance = buyer.balance - item.price * quantity
             site.moderation.bank += item.price * quantity
 
@@ -181,12 +181,12 @@ def buyitem_call(request):
                 form = BuyForm(choices)
             else:
                 form = False
-            
+
             # Return
             response = render(
                 request, "store/buy-form.html", {"form": form, "item": item}
             )
-            response['HX-Trigger'] = "rebalance"
+            response["HX-Trigger"] = "rebalance"
             return response
 
     # If it is not POST
@@ -201,7 +201,7 @@ def send_QRcode(email, username, data):
 
     # Create a msg that can have an image attached
     msg = EmailMultiAlternatives(subject,body,from_email=None,to=[email])
-    msg.mixed_subtype = 'related'
+    msg.mixed_subtype = "related"
 
     # Generate the qr code(s) and attach them to the email
     for count, fact in enumerate(data):
@@ -218,8 +218,8 @@ def send_QRcode(email, username, data):
         image_stream = buf.getvalue()
 
         # Create the image
-        img = MIMEImage(image_stream, 'jpg')
-        img.add_header('Content-Id', '<qr>')
+        img = MIMEImage(image_stream, "jpg")
+        img.add_header("Content-Id", "<qr>")
         img.add_header("Content-Disposition", "inline", filename=f"qr-{count+1}.jpg")
 
         # Attach image to the message
@@ -293,7 +293,7 @@ class TransferView(View):
                 return HttpResponse(
                     status=204, headers={"HX-Trigger": "rebalance"}
                 )
-            
+
             # No content but no rebalance
             return HttpResponse(status=204)
 

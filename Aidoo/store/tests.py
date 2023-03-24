@@ -114,6 +114,28 @@ class TransferTestCase(LoginRequiredTestCase):
                 "There is no user with the username nobody.", form.errors[key][0]
             )
 
+    def test_gifting_for_myself(self):
+        # test if the user tries t gift themselves
+        original_balance = User.objects.get(pk=1).balance
+        new_form = {
+            "recipient": User.objects.get(pk=1),
+            "amount": "24",
+            "note": "A little gift for you",
+        }
+        response = self.client.post(reverse("transfer"), data=new_form)
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(User.objects.get(pk=1).balance, original_balance)
+
+    def test_form_is_not_valid(self):
+        # test if the user tries t gift themselves
+        new_form = {
+            "recipient": User.objects.get(pk=1),
+            "note": "A little gift for you",
+        }
+        response = self.client.post(reverse("transfer"), data=new_form)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="store/transfer.html")
+
 
 class StoreTestCase(LoginRequiredTestCase):
     """Tests for the store front page."""
@@ -227,6 +249,7 @@ class SaleModelTest(LoginRequiredTestCase):
 
 
 class BuyFormTestCase(TestCase):
+    """Tests for BuyForm"""
 
     def test_quantity_in_range(self):
         buy = {
@@ -253,3 +276,14 @@ class BuyFormTestCase(TestCase):
                     "Select a valid choice. 3 is not one of the available choices.",
                     form.errors[key][0]
                 )
+
+
+class SendQRCodeTestCase(TestCase):
+    """Tests for send_QRcode function"""
+
+    def test_function(self):
+        # Call the function and check if the email was sent
+        send_QRcode("asd@asd.com", "Asd", ["0", "1"])
+
+        # Test email was sent
+        self.assertEqual(len(mail.outbox), 1)
