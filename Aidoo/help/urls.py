@@ -30,7 +30,7 @@ urlpatterns = [
     ),
     # Terms and conditions page
     path(
-        route="tc",
+        route="terms-and-conditions",
         view=TemplateView.as_view(template_name="help/tsandcs.html"),
         name="tc",
     ),

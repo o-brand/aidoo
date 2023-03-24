@@ -99,9 +99,6 @@ class RedeemCallTestCase(LoginRequiredTestCase):
         # Login from super...
         super().setUp()
 
-        # Image...
-        upload_file = open("../fortest.jpeg", "rb")
-
         # Write 1 item into the item model
         item = dict()
         item["item_name"] = "language class"

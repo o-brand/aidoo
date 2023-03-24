@@ -225,6 +225,7 @@ class SaleModelTest(LoginRequiredTestCase):
         """Test that the time of sale is correct."""
         self.assertIsNotNone(self.sale.time_of_sale)
 
+
 class BuyFormTestCase(TestCase):
 
     def test_quantity_in_range(self):
@@ -234,7 +235,7 @@ class BuyFormTestCase(TestCase):
         form = BuyForm(['1'], data=buy)
 
         self.assertEqual(0, len(form.errors))
-    
+
     def test_quantity_out_of_range(self):
         buy = {
             "quantity":"3"
@@ -242,14 +243,13 @@ class BuyFormTestCase(TestCase):
         form = BuyForm(['1'], data=buy)
 
         self.assertEqual(1, len(form.errors))
-        
+
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
 
             if key == "quantity":
                 self.assertIn(
-                    "Select a valid choice. 3 is not one of the available choices.", 
+                    "Select a valid choice. 3 is not one of the available choices.",
                     form.errors[key][0]
                 )
-                

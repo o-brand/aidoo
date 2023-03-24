@@ -1,8 +1,8 @@
 from django import forms
 from django.forms import ModelForm, Form
+from Aidoo.validators import validate_profanity
 from .models import Transfer, Sale
 from .validators import validate_recipient
-from Aidoo.validators import validate_profanity
 
 
 class BuyForm(Form):

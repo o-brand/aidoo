@@ -14,7 +14,7 @@ ENABLED_URLS = (
     "help/privacy",
     "help/community-guidelines",
     "help/manual",
-    "help/tc",
+    "help/terms-and-conditions",
 )
 
 
@@ -31,7 +31,7 @@ class LoginRequiredMiddleware:
         if not request.user.is_authenticated:
             path = request.path_info.lstrip("/")
 
-            # Is it the welcome page?
+            # Remove the last "/" if is there any
             if len(path) > 0 and path[-1] == "/":
                 path = path[0:-1]
 

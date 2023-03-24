@@ -49,6 +49,19 @@ class ManualTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="help/manual.html")
 
-    def test_guidelines_available_by_name(self):
+    def test_manual_available_by_name(self):
         response = self.client.get(reverse("manual"))
+        self.assertEqual(response.status_code, 200)
+
+
+class TAndCTestCase(TestCase):
+    """Tests for the Terms and Conditions page."""
+
+    def test_tandc(self):
+        response = self.client.get("/help/terms-and-conditions")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="help/tsandcs.html")
+
+    def test_tandc_available_by_name(self):
+        response = self.client.get(reverse("tc"))
         self.assertEqual(response.status_code, 200)

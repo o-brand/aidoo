@@ -1,5 +1,6 @@
-from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase
 from .middlewares import ENABLED_URLS, LoginRequiredMiddleware
@@ -134,3 +135,10 @@ class ProfanityValidatorTestCase(TestCase):
 
         # Just call the validator
         validate_profanity("Walk my dog")
+
+    def test_profane(self):
+        """Tests a profane string."""
+
+        # Just call the validator
+        with self.assertRaises(ValidationError):
+            validate_profanity("Walk my kondums dog")
