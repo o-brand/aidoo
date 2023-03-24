@@ -50,7 +50,7 @@ class RoomQueryTestCase(LoginRequiredTestCase):
             message["content"] = "Hello"
             Message.objects.create(**message)
         
-    def query_rooms_test(self):
+    def test_query_rooms(self):
         queried_rooms = _query_rooms(User(pk=1))
         self.assertTrue(len(queried_rooms) != 0)
 
