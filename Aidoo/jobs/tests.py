@@ -54,7 +54,7 @@ class DetailsTestCase(LoginRequiredTestCase):
 
     def test_details_404(self):
         # The id starts with 1, so there is no job with this id.
-        response = self.client.get("/jobs/0/")
+        response = self.client.get("/jobs/0")
         self.assertEqual(response.status_code, 404)
 
     def test_details_hidden(self):
@@ -626,14 +626,25 @@ class ApplyButtonCase(LoginRequiredTestCase):
         # Login from super...
         super().setUp()
 
-        # Write 1 job into the job model
-        job = dict()
-        job["posting_time"] = fake_time()
-        job["points"] = random.randint(0, 100)
-        job["assigned"] = False
-        job["completed"] = False
-        job["poster_id_id"] = 1
-        Job.objects.create(**job)
+        # Write 3 jobs into the job model
+        for _ in range(3):
+            job = dict()
+            job["posting_time"] = fake_time()
+            job["points"] = random.randint(0, 100)
+            job["assigned"] = False
+            job["completed"] = False
+            job["poster_id_id"] = 1
+            Job.objects.create(**job)
+
+        # Change one job to be completed
+        completed_job = Job.objects.get(pk=2)
+        completed_job.completed = True
+        completed_job.save()
+
+        # Change one job to be hidden
+        hidden_job = Job.objects.get(pk=3)
+        hidden_job.hidden = True
+        hidden_job.save()
 
     def test_page(self):
         # test availability via URL
@@ -653,6 +664,16 @@ class ApplyButtonCase(LoginRequiredTestCase):
     def test_page_post_job_not_valid(self):
         # test with a wrong job id
         response = self.client.post("/jobs/apply", {"job_id": 5})
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_job_completed(self):
+        # test with a completed job
+        response = self.client.post("/jobs/apply", {"job_id": 2})
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_job_hidden(self):
+        # test with a hidden job
+        response = self.client.post("/jobs/apply", {"job_id": 3})
         self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_application_exists(self):
@@ -831,7 +852,7 @@ class CancelButtonCase(LoginRequiredTestCase):
         # Login from super...
         super().setUp()
 
-        # Write 1 job into the job model
+        # Write 2 job into the job model
         job = dict()
         job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
@@ -840,6 +861,11 @@ class CancelButtonCase(LoginRequiredTestCase):
         job["poster_id_id"] = 1
         job["hidden"] = False
         Job.objects.create(**job)
+
+        # Change one job to be hidden
+        hidden_job = Job.objects.get(pk=2)
+        hidden_job.hidden = True
+        hidden_job.save()
 
     def test_page(self):
         # test availability via URL
