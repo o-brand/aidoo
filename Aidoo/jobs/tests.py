@@ -14,6 +14,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 from Aidoo.utils import create_date_string, fake_time, LoginRequiredTestCase
+from userprofile.models import Notification
 from .forms import JobForm
 from .models import Application, Bookmark, Job, Comment
 from .validators import validate_deadline, validate_hours, validate_half_hours
@@ -47,6 +48,15 @@ class DetailsTestCase(LoginRequiredTestCase):
         response = self.client.get("/jobs/1")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="jobdetails.html")
+
+    def test_details_bookmark_exists(self):
+        bookmark = {
+            "user_id": self.user,
+            "job_id": Job.objects.get(pk=1),
+        }
+        Bookmark.objects.create(**bookmark)
+        response = self.client.get("/jobs/1")
+        self.assertEqual(response.status_code, 200)
 
     def test_details_available_by_name(self):
         response = self.client.get(reverse("jobdetails", kwargs={"job_id": 1}))
@@ -240,7 +250,7 @@ class BookmarkModelTestCase(TestCase):
     def test_unique_constraint(self):
         """Test if a non-unique user_id and job_id pair raises an error"""
         bookmark = dict()
-        bookmark["user_id"] = User(pk=1)
+        bookmark["user_id"] = User.objects.get(pk=1)
         bookmark["job_id"] = Job(pk=1)
         bookmark["saving_time"] = fake_time()
         Bookmark.objects.create(**bookmark)
@@ -248,7 +258,7 @@ class BookmarkModelTestCase(TestCase):
             Bookmark.objects.create(**bookmark)
 
 
-class ApplicationModelTestCasae(TestCase):
+class ApplicationModelTestCase(TestCase):
     """Test for Application model."""
 
     def setUp(self):
@@ -276,7 +286,7 @@ class ApplicationModelTestCasae(TestCase):
 
     def test_unique_constraint(self):
         application = dict()
-        application["applicant_id"] = User(pk=1)
+        application["applicant_id"] = User.objects.get(pk=1)
         application["job_id"] = Job(pk=1)
         application["status"] = "AP"
         application["time_of_application"] = fake_time()
@@ -679,7 +689,7 @@ class ApplyButtonCase(LoginRequiredTestCase):
     def test_page_post_job_application_exists(self):
         # test with an application which exists
         application = dict()
-        application["applicant_id"] = User(pk=1)
+        application["applicant_id"] = User.objects.get(pk=1)
         application["job_id"] = Job(pk=1)
         application["status"] = "AP"
         Application.objects.create(**application)
@@ -762,7 +772,7 @@ class BookmarkButtonCase(LoginRequiredTestCase):
     def test_page_post_job_bookmark_exists(self):
         # test for a bookmarked job (unmarking a job)
         bookmark = dict()
-        bookmark["user_id"] = User(pk=1)
+        bookmark["user_id"] = User.objects.get(pk=1)
         bookmark["job_id"] = Job(pk=1)
         Bookmark.objects.create(**bookmark)
 
@@ -868,6 +878,22 @@ class CancelButtonCase(LoginRequiredTestCase):
         hidden_job.hidden = True
         hidden_job.save()
 
+        # Create an applicant user
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "a"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
+        User.objects.create_user(**credentials)
+        credentials.clear()
+
+        application = dict()
+        application["applicant_id"] = User.objects.get(pk=2)
+        application["job_id"] = Job(pk=1)
+        Application.objects.create(**application)
+
     def test_page(self):
         # test availability via URL
         response = self.client.get("/jobs/cancel")
@@ -926,14 +952,28 @@ class CancelButtonCase(LoginRequiredTestCase):
             "password": "asd123",
             "profile_id": "media/profilepics/default",
         }
+
         self.client.post("/login", credentials, follow=True)
+
+        # Get applicant notifications length before cancelling
+        b_notifications = len(Notification.objects.filter(
+            user_id=User.objects.get(pk=2))
+        )
 
         # Cancel the job
         response = self.client.post("/jobs/cancel", {"job_id": 1})
 
+        # Get applicant notifications length after cancelling
+        a_notifications = len(Notification.objects.filter(
+            user_id=User.objects.get(pk=2))
+        )
+
         # The user should get back a response with an extra HTMX attribute
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response["HX-Redirect"], "/profile/me")
+
+        # Applicant should have one new notification
+        self.assertTrue(a_notifications == b_notifications + 1)
 
 
 @sync_to_async
