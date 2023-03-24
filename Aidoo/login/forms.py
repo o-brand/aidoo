@@ -6,7 +6,6 @@ from Aidoo.validators import validate_profanity
 from .validators import validate_dob, validate_username
 
 
-
 # Get actual user model.
 User = get_user_model()
 
@@ -16,7 +15,7 @@ class RegisterForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.pop("autofocus", None)
+        self.fields["username"].widget.attrs.pop("autofocus", None)
 
     first_name = forms.CharField(
         max_length=100,

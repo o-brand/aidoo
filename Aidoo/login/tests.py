@@ -30,7 +30,7 @@ class WelcomeTestCase(TestCase):
     def test_welcome_available_by_name(self):
         response = self.client.get(reverse("welcome"))
         self.assertEqual(response.status_code, 200)
-    
+
     def test_redirect(self):
         credentials = {
             "username": "asd",
@@ -217,7 +217,7 @@ class ActivationTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             template_name="login/activation_failure.html")
-    
+
     def test_activation_successful(self):
         uid = urlsafe_base64_encode(force_bytes(self.user.pk))
         request = HttpRequest()
@@ -235,7 +235,7 @@ class ActivationTestCase(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, "/activation/failure")
-    
+
     def test_activiation_failure_uid(self):
         uid = urlsafe_base64_encode(force_bytes('2'))
 
@@ -532,7 +532,7 @@ class ValidatorsTestCase(TestCase):
             "%Y-%m-%d").date()))
         self.assertIsNone(validate_dob(datetime.datetime.strptime("2005-02-19",
             "%Y-%m-%d").date()))
-    
+
     def test_validate_username(self):
         """Test the validate_username function."""
         # Test the invalid username.

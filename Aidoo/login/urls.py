@@ -1,34 +1,30 @@
-from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.urls import path
 from django.views.generic.base import TemplateView
 from .views import SignUpView, activateAccount, welcome
 
 
 urlpatterns = [
     # Welcome page for the whole project
-    path(route="",view=welcome,name="welcome"),
-
+    path(route="", view=welcome, name="welcome"),
     # Login page
     path(
         route="login",
         view=auth_views.LoginView.as_view(template_name="login/login.html"),
         name="login",
     ),
-
     # Logout page
     path(
         route="logout",
         view=auth_views.LogoutView.as_view(),
         name="logout",
     ),
-
     # Registration page
     path(
         route="signup",
         view=SignUpView.as_view(),
         name="signup",
     ),
-
     # Password reset pages
     path(
         route="password_reset",
@@ -58,7 +54,6 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
-
     # Account activation pages
     path(
         route="activate/<uidb64>/<token>",
