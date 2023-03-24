@@ -381,3 +381,87 @@ class ReportsViewTestCase(LoginRequiredTestCase):
     def test_report_view_available_by_name(self):
         response = self.client.get(reverse("superadmin"))
         self.assertEqual(response.status_code, 200)
+
+class ConflictCallTestCase(LoginRequiredTestCase):
+    """Tests for when a user submits a verdict on a report"""
+
+    def setUp(self):
+        fake = Faker()
+
+        # login from super...
+        super().setUp()
+
+        # create 1 user in the database
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "a"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = fake_time()
+        credentials["profile_id"] = "media/profilepics/default"
+        self.user = User.objects.create_user(**credentials)
+
+        #create job
+        job = {
+            "poster_id": self.user,
+            "location": "AB21 3EW",
+            "job_title": "Walking a dog",
+            "job_description": "Nothing",
+            "points": 10,
+        }
+        Job.objects.create(**job)
+        j = Job.objects.get(pk=1)
+
+        #create report
+        report = {
+            "reported_job": j,
+            "reported_user": self.user,
+            "reporting_user": self.user,
+            "complaint": "a"*500,
+            "status": 'OPEN',
+            "type": 'JOB'
+        }
+        Report.objects.create(**report)
+        r = Report.objects.get(pk=1)
+
+        #create ticket
+        ticket = {
+            "report_id": r,
+            "user_id": self.user,
+        }
+        ReportTicket.objects.create(**ticket)
+    
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/superadmin/conflict")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("conflict"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_no_ticket_id(self):
+        # test without sending a ticket id
+        response = self.client.post("/superadmin/conflict")
+        self.assertEqual(response.status_code, 404)
+    
+    def test_wrong_ticket_id(self):
+        # test with wrong ticket id
+        response = self.client.post("/superadmin/conflict", {"ticket_id": 2})
+        self.assertEqual(response.status_code, 404)
+
+    def test_ticket_resolved_already(self):
+        # test with a ticket that is already resolved
+        ticket = ReportTicket.objects.get(ticket_id='1')
+        ticket.status = 'RE'
+        ticket.save()
+
+        response = self.client.post("/superadmin/conflict", {"ticket_id": 1})
+        self.assertEqual(response.status_code, 404)
+    
+    def test_report_resolved(self):
+        # test works
+        response = self.client.post("/superadmin/conflict", {"ticket_id": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="htmx/verdictclosed.html")
