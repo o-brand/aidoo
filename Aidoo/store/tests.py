@@ -1,6 +1,7 @@
 import datetime
 from faker import Faker
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
@@ -8,6 +9,7 @@ from django.utils import timezone
 from Aidoo.utils import LoginRequiredTestCase
 from .forms import TransferForm, BuyForm
 from .models import Item, Sale, Transfer
+from .views import send_QRcode
 
 
 # Get actual user model.
@@ -152,6 +154,34 @@ class StoreTestCase(LoginRequiredTestCase):
 
     def test_store_page_available_by_name(self):
         # test availability via name of page
+        response = self.client.get(reverse("store"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_store_page_with_items(self):
+        # test with items
+        item = Item.objects.create(
+            item_name="Test Item",
+            description="A test item for the shop",
+            price=10,
+            stock=5,
+            on_offer=True,
+            limit_per_user=None,
+            item_picture="media/profilepics/default",
+        )
+        Item.objects.create(
+            item_name="Test Item2",
+            description="A test item for the shop",
+            price=10,
+            stock=0,
+            on_offer=True,
+            limit_per_user=2,
+            item_picture="media/profilepics/default",
+        )
+        Sale.objects.create(
+            purchase=item, buyer=self.user, quantity=2,
+            time_of_sale=timezone.now()
+        )
+
         response = self.client.get(reverse("store"))
         self.assertEqual(response.status_code, 200)
 
