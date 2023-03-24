@@ -1,11 +1,11 @@
 | Name                        |    Stmts |     Miss |   Cover |   Missing |
 |---------------------------- | -------: | -------: | ------: | --------: |
-| Aidoo/\_\_init\_\_.py        |        0 |        0 |    100% |           |
-| Aidoo/middlewares.py         |       23 |        0 |    100% |           |
-| Aidoo/tests.py               |       62 |        0 |    100% |           |
-| Aidoo/urls.py                |        3 |        0 |    100% |           |
-| Aidoo/utils.py               |       18 |        0 |    100% |           |
-| Aidoo/validators.py          |       10 |        0 |    100% |           |
+| Aidoo/\_\_init\_\_.py       |        0 |        0 |    100% |           |
+| Aidoo/middlewares.py        |       23 |        0 |    100% |           |
+| Aidoo/tests.py              |       66 |        0 |    100% |           |
+| Aidoo/urls.py               |        3 |        0 |    100% |           |
+| Aidoo/utils.py              |       18 |        0 |    100% |           |
+| Aidoo/validators.py         |       10 |        0 |    100% |           |
 | chat/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | chat/admin.py               |        4 |        0 |    100% |           |
 | chat/apps.py                |        4 |        0 |    100% |           |
@@ -16,7 +16,7 @@
 | chat/views.py               |       69 |       15 |     78% |     23-41 |
 | help/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | help/apps.py                |        4 |        0 |    100% |           |
-| help/tests.py               |       34 |        0 |    100% |           |
+| help/tests.py               |       42 |        0 |    100% |           |
 | help/urls.py                |        3 |        0 |    100% |           |
 | jobs/\_\_init\_\_.py        |        0 |        0 |    100% |           |
 | jobs/admin.py               |        6 |        0 |    100% |           |
@@ -51,7 +51,7 @@
 | superadmin/models.py        |       58 |        0 |    100% |           |
 | superadmin/tests.py         |      167 |        0 |    100% |           |
 | superadmin/urls.py          |        3 |        0 |    100% |           |
-| superadmin/views.py         |      110 |       79 |     28% |26, 44-82, 98-101, 106-248 |
+| superadmin/views.py         |      125 |       93 |     26% |27, 45-93, 109-112, 117-300 |
 | userprofile/\_\_init\_\_.py |        0 |        0 |    100% |           |
 | userprofile/admin.py        |        9 |        0 |    100% |           |
 | userprofile/apps.py         |        4 |        0 |    100% |           |
@@ -59,10 +59,10 @@
 | userprofile/models.py       |       32 |        0 |    100% |           |
 | userprofile/tests.py        |      368 |        0 |    100% |           |
 | userprofile/urls.py         |        4 |        0 |    100% |           |
-| userprofile/views.py        |      262 |      117 |     55% |53-64, 69-88, 92-93, 98-117, 121-122, 127-144, 148-149, 154-175, 179-180, 191, 197, 199, 201, 203, 225-239, 294, 298, 311-340, 441-471, 483-484, 489, 494-495, 501-507, 511-525 |
+| userprofile/views.py        |      264 |      119 |     55% |53-64, 69-88, 92-93, 98-117, 121-122, 127-144, 148-149, 154-175, 179-180, 191, 197, 199, 201, 203, 225-244, 299, 303, 316-345, 446-476, 488-489, 494, 499-500, 506-512, 516-530 |
 | vendor/\_\_init\_\_.py      |        0 |        0 |    100% |           |
 | vendor/apps.py              |        4 |        0 |    100% |           |
-| vendor/tests.py             |       94 |        0 |    100% |           |
+| vendor/tests.py             |       93 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3176** |  **305** | **90%** |           |
+|                   **TOTAL** | **3204** |  **321** | **90%** |           |
