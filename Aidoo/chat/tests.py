@@ -19,13 +19,16 @@ from .routing import websocket_urlpatterns as chat_url
 # Get actual user model.
 User = get_user_model()
 
+
 class RoomQueryTestCase(LoginRequiredTestCase):
+
     def setUp(self):
         super().setUp()
+
         fake = Faker()
 
-        # create 3 users in the database
-        for _ in range(3):
+        # create 4 users in the database
+        for _ in range(4):
             credentials = dict()
             credentials["username"] = fake.unique.name()
             credentials["password"] = "a"
@@ -36,7 +39,7 @@ class RoomQueryTestCase(LoginRequiredTestCase):
             User.objects.create_user(**credentials)
             credentials.clear()
 
-        pairings = itertools.combinations(range(1,4), 2)
+        pairings = [[1, 2], [3, 1]]
         for pair in pairings:
             room = dict()
             room["user_1"] = User(pk=pair[0])
@@ -49,7 +52,19 @@ class RoomQueryTestCase(LoginRequiredTestCase):
             message["user_id"] = room.user_1
             message["content"] = "Hello"
             Message.objects.create(**message)
-        
+
+        for room in Room.objects.filter(user_2=self.user):
+            message = dict()
+            message["room_id"] = room
+            message["user_id"] = room.user_1
+            message["content"] = "Hello"
+            Message.objects.create(**message)
+
+        room = dict()
+        room["user_1"] = User(pk=4)
+        room["user_2"] = User(pk=1)
+        Room.objects.create(**room)
+
     def test_query_rooms(self):
         queried_rooms = _query_rooms(User(pk=1))
         self.assertTrue(len(queried_rooms) != 0)
