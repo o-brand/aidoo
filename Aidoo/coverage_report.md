@@ -11,7 +11,7 @@
 | chat/apps.py                |        4 |        0 |    100% |           |
 | chat/consumers.py           |       36 |        0 |    100% |           |
 | chat/models.py              |       19 |        0 |    100% |           |
-| chat/tests.py               |      215 |       25 |     88% |24-50, 53-54 |
+| chat/tests.py               |      216 |       26 |     88% |24-51, 54-55 |
 | chat/urls.py                |        3 |        0 |    100% |           |
 | chat/views.py               |       69 |       15 |     78% |     23-41 |
 | help/\_\_init\_\_.py        |        0 |        0 |    100% |           |
@@ -24,10 +24,10 @@
 | jobs/consumers.py           |       40 |        0 |    100% |           |
 | jobs/forms.py               |       19 |        0 |    100% |           |
 | jobs/models.py              |       51 |        0 |    100% |           |
-| jobs/tests.py               |      552 |        0 |    100% |           |
+| jobs/tests.py               |      572 |        0 |    100% |           |
 | jobs/urls.py                |        3 |        0 |    100% |           |
 | jobs/validators.py          |       17 |        0 |    100% |           |
-| jobs/views.py               |      136 |       11 |     92% |24-25, 40, 201, 205, 249, 269-280 |
+| jobs/views.py               |      136 |        7 |     95% |40, 249, 269-280 |
 | login/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | login/apps.py               |        4 |        0 |    100% |           |
 | login/forms.py              |       23 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       93 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3255** |  **321** | **90%** |           |
+|                   **TOTAL** | **3276** |  **318** | **90%** |           |
