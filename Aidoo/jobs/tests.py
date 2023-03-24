@@ -911,7 +911,7 @@ class CancelButtonCase(LoginRequiredTestCase):
 
     def test_page_post_job_hidden(self):
         # test with a hidden job
-        response = self.client.post("/jobs/apply", {"job_id": 2})
+        response = self.client.post("/jobs/cancel", {"job_id": 2})
         self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_not_valid(self):
