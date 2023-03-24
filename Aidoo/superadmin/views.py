@@ -54,19 +54,27 @@ class ReportFormView(View):
             report = form.save(commit=False)
             report.save()
 
+            moderation = get_current_site(request).moderation
+
             eligible = User.objects.filter(
-                 Q(charity=False) &
-                 Q(guardian=True) &
-                 ~Q(id=actual_user_id) &
-                 ~Q(id=report.reported_user.id) &
-                 ~Q(id=report.reporting_user.id)
+                Q(charity=False) &
+                Q(guardian=True) &
+                ~Q(id=actual_user_id) &
+                ~Q(id=report.reported_user.id) &
+                ~Q(id=report.reporting_user.id)
             )
 
              # TODO not sure what to do when there aren't enough eligible reviewers
              # Should we have a script to ticket it when there are? Or should it be
              # directly dealt with by admins?
             if len(eligible) >= 3:
-                reviewers = random.sample(list(eligible), k=3)
+                outsourceable = min(
+                    moderation.bank // moderation.ticket_payout, 3)
+                out_reviewers = random.sample(
+                    list(eligible.filter(is_staff=False)), k=outsourceable)
+                in_reviewers = random.sample(
+                    list(eligible.filter(is_staff=True)), k=3-outsourceable)
+                reviewers = out_reviewers + in_reviewers
 
                 for reviewer in reviewers:
                     ticket = ReportTicket.objects.create(
@@ -85,6 +93,12 @@ class ReportFormView(View):
                     )
                     notification.save()
 
+                    if not reviewer.is_staff:
+                        moderation.bank -= moderation.ticket_payout
+                        moderation.bank.save()
+                        moderation.frozen_bank += moderation.ticket_payout
+                        moderation.frozen_bank.save()
+                        
                 report.status = Report.ReportStatus.TICKETED
                 report.save()
 
@@ -141,8 +155,8 @@ def conflict_call(request):
 
         # Queries the reported job for a list of all answers
         verdict = ReportTicket.objects.filter(
-                Q(report_id=ticket[0].report_id) &
-                ~Q(answer=None)
+            Q(report_id=ticket[0].report_id) &
+            ~Q(answer=None)
         )
 
         # Context for template, used by htmx
@@ -249,18 +263,12 @@ def conflict_call(request):
 
             # Distributes scrip to the superusers, from the bank
             for x in range(0, len(verdict)):
-                # Takes the scrip from the bank
-                sitemodel.bank -= 2
-                
-                # Gives the scrip to the superuser
-                verdict[x].user_id.balance += 2
-                verdict[x].user_id.save()
+                # Takes the scrip from the bank and gives it to the guardian
+                if not verdict[x].user_id.is_staff:
+                    sitemodel.frozen_bank -= sitemodel.ticket_payout
+                    verdict[x].user_id.balance += sitemodel.ticket_payout
+                    verdict[x].user_id.save()
 
-            # TODO liquidity
-            # Prints scrip if bank runs out
-            if sitemodel.bank < 0:
-                sitemodel.bank = 0
-            
             # Saves the new bank state
             sitemodel.save()
 

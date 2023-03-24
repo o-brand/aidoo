@@ -102,5 +102,11 @@ class Moderation(models.Model):
     # Holds all points spent in the store
     bank = models.IntegerField(default=0)
 
+    # Money to be paid per ticket
+    ticket_payout = models.IntegerField(default=2)
+
+    # Holds all points due to be paid for guardians
+    frozen_bank = models.IntegerField(default=0)
+
     # Decides if chat deletion is active or not for reporting
     chat_deletion = models.BooleanField(default=True)
