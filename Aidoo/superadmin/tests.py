@@ -1,12 +1,13 @@
 from faker import Faker
 import datetime
 import random
-from django.test import TestCase
-from django.utils import timezone
-from Aidoo.utils import LoginRequiredTestCase, fake_time
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
+from Aidoo.utils import LoginRequiredTestCase, fake_time
 from jobs.models import Job
 from superadmin.models import Report, ReportTicket, ConflictResolution
 from superadmin.forms import ReportForm
@@ -367,3 +368,16 @@ class ConflictRersolutionTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             created_conflict.full_clean()
+
+
+class ReportsViewTestCase(LoginRequiredTestCase):
+    """Tests for the reporting page"""   
+
+    def test_report_view(self):
+        response = self.client.get("/superadmin/")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, template_name="superadmin/index.html")
+
+    def test_report_view_available_by_name(self):
+        response = self.client.get(reverse("superadmin"))
+        self.assertEqual(response.status_code, 200)
