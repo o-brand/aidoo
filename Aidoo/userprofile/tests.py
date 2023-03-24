@@ -3,10 +3,11 @@ import datetime
 import random
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from Aidoo.utils import LoginRequiredTestCase, fake_time
 from jobs.models import Job, Application
 from userprofile.models import Notification
@@ -130,6 +131,37 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
         response = self.client.get(reverse("me"))
         self.assertEqual(response.status_code, 200)
 
+    #test if the response for non-existing user gives the 404 response
+    def test_profile_404(self):
+        request = RequestFactory()
+        request.user = AnonymousUser()
+        response = self.client.get(request)
+        self.assertEqual(response.status_code, 404)
+
+    #tests for cards?
+    def test_commitments_available_by_name(self):
+        session = self.client.session
+        session["private_tab"] = "commitments"
+        response = self.client.get(reverse("commitments"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_posts_available_by_name(self):
+        session = self.client.session
+        session["private_tab"] = "posts"
+        response = self.client.get(reverse("posts"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_applications_available_by_name(self):
+        session = self.client.session
+        session["private_tab"] = "applications"
+        response = self.client.get(reverse("applications"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_bookmarks_available_by_name(self):
+        session = self.client.session
+        session["private_tab"] = "bookmarks"
+        response = self.client.get(reverse("bookmarks"))
+        self.assertEqual(response.status_code, 200)
 
 class WithdrawButtonCase(LoginRequiredTestCase):
     """Tests for withdraw button."""
