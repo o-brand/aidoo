@@ -11,7 +11,7 @@
 | chat/apps.py                |        4 |        0 |    100% |           |
 | chat/consumers.py           |       36 |        0 |    100% |           |
 | chat/models.py              |       19 |        0 |    100% |           |
-| chat/tests.py               |      185 |        0 |    100% |           |
+| chat/tests.py               |      215 |       25 |     88% |24-50, 53-54 |
 | chat/urls.py                |        3 |        0 |    100% |           |
 | chat/views.py               |       69 |       15 |     78% |     23-41 |
 | help/\_\_init\_\_.py        |        0 |        0 |    100% |           |
@@ -34,16 +34,16 @@
 | login/tests.py              |      237 |        0 |    100% |           |
 | login/urls.py               |        5 |        0 |    100% |           |
 | login/validators.py         |       14 |        0 |    100% |           |
-| login/views.py              |       50 |        0 |    100% |           |
+| login/views.py              |       48 |        0 |    100% |           |
 | store/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | store/admin.py              |        6 |        0 |    100% |           |
 | store/apps.py               |        4 |        0 |    100% |           |
 | store/forms.py              |       17 |        0 |    100% |           |
 | store/models.py             |       32 |        0 |    100% |           |
-| store/tests.py              |      129 |        0 |    100% |           |
+| store/tests.py              |      152 |        0 |    100% |           |
 | store/urls.py               |        5 |        0 |    100% |           |
 | store/validators.py         |        7 |        0 |    100% |           |
-| store/views.py              |      145 |       83 |     43% |29-41, 57-62, 74-193, 199-229, 298-300 |
+| store/views.py              |      145 |       58 |     60% |    74-193 |
 | superadmin/\_\_init\_\_.py  |        0 |        0 |    100% |           |
 | superadmin/admin.py         |        5 |        0 |    100% |           |
 | superadmin/apps.py          |        4 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       93 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3204** |  **321** | **90%** |           |
+|                   **TOTAL** | **3255** |  **321** | **90%** |           |
