@@ -24,10 +24,10 @@
 | jobs/consumers.py           |       40 |        0 |    100% |           |
 | jobs/forms.py               |       19 |        0 |    100% |           |
 | jobs/models.py              |       51 |        0 |    100% |           |
-| jobs/tests.py               |      572 |        0 |    100% |           |
+| jobs/tests.py               |      594 |        0 |    100% |           |
 | jobs/urls.py                |        3 |        0 |    100% |           |
 | jobs/validators.py          |       17 |        0 |    100% |           |
-| jobs/views.py               |      136 |        7 |     95% |40, 249, 269-280 |
+| jobs/views.py               |      136 |        1 |     99% |       249 |
 | login/\_\_init\_\_.py       |        0 |        0 |    100% |           |
 | login/apps.py               |        4 |        0 |    100% |           |
 | login/forms.py              |       23 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       93 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3276** |  **318** | **90%** |           |
+|                   **TOTAL** | **3298** |  **312** | **91%** |           |
