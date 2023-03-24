@@ -14,6 +14,10 @@ from store.models import Item, Sale
 User = get_user_model()
 
 
+# Change KEY
+settings.KEY = b'K7gzDFlFHb3Y7uANnSQORZIQnX8c6WqWMH9jtD4oqr8='
+
+
 class RedeemTestCase(TestCase):
     """Tests for displaying the redeem page."""
 
