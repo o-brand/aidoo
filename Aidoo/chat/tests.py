@@ -1,5 +1,6 @@
 import datetime
 import json
+import itertools
 from asgiref.sync import sync_to_async
 from channels.auth import AuthMiddlewareStack
 from channels.testing import WebsocketCommunicator
@@ -10,6 +11,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
 from Aidoo.utils import LoginRequiredTestCase
+from .views import _query_rooms
 from .models import Room, Message
 from .routing import websocket_urlpatterns as chat_url
 
@@ -17,15 +19,49 @@ from .routing import websocket_urlpatterns as chat_url
 # Get actual user model.
 User = get_user_model()
 
+class RoomQueryTestCase(TestCase):
+    def setUp(self):
+        fake = Faker()
 
-class RoomModelTestCase(TestCase):
+        # create 3 users in the database
+        for _ in range(3):
+            credentials = dict()
+            credentials["username"] = fake.unique.name()
+            credentials["password"] = "a"
+            credentials["last_name"] = lambda: fake.last_name()
+            credentials["first_name"] = lambda: fake.first_name()
+            credentials["date_of_birth"] = datetime.datetime.now()
+            credentials["profile_id"] = "media/profilepics/default"
+            User.objects.create_user(**credentials)
+            credentials.clear()
+
+        pairings = itertools.combinations(range(1,4), 2)
+        for pair in pairings:
+            room = dict()
+            room["user_1"] = User(pk=pair[0])
+            room["user_2"] = User(pk=pair[1])
+            Room.objects.create(**room)
+
+        for room in Room.objects.all():
+            message = dict()
+            message["room_id"] = room
+            message["user_id"] = room.user_1
+            message["content"] = "Hello"
+            Message.objects.create(**message)
+        
+    def query_rooms_test(self):
+        queried_rooms = _query_rooms(User(pk=1))
+        self.assertTrue(len(queried_rooms) != 0)
+
+
+class RoomModelTestCase(LoginRequiredTestCase):
     """Tests for Room model."""
 
     def setUp(self):
         fake = Faker()
 
         # create 2 users in the database
-        for i in range(2):
+        for _ in range(2):
             credentials = dict()
             credentials["username"] = fake.unique.name()
             credentials["password"] = "a"
