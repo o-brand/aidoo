@@ -112,7 +112,7 @@ def buyitem_call(request):
                 )
                 response["HX-Trigger"] = "rebalance"
                 return response
-        except ValidationError:
+        except ValueError:
             raise Http404()
 
         # If everything is valid

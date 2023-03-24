@@ -1,14 +1,17 @@
 import datetime
 from faker import Faker
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core import mail
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from Aidoo.utils import LoginRequiredTestCase
+from userprofile.models import Notification
 from .forms import TransferForm, BuyForm
-from .models import Item, Sale, Transfer
+from .models import Item, Sale, Transfer, Moderation
 from .views import send_QRcode
 
 
@@ -317,3 +320,117 @@ class SendQRCodeTestCase(TestCase):
 
         # Test email was sent
         self.assertEqual(len(mail.outbox), 1)
+
+
+class BuyItemCallTestCase(LoginRequiredTestCase):
+    """Tests for buying an item"""
+
+    def setUp(self):
+        # Login from super...
+        super().setUp()
+
+        Item.objects.create(
+            item_name="Test Item",
+            description="A test item for the shop",
+            price=10,
+            stock=5,
+            on_offer=True,
+            limit_per_user=None,
+            item_picture="media/profilepics/default",
+        )
+        Item.objects.create(
+            item_name="Test Item2",
+            description="A test item for the shop",
+            price=10,
+            stock=0,
+            on_offer=False,
+            limit_per_user=2,
+            item_picture="media/profilepics/default",
+        )
+        Item.objects.create(
+            item_name="Test Item",
+            description="A test item for the shop",
+            price=30,
+            stock=5,
+            on_offer=True,
+            limit_per_user=None,
+            item_picture="media/profilepics/default",
+        )
+
+    def test_page(self):
+        # test availability via URL
+        response = self.client.get("/store/buyitem")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_available_by_name(self):
+        # test availability via name of page
+        response = self.client.get(reverse("buyitem"))
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_no_purchase(self):
+        # test without sending a purchase id
+        response = self.client.post("/store/buyitem")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_purchase_not_valid(self):
+        # test with a wrong purchase id
+        response = self.client.post("/store/buyitem", {"purchase": 0})
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_purchase_not_on_offer(self):
+        # test with a wrong purchase id
+        response = self.client.post("/store/buyitem", {"purchase": 2})
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_purchase_not_number_quantity(self):
+        # test with a not number quantity
+        response = self.client.post("/store/buyitem", {"purchase": 1, "quantity": "one"})
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_not_enough_fund(self):
+        # test with not enough fund
+        response = self.client.post("/store/buyitem", {"purchase": 1, "quantity": 3})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Trigger"], "rebalance")
+        self.assertTemplateUsed(response, template_name="store/buy-form.html")
+
+    def test_page_post_not_enough_fund_cannot_buy(self):
+        # test with not enough fund and they cannot buy any
+        response = self.client.post("/store/buyitem", {"purchase": 3, "quantity": 3})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Trigger"], "rebalance")
+        self.assertTemplateUsed(response, template_name="store/buy-form.html")
+
+    def test_page_post_form_valid_encryption_error(self):
+        # test with valid form but error in encryption
+        settings.KEY = "asd"
+        response = self.client.post("/store/buyitem", {"purchase": 1, "quantity": 1})
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_form_valid_cannot_buy_again(self):
+        # test with valid form but cannot buy again
+        site = Site.objects.get(domain="example.com")
+        Moderation.objects.create(**{"site": site})
+
+        response = self.client.post("/store/buyitem", {"purchase": 1, "quantity": 2})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Trigger"], "rebalance")
+        self.assertTemplateUsed(response, template_name="store/buy-form.html")
+        self.assertTrue(Moderation.objects.get(pk=2).bank > 0)
+        self.assertTrue(User.objects.get(pk=1).balance < 24)
+        self.assertEqual(Item.objects.get(pk=1).stock, 3)
+        self.assertEqual(len(Notification.objects.filter(user_id=self.user)), 1)
+
+    def test_page_post_form_valid_can_buy_again(self):
+        # test with valid form and can buy again
+        site = Site.objects.get(domain="example.com")
+        Moderation.objects.create(**{"site": site})
+
+        response = self.client.post("/store/buyitem", {"purchase": 1, "quantity": 1})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["HX-Trigger"], "rebalance")
+        self.assertTemplateUsed(response, template_name="store/buy-form.html")
+        self.assertTrue(Moderation.objects.get(pk=2).bank > 0)
+        self.assertTrue(User.objects.get(pk=1).balance < 24)
+        self.assertEqual(Item.objects.get(pk=1).stock, 4)
+        self.assertEqual(len(Notification.objects.filter(user_id=self.user)), 1)
