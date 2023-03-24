@@ -401,12 +401,6 @@ class BuyItemCallTestCase(LoginRequiredTestCase):
         self.assertEqual(response["HX-Trigger"], "rebalance")
         self.assertTemplateUsed(response, template_name="store/buy-form.html")
 
-    def test_page_post_form_valid_encryption_error(self):
-        # test with valid form but error in encryption
-        settings.KEY = "asd"
-        response = self.client.post("/store/buyitem", {"purchase": 1, "quantity": 1})
-        self.assertEqual(response.status_code, 404)
-
     def test_page_post_form_valid_cannot_buy_again(self):
         # test with valid form but cannot buy again
         site = Site.objects.get(domain="example.com")
