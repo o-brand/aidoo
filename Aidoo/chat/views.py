@@ -4,8 +4,8 @@ from django.views.generic import ListView
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from .models import Room, Message
 from Aidoo.settings import CHAT_MESSAGE_TTL
+from .models import Room, Message
 
 
 #Get actual user model

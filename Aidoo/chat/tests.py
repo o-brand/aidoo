@@ -19,8 +19,9 @@ from .routing import websocket_urlpatterns as chat_url
 # Get actual user model.
 User = get_user_model()
 
-class RoomQueryTestCase(TestCase):
+class RoomQueryTestCase(LoginRequiredTestCase):
     def setUp(self):
+        super().setUp()
         fake = Faker()
 
         # create 3 users in the database
