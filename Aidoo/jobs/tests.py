@@ -853,14 +853,15 @@ class CancelButtonCase(LoginRequiredTestCase):
         super().setUp()
 
         # Write 2 job into the job model
-        job = dict()
-        job["posting_time"] = fake_time()
-        job["points"] = random.randint(0, 100)
-        job["assigned"] = False
-        job["completed"] = False
-        job["poster_id_id"] = 1
-        job["hidden"] = False
-        Job.objects.create(**job)
+        for _ in range(2):
+            job = dict()
+            job["posting_time"] = fake_time()
+            job["points"] = random.randint(0, 100)
+            job["assigned"] = False
+            job["completed"] = False
+            job["poster_id_id"] = 1
+            job["hidden"] = False
+            Job.objects.create(**job)
 
         # Change one job to be hidden
         hidden_job = Job.objects.get(pk=2)
@@ -880,6 +881,11 @@ class CancelButtonCase(LoginRequiredTestCase):
     def test_page_post_no_job(self):
         # test without sending a job id
         response = self.client.post("/jobs/cancel")
+        self.assertEqual(response.status_code, 404)
+
+    def test_page_post_job_hidden(self):
+        # test with a hidden job
+        response = self.client.post("/jobs/apply", {"job_id": 2})
         self.assertEqual(response.status_code, 404)
 
     def test_page_post_job_not_valid(self):
