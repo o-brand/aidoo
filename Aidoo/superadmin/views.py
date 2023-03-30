@@ -95,10 +95,9 @@ class ReportFormView(View):
 
                     if not reviewer.is_staff:
                         moderation.bank -= moderation.ticket_payout
-                        moderation.bank.save()
                         moderation.frozen_bank += moderation.ticket_payout
-                        moderation.frozen_bank.save()
-                        
+                        moderation.save()
+
                 report.status = Report.ReportStatus.TICKETED
                 report.save()
 
@@ -131,7 +130,7 @@ def conflict_call(request):
     if request.method == "POST":
         # Get the ticket ID or -1 if it is not found
         ticket_id = request.POST.get("ticket_id", -1)
-        
+
         # Check if the ticket ID is valid
         ticket = ReportTicket.objects.filter(pk=ticket_id)
         ticket_id_exists = len(ticket) == 1
@@ -173,18 +172,18 @@ def conflict_call(request):
             # If two or more superusers voted for ban
             if ban >= 2:
 
-                # BAN CASE: Remove the job from the site, by running the cancel 
+                # BAN CASE: Remove the job from the site, by running the cancel
                 # call
                 # In the case that the job has accepted an applicant already
                 # we hide the job and give the scrip to the applicant
-                
+
                 # Checks if the job has been cancelled already
                 if ticket[0].report_id.reported_job.hidden == False:
-    
+
                     # Hide the job
                     ticket[0].report_id.reported_job.hidden = True
                     ticket[0].report_id.reported_job.save()
-                    
+
                     # Check if job has been completed already
                     if ticket[0].report_id.reported_job.completed == False:
                         # Check if an applicant was accepted
@@ -204,7 +203,7 @@ def conflict_call(request):
                             poster.frozen_balance -= reportedjob.points
                             applications[0].applicant_id.balance += reportedjob.points
                             applications[0].applicant_id.save()
-                        else:  
+                        else:
                             # Give the poster back the points
                             poster.frozen_balance -= reportedjob.points
                             poster.balance += reportedjob.points
@@ -214,7 +213,7 @@ def conflict_call(request):
 
                         # Check if application exists
                         applications = Application.objects.filter(
-                            Q(job_id=ticket[0].report_id.reported_job.job_id) & 
+                            Q(job_id=ticket[0].report_id.reported_job.job_id) &
                             ~Q(status="WD")
                         )
 
@@ -272,7 +271,7 @@ def conflict_call(request):
             # Saves the new bank state
             sitemodel.save()
 
-            # Sends out a notification to all superusers to let them 
+            # Sends out a notification to all superusers to let them
             # know the status of the conflict
             for x in range(0, len(verdict)):
                 notification = Notification.objects.create(
@@ -285,7 +284,7 @@ def conflict_call(request):
                     link="/superadmin/",
                 )
                 notification.save()
-            
+
             # Sends out a notification to the user who filed the complaint
             notification = Notification.objects.create(
                 user_id = ticket[0].report_id.reporting_user,
@@ -300,8 +299,8 @@ def conflict_call(request):
         # Mark the ticket as closed
         ticket[0].status = 'RE'
         ticket[0].save()
-            
-        return render(request, "htmx/verdictclosed.html", 
+
+        return render(request, "htmx/verdictclosed.html",
                       {"ticket":ticket_id, "answer":answer, "verd":verd})
 
     # In the case that request method is not POST
