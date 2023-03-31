@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
-
 {% block title %}Activation failure - Aidoo{% endblock %}
 
 {% block content %}
-<h1>Failure</h1>
-<p>The account activation token has expired.</p>
+{% include 'public-navigation.html' %}
+<div class="container my-4">
+  <h1>Failure</h1>
+  <p>The account activation token has expired.</p>
+</div>
 {% endblock %}
