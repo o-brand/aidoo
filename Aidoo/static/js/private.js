@@ -1,19 +1,18 @@
 // Add click listeners
-;(function(){
+;(function() {
   const scrollButton = document.getElementById("btn-back-to-top");
 
-  window.onscroll = function () {
+  window.onscroll = function() {
     if (document.body.scrollTop > 20 ||
       document.documentElement.scrollTop > 20) {
       scrollButton.style.display = "block";
-    }
-    else {
+    } else {
       scrollButton.style.display = "none";
     }
   };
 
   // Event listener for clicking, this scrolls back up to the top when triggered
-  scrollButton.addEventListener("click", ()=>{
+  scrollButton.addEventListener("click", () => {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
   });
@@ -21,8 +20,8 @@
 
 
 $(".tablinks").each(function() {
-  $(this).on("click", function (event) {
-    openTab(event.currentTarget.id.slice(0,-4));
+  $(this).on("click", function(event) {
+    openTab(event.currentTarget.id.slice(0, -4));
   });
 });
 
@@ -46,21 +45,10 @@ if (activeTab) {
 //Add the listener to every select.
 $(".select").each(function() {
   // If default value is changed.
-  $(this).on("change", function () {
+  $(this).on("change", function() {
     // Get the button id
     var button_id = "#accept-" + $(this)[0].id.split("-")[1];
     // and enable it.
     $(button_id).prop("disabled", false);
   });
 });
-
-document.addEventListener("DOMContentLoaded", function(event) {
-  var scrollpos = localStorage.getItem('scrollpos');
-  if (scrollpos) {
-    window.scrollTo(0, scrollpos);
-  };
-});
-
-window.onbeforeunload = function(e) {
-  localStorage.setItem('scrollpos', window.scrollY);
-};
