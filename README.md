@@ -1,67 +1,18 @@
-# Small Jobs App
+# Aidoo
 
 [![Coverage](https://github.com/o-brand/golf/actions/workflows/test_coverage.yml/badge.svg)](https://github.com/o-brand/golf/actions/workflows/test_coverage.yml)
 [![Django Tests](https://github.com/o-brand/golf/actions/workflows/django-tests.yml/badge.svg)](https://github.com/o-brand/golf/actions/workflows/django-tests.yml)
 
-## Development Themes
-Scrip, UI and UX, user interactions, code (frontend to backend communication), human aspect
+Aidoo is an online volunteering platform designed to empower communities. We connect volunteers with aid positions and local businesses in their community.
 
-## TODO list
-include tests for what we've written today
+## How to get started
 
-1. In my opinion, we must create "scenarios" and "use cases" for the website before starting coding.
-2. Then, we should create the requirements for the programming perspectives (and create the programming environment).
-3. After that we can come up with a design and start coding.
+### How to build the code
+In order to build and run the code a few Python modules must be installed first. We recommend using Python 3.10 or above, and the list of modules and versions can be found in the requirements.txt file in the directory. These can be installed using pip.
 
-## Ideas
+After installing all the required packages, the code can be run by executing the command ```python3 manage.py runserver``` from within the Aidoo folder. This will provide a local web address for you to view the app in your browser.
 
-- We can use [Firebase](https://firebase.google.com/) for user authentication, database (we can store data in JSON trees), and analytics. It can be easily integrated, I am using Firebase in my Android apps.
-- We should consider using [Bootstrap](https://getbootstrap.com/) for design purposes. This way we can create a responsive website much easier.
-- We can host our website in Firebase as well if we only use HTML, CSS, and Javascript. Other languages (Python, PHP) are not allowed. OR we must find a free website hoster.
-    - There might be a possibility that we can host the website using the uni's resources. We should ask Bruce or Brian about this.
-    - Being able to use a different framework (such as Django or Flask which use Python) could allow us to have an easier time than if we have to learn JavaScript
+Alternatively, a deployed version of the code is available online at https://aidoo.herokuapp.com/.
 
-## Concerns
-
-- If we use an "in-app currency" or points, then we have to implement some mechanics to top up your balance to be able to post tasks for points.
-  - What if we find a company that can sponsor the app while enabling spending points to buy their product?
-- I was thinking that only the task-doers would earn points which would have no other material value or use other than purchasing items at the "store" an organization makes for themselves (while for posting it can be unlimited or decided by a subscription tier fees payed to us).
-- I personally do love the company sponsorship idea (for discounts or freebies in the app), if it is feasible, because that really goes hand-in-hand with the goal of empowering local communities and businesses.
-- Incentives need to be added in game theory, in a specific range, value of points needs to be calibrated so that people don't exploit it
-- SCRIP systems, fiat money, studies about collapse when people game the system
-- Should we manage rewards ourselves based on research and surveying within an organization/community about wants and needs?
-- Who can post jobs?
-- Security of data
-- Background checks
-- Risk that no one near would be interested in buying into the idea, is it that compelling then?
-- Liability of damage
-- Terms and Conditions
-
-
-## Brief (working) overview:
-A website/web app that gets people within an organization or community to perform tasks in exchange for points. These points behave like a digital currency in an "incentive shop" managed by the organizers.
-
-### Use cases:
-   - In an office to make daily operations smoother (e.g. coffee runs/brewing, replacing water in cooler, etc.)
-   - By a town council to get people volunteering in a local capacity
-   - In a school to incentivize students (cleaning boards, participating in certain extracurricular activities, etc.)
-
-## Principal components:
-- Portal for task posters
-- Portal for bidders
-- Incentive shop
-- Databases
-   - User management/permissions
-   - App data (tasks, bids, etc.)
-   - \+
-- Ranking algorithms
-   - Sorting
-      - Parameters: value, how long a task been posted, urgency, etc.
-- Rating of volunteers (behind the scenes)
-
-## Unanswered Questions
-- Should tasks have expirations?
-- What mechanism is there to make sure tasks have been performed?
-
-## Potential features
-- Certificates to accredit people for having done volunteering work
+### How to test the code
+Assuming the software requirements have been satisfied as above, you can run our unit tests using the command ```python3 manage.py test``` from within the Aidoo folder.
