@@ -1,6 +1,6 @@
-<div id="rooms-list" class="col jobs-scroll mb-5">
+<div id="rooms-list">
   {% for room in rooms %}
-    <div class="card job-card mb-2">
+    <div class="card chat-card mb-2">
       <div class="card-body">
         <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
           <a href="{% url 'userdetails' room.user_2.id %}">

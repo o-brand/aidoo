@@ -7,20 +7,20 @@
 {% include 'navigation.html' %}
 
 <div class="container">
-  <div class="hello text-center justify-content-center">
-    <h1>Your chats</h1>
-
-    <button class="btn btn-secondary" hx-get="{% url 'chat-searching-modal' %}" hx-target="#dialog">
-      <i class="bi bi-search"></i>
-    </button>
-  </div>
-
   <div class="row d-flex justify-content-center">
-    {% if rooms %}
-      {% include 'htmx/rooms-list.html' %}
-    {% else %}
-      <p>You have no chats. Start chatting by searching for someone.</p>
-    {% endif %}
+    <div class="col col-md-9 col-sm-12 jobs-scroll mb-4">
+      <div class="d-flex justify-content-between mb-2">
+        <h3>Chats</h3>
+        <button class="btn btn-secondary" hx-get="{% url 'chat-searching-modal' %}" hx-target="#dialog">
+          Search users&nbsp;&nbsp;<i class="bi bi-search"></i>
+        </button>
+      </div>
+      {% if rooms %}
+        {% include 'htmx/rooms-list.html' %}
+      {% else %}
+        <p>You have no chats. Start chatting by searching for someone.</p>
+      {% endif %}
+    </div>
   </div>
 </div>
 
