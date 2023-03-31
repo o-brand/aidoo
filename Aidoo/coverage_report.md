@@ -51,7 +51,7 @@
 | superadmin/models.py        |       58 |        0 |    100% |           |
 | superadmin/tests.py         |      218 |        0 |    100% |           |
 | superadmin/urls.py          |        3 |        0 |    100% |           |
-| superadmin/views.py         |      133 |       78 |     41% |27, 45-107, 151, 153, 167-298 |
+| superadmin/views.py         |      132 |       77 |     42% |27, 45-106, 150, 152, 166-297 |
 | userprofile/\_\_init\_\_.py |        0 |        0 |    100% |           |
 | userprofile/admin.py        |        9 |        0 |    100% |           |
 | userprofile/apps.py         |        4 |        0 |    100% |           |
@@ -65,4 +65,4 @@
 | vendor/tests.py             |       93 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3454** |  **154** | **96%** |           |
+|                   **TOTAL** | **3453** |  **153** | **96%** |           |
