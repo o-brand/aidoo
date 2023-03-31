@@ -135,7 +135,7 @@ def posts_context(request):
 
     posted = Job.objects.filter(poster_id=actual_user_id, hidden=False)
 
-    posted_apps = {job: list(Application.objects.filter(job_id=job.job_id))
+    posted_apps = {job: list(Application.objects.filter(job_id=job.job_id, status="AP"))
                     for job in posted}
 
     context = {
