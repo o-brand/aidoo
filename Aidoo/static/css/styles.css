@@ -390,6 +390,11 @@ a:hover {
   flex-grow:1;
 }
 
+.store-card .card-text {
+  height:70px;
+  overflow-y: auto;
+}
+
 .store-card img {
   width: 160px;
   height: 120px;
