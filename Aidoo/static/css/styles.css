@@ -135,11 +135,6 @@ body {
   border-color: #a12e2a;
 }
 
-.chat-button a {
-  color: white;
-  text-decoration: none;
-}
-
 .chat-button {
   background-color: #5bc0de;
   border-color: #5bc0de;
@@ -154,11 +149,6 @@ body {
 .chat-button:active:focus {
   background-color: rgb(60, 152, 181);
   border-color: rgb(48, 131, 157);
-}
-
-.shop-button a {
-  color: white;
-  text-decoration: none;
 }
 
 .shop-button {

@@ -16,19 +16,15 @@
     {% else %}
       <p>You can see the {{jobs_count}} available jobs here. </p>
     {% endif %}
-    <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
+    <a class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-pencil-square"></i><br/>Post
-    </button>
-    <button class="btn btn-secondary chat-button">
-      <a href="{% url 'chat' %}">
-        <i class="bi bi-chat-left"></i><br/>Chats
-      </a>
-    </button>
-    <button class="btn btn-secondary shop-button">
-      <a href="{% url 'store' %}">
-        <i class="bi bi-bag"></i><br/>Store
-      </a>
-    </button>
+    </a>
+    <a href="{% url 'chat' %}" class="btn btn-secondary chat-button">
+      <i class="bi bi-chat-left"></i><br/>Chats
+    </a>
+    <a href="{% url 'store' %}" class="btn btn-secondary shop-button">
+      <i class="bi bi-bag"></i><br/>Store
+    </a>
   </div>
   <form class="searchform d-flex justify-content-center mb-4" method ="get">
     <input class="searchbar" type="text" value='{{request.GET.search}}' name="search"/>
