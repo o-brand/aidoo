@@ -261,7 +261,7 @@ class RegisterFormTestCase(TestCase):
         # behaviour if form is empty
         form = RegisterForm(data={})
 
-        self.assertEqual(9, len(form.errors))
+        self.assertEqual(8, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -279,7 +279,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name must be ok
-        self.assertEqual(6, len(form.errors))
+        self.assertEqual(5, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -297,7 +297,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name must be ok
-        self.assertEqual(6, len(form.errors))
+        self.assertEqual(5, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -323,7 +323,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name, username must be ok
-        self.assertEqual(5, len(form.errors))
+        self.assertEqual(4, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -344,7 +344,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name, username must be ok
-        self.assertEqual(5, len(form.errors))
+        self.assertEqual(4, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -371,7 +371,7 @@ class RegisterFormTestCase(TestCase):
         form = RegisterForm(new_user, self.file_dict)
 
         # Name, email, username must be ok
-        self.assertEqual(4, len(form.errors))
+        self.assertEqual(3, len(form.errors))
 
         # Checks fields for errors
         for key in form.errors:
@@ -499,19 +499,6 @@ class RegisterFormTestCase(TestCase):
             "date_of_birth": datetime.date(2000, 1, 1),
         }
         form = RegisterForm(new_user)
-        self.assertEqual(1, len(form.errors))
-
-    def test_biography(self):
-        new_user = {
-            "first_name": "User",
-            "last_name": "MadeUp",
-            "email": "madeupuser@madeupuser.com",
-            "username": "madeupuser",
-            "password1": "madeuppassword",
-            "password2": "madeuppassword",
-            "date_of_birth": datetime.date(2000, 1, 1),
-        }
-        form = RegisterForm(new_user, self.file_dict)
         self.assertEqual(1, len(form.errors))
 
 
