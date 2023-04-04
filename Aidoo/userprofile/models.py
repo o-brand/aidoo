@@ -28,7 +28,7 @@ class User(AbstractUser):
 
     # EXTRA INFORMATION
     # Bio for the user. Displayed on the profile pages.
-    biography = models.CharField(max_length=250, default="")
+    biography = models.CharField(max_length=250, default="", blank=True)
 
     # Date of birth, Null for charities
     date_of_birth = models.DateField(blank=True, null=True)
