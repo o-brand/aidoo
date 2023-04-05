@@ -1,7 +1,7 @@
-from django.db import models
-from django.core.validators import MinValueValidator
-from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
+from django.db import models
+from django.utils import timezone
 
 
 # Get actual user model.
@@ -101,8 +101,6 @@ class Comment(models.Model):
         ordering = ('post_time',)
 
 
-
-
 class Application(models.Model):
     """This model is used to represent an application for a job by a user."""
 
@@ -137,7 +135,6 @@ class Application(models.Model):
 
     # The time of final status (WITHDRAWN, DONE)
     time_of_final_status = models.DateTimeField(default=None, blank=True, null=True)
-
 
     class Meta:
         """This class creates a contraint for the model."""

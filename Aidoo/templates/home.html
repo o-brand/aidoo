@@ -16,9 +16,9 @@
     {% else %}
       <p>You can see the {{jobs_count}} available jobs here. </p>
     {% endif %}
-    <button class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
+    <a class="btn btn-secondary post-button" hx-get="{% url 'post' %}" hx-target="#dialog">
       <i class="bi bi-pencil-square"></i><br/>Post
-    </button>
+    </a>
     <a href="{% url 'chat' %}" class="btn btn-secondary chat-button">
       <i class="bi bi-chat-left"></i><br/>Chats
     </a>

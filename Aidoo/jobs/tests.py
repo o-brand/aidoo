@@ -264,7 +264,7 @@ class ApplicationModelTestCase(TestCase):
     def setUp(self):
         fake = Faker()
 
-        #create 1 user in the database
+        # create 1 user in the database
         credentials = dict()
         credentials["username"] = fake.unique.name()
         credentials["password"] = "0"
@@ -292,9 +292,9 @@ class ApplicationModelTestCase(TestCase):
         application["time_of_application"] = fake_time()
         application["time_of_final_status"] = fake_time()
 
-        #creates an object
+        # creates an object
         Application.objects.create(**application)
-        #raise error if duplicate found
+        # raise error if duplicate found
         with self.assertRaises(IntegrityError):
             Application.objects.create(**application)
 
@@ -318,25 +318,29 @@ class PostPageCase(LoginRequiredTestCase):
         new_form = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_description": ("This is a cry for help, I actually have no "
+            "job_description": (
+                "This is a cry for help, I actually have no "
                 "skills of writing tests, but wanted to do it on my own cause "
-                "i wanna learn."),
+                "i wanna learn."
+            ),
             "location": "AB25 1GN",
             "duration_hours": "8",
             "duration_half_hours": "0",
             "deadline": datetime.date.today(),
         }
         response = self.client.post(reverse("post"), data=new_form)
-        self.assertEqual(response.status_code, 200) # No fund error...
+        self.assertEqual(response.status_code, 200)  # No fund error...
 
     def test_form_not_valid(self):
         # test if the form stays if it has not valid value
         new_form = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_description": ("This is a cry for help, I actually have no "
+            "job_description": (
+                "This is a cry for help, I actually have no "
                 "skills of writing tests, but wanted to do it on my own cause "
-                "i wanna learn."),
+                "i wanna learn."
+            ),
             "location": "****",
             "duration_hours": "0",
             "duration_half_hours": "0",
@@ -350,9 +354,11 @@ class PostPageCase(LoginRequiredTestCase):
         new_form = {
             "poster_id": "1",
             "job_title": "Job",
-            "job_description": ("This is a cry for help, I actually have no "
+            "job_description": (
+                "This is a cry for help, I actually have no "
                 "skills of writing tests, but wanted to do it on my own cause "
-                "i wanna learn."),
+                "i wanna learn."
+            ),
             "location": "AB25 1GN",
             "duration_hours": "0",
             "duration_half_hours": "0",
@@ -364,7 +370,6 @@ class PostPageCase(LoginRequiredTestCase):
 
 class PostJobCase(TestCase):
     """Tests for posting a job form."""
-    # poster_id is already there, so we do not test that part!
 
     def setUp(self):
         """Creats a user before every test."""
@@ -421,8 +426,7 @@ class PostJobCase(TestCase):
 
             if key == "job_description":
                 self.assertIn(
-                    "Ensure this value has at most 1000 characters",
-                    form.errors[key][0]
+                    "Ensure this value has at most 1000 characters", form.errors[key][0]
                 )
             else:
                 self.assertIn("This field is required.", form.errors[key][0])
@@ -444,8 +448,7 @@ class PostJobCase(TestCase):
 
             if key == "job_description":
                 self.assertIn(
-                    "Ensure this value has at least 50 characters",
-                    form.errors[key][0]
+                    "Ensure this value has at least 50 characters", form.errors[key][0]
                 )
             else:
                 self.assertIn("This field is required.", form.errors[key][0])
@@ -484,8 +487,10 @@ class PostJobCase(TestCase):
 
             if key == "location":
                 self.assertIn(
-                    ("The postcode format is not valid. You must use capital "
-                    "letters."),
+                    (
+                        "The postcode format is not valid. You must use capital "
+                        "letters."
+                    ),
                     form.errors[key][0],
                 )
             else:
@@ -551,8 +556,10 @@ class PostJobCase(TestCase):
 
             if key == "duration_half_hours":
                 self.assertIn(
-                    ("The number of minutes is not valid. Only 0 and 30 "
-                    "minutes are allowed."),
+                    (
+                        "The number of minutes is not valid. Only 0 and 30 "
+                        "minutes are allowed."
+                    ),
                     form.errors[key][0],
                 )
 
@@ -621,8 +628,10 @@ class PostJobCase(TestCase):
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
             self.assertIn(
-                ("is not a valid date. The deadline cannot be more than 1 "
-                "year from now."),
+                (
+                    "is not a valid date. The deadline cannot be more than 1 "
+                    "year from now."
+                ),
                 form.errors[key][0],
             )
 
@@ -707,7 +716,6 @@ class ApplyButtonCase(LoginRequiredTestCase):
 
 class ReportButtonCase(LoginRequiredTestCase):
     """Tests for report button."""
-    # TODO We need to write more tests when the function is fully implemented.
 
     def setUp(self):
         # Login from super...
@@ -784,35 +792,49 @@ class BookmarkButtonCase(LoginRequiredTestCase):
         # test for a unmarked job (bookmarking functionality)
         response = self.client.post("/jobs/bookmark", {"job_id": 1})
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,
-            template_name="htmx/bookmark-unmark.html")
+        self.assertTemplateUsed(response, template_name="htmx/bookmark-unmark.html")
 
 
 class DeadlineValidationTestCase(TestCase):
+
     def test_valid_deadline(self):
         """Test a valid deadline date."""
         today = datetime.date.today()
-        deadline = today + datetime.timedelta(days=30)  # set deadline 30 days from today
-        validate_deadline(deadline)  # should not raise ValidationError
+
+        # set deadline 30 days from today
+        deadline = today + datetime.timedelta(days=30)
+        # should not raise ValidationError
+        validate_deadline(deadline)
 
     def test_invalid_past_deadline(self):
         """Test an invalid deadline date in the past."""
         today = datetime.date.today()
-        deadline = today - datetime.timedelta(days=1)  # set deadline 1 day in the past
+
+        # set deadline 1 day in the past
+        deadline = today - datetime.timedelta(days=1)
         with self.assertRaises(ValidationError) as cm:
             validate_deadline(deadline)
-        self.assertEqual(str(cm.exception), (f"['{deadline} is not a valid "
-            "date. The minimum deadline is today.']"))
+        self.assertEqual(
+            str(cm.exception),
+            (f"['{deadline} is not a valid " "date. The minimum deadline is today.']"),
+        )
 
     def test_invalid_future_deadline(self):
         """Test an invalid deadline date more than 1 year in the future."""
         today = datetime.date.today()
         yearplus = datetime.timedelta(days=400) + datetime.timedelta(days=1)
-        deadline = today + yearplus # set deadline more than 1 year in the future
+
+        # set deadline more than 1 year in the future
+        deadline = today + yearplus
         with self.assertRaises(ValidationError) as cm:
             validate_deadline(deadline)
-        self.assertEqual(str(cm.exception), (f"['{deadline} is not a valid "
-            "date. The deadline cannot be more than 1 year from now.']"))
+        self.assertEqual(
+            str(cm.exception),
+            (
+                f"['{deadline} is not a valid "
+                "date. The deadline cannot be more than 1 year from now.']"
+            ),
+        )
 
 
 class HoursValidationTestCase(TestCase):
@@ -850,7 +872,10 @@ class HalfHoursValidationTestCase(TestCase):
         """Test an invalid half hour."""
         with self.assertRaises(ValidationError) as cm:
             validate_half_hours(23)
-        self.assertEqual(str(cm.exception), "['The number of minutes is not valid. Only 0 and 30 minutes are allowed.']")
+        self.assertEqual(
+            str(cm.exception),
+            "['The number of minutes is not valid. Only 0 and 30 minutes are allowed.']",
+        )
 
 
 class CancelButtonCase(LoginRequiredTestCase):
@@ -956,16 +981,16 @@ class CancelButtonCase(LoginRequiredTestCase):
         self.client.post("/login", credentials, follow=True)
 
         # Get applicant notifications length before cancelling
-        b_notifications = len(Notification.objects.filter(
-            user_id=User.objects.get(pk=2))
+        b_notifications = len(
+            Notification.objects.filter(user_id=User.objects.get(pk=2))
         )
 
         # Cancel the job
         response = self.client.post("/jobs/cancel", {"job_id": 1})
 
         # Get applicant notifications length after cancelling
-        a_notifications = len(Notification.objects.filter(
-            user_id=User.objects.get(pk=2))
+        a_notifications = len(
+            Notification.objects.filter(user_id=User.objects.get(pk=2))
         )
 
         # The user should get back a response with an extra HTMX attribute
@@ -980,6 +1005,7 @@ class CancelButtonCase(LoginRequiredTestCase):
 def get_all_comments():
     """Reads all the comments. Used to test the consumer."""
     return list(Comment.objects.all())
+
 
 class CommentsConsumerTestCase(LoginRequiredTestCase):
 
@@ -1023,14 +1049,16 @@ class CommentsConsumerTestCase(LoginRequiredTestCase):
         await communicator.connect()
 
         # Send message
-        await communicator.send_input({
-            "type": "comment",
-            "content": "Hi?",
-            "commenter": "madeupuser",
-            "commenter_id": "2",
-            "commenter_url": "/2",
-            "date_time": "2023-03-18",
-        })
+        await communicator.send_input(
+            {
+                "type": "comment",
+                "content": "Hi?",
+                "commenter": "madeupuser",
+                "commenter_id": "2",
+                "commenter_url": "/2",
+                "date_time": "2023-03-18",
+            }
+        )
 
         # "Receive" message
         event = await communicator.receive_output()
@@ -1051,12 +1079,14 @@ class CommentsConsumerTestCase(LoginRequiredTestCase):
         await communicator.connect()
 
         # Send message
-        await communicator.send_json_to({
-            "content": "Hi?",
-            "commenter": "madeupuser",
-            "commenter_id": "2",
-            "commenter_url": "/2",
-        })
+        await communicator.send_json_to(
+            {
+                "content": "Hi?",
+                "commenter": "madeupuser",
+                "commenter_id": "2",
+                "commenter_url": "/2",
+            }
+        )
         event = await communicator.receive_from()
         response = json.loads(event)
         self.assertEqual(response["content"], "Hi?")

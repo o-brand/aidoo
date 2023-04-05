@@ -1,14 +1,14 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+from django.db.models import Q
 from django.http import HttpResponse, Http404
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView
 from django.views import View
-from django.contrib.auth import get_user_model
-from django.db.models import Q
+from userprofile.models import Notification
 from .models import Job, Bookmark, Application, Comment
 from .forms import JobForm
-from userprofile.models import Notification
 
 
 # Get actual user model.
@@ -36,7 +36,8 @@ def details(request, job_id):
         status = "NA"
 
     # Filter the bookmark state for the current user
-    if len(Bookmark.objects.filter(user_id=request.user.id, job_id=job.job_id)) == 1:
+    bookmarks = Bookmark.objects.filter(user_id=request.user.id, job_id=job.job_id)
+    if len(bookmarks) == 1:
         bookmark = True
     else:
         bookmark = False
@@ -46,7 +47,7 @@ def details(request, job_id):
         "job": job,
         "comments": comments,
         "status": status,
-        "bookmark":bookmark,
+        "bookmark": bookmark,
     }
 
     # Render the page
@@ -95,9 +96,10 @@ class FormView(View):
             me.balance = me.balance - post.points
             me.save()
 
+            # No content
             return HttpResponse(
-                status=204,
-                headers={"HX-Trigger": "new_post"}) # No content
+                status=204, headers={"HX-Trigger": "new_post"}
+            )
 
         return render(
             request,
@@ -199,7 +201,7 @@ def apply_call(request):
         # Check if the job has been completed already
         if jobs[0].completed:
             raise Http404()
-        
+
         # Check if the job has been cancelled already
         if jobs[0].hidden:
             raise Http404()
@@ -243,7 +245,7 @@ def cancel_call(request):
         if not job_id_exists:
             raise Http404()
         job = jobs[0]
-        
+
         # Checks if the job has been cancelled already
         if job.hidden:
             raise Http404()
@@ -264,7 +266,6 @@ def cancel_call(request):
 
         # Send on site notification to the applicants
         # It lets them know that the has been cancelled
-
         for application in applications:
             if application.applicant_id.opt_in_site_application:
                 Notification.objects.create(

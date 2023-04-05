@@ -11,6 +11,9 @@ from Aidoo.utils import LoginRequiredTestCase, fake_time
 from jobs.models import Job
 from superadmin.models import Report, ReportTicket, ConflictResolution
 from superadmin.forms import ReportForm
+from django.contrib.sites.models import Site
+from jobs.models import Application
+from store.models import Moderation
 
 
 # Get actual user model.
@@ -382,6 +385,7 @@ class ReportsViewTestCase(LoginRequiredTestCase):
         response = self.client.get(reverse("superadmin"))
         self.assertEqual(response.status_code, 200)
 
+
 class ConflictCallTestCase(LoginRequiredTestCase):
     """Tests for when a user submits a verdict on a report"""
 
@@ -412,6 +416,22 @@ class ConflictCallTestCase(LoginRequiredTestCase):
         Job.objects.create(**job)
         j = Job.objects.get(pk=1)
 
+        # Create an applicant user
+        credentials = dict()
+        credentials["username"] = fake.unique.name()
+        credentials["password"] = "a"
+        credentials["last_name"] = lambda: fake.last_name()
+        credentials["first_name"] = lambda: fake.first_name()
+        credentials["date_of_birth"] = datetime.datetime.now()
+        credentials["profile_id"] = "media/profilepics/default"
+        User.objects.create_user(**credentials)
+        credentials.clear()
+
+        application = dict()
+        application["applicant_id"] = User.objects.get(pk=2)
+        application["job_id"] = Job(pk=1)
+        Application.objects.create(**application)
+
         #create report
         report = {
             "reported_job": j,
@@ -430,6 +450,31 @@ class ConflictCallTestCase(LoginRequiredTestCase):
             "user_id": self.user,
         }
         ReportTicket.objects.create(**ticket)
+
+        #create two more tickets
+        #one ticket for guilty
+
+        ticket = {
+            "report_id": r,
+            "user_id": self.user,
+            "answer": "BA",
+            "status": "RE",
+        }
+        ReportTicket.objects.create(**ticket)
+
+        #one ticket for not guilty
+        
+        ticket = {
+            "report_id": r,
+            "user_id": self.user,
+            "answer": "NB",
+            "status": "RE",
+        }
+        ReportTicket.objects.create(**ticket)
+
+        #site
+        site = Site.objects.get(domain="example.com")
+        Moderation.objects.create(**{"site": site})
     
     def test_page(self):
         # test availability via URL
@@ -448,7 +493,7 @@ class ConflictCallTestCase(LoginRequiredTestCase):
     
     def test_wrong_ticket_id(self):
         # test with wrong ticket id
-        response = self.client.post("/superadmin/conflict", {"ticket_id": 2})
+        response = self.client.post("/superadmin/conflict", {"ticket_id": 4})
         self.assertEqual(response.status_code, 404)
 
     def test_ticket_resolved_already(self):
@@ -465,3 +510,20 @@ class ConflictCallTestCase(LoginRequiredTestCase):
         response = self.client.post("/superadmin/conflict", {"ticket_id": 1})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, template_name="htmx/verdictclosed.html")
+
+    def test_report_user_verdict_guilty(self):
+        # test for when a user replies guilty
+        response = self.client.post("/superadmin/conflict", {"ticket_id": 1, "answer": "Guilty"})
+        self.assertEqual(response.status_code, 200)
+    
+    def test_report_user_verdict_not_guilty(self):
+        # test for when a user replies not guilty
+        
+        response = self.client.post("/superadmin/conflict", {"ticket_id": 1, "answer": "Not Guilty"})
+        self.assertEqual(response.status_code, 200)
+    
+    def test_no_applicants(self):
+        # test for when a user replies guilty and there is no applicants
+        Application.objects.all().delete()
+        response = self.client.post("/superadmin/conflict", {"ticket_id": 1, "answer": "Not Guilty"})
+        self.assertEqual(response.status_code, 200)

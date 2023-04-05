@@ -22,7 +22,6 @@ python3 manage.py loaddata ../db.json
 python3 manage.py runserver
 ```
 
-more one line fun
 ```
 python3 manage.py migrate && python3 manage.py flush && python3 manage.py loaddata ../db.json
 ```
@@ -43,7 +42,7 @@ python3 manage.py loaddata ../db.json
 python3 manage.py flush && python3 manage.py loaddata ../db.json
 ```
 
-***The date of the actual save is 24/03/2023.***
+***The date of the actual save is 02/04/2023.***
 
 
 ## If you ...
@@ -100,7 +99,6 @@ python3 manage.py flush --settings Aidoo.production
 python3 manage.py loaddata ../db.json --settings Aidoo.production
 ```
 
-one line fun
 ```
 python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > ../db.json && python3 manage.py migrate --settings Aidoo.production && python3 manage.py flush --settings Aidoo.production && python3 manage.py loaddata ../db.json --settings Aidoo.production
 ```
