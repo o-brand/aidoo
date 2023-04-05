@@ -138,13 +138,20 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
         response = self.client.get(request)
         self.assertEqual(response.status_code, 404)
 
-    #tests for cards?
+    #tests for cards
+    def test_my_profile_available_by_name(self):
+        session = self.client.session
+        session["private_tab"] = "privatecard"
+        response = self.client.get(reverse("privatecard"))
+        self.assertEqual(response.status_code, 200)
+
     def test_commitments_available_by_name(self):
         session = self.client.session
         session["private_tab"] = "commitments"
         response = self.client.get(reverse("commitments"))
         self.assertEqual(response.status_code, 200)
 
+        
     def test_posts_available_by_name(self):
         session = self.client.session
         session["private_tab"] = "posts"
