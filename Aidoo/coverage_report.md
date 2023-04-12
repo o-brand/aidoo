@@ -49,20 +49,20 @@
 | superadmin/apps.py          |        4 |        0 |    100% |           |
 | superadmin/forms.py         |        9 |        0 |    100% |           |
 | superadmin/models.py        |       58 |        0 |    100% |           |
-| superadmin/tests.py         |      250 |        0 |    100% |           |
+| superadmin/tests.py         |      247 |        0 |    100% |           |
 | superadmin/urls.py          |        3 |        0 |    100% |           |
-| superadmin/views.py         |      132 |       32 |     76% |27, 45-106, 203-205 |
+| superadmin/views.py         |      130 |       31 |     76% |41-103, 203-205 |
 | userprofile/\_\_init\_\_.py |        0 |        0 |    100% |           |
 | userprofile/admin.py        |        9 |        0 |    100% |           |
 | userprofile/apps.py         |        4 |        0 |    100% |           |
 | userprofile/forms.py        |       14 |        0 |    100% |           |
 | userprofile/models.py       |       32 |        0 |    100% |           |
-| userprofile/tests.py        |      394 |        0 |    100% |           |
+| userprofile/tests.py        |      399 |        0 |    100% |           |
 | userprofile/urls.py         |        4 |        0 |    100% |           |
-| userprofile/views.py        |      264 |       74 |     72% |53-64, 75, 104, 133, 164, 172-174, 195, 201, 203, 205, 207, 229-248, 303, 307, 320-349, 450-480, 492-493, 498, 503-504, 510-516, 520-534 |
+| userprofile/views.py        |      264 |       68 |     74% |63, 76, 104, 134, 163, 170-172, 193, 199, 201, 203, 205, 233-251, 306, 310, 323-353, 463-493, 505-506, 511, 516-517, 523-529, 534-548 |
 | vendor/\_\_init\_\_.py      |        0 |        0 |    100% |           |
 | vendor/apps.py              |        4 |        0 |    100% |           |
 | vendor/tests.py             |       93 |        0 |    100% |           |
 | vendor/urls.py              |        3 |        0 |    100% |           |
 | vendor/views.py             |       43 |        0 |    100% |           |
-|                   **TOTAL** | **3481** |  **108** | **97%** |           |
+|                   **TOTAL** | **3481** |  **101** | **97%** |           |
