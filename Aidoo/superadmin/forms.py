@@ -8,16 +8,16 @@ class ReportForm(ModelForm):
     """Form to report a job post"""
 
     complaint = forms.CharField(
-    max_length=1000,
-    min_length=10,
-    widget=forms.Textarea(
+        max_length=1000,
+        min_length=10,
+        widget=forms.Textarea(
             attrs={
-            "placeholder": "Explain the reason for reporting",
-            "class": "form-control",
-            "rows": 5,
-        }
-    ),
-    label="Describe your issue."
+                "placeholder": "Explain the reason for reporting",
+                "class": "form-control",
+                "rows": 5,
+            }
+        ),
+        label="Describe your issue.",
     )
 
     class Meta:
@@ -27,5 +27,5 @@ class ReportForm(ModelForm):
             "reported_user",
             "reporting_user",
             "complaint",
-            "type"
+            "type",
         ]

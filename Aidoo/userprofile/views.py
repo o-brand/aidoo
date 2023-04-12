@@ -6,8 +6,8 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils import timezone
-from django.views import View
 from django.views.generic import ListView
+from django.views import View
 from chat.models import Room
 from jobs.models import Job, Bookmark, Application
 from .forms import ProfileEditForm

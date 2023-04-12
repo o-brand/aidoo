@@ -1,19 +1,18 @@
-from faker import Faker
 import datetime
+from faker import Faker
 import random
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 from Aidoo.utils import LoginRequiredTestCase, fake_time
-from jobs.models import Job
-from superadmin.models import Report, ReportTicket, ConflictResolution
-from superadmin.forms import ReportForm
-from django.contrib.sites.models import Site
-from jobs.models import Application
+from jobs.models import Application, Job
 from store.models import Moderation
+from .forms import ReportForm
+from .models import Report, ReportTicket, ConflictResolution
 
 
 # Get actual user model.
@@ -21,7 +20,7 @@ User = get_user_model()
 
 
 class ReportingTestCase(LoginRequiredTestCase):
-    """ tests for the reports model """
+    """tests for the reports model"""
 
     def setUp(self):
         # Login from super
@@ -59,12 +58,11 @@ class ReportingTestCase(LoginRequiredTestCase):
             "reported_job": j,
             "reported_user": self.user,
             "reporting_user": self.user,
-            "complaint": "a"*500,
-            "status": 'OPEN',
-            "type": 'JOB'
+            "complaint": "a" * 500,
+            "status": "OPEN",
+            "type": "JOB",
         }
         Report.objects.create(**r)
-
 
     def test_insertion(self):
         # insert a report
@@ -75,9 +73,9 @@ class ReportingTestCase(LoginRequiredTestCase):
             "reported_job": j,
             "reporting_user": self.user,
             "reported_user": self.user,
-            "complaint": "a"*500,
-            "status": 'OPEN',
-            "type": 'JOB'
+            "complaint": "a" * 500,
+            "status": "OPEN",
+            "type": "JOB",
         }
         Report.objects.create(**r)
 
@@ -101,7 +99,6 @@ class ReportingTestCase(LoginRequiredTestCase):
         # change the status of the report
         pass
 
-
     def test_complaint_max_length(self):
         j = Job.objects.get(pk=1)
         len1 = len(Report.objects.all())
@@ -110,9 +107,9 @@ class ReportingTestCase(LoginRequiredTestCase):
             "reported_job": j,
             "reporting_user": self.user,
             "reported_user": self.user,
-            "complaint": "a"*5000,
-            "status": 'OPEN',
-            "type": 'JOB'
+            "complaint": "a" * 5000,
+            "status": "OPEN",
+            "type": "JOB",
         }
         created_report = Report.objects.create(**r)
 
@@ -126,7 +123,7 @@ class PostReportCase(TestCase):
     def setUp(self):
         """Create user and a job before every test."""
 
-        #user
+        # user
         credentials = {
             "username": "asd",
             "password": "asd123",
@@ -135,7 +132,7 @@ class PostReportCase(TestCase):
         }
         User.objects.create_user(**credentials)
 
-        #job
+        # job
         job = dict()
         job["posting_time"] = fake_time()
         job["points"] = random.randint(0, 100)
@@ -147,7 +144,7 @@ class PostReportCase(TestCase):
     def test_empty_form(self):
 
         job = Job.objects.get(pk=1)
-        #behaviour if empty form is submitted
+        # behaviour if empty form is submitted
         form = ReportForm(data={})
         self.assertEqual(5, len(form.errors))
 
@@ -156,28 +153,27 @@ class PostReportCase(TestCase):
             self.assertEqual(1, len(error_now))
             self.assertIn("This field is required", form.errors[key][0])
 
-
     def test_added_complaint(self):
         new_report = {
             "reporting_user": "1",
             "reported_user": "1",
             "reported_job": Job.objects.get(pk=1),
-            "complaint": "!"*11,
-            "type":"Job"
+            "complaint": "!" * 11,
+            "type": "Job",
         }
         form = ReportForm(data=new_report)
 
-        #No errors.
+        # No errors.
         self.assertEqual(0, len(form.errors))
 
     def test_complaint_too_short(self):
-        #complaint has not enough characters
+        # complaint has not enough characters
         new_report = {
             "reporting_user": "1",
             "reported_user": "1",
             "reported_job": Job.objects.get(pk=1),
             "complaint": "!",
-            "type":"Job"
+            "type": "Job",
         }
         form = ReportForm(data=new_report)
         self.assertEqual(1, len(form.errors))
@@ -185,16 +181,19 @@ class PostReportCase(TestCase):
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
-            self.assertIn("Ensure this value has at least 10 characters (it has 1).", form.errors[key][0])
+            self.assertIn(
+                "Ensure this value has at least 10 characters (it has 1).",
+                form.errors[key][0],
+            )
 
     def test_complaint_too_long(self):
-        #complaint is exceeding character limit
+        # complaint is exceeding character limit
         new_report = {
             "reporting_user": "1",
             "reported_user": "1",
             "reported_job": Job.objects.get(pk=1),
-            "complaint": "!"*1001,
-            "type":"Job"
+            "complaint": "!" * 1001,
+            "type": "Job",
         }
         form = ReportForm(data=new_report)
         self.assertEqual(1, len(form.errors))
@@ -202,7 +201,9 @@ class PostReportCase(TestCase):
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))
-            self.assertIn("Ensure this value has at most 1000 characters", form.errors[key][0])
+            self.assertIn(
+                "Ensure this value has at most 1000 characters", form.errors[key][0]
+            )
 
 
 class ReportTicketTestCase(TestCase):
@@ -221,7 +222,7 @@ class ReportTicketTestCase(TestCase):
         credentials["profile_id"] = "media/profilepics/default"
         self.user = User.objects.create_user(**credentials)
 
-        #create job
+        # create job
         job = {
             "poster_id": self.user,
             "location": "AB21 3EW",
@@ -232,19 +233,19 @@ class ReportTicketTestCase(TestCase):
         Job.objects.create(**job)
         j = Job.objects.get(pk=1)
 
-        #create report
+        # create report
         report = {
             "reported_job": j,
             "reported_user": self.user,
             "reporting_user": self.user,
-            "complaint": "a"*500,
-            "status": 'OPEN',
-            "type": 'JOB'
+            "complaint": "a" * 500,
+            "status": "OPEN",
+            "type": "JOB",
         }
         Report.objects.create(**report)
         r = Report.objects.get(pk=1)
 
-        #create ticket
+        # create ticket
         ticket = {
             "report_id": r,
             "user_id": self.user,
@@ -252,7 +253,7 @@ class ReportTicketTestCase(TestCase):
         ReportTicket.objects.create(**ticket)
 
     def test_insertion(self):
-        #insert ticket
+        # insert ticket
         j = Job.objects.get(pk=1)
         r = Report.objects.get(pk=1)
         t = ReportTicket.objects.get(pk=1)
@@ -267,10 +268,10 @@ class ReportTicketTestCase(TestCase):
 
         len2 = len(ReportTicket.objects.all())
 
-        self.assertEqual(len1+1, len2)
+        self.assertEqual(len1 + 1, len2)
 
     def test_deletion(self):
-        #delete ticket
+        # delete ticket
         len1 = len(ReportTicket.objects.all())
 
         t = ReportTicket.objects.get(pk=1)
@@ -278,14 +279,15 @@ class ReportTicketTestCase(TestCase):
 
         len2 = len(ReportTicket.objects.all())
 
-        self.assertEqual(len1-1, len2)
+        self.assertEqual(len1 - 1, len2)
 
     def test_resolution(self):
-        #change status of the ticket
+        # change status of the ticket
         pass
 
 
 class ConflictRersolutionTestCase(TestCase):
+    """Tests for ConflictResolution, in progress"""
 
     def setUp(self):
         fake = Faker()
@@ -300,7 +302,7 @@ class ConflictRersolutionTestCase(TestCase):
         credentials["profile_id"] = "media/profilepics/default"
         self.user = User.objects.create_user(**credentials)
 
-        #create job
+        # create job
         job = {
             "poster_id": self.user,
             "location": "AB21 3EW",
@@ -314,15 +316,14 @@ class ConflictRersolutionTestCase(TestCase):
         conflict = {
             "job_id": j,
             "user1_id": self.user,
-            #"user2_id":self.user,
-            "content": "a"*50,
-            "status": 'OPEN',
-            "type": 'CONFLICT1'
+            "content": "a" * 50,
+            "status": "OPEN",
+            "type": "CONFLICT1",
         }
         ConflictResolution.objects.create(**conflict)
 
     def test_insertion(self):
-        #insert conflict
+        # insert conflict
         j = Job.objects.get(pk=1)
 
         len1 = len(ConflictResolution.objects.all())
@@ -330,18 +331,17 @@ class ConflictRersolutionTestCase(TestCase):
         conflict = {
             "job_id": j,
             "user1_id": self.user,
-            #"user2_id":self.user,
-            "content": "a"*50,
-            "status": 'OPEN',
-            "type": 'CONFLICT1'
+            "content": "a" * 50,
+            "status": "OPEN",
+            "type": "CONFLICT1",
         }
         ConflictResolution.objects.create(**conflict)
 
         len2 = len(ConflictResolution.objects.all())
-        self.assertEqual(len1+1, len2)
+        self.assertEqual(len1 + 1, len2)
 
     def test_deletion(self):
-        #delete a conflict
+        # delete a conflict
         len1 = len(ConflictResolution.objects.all())
 
         conflict = ConflictResolution.objects.get(pk=1)
@@ -349,11 +349,7 @@ class ConflictRersolutionTestCase(TestCase):
 
         len2 = len(ConflictResolution.objects.all())
 
-        self.assertEqual(len1-1, len2)
-
-    def test_resolution(self):
-        #change status of the conflict
-        pass
+        self.assertEqual(len1 - 1, len2)
 
     def test_content_max_length(self):
         j = Job.objects.get(pk=1)
@@ -361,10 +357,9 @@ class ConflictRersolutionTestCase(TestCase):
         conflict = {
             "job_id": j,
             "user1_id": self.user,
-            #"user2_id":self.user,
-            "content": "a"*500,
-            "status": 'OPEN',
-            "type": 'CONFLICT1'
+            "content": "a" * 500,
+            "status": "OPEN",
+            "type": "CONFLICT1",
         }
 
         created_conflict = ConflictResolution.objects.create(**conflict)
@@ -374,7 +369,7 @@ class ConflictRersolutionTestCase(TestCase):
 
 
 class ReportsViewTestCase(LoginRequiredTestCase):
-    """Tests for the reporting page"""   
+    """Tests for the reporting page"""
 
     def test_report_view(self):
         response = self.client.get("/superadmin/")
@@ -405,7 +400,7 @@ class ConflictCallTestCase(LoginRequiredTestCase):
         credentials["profile_id"] = "media/profilepics/default"
         self.user = User.objects.create_user(**credentials)
 
-        #create job
+        # create job
         job = {
             "poster_id": self.user,
             "location": "AB21 3EW",
@@ -432,27 +427,27 @@ class ConflictCallTestCase(LoginRequiredTestCase):
         application["job_id"] = Job(pk=1)
         Application.objects.create(**application)
 
-        #create report
+        # create report
         report = {
             "reported_job": j,
             "reported_user": self.user,
             "reporting_user": self.user,
-            "complaint": "a"*500,
-            "status": 'OPEN',
-            "type": 'JOB'
+            "complaint": "a" * 500,
+            "status": "OPEN",
+            "type": "JOB",
         }
         Report.objects.create(**report)
         r = Report.objects.get(pk=1)
 
-        #create ticket
+        # create ticket
         ticket = {
             "report_id": r,
             "user_id": self.user,
         }
         ReportTicket.objects.create(**ticket)
 
-        #create two more tickets
-        #one ticket for guilty
+        # create two more tickets
+        # one ticket for guilty
 
         ticket = {
             "report_id": r,
@@ -462,8 +457,8 @@ class ConflictCallTestCase(LoginRequiredTestCase):
         }
         ReportTicket.objects.create(**ticket)
 
-        #one ticket for not guilty
-        
+        # one ticket for not guilty
+
         ticket = {
             "report_id": r,
             "user_id": self.user,
@@ -472,10 +467,10 @@ class ConflictCallTestCase(LoginRequiredTestCase):
         }
         ReportTicket.objects.create(**ticket)
 
-        #site
+        # site
         site = Site.objects.get(domain="example.com")
         Moderation.objects.create(**{"site": site})
-    
+
     def test_page(self):
         # test availability via URL
         response = self.client.get("/superadmin/conflict")
@@ -490,7 +485,7 @@ class ConflictCallTestCase(LoginRequiredTestCase):
         # test without sending a ticket id
         response = self.client.post("/superadmin/conflict")
         self.assertEqual(response.status_code, 404)
-    
+
     def test_wrong_ticket_id(self):
         # test with wrong ticket id
         response = self.client.post("/superadmin/conflict", {"ticket_id": 4})
@@ -498,13 +493,13 @@ class ConflictCallTestCase(LoginRequiredTestCase):
 
     def test_ticket_resolved_already(self):
         # test with a ticket that is already resolved
-        ticket = ReportTicket.objects.get(ticket_id='1')
-        ticket.status = 'RE'
+        ticket = ReportTicket.objects.get(ticket_id="1")
+        ticket.status = "RE"
         ticket.save()
 
         response = self.client.post("/superadmin/conflict", {"ticket_id": 1})
         self.assertEqual(response.status_code, 404)
-    
+
     def test_report_resolved(self):
         # test works
         response = self.client.post("/superadmin/conflict", {"ticket_id": 1})
@@ -513,17 +508,23 @@ class ConflictCallTestCase(LoginRequiredTestCase):
 
     def test_report_user_verdict_guilty(self):
         # test for when a user replies guilty
-        response = self.client.post("/superadmin/conflict", {"ticket_id": 1, "answer": "Guilty"})
+        response = self.client.post(
+            "/superadmin/conflict", {"ticket_id": 1, "answer": "Guilty"}
+        )
         self.assertEqual(response.status_code, 200)
-    
+
     def test_report_user_verdict_not_guilty(self):
         # test for when a user replies not guilty
-        
-        response = self.client.post("/superadmin/conflict", {"ticket_id": 1, "answer": "Not Guilty"})
+
+        response = self.client.post(
+            "/superadmin/conflict", {"ticket_id": 1, "answer": "Not Guilty"}
+        )
         self.assertEqual(response.status_code, 200)
-    
+
     def test_no_applicants(self):
         # test for when a user replies guilty and there is no applicants
         Application.objects.all().delete()
-        response = self.client.post("/superadmin/conflict", {"ticket_id": 1, "answer": "Not Guilty"})
+        response = self.client.post(
+            "/superadmin/conflict", {"ticket_id": 1, "answer": "Not Guilty"}
+        )
         self.assertEqual(response.status_code, 200)

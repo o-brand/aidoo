@@ -1,8 +1,8 @@
 from cloudinary.models import CloudinaryField
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.contrib.auth import get_user_model
 from django.db.models import constraints, Q
+from django.db import models
 from django.utils import timezone
 
 

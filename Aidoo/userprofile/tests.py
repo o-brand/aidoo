@@ -1,13 +1,13 @@
 import datetime
-from faker import Faker
 import random
-from django.contrib.auth import get_user_model
+from faker import Faker
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
-from django.test import RequestFactory, TestCase
 from Aidoo.utils import LoginRequiredTestCase, fake_time
 from jobs.models import Job, Application
 from .models import Notification
