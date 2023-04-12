@@ -1,16 +1,16 @@
-from faker import Faker
 import datetime
+from faker import Faker
 import random
-from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
 from django.utils import timezone
 from django.test import RequestFactory, TestCase
 from Aidoo.utils import LoginRequiredTestCase, fake_time
 from jobs.models import Job, Application
-from userprofile.models import Notification
+from .models import Notification
 from .forms import ProfileEditForm
 
 
@@ -151,7 +151,7 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
         response = self.client.get(reverse("commitments"))
         self.assertEqual(response.status_code, 200)
 
-        
+
     def test_posts_available_by_name(self):
         session = self.client.session
         session["private_tab"] = "posts"
@@ -169,6 +169,7 @@ class PrivateProfileTestCase(LoginRequiredTestCase):
         session["private_tab"] = "bookmarks"
         response = self.client.get(reverse("bookmarks"))
         self.assertEqual(response.status_code, 200)
+
 
 class WithdrawButtonCase(LoginRequiredTestCase):
     """Tests for withdraw button."""
@@ -579,7 +580,7 @@ class ProfileEditTestCase(TestCase):
         #profile_pic must be there
         self.assertEqual(2, len(form.errors))
 
-        #check fields for errors    
+        #check fields for errors
         for key in form.errors:
             error_now = form.errors[key]
             self.assertEqual(1, len(error_now))

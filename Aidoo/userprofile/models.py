@@ -1,6 +1,6 @@
 from cloudinary.models import CloudinaryField
-from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import constraints, Q
 from django.utils import timezone
@@ -9,6 +9,7 @@ from django.utils import timezone
 def profile_id_rename(instance, filename): # pragma: no cover
     """Renames the image of the ID before uploading."""
     return "/".join(["ids", instance.username])
+
 
 def profile_picture_rename(instance, filename): # pragma: no cover
     """Renames the profile picture before uploading."""
@@ -32,7 +33,7 @@ class User(AbstractUser):
 
     # Date of birth, Null for charities
     date_of_birth = models.DateField(blank=True, null=True)
-    
+
     # Used to keep track if the email is verified
     verified = models.BooleanField(default=False)
 
@@ -81,30 +82,29 @@ class User(AbstractUser):
                 check=(Q(profile_id="") & Q(charity=True))
                 | (Q(charity=False) & ~Q(profile_id="")),
                 name="profile_id_for_charities",
-            )
+            ),
         ]
-
 
 
 class Notification(models.Model):
     """This model represents notifications."""
 
-    #Primary key
+    # Primary key
     notification_id = models.BigAutoField(primary_key=True)
 
-    #Foreign Key to user who got the notification
+    # Foreign Key to user who got the notification
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    #Short title summarizing the content of the notification
+    # Short title summarizing the content of the notification
     title = models.CharField(max_length=100, default="Alert")
 
-    #Content of the notification
+    # Content of the notification
     content = models.CharField(max_length=1000)
 
-    #Link to resolve the notification
+    # Link to resolve the notification
     link = models.URLField(max_length=200)
 
-    #Notification reviewed
+    # Notification reviewed
     seen = models.BooleanField(default=False)
 
     # Time notificiation recorded
@@ -113,5 +113,4 @@ class Notification(models.Model):
     class Meta:
         """This class specifies the ordering of notifications"""
 
-        ordering = ('-time_of_notification',)
-
+        ordering = ("-time_of_notification",)

@@ -1,7 +1,7 @@
 from django import forms
-from django.forms import ModelForm
 from django.contrib.auth import get_user_model
 from django.core.validators import RegexValidator
+from django.forms import ModelForm
 from Aidoo.utils import create_date_string
 from Aidoo.validators import validate_profanity
 
@@ -35,9 +35,9 @@ class ProfileEditForm(ModelForm):
     )
 
     profile_picture = forms.ImageField(
-        label = "Upload your new profile picture.",
-        widget = forms.FileInput,
-        required = False,
+        label="Upload your new profile picture.",
+        widget=forms.FileInput,
+        required=False,
     )
 
     class Meta:

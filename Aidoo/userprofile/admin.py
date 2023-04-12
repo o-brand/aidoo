@@ -10,11 +10,28 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     fieldsets = (
         (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "email", "date_of_birth", "biography")}),
-        (_("Account Settings info"),
-            {"fields": ("opt_in_emails_application",
-                        "opt_in_site_application",
-                        "opt_in_site_applicant")}),
+        (
+            _("Personal info"),
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "date_of_birth",
+                    "biography",
+                )
+            },
+        ),
+        (
+            _("Account Settings info"),
+            {
+                "fields": (
+                    "opt_in_emails_application",
+                    "opt_in_site_application",
+                    "opt_in_site_applicant",
+                )
+            },
+        ),
         (_("Extra info"), {"fields": ("balance", "frozen_balance", "charity")}),
         (_("Images"), {"fields": ("profile_picture", "profile_id")}),
         (
@@ -40,7 +57,14 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("username", "date_of_birth", "charity", "profile_id", "password1", "password2"),
+                "fields": (
+                    "username",
+                    "date_of_birth",
+                    "charity",
+                    "profile_id",
+                    "password1",
+                    "password2",
+                ),
             },
         ),
     )

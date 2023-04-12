@@ -1,17 +1,17 @@
 from random import choice
-from django.core.mail import send_mail
-from django.shortcuts import render
-from django.http import Http404, HttpResponse
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from django.db.models import Q
-from django.utils import timezone
+from django.http import Http404, HttpResponse
+from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView
-from jobs.models import Job, Bookmark, Application
-from .models import Notification
 from chat.models import Room
+from jobs.models import Job, Bookmark, Application
 from .forms import ProfileEditForm
+from .models import Notification
 
 
 # Get actual user model.
@@ -20,7 +20,8 @@ User = get_user_model()
 
 def userdetails(request, user_id):
     """Public pofile page with just the basic information."""
-    me = request.user # The user who is currently signed in
+    # The user who is currently signed in
+    me = request.user
 
     # Check if the user ID is valid
     users = User.objects.filter(pk=user_id)
@@ -76,8 +77,7 @@ def commitments_context(request):
     me = users[0]
 
     accepted = Application.objects.filter(
-        Q(status="AC") &
-        Q(applicant_id=actual_user_id)
+        Q(status="AC") & Q(applicant_id=actual_user_id)
     )
 
     accepted_jobs = [(job.job_id, job.status) for job in accepted]
@@ -105,8 +105,7 @@ def applications_context(request):
     me = users[0]
 
     applied = Application.objects.filter(
-        ~Q(status="CA") &
-        Q(applicant_id=actual_user_id)
+        ~Q(status="CA") & Q(applicant_id=actual_user_id)
     )
 
     applied_jobs = [(job.job_id, job.status) for job in applied]
@@ -119,7 +118,9 @@ def applications_context(request):
 def applications(request):
     """Private applications."""
     request.session["private_tab"] = "apps"
-    return render(request, "userprofile/applications.html", applications_context(request))
+    return render(
+        request, "userprofile/applications.html", applications_context(request)
+    )
 
 
 def posts_context(request):
@@ -136,9 +137,7 @@ def posts_context(request):
     posted = Job.objects.filter(poster_id=actual_user_id, hidden=False)
 
     posted_apps = {
-        job: list(Application.objects.filter(
-            ~Q(status="WD") & Q(job_id=job.job_id))
-        )
+        job: list(Application.objects.filter(~Q(status="WD") & Q(job_id=job.job_id)))
         for job in posted
     }
 
@@ -164,8 +163,7 @@ def bookmarks_context(request):
         raise Http404()
     me = users[0]
 
-    bookmarks = Bookmark.objects.filter(user_id=actual_user_id
-        ).order_by("saving_time")
+    bookmarks = Bookmark.objects.filter(user_id=actual_user_id).order_by("saving_time")
 
     bookmarks_filtered = []
     for bookmark in bookmarks:
@@ -206,7 +204,7 @@ def me(request):
     elif opened == "saved":
         context = bookmarks_context(request)
     else:
-        context = { "me": me }
+        context = {"me": me}
 
     context["opened"] = opened
     return render(request, "userprofile/private.html", context)
@@ -220,7 +218,13 @@ class ProfileEditView(View):
 
     def get(self, request, *args, **kwargs):
         me = request.user
-        form = self.form_class(initial={"email": me.email, "biography": me.biography, "profile_picture": me.profile_picture})
+        form = self.form_class(
+            initial={
+                "email": me.email,
+                "biography": me.biography,
+                "profile_picture": me.profile_picture,
+            }
+        )
         return render(
             request, self.template_name, {"form": form, "poster_id": request.user.id}
         )
@@ -241,13 +245,10 @@ class ProfileEditView(View):
 
             me.save()
             return HttpResponse(
-                status=204,
-                headers={"HX-Trigger": "profile_edit"}
+                status=204, headers={"HX-Trigger": "profile_edit"}
             ) # No content
 
-        return render(
-            request, self.template_name, {"form": form}
-        )
+        return render(request, self.template_name, {"form": form})
 
 
 def withdraw_call(request):
@@ -275,7 +276,9 @@ def withdraw_call(request):
         application.save()
 
         return render(
-            request, "htmx/job-applied.html", {"job": jobs[0], "status": application.status}
+            request,
+            "htmx/job-applied.html",
+            {"job": jobs[0], "status": application.status},
         )
 
     # If it is not POST
@@ -328,7 +331,7 @@ def selectapplicant_call(request):
                         },
                     )
                     send_mail(
-                        'Sorry!',
+                        "Sorry!",
                         message,
                         None,
                         [user.applicant_id.email],
@@ -339,11 +342,12 @@ def selectapplicant_call(request):
                 # If true, create a new notification in the database
                 if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
-                        user_id = user.applicant_id,
+                        user_id=user.applicant_id,
                         title="Application Update",
-                        content = "You've been rejected from the job: " + str(job.job_title),
-                        link = "/jobs/" + str(job.job_id)
-                        )
+                        content="You've been rejected from the job: "
+                        + str(job.job_title),
+                        link="/jobs/" + str(job.job_id),
+                    )
 
                 user.status = "RE"
                 user.save()
@@ -360,7 +364,7 @@ def selectapplicant_call(request):
                         },
                     )
                     send_mail(
-                        'Congratulations!',
+                        "Congratulations!",
                         message,
                         None,
                         [user.applicant_id.email],
@@ -371,16 +375,19 @@ def selectapplicant_call(request):
                 # If true, create a new notification in the database
                 if user.applicant_id.opt_in_site_application:
                     Notification.objects.create(
-                        user_id = user.applicant_id,
+                        user_id=user.applicant_id,
                         title="Application Update",
-                        content = "You've been accepted for the job: " + str(job.job_title),
-                        link = "/jobs/" + str(job.job_id)
-                        )
+                        content="You've been accepted for the job: "
+                        + str(job.job_title),
+                        link="/jobs/" + str(job.job_id),
+                    )
 
                 user.status = "AC"
                 user.save()
         return render(
-            request, "htmx/job-applicants.html", {"job": job, "applicants": applications}
+            request,
+            "htmx/job-applicants.html",
+            {"job": job, "applicants": applications},
         )
 
     # If it is not POST
@@ -410,14 +417,18 @@ def jobdone_call(request):
 
         # Get volunteer, poster
         volunteer = User.objects.get(pk=application.applicant_id.id)
-        poster = User.objects.get(id=user.id) # Job poster
+        poster = User.objects.get(id=user.id)
 
         # Work...
-        poster.frozen_balance = poster.frozen_balance - job.points # Deduct points from job poster
+        poster.frozen_balance = (
+            poster.frozen_balance - job.points
+        ) # Deduct points from job poster
         volunteer.balance = volunteer.balance + job.points # Pay points to volunteer
         job.completed = True # Set the post to completed
         application.status = "DN" # Set the job process to done
-        application.time_of_final_status = timezone.now() # Set the time of the final status
+        application.time_of_final_status = (
+            timezone.now()
+        ) # Set the time of the final status
 
         poster.save()
         volunteer.save()
@@ -427,7 +438,9 @@ def jobdone_call(request):
         applicants = list(Application.objects.filter(job_id=job.job_id))
 
         return render(
-            request, "htmx/job-applicants.html", {"job": job, "applicants": applicants},
+            request,
+            "htmx/job-applicants.html",
+            {"job": job, "applicants": applicants},
         )
 
     # If it is not POST
@@ -442,14 +455,14 @@ class AccountSettingsView(View):
     # Renders the form at the first time
     def get(self, request, *args, **kwargs):
         me = request.user
-        return render(request, self.template_name, {"me":me})
+        return render(request, self.template_name, {"me": me})
 
     # Processes the form after submit
     def post(self, request, *args, **kwargs):
-        #returns an empty list if button is unchecked otherwise returns ['on']
-        button_check_1 = request.POST.getlist('opt_in_1')
-        button_check_2 = request.POST.getlist('opt_in_2')
-        button_check_3 = request.POST.getlist('opt_in_3')
+        # returns an empty list if button is unchecked otherwise returns ['on']
+        button_check_1 = request.POST.getlist("opt_in_1")
+        button_check_2 = request.POST.getlist("opt_in_2")
+        button_check_3 = request.POST.getlist("opt_in_3")
 
         me = request.user
 
@@ -457,27 +470,27 @@ class AccountSettingsView(View):
         # then change the email preference
         if me.opt_in_emails_application and button_check_1 == []:
             me.opt_in_emails_application = False
-        elif not me.opt_in_emails_application and button_check_1 == ['on']:
+        elif not me.opt_in_emails_application and button_check_1 == ["on"]:
             me.opt_in_emails_application = True
 
         # If checkbox state doesn't match email preference on submit
         # then change the on site preference
         if me.opt_in_site_application and button_check_2 == []:
             me.opt_in_site_application = False
-        elif not me.opt_in_site_application and button_check_2 == ['on']:
+        elif not me.opt_in_site_application and button_check_2 == ["on"]:
             me.opt_in_site_application = True
 
         # If checkbox state doesn't match email preference on submit
         # then change the email preference
         if me.opt_in_site_applicant and button_check_3 == []:
             me.opt_in_site_applicant = False
-        elif not me.opt_in_site_applicant and button_check_3 == ['on']:
+        elif not me.opt_in_site_applicant and button_check_3 == ["on"]:
             me.opt_in_site_applicant = True
 
         me.save()
 
         # Render the form again
-        return render(request, self.template_name, {"me":me})
+        return render(request, self.template_name, {"me": me})
 
 
 class NotificationsPageView(ListView):
@@ -515,12 +528,13 @@ class NotificationsPageView(ListView):
 
         return context
 
+
 def notification_seen(request):
     """Marks a notification as seen when clicked by the user."""
     if request.method == "POST":
 
         # Obtains the id for the notification through htmx include
-        n_id = request.POST['id']
+        n_id = request.POST["id"]
 
         # Obtain the instance in the database for the clicked notification
         notification = Notification.objects.filter(notification_id=n_id)[0]
