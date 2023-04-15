@@ -195,36 +195,6 @@ a:hover {
   border-bottom: none;
 }
 
-/* styles the logo in the nav bar */
-.img-banner {
-  max-width: 50%;
-  height: auto;
-  padding: 10%;
-}
-
-/* styles the bg image on the welcome page*/
-.bg-image {
-  margin: 0px;
-  background-image: url("../assets/bg.jpg");
-  background-attachment: fixed;
-  background-size: contain;
-  background-size: 100%;
-  height: fit-content;
-  background-repeat: no-repeat;
-  padding-bottom: 2%;
-  padding-top: 2%;
-}
-
-/* styles the text on the welcome page */
-.app-desc {
-  padding: 5%;
-  color: white;
-  font-family: 'Lato', sans-serif;
-}
-
-.txt-fmt {
-  margin-right: 25%;
-}
 
 /* CHAT */
 .chat_container {
