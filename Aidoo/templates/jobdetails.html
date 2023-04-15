@@ -18,21 +18,23 @@
         <li class="list-group-item">
           <div class="card-title d-flex justify-content-between mb-0">
             <h4>{{ job.job_title }}</h4>
-            <div class="dropdown">
-              <button class="btn btn-secondary"
-                type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <i class="bi bi-list"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {% if bookmark %}
-                  {% include 'htmx/bookmark-unmark.html' %}
-                {% else %}
-                  {% include 'htmx/bookmark.html' %}
-                {% endif %}
-                {% include 'htmx/report.html' %}
+            {% if job.poster_id != me %}
+              <div class="dropdown">
+                <button class="btn btn-secondary"
+                  type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <i class="bi bi-list"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  {% if bookmark %}
+                    {% include 'htmx/bookmark-unmark.html' %}
+                  {% else %}
+                    {% include 'htmx/bookmark.html' %}
+                  {% endif %}
+                  {% include 'htmx/report.html' %}
+                </div>
               </div>
-            </div>
+            {% endif %}
           </div>
           <div class="d-flex justify-content-start card-subtitle mb-1 text-muted">
             <a href="{% url 'userdetails' job.poster_id.id %}">
