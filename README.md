@@ -12,7 +12,7 @@ In order to build and run the code a few Python modules must be installed first.
 
 After installing all the required packages, the code can be run by executing the command ```python manage.py runserver``` or ```python3 manage.py runserver``` from within the Aidoo folder. This will provide a local web address for you to view the app in your browser.
 
-Alternatively, a deployed version of the code is available online at https://aidoo.herokuapp.com/. For an *optimal* experience we recommend viewing the website on Chrome.
+Alternatively, a deployed version of the code is available online at https://aidoo.herokuapp.com/.
 
 ### How to test the code
 Assuming the software requirements have been satisfied as above, you can run our unit tests using the command ```python manage.py test``` or ```python3 manage.py test``` from within the Aidoo folder.
