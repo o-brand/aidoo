@@ -2,6 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from .models import Room, Message
 
 
@@ -79,4 +80,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message["content"] = content
         saved_message = Message.objects.create(**message)
 
-        return saved_message.date_time.strftime("%#d %b %Y, %I:%M %p")
+        to_tz = timezone.get_default_timezone()
+        return saved_message.date_time.astimezone(to_tz).strftime("%#d %b %Y, %I:%M %p")

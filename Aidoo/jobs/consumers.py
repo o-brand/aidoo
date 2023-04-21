@@ -2,6 +2,7 @@ import json
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from .models import Job, Comment
 
 
@@ -87,4 +88,5 @@ class CommentsConsumer(AsyncWebsocketConsumer):
         comment["content"] = content
         saved_comment = Comment.objects.create(**comment)
 
-        return saved_comment.post_time.strftime("%#d %b %Y, %I:%M %p")
+        to_tz = timezone.get_default_timezone()
+        return saved_comment.post_time.astimezone(to_tz).strftime("%#d %b %Y, %I:%M %p")
