@@ -84,7 +84,7 @@ class JobForm(ModelForm):
                 "class": "form-control",
                 "min": create_date_string(0),
                 "max": create_date_string(-1),  # 1 year in the future
-                "style": "width: auto; display: initial;",
+                "style": "width: auto; display: block;",
             },
         ),
         label="The deadline to complete the job (optional)",
